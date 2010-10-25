@@ -1,0 +1,36 @@
+"qi canned"
+# @obj:    zelig object
+# @simpar: parameters passed to the qi
+# return:  qi list (qi.stat) and qi.names list (qi.name)
+
+# NOTE THIS FILE MUST ALWAYS BE EDITED!!!!
+# IT IS THE MOST IMPORTANT COMPONENT TO
+# ANY ZELIG MODULE
+qi.<<model name>> <- function(obj, simpar=NULL, x, x1=NULL, y=NULL) {
+  # initialize values that necessarily must be
+  # returned.
+  qi.stat <- list()
+  qi.name <- list()
+  
+
+  # add entries to qi.stat and qi.name
+  # in the end, names(qi.stat) should == names(qi.name)
+  # so that printing can be handled by the auto-generated
+  # function
+
+  # ...
+
+
+  # qi computation must be written by the developer,
+  # as it is impossible to tell automatically what is
+  # the statistic of interest (or how to compute it)
+  
+  # ...
+
+
+  # compute the quantities of interest
+  # of this model
+  list(qi.stat=qi.stat,
+       qi.name=qi.name
+       )
+}

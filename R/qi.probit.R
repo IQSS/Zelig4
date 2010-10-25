@@ -1,0 +1,3 @@
+# logit and probit are simulated in the same fashion
+# so...
+qi.probit <- qi.logit

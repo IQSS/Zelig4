@@ -1,0 +1,2 @@
+describe <- function(...)
+  UseMethod("describe")

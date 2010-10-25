@@ -1,0 +1,155 @@
+\documentclass[10pt]{article}
+
+\begin{document}
+
+\title{Writing a \emph{qi} function}
+\author{Matthew Owen}
+\maketitle
+
+\section{Introduction}
+% Introduction Material
+For any Zelig module, the \emph{qi} function is ultimately the most important piece of code that must be written; it describes the actual process which simulates the \emph{quantities of interest}.  Because of the nature of this process - and the gamut of statistical packages and their underlying statistical model - it is rare that the simulation process can be generalized for arbitrary fitted models.  Despite this, it is possible to break down the simulation process into smaller steps.
+
+
+%
+%
+\section{Notable Features of \emph{qi} Function}
+The typical \emph{qi} function has several basic procedures:
+\begin{enumerate}
+	\item{\emph{Call the param function}:  This is entirely optional but sometimes important for the clarity of your algorithm.  This step typically consists of taking random draws from the fitted model's underlying probability distribution.}
+	\item{\emph{Compute the Quantity of Interest}: Depending on your model, there are several ways to compute necessary quantities of interest.  Typical methods for computing quantities of interest include:
+		\begin{enumerate}
+			\item{Using the `predict' method of your given linear model.}
+			\item{Using the sample provided by `param' to generate simulations of the \emph{Quantities of Interest}.}
+			\item{Using a Maximum-likelihood estimate on the fitted model.}
+		\end{enumerate}}
+	\item{\emph{Create a list of titles for your Quantities of Interest}:}
+	\item{\emph{Generate the Quantity of Interest Object}: Finally, with the computed Quantities of Interest, you must }
+\end{enumerate}
+
+
+%
+\section{Basic Layout of a \emph{qi} Function}
+Now with the general outline of a \emph{qi} function defined, it is important to discuss the expected procedures and specifics of implementation.
+
+
+\subsection{The Function's Signature}
+% quick intro
+The \emph{qi} function's signature accepts 4 parameters:
+
+
+%
+%
+\begin{description}
+	\item[@z:]{An object of type ``\emph{zelig}''.  This wraps the fitted model in the slot ``result''.}
+	\item[@x:]{An object of type ``\emph{setx}''.  This object is used to compute important coefficients, parameters, and features of the data.frame passed to the function call.}
+	\item[@x1:]{Also an object of type ``\emph{setx}''.  This object is used in a similar fashion, however its presence allows a variety of \emph{quantities of interest} to be computed.  Notably, this is a necessary parameter to compute first-differences.}
+	\item[@num:]{The number of simulations to compute}
+\end{description}
+
+
+% code example
+%
+\subsection{Code Example: \emph{qi} Function Signature}
+\begin{verbatim}
+qi.your_model_name <- function(z, x=NULL, x1=NULL, num=1000) {
+	# start typing your code here
+	# ...
+	# ...
+\end{verbatim}
+
+
+Note: In the above example, the function name ``qi.your\_model\_name'' is merely a placeholder.  In order to register a \emph{qi} function with zelig, the developer must follow the naming convention qi.\emph{your mode name}, where \emph{your\_model\_name} is the name of the developer's module.  For example, if a developer titled his or her zelig module ``logit'', then the corresponding \emph{qi} function is titled ``\emph{qi.logit}''.
+
+\subsection{Call to the \emph{param} Function}
+This step is common in many zelig models, however, its existence - though highly recommended - is purely optional.  Typically, during this step, samples are taken from the distribution governing the statistical model.  This is then used to simulate values for the \emph{quantities of interest}.
+
+%
+\subsection{The Function Body}
+The function body of \emph{qi} function varies largely from model to model.  As a result, it is impossible to create general guidelines to simulate \emph{quantities of interest} - or even determine what the \emph{quantity of interest} is.  Typical methods for computing \emph{quantities of interest} include:
+\begin{itemize}
+	\item{Implementing sampling algorithms based on the underlying fitted model, or}
+	\item{``Predicting'' a large number of values from the fitted model}
+\end{itemize}
+
+
+% return values
+\subsection{The Return Value}
+In order for Zelig to process the simulations, they must be returned in one of several formats:
+
+\begin{itemize}
+	% First Example
+	\item{\begin{verbatim}
+		list(
+		     "TITLE OF QI 1" = val1,
+		     "TITLE OF QI 2" = val2,
+		     # any number of title-val pairs
+		     # ...
+		     "TITLE OF QI N" = val.n
+		     )
+	\end{verbatim}}
+
+	% Second Example
+	\item{\begin{verbatim}
+		make.qi(
+		        titles = list(title1, title2),
+		        stats  = list(val1, val2)
+		        )
+	\end{verbatim}}
+\end{itemize}
+
+
+In the above example,\emph{val1, val2}are data.frames, matrices, or lists representing the simulations of the \emph{quantities of interests}, and \emph{title1, title2} - and any number of titles - are character-strings that will act as human-readable descriptions of the \emph{quantities of interest}.  Once results are returned in this format, Zelig will convert the results into a machine-readable format and summarize the simulations into a comprehensible format.
+
+NOTE: Because of its readability, it is suggested that the first method is used when returning \emph{quantities of interest}.
+
+% break
+\pagebreak
+
+
+% find better way to output this data
+\section{Example \emph{qi} function (qi.logit.R)}
+
+
+\begin{verbatim}
+qi.ls <- function(z, x=NULL, x1=NULL, num=1000) {
+  # error-catching
+  if (missing(x))
+    stop("x cannot be missing while computing the `ls' model")
+
+
+  # get `parameters'
+  # In this example, this amounts to sampling
+  # a multivariate normal distribution
+  coefs <- param(z, num=num)
+
+
+  # compute expected values using X
+  ev <- coefs %*% t(x$matrix)
+  ev1 <- NA
+  fd <- NA
+  
+  # if x1 exists:
+  #   compute expected values using X1
+  #   compute finite differences
+  if (!is.null(x1)) {
+    ev1 <- coefs %*% t(x1$matrix)
+    fd <- ev1 - ev
+  }
+
+  # return
+  list("Expected Value: E(Y|X)" = ev,
+       "Expected Value (of X1): E(Y|X1)" = ev1,
+       "First Difference in Expected Values: E(Y|X1) - E(Y|X)" = fd
+       )
+}
+\end{verbatim}
+
+\pagebreak
+
+
+\section{The \emph{qi} API}
+\emph{In Development}
+
+
+\end{document}

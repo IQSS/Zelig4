@@ -1,0 +1,11 @@
+"zelig3 canned"
+zelig3<<model name>> <- function (res, ...) {
+class(res) <- c("<<model name>>", class(res))
+
+# give it a terms object
+if (is.null(res$terms))
+res$terms <- terms(res$call$formula)
+
+# return
+res
+}

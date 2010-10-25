@@ -1,0 +1,99 @@
+setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
+  # expand the dots
+  dots <- list(...)
+
+  # init important objects  
+  vars.obj <- as.character(all.vars(formula(obj)[[3]]))
+  not.vars <- as.character(all.vars(formula(obj)[[2]]))
+  env.obj <- NULL
+
+  # explanatory variables
+  explan.obj <- Filter(function (x) x %in% vars.obj, names(dots))
+
+  # fix objects, if some don't come through correctly
+  if (is.null(env.obj))
+    env.obj <- parent.frame()
+
+  # defaults for fn
+  if (missing(fn) || !is.list(fn))
+    # set fn to appropriate values, if NULL
+    fn <- list(numeric = mean,
+               ordered = median.zelig,
+               other   = mode.zelig
+               )
+
+  # get data-frame
+  if (is.null(data))
+    data <- obj$data
+
+  # res
+  res <- list()
+
+  # compute values
+  # if fn[[mode(data(, key))]] exists,
+  # then use that function to compute result
+  for (key in vars.obj) {
+    # skip values that are explicitly set
+    if (key %in% names(dots) || key %in% not.vars)
+      next
+
+    m <- class(data[,key])
+
+    # match the class-type with the correct
+    # function to call
+    if (m %in% names(fn))
+      res[[key]] <- fn[[m]](data[,key])
+
+    else if (is.numeric(data[,key]))
+      res[[key]] <- fn$numeric(data[,key])
+
+    else if (is.ordered(data[,key]))
+      res[[key]] <- fn$ordered(data[,key])
+
+    else
+      res[[key]] <- fn$other(data[,key])
+  }
+  # add explicitly set values
+  for (key in names(dots)) {
+    res[[key]] <- dots[[key]]
+  }
+
+  # make a tiny data-frame with
+  # all the necessary columns
+  d <- data[1,]
+
+  # give the computed values to those entries
+  for (key in names(res)) {
+    val <- res[[key]]
+    
+    if (!(is.numeric(val) || is.ordered(val)))
+      val <- factor(val, levels=levels(data[,key]))
+
+    d[,key] <- val
+  }
+
+  # build the model matrix
+  # this is a cleaner but still hackneyed
+  # of the data.frame casting that's done
+  # in the original setx
+  mod <- model.matrix(terms(obj), data=d)
+  mod <- as.data.frame(mod)
+  rownames(mod) <- "coef:"
+
+
+  # build the setx object
+  sx <- list(name   = obj$name,
+             formula= formula(obj),
+             matrix = mod,
+             values = res,
+             fn     = fn,
+             cond   = cond,
+             new.data = data,
+             special.parameters = list(...),
+             label = ""
+             )
+
+  # set class and return
+  class(sx) <- c(obj$name, "setx")
+  sx
+}

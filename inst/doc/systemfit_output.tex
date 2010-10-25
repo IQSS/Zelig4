@@ -1,0 +1,55 @@
+\begin{itemize}
+\item \texttt{method}: Estimation method. 
+\item \texttt{g}: number of equations.
+\item \texttt{n}: total number of observations.
+\item \texttt{k}: total number of coefficients.
+\item \texttt{ki}: total number of linear independent coefficients.
+\item \texttt{df}: degrees of freedom of the whole system.
+\item \texttt{iter}: number of iteration steps.
+\item \texttt{b}: vector of all estimated coefficients.
+\item \texttt{t}: $t$ values for $b$.
+\item \texttt{se}: estimated standard errors of $b$.
+\item \texttt{bt}: coefficient vector transformed by $TX$.
+\item \texttt{p}: $p$ values for $b$.
+\item \texttt{bcov}: estimated covariance matrix of $b$.
+\item \texttt{btcov}: covariance matrix of $bt$.
+\item \texttt{rcov}: estimated residual covariance matrix.
+\item \texttt{drcov}: determinant of \texttt{rcov}.
+\item \texttt{rcor}: estimated residual correlation matrix.
+\item \texttt{olsr2}: system OLS R-squared value.
+\item \texttt{y}: vector of all (stacked) endogenous variables.
+\item \texttt{x}: matrix of all (diagonally stacked) regressors.
+\item \texttt{data}: data frame of the whole system (including instruments).
+\item \texttt{TX}: matrix used to transform the regressor matrix.
+\item \texttt{rcovformula}: formula to calculate the estimated residual covariance matrix.
+\item \texttt{probdfsys}: system degrees of freedom to calculate probability values?.
+\item \texttt{solvetol}: tolerance level when inverting a matrix or calculating a determinant.
+\item \texttt{eq}: a list that contains the results that belong to the individual equations.
+\item \texttt{eqnlabel*}: the equation label of the ith equation (from the labels list).
+\item \texttt{formula*}: model formula of the ith equation.
+\item \texttt{n*}: number of observations of the ith equation.
+\item \texttt{k*}: number of coefficients/regressors in the ith equation (including the constant).
+\item \texttt{ki*}: number of linear independent coefficients in the ith equation (including the
+constant differs from k only if there are restrictions that are not cross equation).
+\item \texttt{df*}: degrees of freedom of the ith equation.
+\item \texttt{b*}: estimated coefficients of the ith equation. 
+\item \texttt{se*}: estimated standard errors of $b$ of the ith equation.
+\item \texttt{t*}: $t$ values for $b$ of the ith equation.
+\item \texttt{p*}: $p$ values for $b$ of the ith equation.
+\item \texttt{covb*}: estimated covariance matrix of $b$ of the ith equation.
+\item \texttt{y*}: vector of endogenous variable (response values) of the ith equation.
+\item \texttt{x*}: matrix of regressors (model matrix) of the ith equation.
+\item \texttt{data*}: data frame (including instruments) of the ith equation.
+\item \texttt{fitted*}: vector of fitted values of the ith equation.
+\item \texttt{residuals*}: vector of residuals of the ith equaiton.
+\item \texttt{ssr*}: sum of squared residuals of the ith equation.
+\item \texttt{mse*}: estimated variance of the residuals (mean of squared errors) of the ith equation.
+\item \texttt{s2*}: estimated variance of the residents($\hat{sigma}^2$) of the ith equation.
+\item \texttt{rmse*}: estimated standard error of the reiduals (square root of mse) of the ith equation.
+\item \texttt{s*}: estimated standard error of the residuals ($\hat{\sigma})$ of the ith equation.
+\item \texttt{r2*}: R-squared (coefficient of determination).
+\item \texttt{adjr2*}: adjusted R-squared value.
+
+
+
+\end{itemize}

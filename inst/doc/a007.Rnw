@@ -1,0 +1,67 @@
+%% PLEASE DONT DELETE
+\documentclass{article}
+\usepackage{Sweave}
+\begin{document}
+%\VignetteIndexEntry{create zideal and list of models}
+<<code>>=
+## get all model names and create dump them in a file
+
+## If VGAM is loaded before lme4 (mixed models), then summary 
+## does not work for mixed models. HACK here by loading lme4 firt
+## FIX-ME: Is this going to be a problem given than this file is not 
+## distributed with the package (is in .RbuildIgnore)
+
+library(lme4)
+
+library(Zelig)
+models<-setdiff(zeligListModels(),c())
+write(models,file='models.txt');
+
+
+## citations
+getwd() -> wd
+dir.create(file.path(wd,"cites"))
+
+for (m in models){
+  ##cat(m, file="kot.txt",append=TRUE)
+  res <- Zelig:::.getModelCitationTex(m)
+  cat("To cite the \\emph{",m,"} Zelig model:\n","\\begin{verse}\n",res,"\n\\end{verse}", file = paste("cites/",m,".tex", sep = ""))
+}
+
+## create that zideal data
+#H <- Sys.getenv("HOST")
+
+#if (length(grep("harvard",H))){
+#        source('../zideal/zvcServer.R')
+#        zideal <- create.zelig.all.packages("Zelig")
+#        save(zideal, file="../zideal/zideal.RData")
+#}
+
+## create html version of models for gary's web site
+getcat<- function(m){
+Zelig:::zeligDescribeModel(m)$category
+}
+
+mm <- sapply(models,getcat)
+catsList <- Zelig:::categories()
+
+## create html version of models for gary's web site
+
+out <- file("zeligmodels.html","w+b")
+cat ("<ul id=\"models\">\n", file=out, sep="")
+for (cat in names(catsList)){
+        cat ("<li class=\"mainindx\">","<a href=\"\">",catsList[[cat]],"</a>\n", file=out, sep="")
+        cat ("\t<ul>\n", file=out, sep="")
+        thisCatModels<- names(mm[which(mm==cat)])
+        for (m in thisCatModels){
+                cat ("\t\t<li><a href=\"",m,".pdf\">",m," : ",Zelig:::zeligDescribeModel(m)$description,"</a></li>\n" , file = out, sep="")
+        }
+        cat("\t</ul>\n", file=out, sep="")
+        cat("</li>\n", file=out, sep="")
+
+}
+cat ("</ul>\n", file=out, sep="")
+close(out)
+
+@ 
+\end{document}

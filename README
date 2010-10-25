@@ -1,0 +1,270 @@
+2.8-3 (May 29, 2007):  Stable release for R 2.4.0-2.5.0.  Fixed bugs in 
+  help.zelig(), and summary for multinomial logit, bivariate probit, 
+  and bivariate logit with multiple imputation.  First version 
+  dependencies are as follows:  
+     MASS          7.2-34           
+     boot          1.2-27           
+     VGAM          0.7-1            
+     MCMCpack      0.8-2            
+     mvtnorm       0.7-5            
+     survival      2.31             
+     sandwich      2.0-0            
+     zoo           1.2-1            
+     coda          0.10-7           
+     nnet          7.2-34           
+     sna           1.4    
+
+2.8-2 (March 3, 2007):  Stable release for R 2.4.0-2.4.1.  Fixed bug in 
+  ARIMA simulation process.  
+
+2.8-1 (February 21, 2007):  Stable release for R 2.4.0-2.4.1.  Made  
+  setx() compatible with ordred factor variables (thanks to Mike Ward and 
+  Kirill Kalinin).  First order dependencies as in version 2.8-1.  
+
+2.8-0 (February 12, 2007):  Stable release for R 2.4.0-2.4.1.
+  Released ARIMA models and network analysis models (least
+  squares and logit) for sociomatrices.  First version dependencies
+  are as follows:
+    MASS          7.2-31           
+    boot          1.2-27           
+    VGAM          0.7-1            
+    MCMCpack      0.7-4            
+    mvtnorm       0.7-5            
+    survival      2.31             
+    sandwich      2.0-0            
+    zoo           1.2-1            
+    coda          0.10-7           
+    nnet          7.2-31           
+    sna           1.4    
+
+2.7-5 (December 25, 2006):  Stable release for R 2.4.0-2.4.1.
+  Fixed bug related to {\tt names.default()}, summary for multiple
+  imputation methods, and prediction for ordinal response models (thanks 
+  to Brian Ripley, Chris Lawrence, and Ian Yohai).
+
+2.7-3 (November 9, 2006):  Stable release for R 2.4.0.  Fixed bugs related 
+   to R check.
+
+2.7-2 (November 5, 2006):  Stable release for R 2.4.0.  Temporarily 
+  removed ARIMA models.
+     
+2.7-1 (November 3, 2006): Stable release for R 2.4.0. Made
+  changes regarding the S4 classes in VGAM. The ARIMA
+  model for time series data added by Justin Grimmer.  First level
+  dependencies are as follows:
+     MASS         7.2-29 
+     boot         1.2-26 
+     VGAM         0.7-1 
+     MCMCpack     0.7-4 
+     mvtnorm      0.7-5 
+     survival     2.29 
+     sandwich     2.0-0 
+     zoo          1.2-1 
+     coda         0.10-7 
+
+2.6-5 (September 14, 2006): Stable release for R 2.3.0-2.3.1.  Fixed bugs 
+  in bivariate logit, bivariate probit, multinomial logit, and 
+  model.matrix.multiple (related to version 2.6-4, but not previous 
+  versions,  thanks to Chris Lawrence).  First level dependencies are as 
+  follows:
+     MASS          7.2-27.1         
+     boot          1.2-26           
+     VGAM          0.6-9            
+     MCMCpack      0.7-1            
+     mvtnorm       0.7-2            
+     survival      2.28               
+     sandwich      1.1-1            
+     zoo           1.0-6            
+     coda          0.10-5 
+
+2.6-4 (September 8, 2006): Stable release for R 2.3.0-2.3.1.  Fixed 
+  bugs in {\tt setx()}, and bugs related to {\tt multiple}.  Added 
+  instructions for installing Fortran tools for Intel macs.  Added 
+  the RxC ecological inference model.
+
+2.6-3 (June 19, 2006): Stable release for R 2.0.0-2.3.1.
+  Fixed bug in VDC interface functions, and parse.formula().
+
+2.6-2 (June 7, 2006): Stable release for R 2.0.0-2.3.1. Removed R x C EI.  
+  Changed data = list() to data = mi() for multiply-imputed data frames.  
+  First level version compatabilities are as for version 2.6-1.
+
+2.6-1 (April 29, 2006): Stable release for R 2.0.0-2.2.1. Fixed major bug 
+  in ordinal logit and ordinal probit expected value simulation procedure 
+  (does not affect Bayesian ordinal probit). (reported by Ian Yohai) Added 
+  the following ecological inference (EI) models: Bayesian hierarchical 
+  EI, Bayesian dynamic EI, and RxC EI.  First level version compatabilties 
+  (at time of release) are as follows:
+     MASS          7.2-24 
+     boot          1.2-24     
+     VGAM          0.6-8       
+     MCMCpack      0.7-1      
+     mvtnorm       0.7-2       
+     survival      2.24       
+     sandwich      1.1-1       
+     zoo           1.0-6       
+     coda          0.10-5
+
+2.5-4 (March 16, 2006): Stable release for R 2.0.0-2.2.1.  Fixed bug related to 
+  windows build.  First-level dependencies are the same as in version 2.5-1.  
+
+2.5-3 (March 9, 2006): Stable release for R 2.0.0-2.2.1.  Fixed bugs related to VDC 
+  GUI.  First level dependencies are the same as in version 2.5-1.
+
+2.5-2 (February 3, 2006): Stable release for R 2.0.0-2.2.1.  Fixed bugs related to 
+  VDC GUI.  First level dependencies are the same as in version 2.5-1.  
+
+2.5-1 (January 31, 2006): Stable release for R 2.0.0-2.2.1.  Added methods for 
+  multiple equation models.  Fixed bugs related to robust estimation and upgrade of 
+  sandwich and zoo packages.  Revised setx() to use environments.  Added 
+  current.packages() to retrieve version of packages upon which Zelig depends.  
+  First level version dependencies are as follows:  
+     MASS        7.2-24           
+     boot        1.2-24           
+     VGAM        0.6-7            
+     mvtnorm     0.7-2            
+     survival    2.20             
+     sandwich    1.1-0            
+     zoo         1.0-4            
+     MCMCpack    0.6-6            
+     coda        0.10-3
+
+2.4-6 (October 27, 2005): Stable release for R 2.0.0-2.2.0.  Fixed bug 
+  related to simulation for Bayesian Normal regression.  
+
+2.4-5 (October 18, 2005): Stable release for R 2.0.0-2.2.0.  Updated 
+  installation instructions. 
+
+2.4-4 (September 29, 2005): Stable release for R 2.0.0-2.2.0.  Fixed 
+  links for help.zelig().
+
+2.4-3 (September 29, 2005): Stable release for R 2.0.0-2.2.0.  
+
+2.4-2 (August 30, 2005): Stable release for R 2.0.0-2.1.1.  Fixed bug in 
+  setx() related to as.factor() and I().  Streamlined qi.survreg().
+
+2.4-1 (August 15, 2005): Stable release for R 2.0.0-2.1.1.  Added the 
+  following Bayesian models:  factor analysis, mixed factor analysis, 
+  ordinal factor analysis, unidimensional item response theory, 
+  k-dimensional item response theory, logit, multinomial logit, normal, 
+  ordinal probit, Poisson, and tobit.  Also fixed minor bug in
+  formula (long variable names coerced to list). 
+
+2.3-2 (August 5, 2005): Stable release for R 2.0.0-2.1.1.  Fixed bug in 
+  simulation procedure for lognormal model.
+
+2.3-1 (August 4, 2005): Stable release for R 2.0.0-2.1.1.
+  Fixed documentation errors related to model parameterization and code 
+  bugs related to first differences and conditional prediction for 
+  exponential, lognormal, and Weibull models.  (reported by Alison Post)
+
+2.2-4 (July 30, 2005): Stable release for R 2.0.0-2.1.1.  Revised 
+  relogit, additing options for weightig in addition to prior
+  correction.  (reported by Martin Plöderl)
+
+2.2-3 (July 24, 2005): Stable release for R 2.0.0-2.1.1.  Fixed bug 
+  associated with robust standard errors for negative binomial.
+
+2.2-2 (July 13, 2005): Stable release for R 2.0.0-2.1.1.  Fixed bug in 
+  setx().  (reported by Ying Lu)
+
+2.2-1 (July 11, 2005):  Stable release for R 2.0.0-2.1.0.  Revised 
+  ordinal probit to use MASS library.  Added robust standard errors 
+  for the following regression models: exponential, gamma, logit, 
+  lognormal, least squares, negative binomial, normal (Gaussian), 
+  poisson, probit, and weibull.
+
+2.1-4 (May 22, 2005):  Stable release for R 1.9.1-2.1.0.  Revised 
+  help.zelig() to deal with CRAN build of Windows version.  Added
+  recode of slots to lists in NAMESPACE.  Revised install.R script
+  to deal with changes to install.packages().  (reported by Dan 
+  Powers and Ying Lu)
+
+2.1-3 (May 9, 2005):  Stable release for R 1.9.1-2.1.0.  Revised
+  param.lm() function to work with bootstrap simulation.  (reported by 
+  Jens Hainmueller)
+
+2.1-2 (April 14, 2005):  Stable release for R 1.9.1-2.1.  Revised 
+  summary.zelig().
+
+2.1-1 (April 7, 2005):  Stable release for R 1.9.1-2.1.  Fixed bugs in 
+  NAMESPACE and summary.vglm().  
+
+2.0-13 (March 11, 2005): Stable release for R 1.9.1-2.0.1.  Fixed bugs in 
+  NAMESPACE and rocplot.Rd. 
+
+2.0-12 (February 20, 2005): Stable release for R 1.9.1-2.0.1.  Added plot 
+  = TRUE option to rocplot().  
+
+2.0-11 (January 14, 2005): Stable release for R 1.9.1-2.0.1.  Changed 
+  class name for subsettted models from "multiple" to "strata", and 
+  modified affected functions.
+
+2.0-10 (January 4, 2005): Stable release for R 1.9.1 and R 2.0.0.  Fixed 
+  bug in simulation procedure for ordinal logit.  (Reported by Ian Yohai.)
+
+2.0-9 (October 21, 2004): Stable release for R 1.9.1 and R 2.0.0 (Linux 
+  only).  Fixed bugs in NAMESPACE.
+
+2.0-8 (October 18, 2004): Stable release for R 1.9.1 and R 2.0.0
+  (Linux only).  Revised Zelig for submission to CRAN.
+  
+2.0-7 (October 14, 2004): Stable release for R 1.9.1 \emph{and} R
+  2.0.0 (Linux only).  Fixed bugs in summary.zelig(), NAMESPACE, and
+  assorted bugs related to new R release.  Revised syntax for multiple
+  equation models.
+
+2.0-6 (October 4, 2004): Stable release for R 1.9.1. Fixed problem
+  with NAMESPACE.
+
+2.0-5 (September 25, 2004): Stable release for R 1.9.1.  Changed
+  installation procedure to source install.R from Zelig website.
+
+2.0-4 (September 22, 2004): Stable release for R 1.9.1.  Fixed typo in
+  installation directions, implemented NAMESPACE, rationalized
+  summary.zelig(), and tweaked documentation for least squares.
+
+2.0-3 (September 1, 2004): Stable release for R 1.9.1.  Fixed bug in
+  conditional prediction for survival models.
+
+2.0-2 (August 25, 2004): Stable release for R 1.9.1.  Removed
+  predicted values from ls.
+
+2.0-1b (July 16, 2004): Stable release for R 1.9.1.  MD5 checksum
+  problem fixed.  Revised plot.zelig() command to be a generic function
+  with methods assigned by the model.  Revised entire architecture to
+  accept multiply imputed data sets with strata.  Added functions to
+  simplify adding models.  Completely restructured reference manual.
+  Fixed bugs related to conditional prediction in setx and summarizing
+  strata in summary.zelig.
+
+1.1-2 (June 24, 2004): Stable release for R 1.9.1 (MD5
+  checksum problem not fixed, but does not seem to cause problems).
+  Fixed bug in help.zelig().  (reported by Michael L. Levitan)
+
+1.1-1 (June 14, 2004): Stable release for R 1.9.0.  Revised zelig()
+  procedure to use zelig2model() wrappers, revised help.zelig() to use a
+  data file with extension .url.tab, and revised setx() procedure to
+  take a list of fn to apply to variables, and such that fn = NULL
+  returns the entire model.matrix().
+
+1.0-8 (May 27, 2004): Stable release for R 1.9.0.  Fixed bug in
+  simulation procedure for survival models.  (reported by Elizabeth
+  Stuart)
+
+1.0-7 (May 26, 2004): Stable release for R 1.9.0. Fixed bug in relogit
+  simulation procedure.  (reported by Tom Vanwellingham)
+
+1.0-6 (May 11, 2004): Stable release for R 1.9.0.  Fixed bug in
+  setx.default, which had previously failed to ignore extraneous
+  variables in data frame.  (reported by Steve Purpura)
+
+1.0-5 (May 7, 2004): Replaced relogit procedure with memory-efficient
+  version. (reported by Tom Vanwellingham)
+
+1.0-4 (April 19, 2004): Stable release for R 1.9.0.  Added vcov.lm
+  method; changed print for summary.relogit.
+
+1.0-2 (April 16, 2004): Testing distribution for R 1.9.0. 
+
+1.0-1 (March, 23, 2004): Stable release for R 1.8.1. 

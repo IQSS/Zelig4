@@ -1,0 +1,25 @@
+"zelig2 how-to"
+# 0. the zelig2 function acts as an interface between
+#    the existing model and the zelig module that is
+#    being created.
+# 1. construct a call object containing all the parameters
+#    passed into "zelig2<<model name>>"
+# 2. remove all parameters that will not make sense within
+#    the original model (in the demo code, e.g. robust, M, etc.)
+# 3. re-assign the call object's first entry to the name of the
+#    model that must be called.
+#    This step is crucial, as it is how your model invokes the
+#    pre-existing model's name
+# 4. attach the data frame (mf$data <- data)
+# 5. return the call (as a call)
+#
+# NOTE: the returned value is going to be evaluated, and -
+#       as a result - call the pre-existing model.  Any
+#       parameters passed to the original zelig function
+#       will be forwarded to the model unless set to NULL
+#
+#
+# NOTE: THIS FUNCTION IS INVOKED BY THE ZELIG FUNCTION
+#       (NOT THE USER)
+#
+# call order: zelig -> zelig2<<model name>>"

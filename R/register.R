@@ -1,0 +1,3 @@
+register <- function(...) {
+  UseMethod("register")
+}

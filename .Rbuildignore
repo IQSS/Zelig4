@@ -1,0 +1,8 @@
+inst/doc/models
+inst/doc/a007.*
+inst/unitTests
+R/systemfit
+R/ate
+R/gee
+tests
+

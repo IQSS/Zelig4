@@ -1,0 +1,51 @@
+\section{{\tt print}: Printing Quantities of Interest}
+\label{ss:print}
+
+\subsubsection{Description}
+The {\tt print} command formats summary output and allows users to
+specify the number of decimal places as an optional argument.  
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> print(x, digits = 3, print.x = FALSE)
+\end{verbatim}
+
+\subsubsection{Arguments}
+
+\begin{itemize}
+\item {\tt x}: the object to be printed may be {\tt z.out} output
+  from {\tt zelig()}, {\tt x.out} output from {\tt setx()}, {\tt s.out}
+  output from {\tt sim()}, or other R data structures.
+\item {\tt digits}: the minimum number of significant digits to return
+  for all elements of $x < 0$.  By default, {\tt print()} avoids
+  scientific notation, but setting the number of digits to 1 will
+  frequently force output in scientific notation.  The number of {\tt
+    digits} is not the number of significant digits for all output
+  values, but the minimum number of significant digits for the
+  smallest value in {\tt x} between -1 and 1; this governs the number
+  of significant digits in the rest of the values with decimal output.
+\item {\tt print.x}: a logical value for {\tt sim()} output, which
+  specifies whether to print a summary ({\tt print.x = FALSE}, the
+  default) of the {\tt x} and {\tt x1} \emph{inputs} to {\tt sim()},
+  or the complete set of inputs (optionally, {\tt print.x = TRUE}).
+\end{itemize}
+
+\subsubsection{Examples}
+\begin{verbatim}
+> print(summary(z.out), digits = 2)
+> print(summary(s.out), digits = 3, print.x = TRUE)
+\end{verbatim}
+
+\subsubsection{See Also}
+
+Advanced users may wish to refer to {\tt help(print)}.
+
+\subsubsection{Contributors}
+
+Kosuke Imai, Gary King, and Olivia Lau added print methods for {\tt
+  sim()} output, and {\tt summary()} output for Zelig objects.   
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

@@ -1,0 +1,68 @@
+approval                U.S. Presidential Approval Data
+coalition               Coalition Dissolution in Parliamentary
+                        Democracies
+current.packages        Find all packages in a dependency chain
+dims                    Return Dimensions of Vectors, Arrays, and Data
+                        Frames
+eidat                   Simulation Data for Ecological Inference
+friendship              Simulated Example of Schoolchildren Friendship
+                        Network
+grunfeld                Simulation Data for model Seemingly Unrelated
+                        Regression (sur) that corresponds to method SUR
+                        of systemfit
+gsource                 Read Data As a Space-Delimited Table
+help.zelig              HTML Help for Zelig Commands and Models
+hoff                    Social Security Expenditure Data
+immigration             Individual Preferences Over Immigration Policy
+klein                   Simulation Data for model Two-Stage Least
+                        Square (twosls) that corresponds to method 2SLS
+                        of systemfit
+kmenta                  Simulation Data for model Three-Stage Least
+                        Square (threesls) that corresponds to method
+                        3SLS of systemfit
+macro                   Macroeconomic Data
+match.data              Output matched data sets
+MatchIt.url             Table of links for Zelig
+mexico                  Voting Data from the 1988 Mexican Presidental
+                        Election
+mi                      Bundle multiply imputed data sets as a list
+mid                     Militarized Interstate Disputes
+model.end               Cleaning up after optimization
+model.frame.multiple    Extracting the "environment" of a model formula
+model.matrix.multiple   Design matrix for multivariate models
+network                 Format matricies into a data frame for social
+                        network analysis
+newpainters             The Discretized Painter's Data of de Piles
+parse.formula           Parsing user-input formulas into multiple
+                        syntax
+parse.par               Select and reshape parameter vectors
+PErisk                  Political Economic Risk Data from 62 Countries
+                        in 1987
+plot.ci                 Plotting Vertical confidence Intervals
+plot.zelig              Graphing Quantities of Interest
+put.start               Set specific starting values for certain
+                        parameters
+repl                    Replicating Analyses
+rocplot                 Receiver Operator Characteristic Plots
+sanction                Multilateral Economic Sanctions
+set.start               Set starting values for all parameters
+setx                    Setting Explanatory Variable Values
+sim                     Simulating Quantities of Interest
+sna.ex                  Simulated Example of Social Network Data
+summary.zelig           Summary of Simulated Quantities of Interest
+SupremeCourt            U.S. Supreme Court Vote Matrix
+swiss                   Swiss Fertility and Socioeconomic Indicators
+                        (1888) Data
+ternaryplot             Ternary diagram
+ternarypoints           Adding Points to Ternary Diagrams
+tobin                   Tobin's Tobit Data
+turnout                 Turnout Data Set from the National Election
+                        Survey
+user.prompt             Pause in demo files
+Weimar                  1932 Weimar election data
+zelig                   Estimating a Statistical Model
+zeligDepStatus          Zelig Dependencies Packages Client Status
+zeligDepUpdate          Download Zelig Dependencies Packages
+zeligDescribeModelXML   Zelig interface functions
+Zelig-package           Zelig: Everyone's Statistical Software
+Zelig.url               Table of links for Zelig

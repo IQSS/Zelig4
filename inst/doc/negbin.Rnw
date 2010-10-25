@@ -1,0 +1,254 @@
+\SweaveOpts{results=hide, prefix.string=vigpics/negbin}
+\include{zinput}
+%\VignetteIndexEntry{Negative Binomial Regression for Event Count Dependent Variables}
+%\VignetteDepends{Zelig, MASS}
+%\VignetteKeyWords{model, binomial,negative, regression, count}
+%\VignettePackage{Zelig}
+\begin{document}
+\nobibliography*
+<<beforepkgs, echo=FALSE>>=
+ before=search()
+@
+
+<<loadLibrary, echo=F,results=hide>>=
+library(Zelig)
+@
+
+
+\section{{\tt negbin}: Negative Binomial Regression for Event
+Count Dependent Variables}\label{negbin}
+
+Use the negative binomial regression if you have a count of events for
+each observation of your dependent variable.  The negative binomial
+model is frequently used to estimate over-dispersed event count
+models.
+
+\subsubsection{Syntax}
+
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "negbin", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+\subsubsection{Additional Inputs} 
+
+In addition to the standard inputs, {\tt zelig()} takes the following
+additional options for negative binomial regression:  
+\begin{itemize}
+\item {\tt robust}: defaults to {\tt FALSE}.  If {\tt TRUE} is
+selected, {\tt zelig()} computes robust standard errors via the {\tt
+sandwich} package (see \cite{Zeileis04}).  The default type of robust
+standard error is heteroskedastic and autocorrelation consistent (HAC),
+and assumes that observations are ordered by time index.
+
+In addition, {\tt robust} may be a list with the following options:  
+\begin{itemize}
+\item {\tt method}:  Choose from 
+\begin{itemize}
+\item {\tt "vcovHAC"}: (default if {\tt robust = TRUE}) HAC standard
+errors. 
+\item {\tt "kernHAC"}: HAC standard errors using the
+weights given in \cite{Andrews91}. 
+\item {\tt "weave"}: HAC standard errors using the
+weights given in \cite{LumHea99}.  
+\end{itemize}  
+\item {\tt order.by}: defaults to {\tt NULL} (the observations are
+chronologically ordered as in the original data).  Optionally, you may
+specify a vector of weights (either as {\tt order.by = z}, where {\tt
+z} exists outside the data frame; or as {\tt order.by = \~{}z}, where
+{\tt z} is a variable in the data frame).  The observations are
+chronologically ordered by the size of {\tt z}.
+\item {\tt \dots}:  additional options passed to the functions 
+specified in {\tt method}.   See the {\tt sandwich} library and
+\cite{Zeileis04} for more options.   
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Example}
+
+Load sample data:  
+<<Example.data>>=
+ data(sanction)
+@ 
+Estimate the model:  
+<<Example.zelig>>=
+ z.out <- zelig(num ~ target + coop, model = "negbin", data = sanction)
+@ 
+<<Example.summary>>= 
+summary(z.out)
+@ 
+Set values for the explanatory variables to their default mean values:  
+<<Example.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulate fitted values:  
+<<Example.sim>>=
+ s.out <- sim(z.out, x = x.out)
+@
+<<Example.summary.sim>>= 
+summary(s.out)
+@ 
+\begin{center}
+<<label=Example1Plot,fig=true>>= 
+ plot(s.out)
+@ 
+\end{center}
+\subsubsection{Model}
+Let $Y_i$ be the number of independent events that occur during a
+fixed time period. This variable can take any non-negative integer value.
+
+\begin{itemize}
+\item The negative binomial distribution is derived by letting the
+  mean of the Poisson distribution vary according to a fixed
+  parameter $\zeta$ given by the Gamma distribution. The
+  \emph{stochastic component} is given by
+   \begin{eqnarray*}
+     Y_i \mid \zeta_i & \sim & \textrm{Poisson}(\zeta_i \mu_i),\\
+     \zeta_i & \sim & \frac{1}{\theta}\textrm{Gamma}(\theta).
+   \end{eqnarray*}
+   The marginal distribution of $Y_i$ is then the negative binomial
+   with mean $\mu_i$ and variance $\mu_i + \mu_i^2/\theta$:
+   \begin{eqnarray*}
+   Y_i & \sim & \textrm{NegBin}(\mu_i, \theta), \\
+       & = & \frac{\Gamma (\theta + y_i)}{y! \, \Gamma(\theta)} 
+             \frac{\mu_i^{y_i} \, \theta^{\theta}}{(\mu_i + \theta)^{\theta + y_i}},
+   \end{eqnarray*}
+   where $\theta$ is the systematic parameter of the Gamma
+   distribution modeling $\zeta_i$.  
+
+ \item The \emph{systematic component} is given by
+   \begin{equation*}
+     \mu_i = \exp(x_i \beta)
+   \end{equation*}
+   where $x_i$ is the vector of $k$ explanatory variables and $\beta$ is
+   the vector of coefficients.
+ \end{itemize}
+
+\subsubsection{Quantities of Interest}
+\begin{itemize}
+\item The expected values ({\tt qi\$ev}) are simulations of the mean
+  of the stochastic component.  Thus, $$E(Y) = \mu_i = \exp(x_i
+  \beta),$$ given simulations of $\beta$.  
+  
+\item The predicted value ({\tt qi\$pr}) drawn from the distribution
+  defined by the set of parameters $(\mu_i, \theta)$.
+
+\item The first difference ({\tt qi\$fd}) is
+\begin{equation*}
+\textrm{FD} \; = \; E(Y | x_1) - E(Y \mid x)
+\end{equation*}
+\item In conditional prediction models, the average expected treatment
+  effect ({\tt att.ev}) for the treatment group is 
+    \begin{equation*} \frac{1}{\sum_{i=1}^n t_i}\sum_{i:t_i=1}^n \left\{ Y_i(t_i=1) -
+      E[Y_i(t_i=0)] \right\},
+    \end{equation*} 
+    where $t_i$ is a binary explanatory variable defining the treatment
+    ($t_i=1$) and control ($t_i=0$) groups.  Variation in the
+    simulations are due to uncertainty in simulating $E[Y_i(t_i=0)]$,
+    the counterfactual expected value of $Y_i$ for observations in the
+    treatment group, under the assumption that everything stays the
+    same except that the treatment indicator is switched to $t_i=0$.
+
+\item In conditional prediction models, the average predicted treatment
+  effect ({\tt att.pr}) for the treatment group is 
+    \begin{equation*} \frac{1}{\sum_{i=1}^n t_i}\sum_{i:t_i=1}^n \left\{ Y_i(t_i=1) -
+      \widehat{Y_i(t_i=0)} \right\},
+    \end{equation*} 
+    where $t_i$ is a binary explanatory variable defining the
+    treatment ($t_i=1$) and control ($t_i=0$) groups.  Variation in
+    the simulations are due to uncertainty in simulating
+    $\widehat{Y_i(t_i=0)}$, the counterfactual predicted value of
+    $Y_i$ for observations in the treatment group, under the
+    assumption that everything stays the same except that the
+    treatment indicator is switched to $t_i=0$.
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you
+may view.  For example, if you run \texttt{z.out <- zelig(y \~\,
+  x, model = "negbin", data)}, then you may examine the available
+information in \texttt{z.out} by using \texttt{names(z.out)},
+see the {\tt coefficients} by using {\tt z.out\$coefficients}, and
+a default summary of information through \texttt{summary(z.out)}.
+Other elements available through the {\tt \$} operator are listed
+below.
+
+\begin{itemize}
+\item From the {\tt zelig()} output object {\tt z.out}, you may extract:
+   \begin{itemize}
+   \item {\tt coefficients}: parameter estimates for the explanatory
+     variables.
+   \item {\tt theta}: the maximum likelihood estimate for the
+     stochastic parameter $\theta$.  
+   \item {\tt SE.theta}: the standard error for {\tt theta}.  
+   \item {\tt residuals}: the working residuals in the final iteration
+     of the IWLS fit.
+   \item {\tt fitted.values}: a vector of the fitted values for the systemic
+     component $\lambda$.  
+   \item {\tt linear.predictors}: a vector of $x_{i} \beta$.  
+   \item {\tt aic}: Akaike's Information Criterion (minus twice the
+     maximized log-likelihood plus twice the number of coefficients).
+   \item {\tt df.residual}: the residual degrees of freedom.
+   \item {\tt df.null}: the residual degrees of freedom for the null
+     model.
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+   \end{itemize}
+
+\item From {\tt summary(z.out)}, you may extract: 
+   \begin{itemize}
+   \item {\tt coefficients}: the parameter estimates with their
+     associated standard errors, $p$-values, and $t$-statistics.
+   \item{\tt cov.scaled}: a $k \times k$ matrix of scaled covariances.
+   \item{\tt cov.unscaled}: a $k \times k$ matrix of unscaled
+     covariances.  
+   \end{itemize}
+
+\item From the {\tt sim()} output object {\tt s.out}, you may extract
+  quantities of interest arranged as matrices indexed by simulation
+  $\times$ {\tt x}-observation (for more than one {\tt x}-observation).
+  Available quantities are:
+
+   \begin{itemize}
+   \item {\tt qi\$ev}: the simulated expected values given the specified
+     values of {\tt x}.
+   \item {\tt qi\$pr}: the simulated predicted values drawn from the
+     distribution defined by $(\mu_i, \theta)$.  
+   \item {\tt qi\$fd}: the simulated first differences in the
+     simulated expected values given the specified values of {\tt x}
+     and {\tt x1}.
+   \item {\tt qi\$att.ev}: the simulated average expected treatment
+     effect for the treated from conditional prediction models.  
+   \item {\tt qi\$att.pr}: the simulated average predicted treatment
+     effect for the treated from conditional prediction models.  
+   \end{itemize}
+\end{itemize}
+
+\subsection* {How to Cite} 
+
+\input{cites/negbin}
+\input{citeZelig}
+
+\subsection* {See also}
+The negative binomial model is part of the MASS package by William N. Venable and Brian D. Ripley \citep{VenRip02}. Advanced users may wish to refer to \texttt{help(glm.nb)} as well as \cite{McCNel89}. Robust standard errors are implemented via sandwich package by Achim Zeileis \citep{Zeileis04}.Sample data are from \cite{Martin92}.
+
+\bibliographystyle{asa}
+\bibliography{gk,gkpubs}
+<<afterpkgs, echo=FALSE>>=
+ after<-search()
+ torm<-setdiff(after,before)
+ for (pkg in torm)
+ detach(pos=match(pkg,search()))
+@
+ \end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+
+
+
+
+

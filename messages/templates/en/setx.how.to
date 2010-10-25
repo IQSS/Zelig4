@@ -1,0 +1,22 @@
+"setx how-to"
+# HOW-TO WRITE A SETX FUNCTION
+# ============================
+# 0. For most purposes setx.default will compute
+#    correctly values of interest, which are needed
+#    to compute the quantities of interest.  However,
+#    some models will not provide data in the correct
+#    fashion, etc. (e.g. computing a covariance matrix
+#    of the explanatory variables may not make sense
+#    or be relevant for certain models)
+# 1. parameters are passed in as a zelig model and potentially
+#    a new data-set.  The new data-set is used in place of the
+#    original one that was passed into zelig.  This
+# 2. the result of the setx function should be of class
+#    "setx.<<model name>>"
+#    this is important, because it ensures that the correct
+#    qi function and sim function are called
+# 3. <optional> the data frame used to compute this setx may
+#    be attached with the line
+#      res$data <- data
+#    if the sim function needs to make further computations
+#    if this is not the case, please omit that line

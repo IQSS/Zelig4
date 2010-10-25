@@ -1,0 +1,68 @@
+
+                Zelig: Everyone's Statistical Software
+
+                Kosuke Imai, Gary King and Olivia Lau
+
+                             Version 2.0
+
+            (Available at http://gking.harvard.edu/zelig)
+
+
+A growing proportion of statisticians and methodologists from many
+disciplines are converging on R, a powerful statistics package and
+programming language.  As an open source project, R is freely
+accessible.  With thousands of contributors who have written hundreds
+of packaged routines, R can deal with nearly any statistical problem.
+Although this high level of participation may be its greatest
+strength, the enormous diversity in approaches to statistical analyses
+and theories of statistical inference covered by R packages often
+results in a virtual babel of contradictory statistical advice,
+competing functions, and inconsistent syntax.
+
+To address these problems from a common perspective, we have created
+Zelig, a single, easy-to-use program, with a unified framework and
+syntax, that can estimate, help interpret, and present the results of
+a large range of statistical methods. It literally _is_ "everyone's
+statistical software" because Zelig uses R code from many researchers.
+We also hope it will _become_ "everyone's statistical software" for
+applications, and we have designed it so that anyone can use it or add
+their methods to it.  Zelig comes with detailed, self-contained
+documentation that minimizes startup costs for Zelig and R, automates
+graphics and summaries for all models, and, with only three simple
+commands required, generally makes the power of R accessible for all
+users.  Zelig also works well for teaching, and is designed so that
+scholars can use the same program they use for their research.
+
+Zelig adds considerable infrastructure to improve the use of existing
+methods.  Zelig
+ - implements and generalizes the program Clarify (for Stata),
+   which translates hard-to-interpret coefficients into quantities of
+   interest;
+ - combines multiply imputed data sets (such as output from Amelia) to
+   deal with missing data;
+ - automates bootstrapping for all models; 
+ - uses sophisticated nonparametric matching commands which improve
+   parametric procedures (via MatchIt);
+ - allows one-line commands to run analyses in all designated strata;
+ - automates the creation of replication data files so that you (or,
+   if you wish, anyone else) can replicate the results of your
+   analyses (hence satisfying the replication standard); and
+ - makes conditional population and superpopulation inferences.
+ 
+If you wish to add your methods to Zelig, the documentation also
+includes simple instructions for how to do so.  The process is easy
+and quick, and can be done by writing a few bridge functions and
+without rewriting or "porting" your R code.  If you don't know how to
+program in R, the Zelig documentation provides all the information you
+need.  R also interfaces seamlessly with C and Fortran if you prefer
+to write in those languages.  A variety of the best methodologists are
+currently working to include their methods in Zelig.  As Zelig grows,
+you will have access to an increasing range of cutting edge methods
+and models.
+
+You may also be interested in an APSA short course on Zelig, held on
+Wednesday, September 1st, at 1pm.  There is no fee, but
+preregistration is required; please email Olivia Lau
+<olau@fas.harvard.edu> to sign up.
+
+

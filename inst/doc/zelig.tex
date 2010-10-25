@@ -1,0 +1,81 @@
+\include{zinput}
+\usepackage{Sweave}
+\title{Zelig: Everyone's Statistical Software\thanks{The current
+    version of this software is available at
+    \texttt{http://gking.harvard.edu/zelig/}, free of charge and
+    open-source (under the terms of the GNU GPL, v. 2).}}
+\author{Kosuke
+  Imai\thanks{Assistant Professor, Department of Politics, Princeton
+    University (Corwin Hall, Department of Politics, Princeton
+    University, Princeton NJ 08544; \texttt{http://Imai.Princeton.Edu},
+    \texttt{KImai@Princeton.Edu}).}
+\and %
+Gary King\thanks{Albert J. Weatherhead III University Professor, Harvard
+  University (Institute for Quantitative Social Sciences, 1737 Cambridge 
+Street, Harvard University, Cambridge MA 02138;
+  \texttt{http://GKing.Harvard.Edu}, \texttt{King@Harvard.Edu}, (617)
+  495-2027).}
+\and %
+Olivia Lau\thanks{Ph.D.\ Candidate, Department of Government, Harvard
+  University (1737 Cambridge Street, Cambridge MA 02138;
+  \texttt{http://www.people.fas.harvard.edu/\~\,olau},
+  \texttt{OLau@Fas.Harvard.Edu}).}}
+
+% rbuild: replace 'Version ' '\\' Version
+\date{Version \\ \today}
+
+\begin{document}
+\maketitle
+\begin{rawhtml}
+  <p>
+  [Also available is a downloadable <a href="/zelig/docs/zelig.pdf">PDF</a>
+  version of this entire document]
+\end{rawhtml}
+
+\tableofcontents
+
+\nobibliography*
+
+\include{acknowledgments}
+
+\input{intro}
+
+\part[User's Guide]{User's Guide}
+
+\input{install}
+\input{syntax}
+\input{Zcommands}
+\input{graphs}
+
+\part{Advanced Zelig Uses}
+
+\input{robjects}
+\input{programmingstatements}
+\input{newModels}
+\input{addingModels}
+
+\part{Reference Manual}
+
+\input{refman}
+
+\appendix
+
+\part[Appendices]{Appendices}
+
+%\input{distributions}
+
+\chapter{What's New?  What's Next?}
+\input{whatsnew}
+
+\input{faq}
+
+\bibliographystyle{asa}
+\bibliography{gk,gkpubs}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: LaTeX
+%%% TeX-master: t
+%%% End:
+

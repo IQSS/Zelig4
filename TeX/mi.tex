@@ -1,0 +1,163 @@
+% author: Matt Owen
+% documentation for using the 'mi' class
+\documentclass[a4paper,11pt]{article}
+
+% Packages
+\usepackage{listings}
+\lstset{language=R}
+
+
+\begin{document}
+
+
+\section*{Fitting Multiple Statistical Models Simultaneously}
+
+It is often important, especially when computing data based on counterfactuals, to have a side-by-side comparison of the different fitted models and their \emph{quantities of interest}.  Typically, the statistician interested in comparing multiple models would:
+\begin{itemize}
+	\item{Prepare Several Different Datasets, by:}
+	\begin{itemize}
+		\item{Splitting a Dataset into Several Categorized by Some Particular Quality}
+		\item{Preparing Counterfactual Data Based on a Pre-existing Dataset}
+		\item{Collecting Several Different Data-sets Analyzing Similar Data}
+	\end{itemize}
+	\item{Compute a Fitted Model for Each Dataset}
+	\item{Simulate Quantities of Interest for Each Fitted Model}
+	\item{Organize the Results in a Logical Fashion}
+\end{itemize}
+
+This process can be quite arduous, and the programming syntax associated with these sorts of processes is often unintuitive and cumbersome.  Resulting from the necessity to simplify this process, the Zelig software package offers an intuitive and simple syntax to produce these results.
+
+\section{The \emph{mi} class: An Easy Method for Multiply Imputed Data}
+
+Zelig offers a simple way to fit models for multiply imputed data.  By submitting an \emph{mi} object to the data parameter of Zelig, the statistician can prepare analysis of multiply imputed data quickly and easily.
+
+\subsection{Parameters and Return-values of the ``mi'' Function}
+
+
+% Describe arguments/return-values
+\begin{description}
+	\item[@...:]{A series of \emph{data.frame} objects.  Note: if a non-\emph{data.frame} object is submitted, the \emph{mi} class will raise an error.}
+	\item[Return Value:]{An \emph{mi} object that the \emph{zelig} function will use to run analysis on the datasets.}
+\end{description}
+
+
+% clear page, and begin the section on mi
+\pagebreak
+\subsection{Examples of Multiply Imputed Data}
+
+
+% CODE EXAMPLE
+% ---- -------
+\begin{lstlisting}
+library(Zelig)
+
+data(turnout)
+
+# split the turnout data into 2 sets
+turnout1 <- turnout[1:1000,]
+turnout2 <- turnout[1001:2000, ]
+
+# create the mi object
+split.turnout <- mi(turnout1, turnout2)
+
+# fit the models
+z.out <- zelig(vote ~ race + educate, model="logit", data=split.turnout)
+
+# set a counterfactual on both data-sets
+x.out <- setx(z.out, age=65)
+
+# simulate quantities of interest for both models
+s.out <- sim(z.out,  x = x.out)
+
+# output results
+summary(s.out)
+\end{lstlisting}
+
+% some spacing between sections
+\vspace{4mm}
+
+\subsection*{Important Notes}
+\begin{itemize}
+	\item{When \emph{data} is submitted to the zelig function via the \emph{mi} class, Zelig returns an object of both class \emph{MI} and \emph{zelig}.  This is in contrast to usually simply being of the class \emph{zelig}.}
+	\item{...}
+\end{itemize}
+
+%
+\subsection{Developing Models to Interact with \emph{mi} Objects}
+For the most part, the Zelig developer should not need any additional code to have their model work with the \emph{mi} class.  However, an API exists for the managing and printing of results from this class.
+
+
+\section{The \emph{by} Keyword: Subsetting Datasets by Factors}
+
+For some models, a the significance of a factor variable - a variable whose range is a finite, specific number of values - is best understood by subsetting a dataset by each of its potential values.  For example, when trying to analyze voting patterns, it may make sense to fit your model separately by race, religion, or birth-state.  Typically, this would require creating a new data-set for each of the possible combinations of race, religion, and birth-state.  Zelig, via the emph{by} keyword, employs a straightforward method to create such models.
+
+\subsection{How-to Use the \emph{by} Keyword}
+
+\begin{itemize}
+	\item{\emph{by} must be a column name of the dataset (or datasets) being passed to the model}
+	\item{The formula must not contain any of the values passed into \emph{by}}
+	\item{\emph{by} should be a column describing factors - not numerical data.  Otherwise, results may be too numerous or nonsensical}
+\end{itemize}
+
+\subsection{Code Example}
+
+\begin{lstlisting}
+library(Zelig)
+
+data(turnout)
+
+z.out <- zelig(
+	vote ~ age + income + educate,
+	model = "logit",
+	data  = turnout,
+	by    = "race"
+	)
+
+x.out <- setx(z.out)
+
+s.out <- sim(z.out, x.out)
+
+summary(s.out)
+\end{lstlisting}
+
+% some spacing between sections
+\vspace{4mm}
+
+\subsection{Explanation of the Above Code}
+
+The above code individually fits, analyzes, and simulates a model for voter turnout based on age, income, and race.  By passing the \emph{by} keyword the value ``race'', our model knows to split the turnout data object into separate components: one for each different in the data column labeled ``race''.  The beauty in this script is the simplicity in which it does this process.  That is, it differs in no way from a typical call to \emph{zelig} with the exception that the \emph{by} keyword is specified.
+
+\section{Using the \emph{mi} Class and the \emph{by} Keyword Together}
+
+No special programming is necessary to use both the \emph{mi} class along with the \emph{by} keyword!  Just simply pass an \emph{mi} object to data, and pass the names of columns to subset the data by to the \emph{by} parameter, and \emph{zelig} will handle the rest.  In fact, the printout that Zelig will produce will automatically categorize the data according to which dataset was submitted and which factor was subsetted.  For complex operations an API is available for the savvy developer.
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

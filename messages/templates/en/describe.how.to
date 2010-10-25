@@ -1,0 +1,11 @@
+"describe how-to"
+# HOW-TO WRITE A DESCRIBE FUNCTION
+# ================================
+# 1. Fill in the "description" variable with a *short*
+#    description of the model. e.g. "multinomial probit model"
+# 2. Fill in the return-value for "category"
+# 3. Fill in the return-value for "authors" with either:
+#    i.  <<author name>>, or
+#    ii. c(<<author 1>>, <author 2>>, <<author 3>>, ...)
+# 4. Fill in the return-value for "year"
+# 5. <optional> Fill in the package variable

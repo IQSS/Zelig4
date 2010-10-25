@@ -1,0 +1,44 @@
+\documentclass[a4paper,10pt]{article}
+
+\begin{document}
+
+\title{The \emph{describe} Function}
+\author{Matt Owen}
+\maketitle
+
+\section{Introduction}
+The {\tt describe} function serves two purposes:
+
+\begin{enumerate}
+	\item{to give correct citation information for the Zelig model}
+	\item{to declare the type of data-sets that can be processed by the Zelig model}
+\end{enumerate}
+
+The developer can accomplish these two things simply by writing the {\tt describe} function for their model.
+
+\section{Form of a {\tt describe} Function}
+The {\tt describe} function should - in almost all cases - simply return a list or character-vector specifying the author, year or publication, and description of the developed model.  That is, 
+
+\section{Example of a {\tt describe} Function}
+\begin{verbatim}
+describe.logit <- function(zelig.obj)
+  list(
+       author   = c("Kosuke Imai", "Gary King"),
+       year     = 2008,
+       describe = "Logistic Regression for Dichotomous Dependent Variables"
+       )
+\end{verbatim}
+
+\section{Resulting Citation from the Above Example}
+\begin{verbatim}
+How to cite this model in Zelig:
+  Kosuke Imai, Gary King, and Olivia Lau. 2008.
+  "logit: Logistic Regression for Dichotomous Dependent Variables"
+  in Kosuke Imai, Gary King, and Olivia Lau,
+  "Zelig: Everyone's Statistical Software,"
+  http://gking.harvard.edu/zelig
+\end{verbatim}
+
+\section{Explanation of the Above Example}
+The above example is an actual copy of the {\tt describe} function for the ``logit'' model in Zelig's core package.  It specifies the author, the year of publication, and the description text in a clear and concise manner.  All Zelig models can have citation information generated for the exact same fashion that the logit model does.
+\end{document}

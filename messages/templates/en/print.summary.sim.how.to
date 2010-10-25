@@ -1,0 +1,9 @@
+"print.summary.sim how-to"
+# HOW TO WRITE A PRINT.SUMMARY.SIM FUNCTION
+# =========================================
+# 0. print.summary functions typically display the result
+#    from a summary object (a list) in an organized fashion
+#    with various text-formatting.
+# 1. for most purpose the default print function (below) should
+#    work, however, various formatting, etc. can be added typically
+#    without any impact on the operation of the program

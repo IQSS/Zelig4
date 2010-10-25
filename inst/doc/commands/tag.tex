@@ -1,0 +1,54 @@
+\section{{\tt tag}: Constrain parameter effects across equations}
+\label{tag}
+
+\subsubsection{Description}
+Use {\tt tag()} to identify parameters and constrain their effects
+across equations in multiple-equation models.  
+  
+\subsubsection{Syntax}
+\begin{verbatim}
+tag(x, label)
+\end{verbatim}
+
+\subsubsection{Arguments}
+\begin{itemize}
+\item {\tt x}: the variable to be constrained.
+\item {\tt label}: the name that the constrained variable takes.  
+\end{itemize}
+
+\subsubsection{Output Values}
+While there is no specific output from {\tt tag()} itself, {\tt
+parse.formula()} uses {\tt tag()} to identify parameter constraints
+across equations, when a model takes more than one systematic
+component.  
+
+\subsubsection{Examples}
+
+\subsubsection{See Also}
+\begin{itemize}
+\item \Sref{ui} for an overview of the multiple-equation user-interface.
+\item \Sref{parse.formula} for more examples of acceptable uses for
+{\tt tag()} in formulas.  
+\end{itemize}
+
+\subsubsection{Contributors}
+
+Kosuke Imai, Gary King, Olivia Lau, and Ferdinand Alimadhi.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+
+
+
+
+
+
+
+
+
+
+
+

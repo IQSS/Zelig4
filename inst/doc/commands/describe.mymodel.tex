@@ -1,0 +1,206 @@
+\section{{\tt describe}: Describe a model's systematic and stochastic 
+parameters}
+\label{describe.mymodel}
+
+\subsubsection{Description}
+
+In order to use {\tt parse.formula()}, {\tt parse.par()}, and the {\tt
+model.*.multiple()} commands, you must write a {\tt describe.mymodel()}
+function where {\tt mymodel} is the name of your modeling function.
+(Hence, if your function is called {\tt normal.regression()}, you need
+to write a {\tt describe.normal.regression()} function.)  Note that
+{\tt describe()} is \emph{not} a generic function, but is called by
+{\tt parse.formula(\dots, model = "mymodel")} using a combination of
+{\tt paste()} and {\tt exists()}.  You will never need to call {\tt
+describe.mymodel()} directly, since it will be called from {\tt
+parse.formula()} as that function checks the user-input formula or
+list of formulas.  
+
+\subsubsection{Syntax}
+\begin{verbatim}
+describe.mymodel()
+\end{verbatim}
+
+\subsubsection{Arguments}\label{categories}
+The {\tt describe.mymodel()} function takes no arguments.  
+
+\subsubsection{Output Values}
+The {\tt describe.mymodel()} function returns a list with the
+following information:  
+\begin{itemize}
+\item {\tt category}: a character string, consisting of one of the
+following: 
+\begin{itemize}
+\item {\tt "continuous"}: the dependent variable is continuous, numeric, and
+unbounded (e.g., normal regression), but may be censored with an associated censoring 
+indicator (e.g., tobit regression).  
+\item {\tt "dichotomous"}: the dependent variable takes two discrete integer
+values, usually 0 and 1 (e.g., logistic regression).  
+\item {\tt "ordinal"}: the dependent variable is an ordered factor
+response, taking 3 or more discrete values which are arranged in an
+ascending or descending manner (e.g., ordered logistic regression).  
+\item {\tt "multinomial"}: the dependent variable is an unordered
+factor response, taking 3 or more discrete values which are arranged
+in no particular order (e.g., multinomial logistic regression).  
+\item {\tt "count"}: the dependent variable takes integer values
+greater than or equal to 0 (e.g., Poisson regression).  
+\item {\tt "bounded"}: the dependent variable is a continuous numeric variable, that 
+is restricted (bounded within) some range (e.g., $(0, \infty)$).  The variable may 
+also be censored either on the left and/or right side, with an associated censoring 
+indicator (e.g., Weibull regression).
+\item {\tt "mixed"}: the dependent variables are a mix of the above
+categories (usually applies to multiple equation models).  
+\end{itemize}
+Selecting the category is particularly important since it sets certain
+interface parameters for the entire GUI.
+
+\item {\tt package}: (optional) a list with the following elements
+
+  \begin{itemize} 
+
+   \item {\tt name}: a characters string with the name of the package
+   containing the {\tt mymodel()} function.
+
+   \item {\tt version}: the minimum version number that works with
+   Zelig.
+
+   \item {\tt CRAN}: if the package is not hosted on CRAN mirrors,
+   provide the URL here as a character string.  You should be able
+   to install your package from this URL using {\tt name}, {\tt
+version}, and {\tt CRAN}:
+\begin{verbatim}
+install.packages(name, repos = CRAN, installWithVers = TRUE)
+\end{verbatim}  
+By default, {\tt CRAN = "http://cran.us.r-project.org/"}.  
+\end{itemize}
+
+\item {\tt parameters}: For each systematic and stochastic parameter
+(or set of parameters) in your model, you should create a list (named
+after the parameters as given in your model's notation, e.g., {\tt
+mu}, {\tt sigma}, {\tt theta}, etc.; not literally {\tt myparameter})
+with the following information:
+\begin{itemize}
+
+\item {\tt equations}: an integer number of equations for the
+parameter.  For parameters that can take an undefined number of
+equations (for example in seemingly unrelated regression), use {\tt
+c(2, Inf)} or {\tt c(2, 999)} to indicate that the parameter can take
+a minimum of two equations up to a theoretically infinite number of
+equations.  
+
+\item {\tt tagsAllowed}: a logical value ({\tt TRUE}/{\tt FALSE})
+specifying whether a given parameter allows constraints.  If there is
+only one equation for a parameter (for example, {\tt mu} for the
+normal regression model has {\tt equations = 1}), then {\tt
+tagsAllowed = FALSE} by default.  If there are two or more equations
+for the parameter (for example, {\tt mu} for the bivariate probit
+model has {\tt equations = 2}), then {\tt tagsAllowed = TRUE} by
+default.  
+
+\item {\tt depVar}: a logical value ({\tt TRUE}/{\tt FALSE})
+specifying whether a parameter requires a corresponding dependent
+variable.  
+
+\item {\tt expVar}: a logical value ({\tt TRUE}/{\tt FALSE})
+specifying whether a parameter allows explanatory variables.  If {\tt
+depVar = TRUE} and {\tt expVar = TRUE}, we call the parameter a
+``systematic component'' and {\tt parse.formula()} will fail if
+formula(s) are not specified for this parameter.  If {\tt
+depVar = FALSE} and {\tt expVar = TRUE}, the parameter is estimated as
+a scalar ancillary parameter, with default formula \verb|~ 1|, if the
+user does not specify a formula explicitly.  If {\tt depVar = FALSE}
+and {\tt expVar = FALSE}, the parameter can only be estimated as a
+scalar ancillary parameter.  
+
+\item {\tt specialFunction}: (optional) a character string giving the
+name of a function that appears on the left-hand side of the formula.
+Options include {\tt "Surv"}, {\tt "cbind"}, and {\tt "as.factor"}. 
+
+\item {\tt varInSpecial}: (optional) a scalar or vector giving the
+number of variables taken by the {\tt specialFunction}.  For example,
+{\tt Surv()} takes a minimum of 2 arguments, and a maximum of 4
+arguments, which is represented as {\tt c(2, 4)}.   
+
+\end{itemize}
+If you have more than one parameter (or set of parameters) in
+your model, you will need to produce a {\tt myparameter} list for each
+one.  See examples below for details.  
+\end{itemize}
+
+\subsubsection{Examples}
+For a Normal regression model with mean {\tt mu} and scalar variance
+parameter {\tt sigma2}, the minimal {\tt describe.*()} function is as
+follows:  
+\begin{verbatim}
+describe.normal.regression <- function() {
+  category <- "continuous"
+  mu <- list(equations = 1,              # Systematic component
+             tagsAllowed = FALSE, 
+             depVar = TRUE, 
+             expVar = TRUE)
+  sigma2 <- list(equations = 1,          # Scalar ancillary parameter
+                 tagsAllowed = FALSE, 
+                 depVar = FALSE, 
+                 expVar = FALSE)
+  pars <- list(mu = mu, sigma2 = sigma2)
+  model <- list(category = category, parameters = pars)
+}
+\end{verbatim}
+See \Sref{normal.regression} for full code to execute this model from
+scratch in R with Zelig.  
+
+Now consider a bivariate probit model with parameter vector {\tt mu} and
+correlation parameter {\tt rho} (which may or may not take explanatory
+variables).  Since the bivariate probit function uses the {\tt pmvnorm()} 
+function from the mvtnorm library, we list this under {\tt package}.   
+\begin{verbatim}
+describe.bivariate.probit <- function() {
+  category <- "dichotomous"
+  package <- list(name = "mvtnorm", 
+                  version = "0.7")
+  mu <- list(equations = 2,               # Systematic component 
+             tagsAllowed = TRUE,          
+             depVar = TRUE, 
+             expVar = TRUE) 
+  rho <- list(equations = 1,              # Optional systematic component
+             tagsAllowed = FALSE,         #   Estimated as an ancillary
+             depVar = FALSE,              #   parameter by default
+             expVar = TRUE) 
+  pars <- list(mu = mu, rho = rho)
+  list(category = category, package = package, parameters = pars)
+}
+\end{verbatim}  
+See \Sref{bivariate.probit} for the full code to write this model from
+scratch in R with Zelig. 
+
+For a multinomial logit model, which takes an undefined number of
+equations (corresponding to each level in the response variable):  
+\begin{verbatim}
+describe.multinomial.logit <- function() { 
+  category <- "multinomial"
+  mu <- list(equations = c(1, Inf), 
+             tagsAllowed = TRUE, 
+             depVAR = TRUE, 
+             expVar = TRUE, 
+             specialFunction <- "as.factor", 
+             varInSpecial <- c(1, 1))
+  list(category = category, parameters = list(mu = mu))
+}
+\end{verbatim}
+(This example does not have corresponding executable sample code.)
+
+\subsubsection{See Also}
+\begin{itemize}
+\item \Sref{s:new} for an overview of how the {\tt describe.*()}
+function works with {\tt parse.formula()}.  
+\item \Sref{parse.formula} for information on {\tt parse.formula()}.
+\end{itemize}
+
+\subsubsection{Contributors}
+
+Kosuke Imai, Gary King, Olivia Lau, and Ferdinand Alimadhi.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "~/zelig/docs/zelig"
+%%% End: 

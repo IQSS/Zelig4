@@ -1,0 +1,26 @@
+Package: Zelig
+Version: 4.0-0
+Date: 2010-09-28
+Title: Everyone's Statistical Software
+Author: Kosuke Imai <kimai@Princeton.Edu>,
+        Gary King <king@harvard.edu>,
+        Olivia Lau <olau@fas.harvard.edu>
+Maintainer: Matt Owen, <mowen@iq.harvard.edu>
+Depends: R (>= 2.8.1), methods, MASS, iterators
+Suggests: mvtnorm, survival
+Description: Zelig is an easy-to-use program that can estimate, and
+        help interpret the results of, an enormous range of
+        statistical models. It literally is ``everyone's statistical
+        software'' because Zelig's simple unified framework
+        incorporates everyone else's (R) code. We also hope it will
+        become ``everyone's statistical software'' for applications
+        and teaching, and so have designed Zelig so that anyone can
+        easily use it or add their programs to it.  Zelig also comes
+        with infrastructure that facilitates the use of any existing
+        method, such as by allowing multiply imputed data for any
+        model, and mimicking the program Clarify (for Stata) that
+        takes the raw output of existing statistical procedures and
+        translates them into quantities of direct interest.
+License: GPL (>=2)
+URL: http://gking.harvard.edu/zelig
+Packaged: Tue Sept 28 12:06:15 2010; mowen

@@ -1,0 +1,57 @@
+\section{{\tt names}: Identifying the Structure of Zelig Objects}
+
+\subsubsection{Description}
+  The function \texttt{names()} returns the named elements within an
+  object.  For objects created using \texttt{zelig()} and
+  \texttt{sim()}, \texttt{names()} returns nested lists as
+  object-level arguments.  Use the \texttt{\$} operator to extract 
+elements
+  from objects.  
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> names(x)                                            # Lists elements. 
+> names(x) <- "value"                                 # Assigns names to x.  
+\end{verbatim}
+
+\subsubsection{Arguments}
+\begin{itemize}
+\item {\tt x}: any R object. 
+\item {\tt "value"}: a character vector of up to the same length as
+  \texttt{x} (or \texttt{NULL} to clear the names from the object).
+\end{itemize}
+
+\subsubsection{Output Values}
+For the generic function \texttt{names}, \texttt{NULL} or a character
+vector of the same length as \texttt{x}.
+
+\subsubsection{Example}
+Attach sample data:  
+\begin{verbatim}
+> data(turnout)
+\end{verbatim}
+Return the variables in the data frame:  
+\begin{verbatim}
+> names(turnout)
+\end{verbatim}
+Generate Zelig objects:
+\begin{verbatim}
+> z.out <- zelig(vote ~ age + income, model = "logit", data = turnout)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+Extract names from objects of class zelig:
+\begin{verbatim}
+> names(z.out)
+> names(s.out)
+> names(summary(s.out))
+\end{verbatim}
+
+\subsubsection{See Also}
+
+Additional information is available in {\tt help(names)}.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

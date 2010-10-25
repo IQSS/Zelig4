@@ -1,0 +1,8 @@
+"sim.setx canned"
+sim.setx.<<model name>> <- function (obj, x, ...) {
+# this function exists so that if
+# sim(obj) and sim(obj, x) should have radically
+# different behavior, we will be able to place them
+# in seperate files easily
+sim.<<model name>>(obj, x, ...)
+}

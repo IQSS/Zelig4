@@ -1,0 +1,21 @@
+"describe canned"
+describe.<<model name>> <- function () {
+package <- list(name="stats",
+version=".9"
+)
+
+# edit the below line to add a description
+# to this zelig model
+description <- "a zelig model"
+
+# edit the below with information about
+# the model that this zelig module is based on
+# the citation year may differ than the auto-generated one
+list(category = "",
+authors = "<<author>>",
+year = <<year>>,
+description = description,
+package = package,
+parameters=list(list())
+)
+}

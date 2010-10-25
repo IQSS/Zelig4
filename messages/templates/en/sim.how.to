@@ -1,0 +1,16 @@
+"sim how-to"
+# HOW-TO WRITE A SIM FUNCTION
+# ===========================
+# 0. The sim function invokes the qi function.
+#    Then, returns the quantities of interests
+#    alongside a host of other relevant data, that
+#    is presented along with summary and print
+# 1. importantly, sim should always have the line:
+#      res <- qi(obj, x=x, x1=x1)
+#    this enesure that the qi's are computed with the
+#    exact parameters that enter the sim function itself
+# 2. the call to sim and the call should be returned along
+#    with the quantities of interest (qi.stat) and their
+#    titles (qi.name)
+# 3. the returned object should have class type:
+#     "sim.<<model name>>:

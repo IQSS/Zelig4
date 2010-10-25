@@ -1,0 +1,28 @@
+"sim.setx how-to"
+# HOW-TO WRITE A SIM.SETX FILE
+# ============================
+# 0. sim.setx functions offer alternative ways
+#    to simulate quantities of interest.  That is,
+#    sim functions are called in this fashion
+#      sim(zelig.out)
+#
+#    while sim.setx functs are called as:
+#      sim(zelig.out, x)
+#    or
+#      sim(zelig.out, x, x1)
+#
+#    this allows the developer to separate
+#    the different types of simulation algorithms
+#    that may exist for his or her model
+#
+#    if the model simulates quantities of interest
+#    identically to that of the standard sim function
+#    it should then only contain the line:
+#      sim.<<model name>>(obj, x, ...)
+#
+# 1. invoke qi with
+#      qi(obj, x=x, x=x1)
+#
+#    do relevant computation on the return quantities
+#    of interest, and attach relevant data that needs
+#    to be passed to print and summary functions

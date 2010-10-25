@@ -1,0 +1,38 @@
+\documentclass[a4paper,10pt]{article}
+
+\begin{document}
+
+\title{The \emph{register} Function}
+\author{Matt Owen}
+\maketitle
+
+
+
+\section{Introduction and Significance}
+When an existing statistical model is created as a Zelig package, it is useful to be able to quickly port functions from the original model over to Zelig.  Zelig can do this on its own, of course, however it takes a slight amount of loading time.  While a few moments is typically inconsequential, in the interest of completeness the \emph{register} generic function was added to Zelig in order to cutdown load times as much as possible.
+
+\section{Format of a \emph{register} Function}
+
+\subsection{The Function Signature}
+The \emph{register} function is extremely straightforward to write.  Simply define a function {\tt register.model\_name} with the argument {\tt zelig.object} or {\tt ...}, and have it return a character-vector of generic functions that you would like to port over.
+
+\subsection{The Return Value}
+The return-value of the \emph{register} function should be either a list or a vector of character-strings.  These strings must correspond to an existing function that is used by the statistical model Zelig is wrapping.  That is, 
+
+
+
+\section{Example of Porting a ``Logit'' Model}
+
+\begin{verbatim}
+register.logit <- function(zelig.object)
+  c("vcov", "coef")
+\end{verbatim}
+
+
+
+\section{Explanation of {\tt register.logit}}
+Above is a verbatim copy of the actual function Zelig uses for the \emph{logit} model.  The title of the function ``register.logit'' specifies that the value being returned by this function is relevant only to the \emph{logit} function.  The return value is a character-vector (or a list of strings) that specifies which generic functions to map over to the Zelig's wrapper for the \emph{logit} model.
+
+
+
+\end{document}

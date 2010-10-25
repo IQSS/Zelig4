@@ -1,0 +1,29 @@
+"qi how-to"
+# HOW-TO WRITE A QI FILE 
+# ======================
+# qi functions are the heart of any zelig module.
+# The qi function is passed information from the setx
+# function (via x, x1), parameters (simpar), and the
+# original zelig model (obj or object)
+# The developer (you) then writes the software that he/she
+# believes produces a significant quantity of interest.
+# The result should always be returned in the fashion
+# list(qi.stat=qi.stat
+#      qi.name=qi.name
+#     )
+# where qi.stat is a list of qi.stat and qi.name have the form
+# qi.stat <- list(qi.1 = <<qi.1>>,
+#                 qi.2 = <<qi.2>>,
+#                 qi.3 = <<qi.3>>,
+#                 ...
+#                 )
+#
+# qi.name <- list(qi.1 = <<qi.1 name>>,
+#                 qi.2 = <<qi.2 name>>,
+#                 qi.3 = <<qi.3 name>>,
+#                 ...
+#                 )
+#
+# qi.1, qi.2, etc. should be named in an easy to comprehend manner
+# the indices of qi.stat and qi.name (qi.1, qi.2, etc.) should match,
+# otherwise a warning will be displayed during the print stage

@@ -1,0 +1,18 @@
+"summary.sim canned"
+summary.sim.<<model name>> <- function(obj, ...) {
+# set important summary objects
+# zelig models always have qi.stat, and qi.name
+# elements
+res <- list(model="mprobit",
+qi.stat   = obj$qi.stat,
+qi.name    = obj$qi.name,
+original   = obj$obj,
+call       = obj$call,
+zelig.call = obj$zelig.call
+)
+
+# cast as class
+class(res) <- "summary.sim.<<model name>>"
+
+res
+}

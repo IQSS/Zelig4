@@ -1,0 +1,210 @@
+#!/bin/sh
+
+##
+## This file is called by Makefile. It does the followings:
+## 1.run pdf latex to each tex file produced by R CMD build
+## OR run Sweave to each file if issued from command line (not called by "make" during R build)
+## 2.remove header and footer or each tex file so that it's ready for inclusion by zelig.tex
+## 3.convert all Rd files to tex file so that they are ready for inclusion by zelig.tex
+##
+
+STATICTEXFILES="acknowledgments.tex robjects.tex programmingstatements.tex graphs.tex matchitref.tex describemymodel.tex install.tex intro.tex Zcommands.tex addingModels.tex newModels.tex syntax.tex faq.tex whatsnew.tex"
+
+## get name of the models and save them in a file
+## for now exclude models which are not complete
+##
+## echo "library(Zelig); models<-setdiff(zeligListModels(),c('aov')); write(models,file='models.txt');" | R --vanilla --slave
+
+## at this point, Sweave should have been run and produced tex files
+for f in `cat models.txt`
+  do 
+  #if this script is called from make, then Rbuild would have 
+  # run vignettes, otherwise this script should run them.
+  # to distinguish this to cases we test the number of params
+  # 0 - when called from command line
+  # 1 - when called from make
+  #
+  if [ $# -eq 0 ]
+  then
+  	echo "Sweave(\"$f.Rnw\")" | R --slave
+	echo "sweaving $f"
+  fi
+  
+  ## create pdfs for all the tex file produced by sweave
+  echo "pdflatexing $f"
+  pdflatex $f
+  bibtex $f
+  pdflatex $f
+  pdflatex $f
+
+  ## remove header and footer from the tex file so that they are ready 
+  ## for inclusion in big zelig manual
+  perl -i -ne 'print unless /^\\include{zinput}$/ .. /^\\begin{document}$/' $f.tex
+  perl -i -p -e 's#\\end{document}# #i' $f.tex
+  ## remove 'nobibliography*' line at the beginning
+  perl -i -p -e 's#\\nobibliography\*# #i' $f.tex
+  ## remove bibstyle and bib database at the end
+  perl -i -p -e 's#\\bibliographystyle{asa}# #i' $f.tex
+  perl -i -p -e 's#\\bibliography{gk,gkpubs}# #i' $f.tex
+  perl -i -p -e 's#\\bibliography{gk}# #i' $f.tex
+done
+
+## create pdf file for a007.Rnw, just to pass the local R CMD check
+pdflatex a007.tex
+
+## run R CMD Rdconv to rd files
+## create commandsRd folder if does not exists
+
+if [ ! -d commandsRd ]
+then
+    mkdir commandsRd
+fi
+
+cp zinput.tex commandsRd
+cp Rd.sty commandsRd
+cp upquote.sty commandsRd
+
+Rdfiles=`ls ../../man/*.Rd`
+for rd in ${Rdfiles}
+  do
+    echo $rd
+    newname=`basename ${rd} .Rd`
+    echo $newname
+    R CMD Rdconv -t=latex ${rd} -o commandsRd/${newname}.tex
+  
+    ### perl -i -pe 's#HeaderA{#section{{\\tt #i' commandsRd/${newname}.tex
+    perl -i -pe 's#HeaderA{(.*)}{(.*)}{(.*)}#section{{\\tt \1}: \2}\\label{ss:\3}#i' commandsRd/${newname}.tex 
+
+done
+
+
+## create the big Zelig manual
+pdflatex zelig
+bibtex zelig
+pdflatex zelig
+pdflatex zelig
+pdflatex zelig
+
+
+## time to create pdfs for commands in commandsRd (for garys website help)
+cd commandsRd
+for rd in ${Rdfiles}
+do
+    newname=`basename ${rd} .Rd`
+    ## add header
+    perl -i -pe 'print q{\\include{zinput} \\begin{document}} if $. == 1; close ARGV if eof' ${newname}.tex
+    ## add footer
+    echo "\\end{document}" >> ${newname}.tex
+    ## create pdfs
+    pdflatex ${newname}
+done
+cd ..
+
+
+
+# some static tex to pdf
+# put them in a folder first
+
+
+if [ ! -d static ]
+then
+    mkdir static
+fi
+
+
+
+for stfile in $STATICTEXFILES
+do
+  cp $stfile static
+done
+
+cp zinput.tex static
+cp Rd.sty static
+cp upquote.sty static
+cp -r figs static
+
+cd static
+for stfile in ${STATICTEXFILES}
+do
+
+    ## add header
+    perl -i -pe 'print q{\\include{zinput} \\begin{document}} if $. == 1; close ARGV if eof' ${stfile}
+
+    ## replace \chapter with \title  ## it was not a good idea
+    ### perl -i -pe 's#\\chapter#\\title#i' ${stfile}
+
+    ## add footer
+    echo "\\end{document}" >> ${stfile}
+    ## create pdfs
+    pdflatex ${stfile}
+done
+
+cd ..
+
+## generate html help for models and the full html file
+
+###
+###if [ -f "zeligmodels.html" ]
+###then
+###    rm "zeligmodels.html"
+###fi
+
+###echo "<ul id=models>" >> zeligmodels.html
+###for f in `cat models.txt`
+###  do 
+###echo "<li><a href=$f.pdf>$f</a></li>" >> zeligmodels.html
+###done
+
+###echo "</ul>" >> zeligmodels.html
+
+cat zeligheader.html zeligmodels.html zeligfooter.html > zelig.html
+
+
+
+
+## some other pdf files
+
+
+
+## remove the files with the name of the models
+#rm models.txt
+
+## do some cleanup
+rm -f *.aux *.toc *.out *.blg *.bbl #*.log 
+
+## clean commandsRd directory
+rm -f commandsRd/*.aux commandsRd/*.out commandsRd/*.log commandsRd/*.tex
+## clean statis folder
+rm -f static/*.aux static/*.out static/*.log static/*.tex static/Rd.sty static/zinput.*
+
+
+##rm zeligmodels.html
+for f in `cat models.txt`
+do
+  rm -f $f.tex
+done
+
+## remove cites dir (created by a007.Rnw
+rm -rf cites
+
+###rm models.txt
+
+#### here is how u delete the \end{document}
+#### perl -i.old -p -e 's#\\end{document}# #i' try
+
+#### delete first 10 lines 
+#### perl -i.old -ne 'print unless 1 .. 10' foo.txt
+
+#### \SweaveOpts{result=hide}
+#### perl -i.old -p -e 's#\\include{zinput}#\\SweaveOpts{results=hide}\n\\include{zinput}#i' *.Rnw
+
+### change dependencies line
+### perl -i.old -p -e 's#See Package dependencies#Zelig#i' *.Rnw
+
+#### thats how u remove the header from tex files
+#### perl -i.old -ne 'print unless /^\\include{zinput}$/ .. /^\\begin{document}$/' try
+
+
+### here is how to add some tex at the beginning of each file
+
+### perl -i -ple 'print q{TEXTTOBEADDED} if $. == 1; close ARGV if eof' *.tex

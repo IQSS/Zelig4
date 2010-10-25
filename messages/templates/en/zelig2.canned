@@ -1,0 +1,17 @@
+"zelig2 canned"
+zelig2<<model name>> <- function (formula, model, data, M, ...) {
+# this file acts as an interface to the original model
+# the return ("mf") is a function call that zelig will later invoke
+# in order to process the specified data set
+#
+# any parameters unnecessary to the model
+# should be set to NULL (e.g. mf$M, mf$robust, etc...)
+
+mf <- match.call(expand.dots=T)
+mf$M <- mf$robust <- NULL
+mf[[1]] <- <<model function>>
+mf$model <- NULL
+mf$data <- data
+mf$formula <- formula
+as.call(mf)
+}

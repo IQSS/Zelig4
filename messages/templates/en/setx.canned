@@ -1,0 +1,18 @@
+"setx canned"
+setx.<<model name>> <- function(obj, data=NULL, ...) {
+# send to default
+res <- setx.default(obj, ...)
+
+# cast as appropriate data-type, then return
+class(res) <- "setx.<<model name>>"
+
+# attach data frame here, if the model
+# requires sophisticated number-crunching
+# after setx is called
+# if not, remove the below line
+if (!is.null(data)) {
+res$data <- data
+}
+
+res
+}

@@ -1,0 +1,32 @@
+"sim canned"
+sim.<<model name>> <- function(obj,
+x=NULL,
+x1=NULL,
+num=c(1000, 100),
+prev = NULL,
+cond.data = NULL, ...
+) {
+# error-catching
+if (is.null(x))
+stop("Error: x cannot be NULL")
+
+# simulate qi's for x
+# invoke qi.<model name>
+res <- qi.<<model name>>(obj, x=x, x1=x1)
+
+# change call name
+obj$call[[1]] <- as.name("sim")
+
+
+# append
+res$call <- match.call(expand.dots=T)
+res$zelig.call <- obj$call
+res$par <- NA
+res$obj <- obj
+
+# change class so correct summary/print function
+# can be called
+class(res) <- "sim.<<model name>>"
+
+res
+}

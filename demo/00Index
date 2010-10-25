@@ -1,0 +1,82 @@
+aov                Analysis of Variance Model
+arima              Arima models
+blogit             Bivariate Logit regression and simulation 
+bivariate.probit   New model example: Bivariate probit MLE
+bprobit            Bivariate Probit regression and simulation 
+chopit             Compound Hierarchical Ordered Probit regression 
+conditional        Conditional prediction
+exp                Exponential regression and simulation 
+gamma              Gamma regression and simulation
+logit.gam          Generalized Additive Model for Dichotomous Dependent Variables
+normal.gam         Generalized Additive Model for Continuous Dependent Variables
+poisson.gam        Generalized Additive Model for Count Dependent Variables
+probit.gam         Generalized Additive Model for Dichotomous Dependent Variable
+logit              Logit regression and simulation 
+lognorm            Lognormal regression and simulation 
+ls                 Least Squares regression and simulation 
+match              Regression and simulation on a matched data set 
+mi                 Regression and simulation on multiply imputed data sets
+mlogit             Multinomial Logit regression and simulation 
+negbin             Negative Binomial regression and simulation
+ls.net             Network analysis least squares
+logit.net          Network analysis logit 
+cloglog.net        Social Network Complementary Log Log Regression for Dichotomous Dependent Variables
+gamma.net          Social Network Gamma Regression for Continuous, Positive Dependent Variables
+normal.net         Social Network Normal Regression for Continuous Dependent Variables
+poisson.net        Social Network Poisson Regression for Event Count Dependent Variables
+probit.net         Social Network Probit Regression for Dichotomous Dependent Variables
+normal             Normal (Gaussian) regression and simulation
+normal.regression  New model example for normal regression
+ologit             Ordinal Logit regression and simulation
+oprobit            Ordinal Probit regression and simulation
+poisson            Poisson regression and simulation
+probit             Probit regression and simulation
+quantile	   Quantile regresion model
+relogit            Rare events logit regression and simulation
+robust	           Robust estimation and simulation
+strata             Regression and simulation in a stratified model
+tobit              Regression for classical tobit model
+repl               Replication of model fitting and simulation procedures
+roc                ROC plot
+vertci             Vertical confidence interval plot
+weibull            Weibull regression and simulation
+ei.hier            Hierarchical Ecological Inference model and simulation
+ei.dynamic         Dynamic Ecological Inference model and simulation
+normal.bayes       MCMC regression model and simulation
+logit.bayes        MCMC logistic regression model and simulation
+probit.bayes       MCMC probit regression model and simulation
+tobit.bayes        MCMC tobit regression model and simulation
+poisson.bayes      MCMC poisson regression model and simulation
+mlogit.bayes       MCMC multinomial regression model and simulation
+oprobit.bayes      MCMC ordered probit regression model and simulation
+factor.bayes       MCMC factor analysis
+factor.ord         MCMC factor analysis for ordinal data
+factor.mix         MCMC factor analysis for mixed data
+irt1d              MCMC one-dimensional item response theory model
+irtkd              MCMC K-dimensional item response theory model
+ei.RxC 		   RxC ecological inference via penalized least-squares
+sur                Seemingly Unrelated Regression
+twosls             Two Stage Least Squares
+threesls           Three Stage Least Squares
+logit.gee          GEE logistic regression
+gamma.gee          GEE gamma regression
+normal.gee         GEE normal regression
+poisson.gee        GEE poisson regression
+probit.gee         GEE probit regression
+gamma.negvalues	   Rejection sampling with gamma regression
+ls.mixed           Mixed effects linear regression
+logit.mixed        Mixed effects logistic regression
+gamma.mixed        Mixed effects gamma regression
+poisson.mixed      Mixed effects poisson regression
+probit.mixed       Mixed effects probit regression
+coxph              Cox Proportional Hazard Regression for Duration Dependent Variables
+normal.survey	       Survey-Weighted Normal Regression for Continuous Dependent Variables
+logit.survey	       Survey-Weighted Logistic Regression for Dichotomous Dependent Variables
+probit.survey	       Survey-Weighted Probit Regression for Dichotomous Dependent Variables
+poisson.survey       Survey-Weighted Poisson Regression for Event-count Dependent Variables
+gamma.survey       Survey-Weighted Poisson Regression for Positive Continuous Dependent Variables
+
+
+
+
+

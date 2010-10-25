@@ -1,0 +1,37 @@
+"print.summary.sim canned"
+print.summary.sim.<<model name>> <- function (obj, digits=F, print.x=F, ...) {
+  # prints typically have qi, and qi.names defined as part of the summary object
+  if (is.null(obj$qi.stat) || is.null(obj$qi.name)) {
+    stop("Error: ")
+  }
+
+  # warn if name lists do not match
+  if (any(sort(names(obj$qi.stat)) != sort(names(obj$qi.name)))) {
+    warning("warning: quantities of interest do not match its name list")  
+  }
+
+  print(obj$original)
+  
+  for (key in names(obj$qi.stat)) {
+    # value
+    val <- obj$qi.stat[[key]]
+
+    # pass-by conditions
+    if (is.na(val) || (is.list(val) && !length(val)) || is.null(val))
+      next
+
+    # print the title of the qi
+    s <- gsub("\\s+$", "", obj$qi.name[[key]])
+    message(s)
+    message(rep("=", min(nchar(s), 30)))
+    
+    # print the qi (should be a simple data-type, such as matrix or float)
+    print(val)
+    
+    # line-feed
+    message()
+  }
+  
+  # return invisibly
+  invisible(obj)
+}

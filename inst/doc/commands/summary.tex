@@ -1,0 +1,125 @@
+\section{{\tt summary}: Summarizing Zelig Output}
+\label{ss:summary}
+
+\subsubsection{Description}
+
+Summarize R objects using using the generic function {\tt summary()}.
+R automatically recognizes the type of object (lists, data frames,
+variables, etc.) and selects the appropriate {\tt summary()} function.
+
+\subsubsection{Syntax}
+
+\begin{verbatim}
+> summary(z.out, subset = NULL, ...)
+> summary(s.out, subset = NULL, CI = 95, 
+          stats = c("mean", "sd", "min", "max"), ...)
+\end{verbatim}
+To set the desired number of digits in the summary output, use {\tt
+  options(digits = x)}, where {\tt x} is the desired number of digits,
+prior to using the {\tt summary()} command.
+
+\subsubsection{Arguments for multiply-imputed {\tt zelig()} output}
+For {\tt zelig()} output created with $m$ multiply-imputed data sets,
+the {\tt z.out} object contains one set of output for each imputed
+data set.  Options for multiply-imputed {\tt zelig()} output include:
+   \begin{itemize}
+   \item {\tt subset}: specifies which of the $m$ sets of output to
+     summarize.  Possible arguments include:
+       \begin{itemize}
+       \item {\tt NULL}: (default) which produces one summary by
+         averaging the coefficients and standard errors from all the
+         imputed data sets using the Rubin rules (\hlink{King,
+           Honaker, Joseph, Scheve
+           (2000)}{http://gking.harvard.edu/files/abs/evil-abs.shtml},
+         p. 53).
+       \item a numeric vector: consisting of any set of numbers in
+         $[1,m]$.  For example, you may use {\tt summary(z.out,
+           subset = 2:4)} to view the output from the second, third,
+         and fourth imputed data sets only.  
+       \end{itemize}
+     \item{\dots}: additional options passed to {\tt print()}.  
+    \end{itemize}
+
+\subsubsection{Arguments for subsetted {\tt zelig()} output}
+If you selected the {\tt by} option, {\tt zelig()} creates an {\tt
+  z.out} object with one set of regression output for each of the
+unique values in the {\tt by} variable.  Options for subsetted
+  analyses are:  
+\begin{itemize}
+\item {\tt subset}: specifies which regression output to summarize.
+  You cannot summarize multiple analyses generated using the {\tt
+    "by"} option in one summary, as each of the levels in the {\tt by}
+  variable may have a different number of associated observations.  (A
+  weighted summary would also be inappropriate, as the weighted
+  coefficients would be identical to the coefficients generated
+  without subsetting.)
+\begin{itemize}
+\item numeric vector: specifying which sets of regression output to
+  summarize.  By default, {\tt summary()} for subsetted output
+  sequentially summarizes the regression output for each unique value
+  in the {\tt by} variable.  You may choose to summarize just the
+  fifteenth unique value by typing:  {\tt summary(z.out, subset =
+    15)}.  
+\end{itemize}
+\item {\tt \dots}: Additional arguments passed to {\tt print()}.
+\end{itemize}
+   
+\subsubsection{Arguments for {\tt sim()} output}
+Summaries of {\tt sim()} output includes these additional options:
+   \begin{itemize}
+     \item {\tt subset}:  Only valid for {\tt sim()} output created
+       using more than one observation in {\tt x}.  You may select to
+       summarize the quantities of interest created by each
+       observation in {\tt x} using one of the following options: 
+       \begin{itemize}
+       \item {\tt NULL}: (default) produces one summary per quantity
+         of interest by combining the simulations from each
+         observation into a single set and then summarizing.
+         \item {\tt all}:  summarizes the quantity of interest
+           produced by each observation separately.  
+         \item a numeric vector: specifying the observations to summarize 
+       \end{itemize}
+     \item {\tt CI}: A value between 0 and 100, for the percentage
+       confidence interval.  The default value is 95, for a 95 percent
+       confidence interval.  
+     \item {\tt stats}: A vector specifying the statistics to
+       calculate for each quantity of interest.  The default values
+       are {\tt c("mean", "sd", "min", "max")}.  
+   \end{itemize}
+Using {\tt summary()} on {\tt sim()} output from multiple analyses
+will automatically weight the quantities of interest according to the
+proportion of observations in each strata.  
+
+\subsubsection{Output Values}
+\begin{itemize}
+\item For {\tt zelig()} output objects, {\tt summary()} returns a
+  formatted summary of the regression output, including the usual
+  table of coefficients, standard errors, and $t$-values.  Additional
+  output depends on the statistical model, the names of which may
+  be viewed using the {\tt names(summary(z.out))} command.
+\item For {\tt sim()} output objects, {\tt summary()} returns summary
+  statistics for each quantity of interest, including a default 95\%
+  confidence interval.  Use {\tt names(summary(s.out))} to see the
+  available output.  Note that {\tt qi.stats} contains a useful matrix
+  of summary statistics for each of the quantities of interest.  For
+  example, {\tt summary(s.out)\$qi.stats\$ev}, extracts the summary
+  matrix of expected values.
+\end{itemize}
+
+\subsubsection{See Also}
+
+Advanced users may wish to refer to {\tt help.zelig("print")},
+as well as {\tt help(summary)}, {\tt help(summary.lm)}, {\tt
+  help(summary.glm)}, and {\tt help(anova)} in the base package.
+
+\subsubsection{Contributors}
+
+Kosuke Imai, Gary King, and Olivia Lau added summary methods for
+certain {\tt zelig()} models, and for {\tt sim()} output.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
+

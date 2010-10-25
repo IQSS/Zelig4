@@ -1,0 +1,7 @@
+# export non-private functions
+exportPattern("^[[:alpha:]]+")
+
+# export overloaded operators
+export("[[.zelig")
+export("[[.qi")
+export("%.%")

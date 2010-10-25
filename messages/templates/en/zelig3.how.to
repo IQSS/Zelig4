@@ -1,0 +1,16 @@
+"zelig3 how-to"
+# HOW-TO WRITE A ZELIG3 FUNCTION
+# ==============================
+# 0. zelig3 functions act as in-betweens between
+#    the zelig2 function and the zelig and sim function.
+#    That is, after the model runs its initial computations,
+#    it is often important to cast the result as an object of
+#    the class which it is named after.  This is crucial to
+#    ensure that setx invokes the correct method
+# 1. set the class of the res passed into with the line:
+#      class(res) <- class("<<model name>>", class(res))
+# 2. return the obj (with class newly extended)
+#
+# NOTE: if the class "<<model name>>" is not added, the function
+#       setx.default will be used, which may have unexpected
+#       results

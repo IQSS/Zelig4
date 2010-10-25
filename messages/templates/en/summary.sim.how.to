@@ -1,0 +1,24 @@
+"summary.sim how-to"
+# HOW TO WRITE A SUMMARY.SIM FUNCTION
+# ===================================
+# 0. summary.sim functions exclusively return
+#    a list of important data, *summarizing*
+#    important features of the result of the sim
+#    function
+# 1. like summaries of most objects, the result should
+#    contain a reference to the call that created it,
+#    information on the class-type, etc.:
+#      list(call = obj$call,
+#           zelig.call = obj$zelig.call,
+#           ...)
+# 2. importantly, summary.sim must return a qi.stat
+#    and a qi.name data object.  the indices of these
+#    objects must have the same values for consistency
+#    that is, names(qi.stat) == names(qi.name)
+#    the return should resemble:
+#      list(
+#           qi.stat    = obj$qi.stat,
+#           qi.name    = obj$qi.name,
+#           call       = obj$call,
+#           zelig.call = obj$zelig.call
+#           ...)
