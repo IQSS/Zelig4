@@ -52,14 +52,14 @@ The \emph{qi} function's signature accepts 4 parameters:
 %
 \subsection{Code Example: \emph{qi} Function Signature}
 \begin{verbatim}
-qi.your_model_name <- function(z, x=NULL, x1=NULL, num=1000) {
+qi.model <- function(z, x=NULL, x1=NULL, num=1000) {
 	# start typing your code here
 	# ...
 	# ...
 \end{verbatim}
 
 
-Note: In the above example, the function name ``qi.your\_model\_name'' is merely a placeholder.  In order to register a \emph{qi} function with zelig, the developer must follow the naming convention qi.\emph{your mode name}, where \emph{your\_model\_name} is the name of the developer's module.  For example, if a developer titled his or her zelig module ``logit'', then the corresponding \emph{qi} function is titled ``\emph{qi.logit}''.
+Note: In the above example, the function name ``qi.\_model'' is merely a placeholder.  In order to register a \emph{qi} function with zelig, the developer must follow the naming convention qi.\emph{your mode name}, where \emph{your\_model\_name} is the name of the developer's module.  For example, if a developer titled his or her zelig module ``logit'', then the corresponding \emph{qi} function is titled ``\emph{qi.logit}''.
 
 \subsection{Call to the \emph{param} Function}
 This step is common in many zelig models, however, its existence - though highly recommended - is purely optional.  Typically, during this step, samples are taken from the distribution governing the statistical model.  This is then used to simulate values for the \emph{quantities of interest}.
