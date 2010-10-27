@@ -1,0 +1,2 @@
+repl <- function(...)
+  UseMethod("repl")
