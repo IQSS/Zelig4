@@ -9,9 +9,16 @@
 # return:        a list of generic functions names to
 #                to define for zelig
 .GetGenerics.default <- function(zelig.object, envir=parent.frame()) {
+  if (zelig.object$is.s4)
+    .GetGenericsS4(zelig.object, envir)
+  else
+    .GetGenericsS3(zelig.object, envir)
+}
+
+.GetGenericsS3 <- function(zelig.object, envir=parent.frame()) {
   #
   hash <- list()
-  method.list <- as.character(methods(class="glm"))
+  method.list <- as.character(methods(class=class(zelig.object$result)))
   method.list <- gsub(paste("\\.", 'glm', "$", sep=""), "",
                       method.list)
 
@@ -26,48 +33,14 @@
   # final list
   flist <- c("zelig", "param", "as.parameters", "sim", "setx")
   meth.list <- sort(unique(c(meth.list, names(get(".knownS3Generics")))))
-  meth.list <- meth.list[! meth.list %in% flist]
-  meth.list
+  meth.list %w/o% flist
 }
 
-
-# @zelig.object: a zelig object
-# return: environment containing defined functions
-.MakeGenerics <- function(zelig.object) {
-  #
-  func <- zelig.object$func
-
-  # error-catching & handling
-  if (is.name(func))
-    func <- as.character(func)
-
-  if (is.character(func) && exists(func, mode="function"))
-    func <- get(func, mode="function")
-  
-  else if (!is.function(func) && !is.character(func))
-    stop("no function?")
-
-  # 
-  saved.environment <- new.env()
-
-  # iterate through the list
-  for (meth in .GetGenerics(zelig.object)) {
-    # assign the relevant function in the
-    # correct environment or namespace
-    assign(paste(meth, "zelig", sep="."),
-           .NewZeligGeneric(meth),
-           envir = .GlobalEnv
-           )
-  }
-
-  # return
-  invisible(saved.environment)
-}
 
 # @name:  name of generic function
 # return: a function that calls the given generic 
 #         function on the result object
-.NewZeligGeneric <- function(name) {
+.NewZeligGenericS3 <- function(name) {
   # store name in this environment
   stored.name <- name
 
@@ -85,9 +58,17 @@
   }
 }
 
-# @lis:
-# return:
-.RegisterMethods <- function(lis) {
+
+# @object: a zelig object
+# @lis: a character-vector of names to register for zelig objects
+.RegisterMethods <- function(lis)
+  .RegisterMethodsS3(lis)
+
+
+
+# @lis: 
+# return: 
+.RegisterMethodsS3 <- function(lis) {
   # error-catching & handling
   saved.environment <- new.env()
 
@@ -96,7 +77,7 @@
     # assign the relevant function in the
     # correct environment or namespace
     assign(paste(meth, "zelig", sep="."),
-           .NewZeligGeneric(meth),
+           .NewZeligGenericS3(meth),
            envir = .GlobalEnv
            )
   }
