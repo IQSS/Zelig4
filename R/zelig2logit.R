@@ -1,4 +1,4 @@
-zelig2.logit <- function(model, formula, ..., data, weights=NULL)
+zelig2logit <- function(model, formula, ..., data, weights=NULL)
   alist(glm,
         "formula",
         "data",

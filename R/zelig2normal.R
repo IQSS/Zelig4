@@ -1,4 +1,4 @@
-zelig2.normal <- function(model, formula, ..., data)
+zelig2normal <- function(model, formula, ..., data)
   alist(glm,
         "formula",
         "data",

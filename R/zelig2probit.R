@@ -1,4 +1,4 @@
-do.zelig.probit <- function(model, formula, ..., data)
+zelig2probit <- function(model, formula, ..., data)
   alist(glm,
         "formula",
         "data",

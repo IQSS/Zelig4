@@ -43,6 +43,9 @@ ZeligCall.list <- function(zc, ..., params) {
   if (is.name(zc[[1]]))
     zc[[1]] <- as.character(zc[[1]])
 
+  else if (is.call(zc[[1]]))
+    zc[[1]] <- eval(zc[[1]])
+
   if (!is.function(zc[[1]]) && !is.character(zc[[1]]))
     stop("list's first slot must contain a function")
 

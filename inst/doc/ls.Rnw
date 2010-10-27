@@ -126,34 +126,34 @@ Simulate quantities of interest:
 @ 
 \end{center}
 
-\item Multiple responses (least squares regression will be fitted
-  separately to each dependent variable)
+% \item Multiple responses (least squares regression will be fitted
+%   separately to each dependent variable)
 
-Two responses for data set macro: 
-<<Multiple.zelig>>=
- z.out3 <- zelig(cbind(unem, gdp) ~ capmob + trade,model = "ls", data = macro)
-@
-<<Multiple.zelig.summary>>=
-summary(z.out3)
-@    
-Set values for the explanatory variables, using the default mean/mode
-values, with country set to the United States and Japan, respectively:
-<<Multiple.setx>>=
- x.US <- setx(z.out3, country = "United States")
- x.Japan <- setx(z.out3, country = "Japan")
-@ 
-Simulate quantities of interest:
-<<Multiple.sim>>=
- s.out3 <- sim(z.out3, x = x.US, x1 = x.Japan)
-@
-Summary
-<<Example4.sim.summary>>=
-summary(s.out3)
-@  
-\begin{center}
-<<label=Example4Plot,fig=true,echo=true,  width=7.5, height=6>>= 
- plot(s.out3)
-@ 
+% Two responses for data set macro: 
+% <<Multiple.zelig>>=
+%  z.out3 <- zelig(cbind(unem, gdp) ~ capmob + trade,model = "ls", data = macro)
+% @
+% <<Multiple.zelig.summary>>=
+% summary(z.out3)
+% @    
+% Set values for the explanatory variables, using the default mean/mode
+% values, with country set to the United States and Japan, respectively:
+% <<Multiple.setx>>=
+%  x.US <- setx(z.out3, country = "United States")
+%  x.Japan <- setx(z.out3, country = "Japan")
+% @ 
+% Simulate quantities of interest:
+% <<Multiple.sim>>=
+%  s.out3 <- sim(z.out3, x = x.US, x1 = x.Japan)
+% @
+% Summary
+% <<Example4.sim.summary>>=
+% summary(s.out3)
+% @  
+% \begin{center}
+% <<label=Example4Plot,fig=true,echo=true,  width=7.5, height=6>>= 
+%  plot(s.out3)
+% @ 
 \end{center}
 
 \end{enumerate}

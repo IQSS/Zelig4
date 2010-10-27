@@ -1,4 +1,4 @@
-zelig2.gamma <- function(model, formula, ..., data)
+zelig2gamma <- function(model, formula, ..., data)
   alist(glm,
         "formula",
         "weights",

@@ -73,7 +73,9 @@ Attaching the sample turnout dataset:
 @ 
 Estimating parameter values for the logistic regression:
 <<Example.zelig>>=
+
  z.out1 <- zelig(vote ~ age + race,  model = "logit", data = turnout) 
+
 @ 
 Setting values for the explanatory variables:
 <<Example.setx>>=

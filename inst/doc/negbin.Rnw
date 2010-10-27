@@ -15,8 +15,8 @@ library(Zelig)
 @
 
 
-\section{{\tt negbin}: Negative Binomial Regression for Event
-Count Dependent Variables}\label{negbin}
+\section{{\tt negbinom}: Negative Binomial Regression for Event
+Count Dependent Variables}\label{negbinom}
 
 Use the negative binomial regression if you have a count of events for
 each observation of your dependent variable.  The negative binomial
@@ -26,7 +26,7 @@ models.
 \subsubsection{Syntax}
 
 \begin{verbatim}
-> z.out <- zelig(Y ~ X1 + X2, model = "negbin", data = mydata)
+> z.out <- zelig(Y ~ X1 + X2, model = "negbinom", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
@@ -73,7 +73,7 @@ Load sample data:
 @ 
 Estimate the model:  
 <<Example.zelig>>=
- z.out <- zelig(num ~ target + coop, model = "negbin", data = sanction)
+ z.out <- zelig(num ~ target + coop, model = "negbinom", data = sanction)
 @ 
 <<Example.summary>>= 
 summary(z.out)
@@ -110,7 +110,7 @@ fixed time period. This variable can take any non-negative integer value.
    The marginal distribution of $Y_i$ is then the negative binomial
    with mean $\mu_i$ and variance $\mu_i + \mu_i^2/\theta$:
    \begin{eqnarray*}
-   Y_i & \sim & \textrm{NegBin}(\mu_i, \theta), \\
+   Y_i & \sim & \textrm{NegBinom}(\mu_i, \theta), \\
        & = & \frac{\Gamma (\theta + y_i)}{y! \, \Gamma(\theta)} 
              \frac{\mu_i^{y_i} \, \theta^{\theta}}{(\mu_i + \theta)^{\theta + y_i}},
    \end{eqnarray*}
@@ -168,7 +168,7 @@ fixed time period. This variable can take any non-negative integer value.
 
 The output of each Zelig command contains useful information which you
 may view.  For example, if you run \texttt{z.out <- zelig(y \~\,
-  x, model = "negbin", data)}, then you may examine the available
+  x, model = "negbinom", data)}, then you may examine the available
 information in \texttt{z.out} by using \texttt{names(z.out)},
 see the {\tt coefficients} by using {\tt z.out\$coefficients}, and
 a default summary of information through \texttt{summary(z.out)}.
@@ -227,7 +227,7 @@ below.
 
 \subsection* {How to Cite} 
 
-\input{cites/negbin}
+\input{cites/negbinom}
 \input{citeZelig}
 
 \subsection* {See also}

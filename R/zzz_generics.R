@@ -9,7 +9,9 @@
 # return:        a list of generic functions names to
 #                to define for zelig
 .GetGenerics.default <- function(zelig.object, envir=parent.frame()) {
-  if (zelig.object$is.s4)
+  if (is.null(zelig.object$S4))
+    stop(as.character(zelig.object$family[[1]]))
+  else if (zelig.object$S4)
     .GetGenericsS4(zelig.object, envir)
   else
     .GetGenericsS3(zelig.object, envir)
@@ -18,8 +20,9 @@
 .GetGenericsS3 <- function(zelig.object, envir=parent.frame()) {
   #
   hash <- list()
-  method.list <- as.character(methods(class=class(zelig.object$result)))
-  method.list <- gsub(paste("\\.", 'glm', "$", sep=""), "",
+  cls <- class(zelig.object$result)
+  method.list <- as.character(methods(class=cls))
+  method.list <- gsub(paste("\\.", cls, "$", sep=""), "",
                       method.list)
 
 
@@ -31,7 +34,7 @@
   }
 
   # final list
-  flist <- c("zelig", "param", "as.parameters", "sim", "setx")
+  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register")
   meth.list <- sort(unique(c(meth.list, names(get(".knownS3Generics")))))
   meth.list %w/o% flist
 }

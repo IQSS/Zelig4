@@ -120,7 +120,7 @@ split.up <- function(args) {
   k <- 1
 
   if (is.null(names(args)))
-    wordless <- c(...)
+    return(list(wordless=unlist(args), wordfull=NULL))
 
   for (key in names(args)) {
     if (nchar(key) == 0)

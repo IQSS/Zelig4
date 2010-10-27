@@ -19,7 +19,7 @@ description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
   }
 
   if (!is.numeric(year))
-    year <- as.numeric(format(Sys.date(), "%Y"))
+    year <- as.numeric(format(Sys.Date(), "%Y"))
 
   if (!is.character(model) || length(model) != 1)
     stop("model must be a character-string")
@@ -90,7 +90,13 @@ as.description.description <- function(descr)
 # @descr: a list
 # return: a description object
 as.description.list <- function(descr) {
-  text <- ifelse(is.null(descr$text), descr$description, descr$text)
+  text <- if (!is.null(descr$text))
+    descr$text
+  else if (!is.null(descr$description))
+    descr$description
+  else
+    NULL
+  
   description(authors = descr$authors,
               year    = descr$year,
               model   = descr$model,

@@ -1,4 +1,4 @@
-zelig2.poisson <- function(model, formula, ..., data)
+zelig2poisson <- function(model, formula, ..., data)
   alist(glm,
         "formula",
         "weights",

@@ -1,2 +1,2 @@
 register.logit <- function(zelig.object)
-  c("vcov", "coef")
+  c("vcov", "coef", "summary")

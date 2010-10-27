@@ -23,7 +23,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       by <- NULL
     }
   }
-    
 
   # expand dot arguments
   dots <- list(...)
@@ -45,9 +44,14 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
   # set up list
   res <- NULL
+  old.style.oop <- TRUE
 
   # create a data.frame iterator
   m <- mi(data, by=by)
+
+  # initialize variables for loop
+  k <- 1
+  res <- list()
 
   # repeat
   repeat {
@@ -58,7 +62,10 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     if (inherits(d.f, "try-error"))
       break
 
+    zelig2 <- paste("zelig2", as.character(model), sep="")
+    zelig2 <- get(zelig2, mode="function")
     zc.list <- zelig2(model, formula, ..., data=d.f)
+
 
     # create zelig.call
     zc <- ZeligCall(zc.list,
@@ -66,7 +73,14 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
                     )
 
     # run the model
-    res[['']] <- run(zc, data=d.f)
+    new.res <- run(zc, data=d.f)
+
+    # test
+    old.style.oop <- ! isS4(new.res)
+
+    # append to list
+    res[[k]] <- new.res
+    k <- k+1
   }
 
   # appropriately name each entry
@@ -79,6 +93,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # run clean-up hooks on every result
   # ...
 
+
   # build zelig object
   z <- list(name    = as.character(model),
             formula = formula,
@@ -89,14 +104,19 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
             by      = by,
             mi      = reset(m),
             func    = zc.list[[1]],
-            levels = m$levels
+            levels  = m$levels,
+            S4      = !old.style.oop
             )
 
   # always attach the model name,
   # so that developers can overload
   class(z) <- c("zelig", model)
 
-  z$function.space <- .RegisterMethods(c("terms", register(z)))
+  # ...
+  z$function.space <- if(old.style.oop)
+    .RegisterMethodsS3(c("terms", register(z)))
+  else
+    .RegisterMethodsS4(c("terms", register(z)))
 
   # pre-pend "MI" class to sets of results
   if (is.list(z$result) && length(m) > 1)

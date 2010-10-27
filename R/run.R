@@ -6,13 +6,12 @@ run.ZeligCall <- function(zc, ..., data=NULL) {
   if (is.data.frame(data))
     attach(data)
 
+
   # maybe replace data.frame?
   if (!is.null(data)) {
     zc$parameters$data <- NULL
     zc$paremeters <- append(zc$parameters, alist(data=data))
   }
-  
-
 
   # run function
   res <- do.call(zc$model, zc$parameters)
