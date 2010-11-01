@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# OUTPUT
+echo "MAKING DOCS..."
+
+
 ##
 ## This file is called by Makefile. It does the followings:
 ## 1.run pdf latex to each tex file produced by R CMD build
@@ -7,6 +11,9 @@
 ## 2.remove header and footer or each tex file so that it's ready for inclusion by zelig.tex
 ## 3.convert all Rd files to tex file so that they are ready for inclusion by zelig.tex
 ##
+
+#
+RCMD="/usr/bin/R"
 
 STATICTEXFILES="acknowledgments.tex robjects.tex programmingstatements.tex graphs.tex matchitref.tex describemymodel.tex install.tex intro.tex Zcommands.tex addingModels.tex newModels.tex syntax.tex faq.tex whatsnew.tex"
 
@@ -25,9 +32,10 @@ for f in `cat models.txt`
   # 1 - when called from make
   #
   if [ $# -eq 0 ]
-  then
-  	echo "Sweave(\"$f.Rnw\")" | R --slave
-	echo "sweaving $f"
+      then
+      #echo "Sweave(\"$f.Rnw\")" | ${RCMD} --slave
+      $RCMD Sweave $f.Rnw
+      echo "sweaving $f"
   fi
   
   ## create pdfs for all the tex file produced by sweave
@@ -208,3 +216,8 @@ rm -rf cites
 ### here is how to add some tex at the beginning of each file
 
 ### perl -i -ple 'print q{TEXTTOBEADDED} if $. == 1; close ARGV if eof' *.tex
+
+
+
+# OUTPUT STATEMENT
+echo "MAKING DOCS: DONE"

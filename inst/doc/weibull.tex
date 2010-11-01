@@ -1,0 +1,95 @@
+
+\include{zinput}
+%\VignetteIndexEntry{Weibull Regression for Duration Dependent Variables}
+%\VignetteDepends{Zelig, survival}
+%\VignetteKeyWords{model, weibull,regression,bounded, duration}
+%\VignettePackage{Zelig}
+\usepackage{Sweave}
+\begin{document}
+\nobibliography*
+
+
+\section{{\tt weibull}: Weibull Regression for Duration
+Dependent Variables}\label{weibull}
+
+Choose the Weibull regression model if the values in your dependent
+variable are duration observations.  The Weibull model relaxes the
+exponential model's (see \Sref{exp}) assumption of constant hazard,
+and allows the hazard rate to increase or decrease monotonically with
+respect to elapsed time.
+
+\subsubsection{Syntax}
+
+\begin{verbatim}
+> z.out <- zelig(Surv(Y, C) ~ X1 + X2, model = "weibull", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+Weibull models require that the dependent variable be in the form {\tt
+  Surv(Y, C)}, where {\tt Y} and {\tt C} are vectors of length $n$.
+For each observation $i$ in 1, \dots, $n$, the value $y_i$ is the
+duration (lifetime, for example), and the associated $c_i$ is a binary
+variable such that $c_i = 1$ if the duration is not censored ({\it
+  e.g.}, the subject dies during the study) or $c_i = 0$ if the
+duration is censored ({\it e.g.}, the subject is still alive at the
+end of the study).  If $c_i$ is omitted, all Y are assumed to be
+completed; that is, time defaults to 1 for all observations.
+
+\subsubsection{Input Values} 
+
+In addition to the standard inputs, {\tt zelig()} takes the following
+additional options for weibull regression:  
+\begin{itemize}
+\item {\tt robust}: defaults to {\tt FALSE}.  If {\tt TRUE}, {\tt
+zelig()} computes robust standard errors based on sandwich estimators
+(see \cite{Huber81} and \cite{White80}) based on the options in {\tt
+cluster}.
+\item {\tt cluster}:  if {\tt robust = TRUE}, you may select a
+variable to define groups of correlated observations.  Let {\tt x3} be
+a variable that consists of either discrete numeric values, character
+strings, or factors that define strata.  Then
+\begin{verbatim}
+> z.out <- zelig(y ~ x1 + x2, robust = TRUE, cluster = "x3", 
+                 model = "exp", data = mydata)
+\end{verbatim}
+means that the observations can be correlated within the strata defined by
+the variable {\tt x3}, and that robust standard errors should be
+calculated according to those clusters.  If {\tt robust = TRUE} but
+{\tt cluster} is not specified, {\tt zelig()} assumes that each
+observation falls into its own cluster.  
+\end{itemize}  
+
+\subsubsection{Example}
+
+Attach the sample data: 
+\begin{Schunk}
+\begin{Sinput}
+> data(coalition)
+\end{Sinput}
+\end{Schunk}
+Estimate the model: 
+\begin{Schunk}
+\begin{Sinput}
+> z.out <- zelig(Surv(duration, ciep12) ~ fract + numst2, model = "weibull", 
++     data = coalition)
+\end{Sinput}
+\end{Schunk}
+View the regression output:  
+\begin{Schunk}
+\begin{Sinput}
+> summary(z.out)
+\end{Sinput}
+\end{Schunk}
+Set the baseline values (with the ruling coalition in the minority)
+and the alternative values (with the ruling coalition in the majority)
+for X:
+\begin{Schunk}
+\begin{Sinput}
+> x.low <- setx(z.out, numst2 = 0)
+> x.high <- setx(z.out, numst2 = 1)
+\end{Sinput}
+\end{Schunk}
+Simulate expected values ({\tt qi\$ev}) and first differences ({\tt qi\$fd}):
+\begin{Schunk}
+\begin{Sinput}
+> s.out <- sim(z.out, x = x.low, x1 = x.high)

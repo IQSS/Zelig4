@@ -1,0 +1,46 @@
+%% PLEASE DONT DELETE
+\documentclass{article}
+\usepackage{Sweave}
+\begin{document}
+%\VignetteIndexEntry{create zideal and list of models}
+\begin{Schunk}
+\begin{Sinput}
+> library(lme4)
+> library(Zelig)
+\end{Sinput}
+\begin{Soutput}
++----------------------------------------------------------------+
+\end{Soutput}
+\begin{Sinput}
+> models <- ZeligListModels()
+> write(models, file = "models.txt")
+> wd <- getwd()
+> dir.create(file.path(wd, "cites"))
+> for (m in models) {
++     res <- Zelig:::.GetModelCitationTex(m)
++     cat("To cite the \\emph{", m, "} Zelig model:\n", "\\begin{verse}\n", 
++         res, "\n\\end{verse}", file = paste("cites/", m, ".tex", 
++             sep = ""))
++ }
+> getcat <- function(m) Zelig:::ZeligDescribeModel(m)$category
+> mm <- sapply(models, getcat)
+> catsList <- Zelig:::.ModelCategories()
+> out <- file("zeligmodels.html", "w+b")
+> cat("<ul id=\"models\">\n", file = out, sep = "")
+> for (cat in names(catsList)) {
++     cat("<li class=\"mainindx\">", "<a href=\"\">", catsList[[cat]], 
++         "</a>\n", file = out, sep = "")
++     cat("\t<ul>\n", file = out, sep = "")
++     thisCatModels <- names(mm[which(mm == cat)])
++     for (m in thisCatModels) {
++         cat("\t\t<li><a href=\"", m, ".pdf\">", m, " : ", Zelig:::zeligDescribeModel(m)$description, 
++             "</a></li>\n", file = out, sep = "")
++     }
++     cat("\t</ul>\n", file = out, sep = "")
++     cat("</li>\n", file = out, sep = "")
++ }
+> cat("</ul>\n", file = out, sep = "")
+> close(out)
+\end{Sinput}
+\end{Schunk}
+\end{document}
