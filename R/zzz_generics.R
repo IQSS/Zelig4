@@ -66,6 +66,27 @@
 }
 
 
+.NewZeligMIGenericS3 <- function(name) {
+  # store name in this environment
+  stored.name <- name
+
+  # return function
+  function (...) {
+    # get list of parameters,
+    # omitting function name
+    params <- as.list(match.call())
+
+    # get the result object from the zelig object
+    params[[1]] <- stored.name
+    params[[2]] <- ..1$result
+
+
+    # call function on the fitted model
+    do.call(Map, params)
+  }
+}
+
+
 # @object: a zelig object
 # @lis: a character-vector of names to register for zelig objects
 .RegisterMethods <- function(lis)
@@ -81,12 +102,14 @@
 
   # iterate through the list
   for (meth in lis) {
+    fname <- paste(meth, "zelig", sep=".")
     # assign the relevant function in the
     # correct environment or namespace
-    assign(paste(meth, "zelig", sep="."),
-           .NewZeligGenericS3(meth),
-           envir = .GlobalEnv
-           )
+    assign(fname, .NewZeligGenericS3(meth), envir = .GlobalEnv)
+
+    # assign MI version
+    fname <- paste(meth, "MI", sep=".")
+    assign(fname, .NewZeligMIGenericS3(meth), .GlobalEnv)    
   }
 
   # return

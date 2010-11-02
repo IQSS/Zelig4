@@ -1,13 +1,14 @@
-setx.MI <- function(z, ..., data=NULL) {
+setx.MI <- function(obj, ..., data=NULL) {
+  print(class(obj))
   s.x <- results <- list()
 
   # assign data, if NULL
   if (is.null(data))
-    data <- z$data
+    data <- obj$data
 
   # create iterators
-  result.iter <- iter(z$result)
-  data.iter <- z$mi
+  result.iter <- iter(obj$result)
+  data.iter <- obj$mi
 
   repeat {
     # get next items from iterators
@@ -26,7 +27,7 @@ setx.MI <- function(z, ..., data=NULL) {
     }
 
     # create kin object
-    kin <- zelig.kin(z, result.item, data=data.item)
+    kin <- zelig.kin(obj, result.item, data=data.item)
 
     # call the correct setx function
     result <- setx(kin, data=data.item, ...)
@@ -35,7 +36,7 @@ setx.MI <- function(z, ..., data=NULL) {
     results[['']] <- result
   }
 
-  s.x.mi <- list(s.x=results, by=z$by, levels=z$levels)
+  s.x.mi <- list(s.x=results, by=obj$by, levels=obj$levels)
 
   class(s.x.mi) <- c("MI", "setx.mi", "setx")
   s.x.mi
