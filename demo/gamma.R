@@ -6,8 +6,7 @@ z.out <- zelig(duration ~ fract + numst2, model = "gamma", data = coalition)
 
 summary(z.out)
 
-as.character(z.out$result$family[[1]])
-#warnings()
+warnings()
 
 ##  Setting the explanatory variables at their default values
 ##  (mode for factor variables and mean for non-factor variables),

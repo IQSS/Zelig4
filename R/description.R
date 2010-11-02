@@ -4,7 +4,8 @@
 # @text: a character-string
 # @url: a character-string specifying the models source homepage
 description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
-                        year=NULL, model="", text="", url="") {
+                        year=NULL, model="", text="", url="",
+                        category = NULL) {
   # error-catching
   if (!is.character(authors))
     author <- "Kosuke Imai, Gary King, and Olivia Lau"
@@ -29,6 +30,9 @@ description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
 
   if (is.null(url))
     url <- "http://gking.harvard.edu/zelig"
+
+  if (!is.character(category))
+    category <- ""
 
   else if (length(url) > 1 || !is.character(url))
     stop("url must be a character-vector of length 1")
@@ -101,6 +105,7 @@ as.description.list <- function(descr) {
               year    = descr$year,
               model   = descr$model,
               text    = text,
-              url     = descr$url
+              url     = descr$url,
+              category= descr$category
               )
 }

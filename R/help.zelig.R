@@ -1,5 +1,4 @@
 help.zelig <- function (...)  {
-
         driver  <- match.call()
         driver  <- as.character(driver)
         name <- NULL

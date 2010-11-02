@@ -1,6 +1,6 @@
-describe.logit <- function(...) {
+describe.gamma <- function(...) {
   # parameters object
-  parameters <- list(pi = list(
+  parameters <- list(lambda = list(
                        equations = c(1, 1),
                        tags.allowed = FALSE,
                        dep.var = TRUE,
@@ -10,10 +10,10 @@ describe.logit <- function(...) {
 
   # return list
   list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
-       year     = 2008,
-       category = "dichotomous",
+       year     = 2007,
+       category = "bounded",
        package  = package.zelig("CORE", 1.0),
        parameters = parameters,
-       text = "Logistic Regression for Dichotomous Dependent Variables"
+       text = "Gamma Regression for Continuous, Positive Dependent Variables"
        )
 }

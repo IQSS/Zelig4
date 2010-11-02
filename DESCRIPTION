@@ -7,7 +7,7 @@ Author: Kosuke Imai <kimai@Princeton.Edu>,
         Olivia Lau <olau@fas.harvard.edu>
 Maintainer: Matt Owen, <mowen@iq.harvard.edu>
 Depends: R (>= 2.8.1), methods, MASS, iterators, survival
-Suggests: mvtnorm
+Suggests: mvtnorm, MCMCpack
 Description: Zelig is an easy-to-use program that can estimate, and
         help interpret the results of, an enormous range of
         statistical models. It literally is ``everyone's statistical
