@@ -21,10 +21,12 @@
   #
   hash <- list()
   cls <- class(zelig.object$result)
-  method.list <- as.character(methods(class=cls))
-  method.list <- gsub(paste("\\.", cls, "$", sep=""), "",
-                      method.list)
+  method.list <- as.character(unlist(mapply(methods, class=cls)))
 
+  regex <- paste("(", paste(cls, collapse="|"), ")", sep="|")
+
+
+  method.list <- gsub(regex, "", method.list)
 
   meth.list <- c()
   for (cl in c(class(zelig.object$result), "default")) {
@@ -35,7 +37,9 @@
 
   # final list
   flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register")
-  meth.list <- sort(unique(c(meth.list, names(get(".knownS3Generics")))))
+  meth.list <- sort(unique(c(meth.list,
+                             names(get(".knownS3Generics")))))
+
   meth.list %w/o% flist
 }
 

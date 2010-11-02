@@ -35,7 +35,7 @@ getcat <- function(m)
 
 
 mm <- sapply(models, getcat)
-catsList <- Zelig:::.ModelCategories()
+catsList <- Zelig:::.ZeligModelCategories()
 
 ## create html version of models for gary's web site
 

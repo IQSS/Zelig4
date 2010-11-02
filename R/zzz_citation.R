@@ -52,7 +52,7 @@ It's just very beautiful to watch."
 
 
 # return: list of available model categories
-.ModelCategories <- function() {
+.ZeligModelCategories <- function() {
   list(continuous  = "Models for Continuous Dependent Variables",
        dichotomous = "Models for Dichotomous Dependent Variables",
        ordinal     = "Models for Ordinal Dependent Variables",
@@ -64,3 +64,8 @@ It's just very beautiful to watch."
        )
 }
 
+.describe <- function(model) {
+  dummy <- "I love baseball.  You know, it doesn't have to mean anything."
+  class(dummy) <- model
+  describe(model)
+}

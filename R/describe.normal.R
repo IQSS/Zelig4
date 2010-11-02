@@ -1,4 +1,4 @@
-describe.logit <- function(...) {
+describe.normal <- function(...) {
   # parameters object
   parameters <- list(pi = list(
                        equations = c(1, 1),
@@ -11,9 +11,9 @@ describe.logit <- function(...) {
   # return list
   list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
        year     = 2008,
-       category = "dichotomous",
+       category = "continuous",
        package  = package.zelig("CORE", 1.0),
        parameters = parameters,
-       text = "Logistic Regression for Dichotomous Dependent Variables"
+       text = "Normal Regression for Continuous Dependent Variables"
        )
 }
