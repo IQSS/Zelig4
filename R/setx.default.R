@@ -55,7 +55,16 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   }
   # add explicitly set values
   for (key in names(dots)) {
-    res[[key]] <- dots[[key]]
+    if (! key %in% colnames(data)) {
+      warning(key, "is not an column in the data-set, and will be ignored")
+      next
+    }
+
+    res[[key]] <- if (is.factor(data[,key])) {
+      factor(dots[[key]], levels=levels(data[,key]))
+    }
+    else
+      dots[[key]]
   }
 
   # make a tiny data-frame with
@@ -65,8 +74,8 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # give the computed values to those entries
   for (key in names(res)) {
     val <- res[[key]]
-    
-    if (!(is.numeric(val) || is.ordered(val)))
+
+    if (is.factor(val) || !(is.numeric(val) || is.ordered(val)))
       val <- factor(val, levels=levels(data[,key]))
 
     d[,key] <- val
