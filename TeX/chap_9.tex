@@ -24,6 +24,7 @@ Zelig implements a unique and simple method for incorporating existing statistic
 	\item{A name for the {\tt \bf zelig} model, which can differ from the original name of the statistical model.}
 \end{enumerate}
 
+%% MOVED 1:39
 
 % THE ZELIG2 FUNCTION
 \section{The \emph{zelig2} Function}
@@ -103,6 +104,8 @@ The entries of the returned list have the following format:
 \end{description}
 
 
+% setx function
+%
 \section{The \emph{setx} Function}
 The Zelig software suite can typically work with the arbitrary {\tt zelig} object, so long as several functions are defined with the following names and outputs:
 
@@ -113,7 +116,7 @@ The Zelig software suite can typically work with the arbitrary {\tt zelig} objec
 
 If a model is failing to work with the {\tt setx} function, then the developer must either create valid versions of the the missing or undefined functions; or entirely rewrite the {\tt setx.model} function (where {\tt model} is the name of the Zelig model being written) to perform the correct type of operations.  Please note that the {\tt setx.model} function must return an object of class ``setx'' and the original class of the statistical model.  Please see the source code of {\tt setx.default} for reference.
 
-%
+% SIM function
 \section{The \emph{sim} Function}
 
 Simulating \emph{quantities of interest} is an integral part of interpreting model results. To use the functionality built into the Zelig {\tt sim} procedure, you need to provide a way to simulate parameters (called a {\tt param} function), and a method for calculating or drawing \emph{quantities of interest} from the simulated parameters (called a {\tt qi} function).
@@ -192,6 +195,8 @@ param.poisson <- function(z, num) {
 }
 \end{verbatim}
 
+
+
 \subsubsection{Explanation of Indexed List (with \emph{link} Function) Example}
 
 The above example shows how a \emph{parameters} object can be created with by explicitly setting the statistical model's link function.  The \emph{linkinv} parameter is purely optional, since Zelig will create a numerical inverse if it is undefined.  However, the computation of the inverse is typically slower than non-iterative methods.  As a result of this, if the link-inverse is known, it should be set, using the \emph{linkinv} parameter.
@@ -260,13 +265,13 @@ In order for Zelig to process the simulations, they must be returned in the foll
 \end{verbatim}
 
 
-In the above example,\emph{val1, val2}are data.frames, matrices, or lists representing the simulations of the \emph{quantities of interests}, and \emph{title1, title2} - and any number of titles - are character-strings that will act as human-readable descriptions of the \emph{quantities of interest}.  Once results are returned in this format, Zelig will convert the results into a machine-readable format and summarize the simulations into a comprehensible format.
+In the above example,\emph{val1, val2} are data.frames, matrices, or lists representing the simulations of the \emph{quantities of interests}, and \emph{title1, title2} - and any number of titles - are character-strings that will act as human-readable descriptions of the \emph{quantities of interest}.  Once results are returned in this format, Zelig will convert the results into a machine-readable format and summarize the simulations into a comprehensible format.
 
 
 \pagebreak
 
 % find better way to output this data
-\section{Example \emph{qi} function (qi.ls.R)}
+\subsubsection{Example \emph{qi} function (qi.ls.R)}
 
 
 \begin{verbatim}
