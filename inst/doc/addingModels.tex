@@ -81,319 +81,348 @@ your model, for use with a graphical user interface.  (See \Sref{describe.mymode
 
 \section{Making the Model Compatible with Zelig}\label{compatible}
 
-You can develop a model, write the model-fitting function, and test it
-within the Zelig framework without explicit intervention from the
-Zelig team.  (We are, of course, happy to respond to any questions or
-suggestions for improvement.)  
+Developers can develop a model, write the model-fitting function, and test it within the Zelig framework without explicit intervention from the Zelig team.  This modularity relies on two R programming conventions:
 
-Zelig's modularity relies on two R programming conventions:
 \begin{enumerate}
-\item \emph{\bf wrappers}, which pass arguments from R functions to
-  other R functions or to foreign function calls (such as C, C++, or
-  Fortran functions); and 
-\item \emph{\bf classes}, which tell generic functions how to handle
-  objects of a given class.  
+	\item{{\bf wrappers}, which pass arguments from R functions to other R functions or foreign function calls (such as in C, C++, or Fortran).  This step is facilitated by - as will be explained in detail in the upcoming chapter - the {\tt zelig2} functions.}
+	\item{{\bf classes}, which tell generic functions how to handle objects of a given class.  For a statistical model to be compliant with Zelig, the model-fitting function \emph{must} return a classed object.}
 \end{enumerate}
-Specific methods for R generic functions take the general form: {\tt
-  method.class()}, where {\tt method} is the name of the generic
-procedure to be performed and {\tt class} is the class of the object.
-You may define, for example, {\tt summary.contrib()} to summarize the
-output of your model. Note that for S4 classes, the name of generic
-functions does not have to be {\tt method.class()} so long as users
-can call them via {\tt method()}.
 
-\subsubsection{To Work with {\tt zelig()}}
+Zelig implements a unique and simple method for incorporating existing statistical models which lets developers test \emph{within} the Zelig framework \emph{without} any modification of both their own code or the {\tt zelig} function itself.  The heart of this procedure is the {\tt zelig2} function, which acts as an interface between the {\tt zelig} function and the existing statistical model.  That is, the {\tt zelig2} function maps the user-input from the {\tt zelig} function into input for the existing statistical model's constructor function.  Specifically, a Zelig model requires:
 
-Zelig has implemented a unique method for incorporating new models
-which lets contributors test their models \emph{within} the Zelig
-framework \emph{without} any modification of the {\tt zelig()}
-function itself.  
+\begin{enumerate}
+	\item{An existing statistical model, which is invoked through a function call and returns an object}
+	\item{A {\tt zelig2} function which maps user-input from the {\tt zelig} function to the existing statistical model}
+	\item{A name for the {\tt \bf zelig} model, which can differ from the original name of the statistical model.}
+\end{enumerate}
 
-Using a wrapper function {\tt zelig2contrib()} (where {\tt contrib} is
-the name of your new model), {\tt zelig2contrib()} redefines the inputs to
-{\tt zelig()} to work with the inputs you need for your function {\tt
-contrib()}.  For example, if you type
+%% MOVED 1:39
+
+% THE ZELIG2 FUNCTION
+\subsubsection{The \emph{zelig2} Function}
+The following sections explain how to write a {\tt zelig2} function, given an arbitrary statistical model.  In the illustrative examples, the following conventions are used:
+
+\begin{description}
+	\item[model]{will refer to the name of the \emph{Zelig} model, not the name of the existing model - though these two names are not necessarily different.  If the developer names his model ``logit'' then model refers to ``logit''.}
+	\item[model\_function]{will refer to the name of function that produces the existing statistical model.  If the developer is writing a wrapper for R's built-in logit function, then \emph{model\_function} refers to ``glm''.}
+	\item[zelig2model]{will refer to the name of the {\tt zelig2} function.  If the developer names his model ``logit'', then \emph{zelig2model} refers to ``zelig2logit''.}
+\end{description}
+
+
+
+% WRITING THE ZELIG2 FUNCTION
+\subsubsection{Writing the \emph{zelig2} Function}
+
+The {\tt zelig2} function should follow several specific conventions:
+
+\begin{enumerate}
+	\item{The {\tt zelig2model} function should be simply named \emph{zelig2model}, where \emph{model} is the chosen name for the zelig package}
+	\item{The {\tt zelig2model} function itself should have arguments that list entirety of possible inputs to the {\tt model\_function}}
+	\item{The {\tt zelig2model} function should return a list of key-value pairs that represent the map from {\tt zelig} input to {\tt model\_function} input}
+\end{enumerate}
+
+
+% EXAMPLE USING zelig2logit
+\subsubsection{Example of a \emph{zelig2} Function}
+
 \begin{verbatim}
-zelig(..., model = "normal.regression")
+zelig2logit <- function(model, formula, ..., data, weights=NULL)
+  alist(glm,                             # [1]
+        "formula",                       # [2]
+        "data",
+        "weights",
+        family = binomial(link="logit"), # [3]
+        model  = FALSE
+        )
 \end{verbatim}
-{\tt zelig()} looks for a {\tt zelig2normal.regression()} wrapper in any
-environment (either attached libraries or your workspace).  If the
-wrapper exists, then {\tt zelig()} runs the model.  
 
-If you have a pre-existing model, writing a {\tt zelig2contrib()}
-function is quite easy.  Let's say that your model is {\tt contrib()},
-and takes the following arguments: {\tt formula}, {\tt data}, {\tt
-  weights}, and {\tt start}.  The {\tt zelig()} function, in contrast,
-only takes the {\tt formula}, {\tt data}, {\tt model}, and {\tt by}
-arguments.  You may use the {\tt \dots} to pass additional arguments
-from {\tt zelig()} to {\tt zelig2contrib()}, and {\tt <- NULL} to omit
-the elements you do not need.  Continuing the Normal regression example
-from~\Sref{normal.regression}, let {\tt formula}, {\tt model}, and {\tt data} be
-the inputs to {\tt zelig()}, {\tt M} is the number of subsets, and
-{\tt \dots} are the additional arguments not defined in the {\tt
-  zelig()} call, but passed to {\tt normal.regression()}.
+% EXPLANATION OF zelig2logit code
+The bracketed numbers in the previous example correspond to the numbers below:
+
+\begin{enumerate}
+	\item{The first entry of the returned list in a {\tt zelig2} call represents the name of the function call.  That is, it is the name of the function that the {\tt zelig2} function is wrapping.}
+	\item{Any character-string that does not have a key associated with it will simply forward user-input to that specified parameter.  That is, it will expect the {\tt zelig} function call to supply the value of character-string.}
+	\item{Any key-value pair will explicitly set the parameter specified \emph{by} the key \emph{to} its value.  That is, the left side of the equal specifies a parameter of the existing model and the value specifies that parameter's value.}
+\end{enumerate}
+
+% Equivalent code to the example
+% ...
+
+\subsubsection{Equivalent Function Call to the Example \emph{zelig2} Function}
+The above code is create an interface for the glm function (which returns a generalized linear model, specified by the {\tt family} parameter.  In effect, the above code maps user-input into the {\tt zelig} function to the following call to the {\tt glm} function.
+
 \begin{verbatim}
-zelig2normal.regression <- function(formula, model, data, M, ...) {
-  mf <- match.call(expand.dots = TRUE)                     # [1]
-  mf$model <- mf$M <- NULL                                 # [2]
-  mf[[1]] <- as.name("normal.regression")                  # [3]
-  as.call(mf)                                              # [4] 
+glm(formula = formula,
+    data = data,
+    weights = weights,
+    family = binomial("logit"),
+    model = FALSE
+    )
+\end{verbatim}
+
+% Explanation of Above Code
+% ....
+\subsubsection{Explanation of the Example Code}
+
+\subsubsubsection{Return Values of a \emph{zelig2} Function}
+
+A {\tt zelig2model} function must always return either a list or an alist as its return value.  In most situations, alist is preferred, since it will place the results symbolically within the list.  This typically results in much cleaner looking print methods.
+
+The entries of the returned list have the following format:
+\begin{description}
+	\item[first entry]{is a function or character string specifying the {\tt model\_function}}
+	\item[character-strings with no key]{represent parameters that are simply forwarded to the {\tt model\_function} from the {\tt zelig} function.  Nothing will be computed, etc. on these values}
+	\item[key-value pairs]{Represent an explicitly set value for the parameter that matches ``key''.  This is useful for parameters that do not require user-input, or user-input that must be changed to interface correctly with the existing model}
+\end{description}
+
+
+% setx function
+%
+\subsubsection{The \emph{setx} Function}
+The Zelig software suite can typically work with the arbitrary {\tt zelig} object, so long as several functions are defined with the following names and outputs:
+
+\begin{description}
+	\item[terms]{returns a list of terms used to interpret {\tt data.frame} objects.  \emph{See {\tt help(terms)} for information concerning creating a {\tt terms} function}.}
+	\item[formula]{returns the formula passed into the existing statistical model.  This should typically be the exact value of {\tt formula} passed into the {\tt zelig} call.  This will not be the case, if extra parsing or editing of the {\tt formula} argument is done within the {\tt zelig2} function.}
+\end{description}
+
+If a model is failing to work with the {\tt setx} function, then the developer must either create valid versions of the the missing or undefined functions; or entirely rewrite the {\tt setx.model} function (where {\tt model} is the name of the Zelig model being written) to perform the correct type of operations.  Please note that the {\tt setx.model} function must return an object of class ``setx'' and the original class of the statistical model.  Please see the source code of {\tt setx.default} for reference.
+
+% SIM function
+\subsubsection{The \emph{sim} Function}
+
+Simulating \emph{quantities of interest} is an integral part of interpreting model results. To use the functionality built into the Zelig {\tt sim} procedure, you need to provide a way to simulate parameters (called a {\tt param} function), and a method for calculating or drawing \emph{quantities of interest} from the simulated parameters (called a {\tt qi} function).
+
+% boot is probably not working right now
+% \section{The \emph{boot} Function}
+
+% param function
+% ...
+\subsubsection{The \emph{param} Function}
+Whether you choose to use the default method, or write a model- specific method for simulating parameters, these functions require the same two inputs:
+
+\begin{itemize}
+	\item{{\tt object}, the object returned by the {\tt zelig} function}
+	\item{{\tt num}, the number of simulations to perform}
+\end{itemize}
+
+When creating the return value for the function, several options are available which are explored in detail in the following subsections.
+
+% FIRST METHOD TO SIMULATE PARAMETERS
+\subsubsection{Simplest Method: Returning a Vector/Matrix of Samples}
+
+Simply returning a vector of samples from the fitted model is by far the simplest approach to constructing a ``param'' function.  While it is quick-and-easy to implement, it lacks the descriptiveness of other methods, and restricts the ability of the developer to make use of API functions.  While this my be an insignificant loss to some, it typically will result in the developer writing harder-to-read code.  It is recommended that the developer that the developer use the slightly more sophisticated methods when possible.
+
+\subsubsubsection{Example Code for Simple Vector/Matrix Method}
+\begin{verbatim}
+param.default <- function(z, num) {
+  mvrnorm(n=num, mu=coef(z), Sigma=vcov(z))
 }
 \end{verbatim}
-The bracketed numbers above correspond to the comments below: 
-\begin{enumerate}
-\item Create a call (an expression to be evaluated) by
-  creating a list of the arguments in {\tt zelig2normal.regression()}, including
-  the extra arguments taken by {\tt normal.regression()}, but not by {\tt zelig()}.
-  All wrappers must take the same standardized arguments ({\tt
-    formula}, {\tt model}, {\tt data}, and {\tt M}), which may be used
-  in the wrapper function to manipulate the {\tt zelig()} call into
-  the {\tt normal.regression()} call.  Additional arguments to {\tt normal.regression()}, such
-  as {\tt start.val} are passed implicitly from {\tt zelig()} using the
-  {\tt ...} operator.
-  
-  \item Erase extraneous information from the call
-    object {\tt mf}.  In this wrapper, {\tt model} and {\tt M} are not
-    used.  In other models, these are used to further manipulate the
-    call, and so are included in the standard inputs to all wrappers.
 
-\item  Reassign the first element of the call
-  (currently {\tt zelig2normal.regression}) with the name of the function to be
-  evaluated, {\tt normal.regression()}.  
+\subsubsubsection{Explanation}
+``mvrnorm'' is the function that takes samples from a multivariate-normal distribution.  In the above example, the \emph{param.default} function returns a matrix with row size \emph{num} and column size equivalent to that of the variance-covariance matrix of the fitted model.  Zelig knows how to convert matrices of this type to a parameters object.
 
-\item Return the call to {\tt zelig()}, which will
-  evaluate the call for each multiply-imputed data set, each subset
-  defined in {\tt by}, or simply {\tt data}.  
-\end{enumerate}
+% SECOND METHOD (LIST METHOD)
+% LIST METHODS
+% ------------
+% LOGIT EXAMPLE
+\subsubsection{List Method: Returning an Indexed List of Parameters}
 
-If you use an S4 class to represent your model, say {\tt mymodel},
-within {\tt zelig.default()}, Zelig's internal function, {\tt
-  create.ZeligS4()}, automatically creates a new S4 class called {\tt
-  ZeligS4mymodel} in the global environment with two additional slots.
-These include {\tt zelig}, which stores the name of the model, and
-{\tt zelig.data}, which stores the data frame if {\tt save.data=TRUE}
-and is empty otherwise.  These names are taken from the original call.
-This new output inherits the original class {\tt mymodel} so all the
-generic functions associated with {\tt mymodel} should still work.  If
-you would like to see an example, see the models implemented using the
-VGAM package, such as multinomial probit.
+While the simple method of returning a vector or matrix from a \emph{param} function is extremely simple, it has no method for setting link or link-inverse functions for use within the actual simulation process.  That is, it does not provide a clear, easy-to-read method for simulating \emph{quantities of interest}.  By returning an indexed list - or a parameters object - the developer can provide clearly labeled and stored link and link-inverse functions, as well as, ancillary parameters.
 
-\subsubsection{To Work with {\tt setx()}}
 
-In the case of {\tt setx()}, most models will use {\tt
-  setx.default()}, which in turn relies on the generic R function {\tt
-  model.matrix()}.  For this procedure to work, your list of output
-must include:  
-\begin{itemize}
-\item {\tt terms}, created by {\tt model.frame()}, or manually;
-\item {\tt formula}, the formula object input by the user;
-\item {\tt xlevels}, which define the strata in the explanatory
-  variables; and
-\item {\tt contrasts}, an optional element which defines the type of
-  factor variables used in the explanatory variables.  See {\tt
-    help(contrasts)} for more information.
-\end{itemize}
+\subsubsubsection{Example of Indexed List Method with \emph{fam} Object Set}
 
-If your model output does not work with {\tt setx.default()}, you must
-write your own {\tt setx.contrib()} function.  For example, models fit
-to multiply-imputed data sets have output from {\tt zelig()} of class
-{\tt "MI"}.  The special {\tt setx.MI()} wrapper pre-processes the
-{\tt zelig()} output object and passes the appropriate arguments to
-{\tt setx.default()}.  
-
-\subsubsection{Compatibility with {\tt sim()}}
-
-Simulating quantities of interest is an integral part of interpreting
-model results.  To use the functionality built into the Zelig {\tt
-sim()} procedure, you need to provide a way to simulate parameters
-(called a {\tt param()} function), and a method for calculating or
-drawing quantities of interest from the simulated parameters (called a
-{\tt qi()} function).
-
-\paragraph{Simulating Parameters}
-
-Whether you choose to use the default method, or write a
-model-specific method for simulating parameters, these functions
-require the same three inputs:  
-\begin{itemize}
-\item {\tt object}: the estimated model or {\tt zelig()} output.
-\item {\tt num}: the number of simulations.
-\item {\tt bootstrap}: either {\tt TRUE} or {\tt FALSE}.  
-\end{itemize}
-The output from {\tt param()} should be either
-\begin{itemize}
-\item If {\tt bootstrap = FALSE} (default), an matrix with rows
-corresponding to simulations and columns corresponding to model
-parameters.  Any ancillary parameters should be included in the output
-matrix.  
-\item If {\tt bootstrap = TRUE}, a vector containing all model
-parameters, including ancillary parameters.    
-\end{itemize} 
-
-There are two ways to simulate parameters:
-\begin{enumerate}
-  
-\item Use the {\tt param.default()} function to extract parameters
-  from the model and, if bootstrapping is not selected, simulate
-  coefficients using asymptotic normal approximation.  The {\tt
-    param.default()} function relies on two R functions:
-
-  \begin{enumerate}
-  \item {\tt coef()}: extracts the coefficients.  Continuing the
-    Normal regression example from above, the appropriate {\tt coef.normal()}
-    function is simply:
 \begin{verbatim}
-coef.normal <- function(object)
-  object$coefficients
-\end{verbatim} %$
-  \item {\tt vcov()}: extracts the variance-covariance matrix.  Again
-    continuing the Poisson example from above:
-\begin{verbatim}
-vcov.normal <- function(object)
-  object$variance
-\end{verbatim} %$
-\end{enumerate}
+param.logit <- function(z, num)
+  list(
+       coef  = mvrnorm(n=num, mu=coef(z), Sigma=vcov(z)),
+       alpha = NULL,
+       fam   = binomial(link="logit")
+       )
+\end{verbatim}
 
-\item Alternatively, you can write your own {\tt param.contrib()}
-  function.  This is appropriate when:  
-  \begin{enumerate}
-  \item Your model has auxiliary parameters, such as $\sigma$ in the
-    case of the Normal distribution.
-  \item Your model performs some sort of correction to the coefficients
-    or the variance-covariance matrix, which cannot be performed in
-    either the {\tt coef.contrib()} or the {\tt vcov.contrib()}
-    functions.
-  \item Your model does not rely on asymptotic approximation to the
-    log-likelihood.  For Bayesian Markov-chain monte carlo models, for
-    example, the {\tt param.contrib()} function ({\tt
-      param.MCMCzelig()} in this case) simply extracts the model
-    parameters simulated in the model-fitting function.
-  \end{enumerate}
-  Continuing the Normal example, 
+
+\subsubsubsection{Explanation of Indexed List with \emph{fam} Object Set Example}
+
+The above example shows how link and link-inverse functions (for a ``logit'' model) can be set using a ``family'' object.  Family objects exist for most statistical models - logit, probit, normal, Gaussian, et cetera - and come preset with values for link and link-inverses.  This method does not differ immensely from the simple, vector-only method; however, it allows for the use of several API functions - \emph{link}, \emph{linkinv}, \emph{coef}, \emph{alpha} - that improve the readability and simplicity of the model's implementation.
+
+The \emph{param} function and the \emph{parameters} class offer methods for automating and simplifying a large amount of repetitive and cumbersome code that may come with building the arbitrary statistical model.  While both are in principle entirely optional - so long as the \emph{qi} function is well-written - they serve as a means to quickly and elegantly implement Zelig models.
+
+
+% ANOTHER METHOD
+\subsubsubsection{Example of Indexed List Method (with \emph{link} Function) Set}
+
 \begin{verbatim}
-param.normal <- function(object, num = NULL, bootstrap = FALSE, 
-                   terms = NULL) {
-  if (!bootstrap) {
-    par <- mvrnorm(num, mu = coef(object), Sigma = vcov(object))
-    Beta <- parse.par(par, terms = terms, eqn = "mu")
-    sigma2 <- exp(parse.par(par, terms = terms, eqn = "sigma2"))
-    res <- cbind(Beta, sigma2)
-  }
-  else {
-    par <- coef(object)
-    Beta <- parse.par(par, terms = terms,  eqn = "mu")
-    sigma2 <- exp(parse.par(par, terms = terms, eqn = "sigma2"))
-    res <- c(coef, sigma2)
-  }
-  res
+param.poisson <- function(z, num) {
+  list(
+       coef = mvrnorm(n=num, mu=coef(z), Sigma=vcov(z)),
+       link = log,
+             
+       # because ``link'' is set,
+       # the next line is purely optional
+       linkinv = exp
+       )
 }
 \end{verbatim}
-\end{enumerate}
 
-\paragraph{Calculating Quantities of Interest}
 
-All models require a model-specific method for calculating quantities
-of interest from the simulated parameters.  For a model of class {\tt
-  contrib}, the appropriate {\tt qi()} function is {\tt
-  qi.contrib()}.  This function should calculate, at the bare minimum,
-the following quantities of interest:
+\subsubsubsection{Explanation of Indexed List (with \emph{link} Function) Example}
 
-\begin{itemize}
-\item {\tt ev}:  the expected values, calculated from the analytic
-  solution for the expected value as a function of the systematic
-  component and ancillary parameters.  
-\item {\tt pr}:  the predicted values, drawn from a distribution
-  defined by the predicted values.  If R does not have a built-in
-  random generator for your function, you may take a random draw from
-  the uniform distribution and use the inverse CDF method to calculate
-  predicted values.  
-\item {\tt fd}: first differences in the expected value, calculated
-  by subtracting the expected values given the specified {\tt x} from
-  the expected values given {\tt x1}.   
-\item {\tt ate.ev}: the average treatment effect calculated using the
-  expected values {\tt ev}.  This is simply {\tt y - ev}, averaged across
-  simulations for each observation.  
-\item {\tt ate.pr}:  the average treatment effect calculated using
-  the predicted values {\tt pr}.  This is simply {\tt y - pr},
-  averaged across simulations for each observation.   
-\end{itemize}
-The required arguments for the {\tt qi()} function are:  
-\begin{itemize}
-\item {\tt object}: the zelig output object.
-\item {\tt par}: the simulated parameters. 
-\item {\tt x}: the matrix of explanatory variables (created using {\tt
-    setx()}).
-\item {\tt x1}: the optional matrix of alternative values for first
-  differences (also created using {\tt setx()}).  If first differences
-  are inappropriate for your model, you should put in a {\tt
-    warning()} or {\tt stop()} if {\tt x1} is not {\tt NULL}.  
-\item {\tt y}: the optional vector or matrix of dependent variables
-  (for calculating average treatment effects).  If average treatment
-  effects are inappropriate for your model, you should put in a {\tt
-    warning()} or {\tt stop()} if conditional prediction has been
-  selected in the {\tt setx()} step.  
-\end{itemize}
+The above example shows how a \emph{parameters} object can be created with by explicitly setting the statistical model's link function.  The \emph{linkinv} parameter is purely optional, since Zelig will create a numerical inverse if it is undefined.  However, the computation of the inverse is typically slower than non-iterative methods.  As a result of this, if the link-inverse is known, it should be set, using the \emph{linkinv} parameter.
 
-Continuing the Normal regression example from above, the appropriate {\tt
-  qi.normal()} function is as follows:  
+The above example can also contain an \emph{alpha} parameter, in order to store important ancillary parameters - mean, standard deviation, gamma-scale, etc. - that would be necessary in the computation of \emph{quantities of interest}.
+
+
+% QUANTITIES OF INTEREST
+\subsection{The \emph{qi} Function}
+
+% Introduction Material
+For any Zelig model, the \emph{qi} function is ultimately the most important piece of code that must be written; it describes the actual process which simulates the \emph{quantities of interest}.  Because of the nature of this process - and the gamut of statistical packages and their underlying statistical model - it is rare that the simulation process can be generalized for arbitrary fitted models.  Despite this, it is possible to break down the simulation process into smaller steps.
+
+% Calculating
+\subsubsection{Calculating Quantities of Interest}
+All models require a model-specific method for calculating quantities of interest from the simulated parameters. For a model of class {\tt model}, the appropriate {\tt qi} function is {\tt qi.model}. This function should calculate, at the bare minimum, the following quantities of interest:
+
+\begin{description}
+	\item[E(Y:X)]{the expected values, calculated from the analytic solution for the expected value as a function of the systematic component and ancillary parameters.}
+	\item[Y:X]{the predicted values, drawn from a distribution defined by the predicted values. If R does not have a built-in random generator for your function, you may take a random draw from the uniform distribution and use the inverse CDF method to calculate predicted values.}
+	\item[E(Y:X1) - E(Y:X)]{first differences in the expected value, calculated by subtracting the expected values given the specified {\tt x} from the expected values given {\tt x1}.}
+\end{description}
+
+
+% QI FUNCTION SIGNATURE
+\subsection{The Function's Signature}
+
+
+% quick intro
+The \emph{qi} function's signature accepts 4 parameters:
+
+
+%
+\begin{description}
+	\item[@object:]{An object of type ``\emph{zelig}''.  This wraps the fitted model in the slot ``result''.}
+	\item[@x:]{An object of type ``\emph{setx}''.  This object is used to compute important coefficients, parameters, and features of the data.frame passed to the function call.}
+	\item[@x1:]{Also an object of type ``\emph{setx}''.  This object is used in a similar fashion, however its presence allows a variety of \emph{quantities of interest} to be computed.  Notably, this is a necessary parameter to compute first-differences.}
+	\item[@num:]{The number of simulations to compute}
+\end{description}
+
+
+% code example
+\subsubsection{Code Example: \emph{qi} Function Signature}
 \begin{verbatim}
-qi.normal <- function(object, par, x, x1 = NULL, y = NULL) {
-  Beta <- parse.par(par, eqn = "mu")                        # [1]
-  sigma2 <- parse.par(par, eqn = "sigma2")                  # [2]
-  ev <- Beta %*% t(x)                                       # [3a]
-  pr <- matrix(NA, ncol = ncol(ev), nrow = nrow(ev))
-  for (i in 1:ncol(ev))                                           
-    pr[,i] <- rnorm(length(ev[,i]), mean = ev[,i],          # [4]
-                    sigma = sd(sigma2[i]))
-  qi <- list(ev = ev, pr = pr)
-  qi.name <- list(ev = "Expected Values: E(Y|X)",
-                  pr = "Predicted Values: Y|X")
-  if (!is.null(x1)){
-    ev1 <- par %*% t(x1)                                    # [3b]
-    qi$fd <- ev1 - ev
-    qi.name$fd <- "First Differences in Expected Values: E(Y|X1)-E(Y|X)"
-  }
-  if (!is.null(y)) {
-    yvar <- matrix(rep(y, nrow(par)), nrow = nrow(par), byrow = TRUE)
-    tmp.ev <- yvar - qi$ev
-    tmp.pr <- yvar - qi$pr
-    qi$ate.ev <- matrix(apply(tmp.ev, 1, mean), nrow = nrow(par))
-    qi$ate.pr <- matrix(apply(tmp.pr, 1, mean), nrow = nrow(par))
-    qi.name$ate.ev <- "Average Treatment Effect: Y - EV"
-    qi.name$ate.pr <- "Average Treatment Effect: Y - PR"
-  }
-  list(qi=qi, qi.name=qi.name)
+qi.model <- function(z, x=NULL, x1=NULL, num=1000) {
+  # start typing your code here
+  # ...
+  # ...
 }
 \end{verbatim}
-There are five lines of code commented above.  By changing these five
-lines in the following \emph{four} ways, you can write {\tt qi()}
-function appropriate to almost any model:  
-\begin{enumerate}  
-\item Extract any systematic parameters by substituting the name of
-your systematic parameter (defined in {\tt describe.mymodel()}).   
-\item Extract any ancillary parameters (defined in {\tt
-describe.mymodel()}) by substituting their names
-here.  
-\item Calculate the expected value using the inverse link function and
-$\eta = X \beta$.  (For the normal model, this is linear.)  You will
-need to make this change in two places, at Comment [3a] and [3b].  
-\item Replace {\tt rnorm()} with a function that takes random draws
-from the stochastic component of your model.  
+
+
+Note: In the above example, the function name ``qi.\_model'' is merely a placeholder.  In order to register a \emph{qi} function with zelig, the developer must follow the naming convention qi.\emph{your mode name}, where \emph{your\_model\_name} is the name of the developer's module.  For example, if a developer titled his or her zelig module ``logit'', then the corresponding \emph{qi} function is titled ``\emph{qi.logit}''.
+
+
+% QI FUNCTION RETURN VALUES
+\subsubsection{The Return Value}
+In order for Zelig to process the simulations, they must be returned in the following format:
+
+\begin{verbatim}
+  list(
+       "TITLE OF QI 1" = val1,
+       "TITLE OF QI 2" = val2,
+
+       # any number of title-val pairs
+       "TITLE OF QI N" = val.n
+       )
+\end{verbatim}
+
+
+In the above example,\emph{val1, val2} are data.frames, matrices, or lists representing the simulations of the \emph{quantities of interests}, and \emph{title1, title2} - and any number of titles - are character-strings that will act as human-readable descriptions of the \emph{quantities of interest}.  Once results are returned in this format, Zelig will convert the results into a machine-readable format and summarize the simulations into a comprehensible format.
+
+
+
+
+% EXAMPLE CODE
+%
+
+\page break
+
+\subsubsection{Example \emph{qi} function (qi.ls.R)}
+
+
+\begin{verbatim}
+qi.logit <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+  coef <- coef(param)             # [1]
+  link.inverse <- linkinv(param)
+
+  eta <- coef %*% t(x)            # [2]
+  theta <- matrix(link.inverse(eta), nrow = nrow(coef))
+
+  ev <- theta                     # [3]
+  pr <- matrix(nrow=nrow(theta), ncol=ncol(theta))
+
+  ev2 <- pr2 <- fd <- NA          # [4]
+
+  for (i in 1:ncol(theta))        # [5]
+    pr[,i] <- as.character(rbinom(length(ev[,i]), 1, ev[,i]))
+
+
+  if (!is.null(x1)) {             # [6]
+    eta2 <- coef %*% t(x1)
+    theta2 <- matrix(link.inverse(eta2), nrow = nrow(coef))
+
+    ev2 <- theta2
+    pr2 <- matrix(nrow=nrow(theta2), ncol=ncol(theta2))
+
+    for (i in 1:ncol(theta))
+      pr2[,i] <- as.character(rbinom(length(ev[,i]), 1, ev[,i]))
+
+    fd <- ev2-ev
+  }
+
+  # return                          [7]
+  list("Expected Values: E(Y|X)" = ev,
+       "Predicted Values: Y|X" = pr,
+       "Expected Values (for X1)" = ev2,
+       "Predicted Values (for X1" = pr2,
+       "First Differences: E(Y|X1) - E(Y|X)" = fd
+       )
+}
+
+\end{verbatim}
+
+
+% EXPLANATION OF ABOVE CODE
+\subsubsection{\emph{qi.logit} Code Explanation}
+
+The following list corresponds to the numbered comments in the {\tt qi.logit} example:
+
+\begin{enumerate}
+	\item{Extract ancillary parameters and the inverse function from the {\tt parameters} object.  These are used later in simulating the \emph{quantities of interest}}
+	\item{Compute $\eta$ (eta) for the given statistical model, and apply the inverse link function to compute $\theta$ (theta)}
+	\item{Store $\theta$ in a matrix}
+	\item{Set our finite-differences, et cetera to {\tt NA}.  If the parameter {\tt x1} is {\tt NULL}, this will prevent unavailable \emph{quantities of interest} from being computed}
+	\item{Use the ancillary parameters that have been simulated to take random draws from a binomial distribution, this simulates the predicted values of our data-set}
+	\item{If the {\tt x1} parameter is not {\tt NULL}, we want to compute the expected values and predicted values for x1, as well.  This allows for that condition to be possible, while not exclusively depending on it occuring}
+	\item{The return value matches titles of the \emph{quantities of interest} with their actual values}
 \end{enumerate}
 
-\section{Getting Ready for the GUI}  
 
-Zelig can work with a variety of graphical user interfaces (GUIs).  GUIs
-work by knowing {\it a priori} what a particular model
-accepts, and presenting only those options to the user in some sort of
-graphical interface.  Thus, in order for your model to work with a
-GUI, you must describe your model in terms that the GUI can
-understand.  For models written using the guidelines in Chapter
-\ref{s:new}, your model will be compatible with (at least)
-the \hlink{Virtual Data Center}{http://thedata.org} GUI.  For
-pre-existing models, you will need to create a {\tt describe.*()}
-function for your model following the examples in
-\Sref{describe.mymodel}.  
+
+%\section{Getting Ready for the GUI}  
+%
+%Zelig can work with a variety of graphical user interfaces (GUIs).  GUIs
+%work by knowing {\it a priori} what a particular model
+%accepts, and presenting only those options to the user in some sort of
+%graphical interface.  Thus, in order for your model to work with a
+%GUI, you must describe your model in terms that the GUI can
+%understand.  For models written using the guidelines in Chapter
+%\ref{s:new}, your model will be compatible with (at least)
+%the \hlink{Virtual Data Center}{http://thedata.org} GUI.  For
+%pre-existing models, you will need to create a {\tt describe.*()}
+%function for your model following the examples in
+%\Sref{describe.mymodel}.  
 
 \section{Formatting Reference Manual Pages}  \label{s:format}
 
