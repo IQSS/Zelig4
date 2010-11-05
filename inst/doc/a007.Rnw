@@ -15,7 +15,7 @@ library(lme4)
 
 library(Zelig)
 models <- ZeligListModels()
-write(models,file='models.txt');
+write(models, file='models.txt');
 
 
 ## citations

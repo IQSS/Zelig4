@@ -19,12 +19,12 @@
 # return: a list of the loaded zelig models
 ZeligListModels <- function(zelig.only=FALSE) {
   results <- if (zelig.only)
-    ls(pattern="^zelig2\\.", envir=asNamespace("Zelig"))
+    ls(pattern="^zelig2\\", envir=asNamespace("Zelig"))
   else
-    apropos("^zelig2\\.", mode="function")
+    apropos("^zelig2\\", mode="function")
 
   # substitute and return
-  sub("^zelig2\\.", "", results)
+  sub("^zelig2\\", "", results)
 }
 
 .GetModelCitationTex <- function(model.name) {

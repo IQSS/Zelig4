@@ -164,7 +164,7 @@ glm(formula = formula,
 % ....
 \subsubsection{Explanation of the Example Code}
 
-\subsubsubsection{Return Values of a \emph{zelig2} Function}
+\subsubsection{Return Values of a \emph{zelig2} Function}
 
 A {\tt zelig2model} function must always return either a list or an alist as its return value.  In most situations, alist is preferred, since it will place the results symbolically within the list.  This typically results in much cleaner looking print methods.
 
@@ -213,14 +213,14 @@ When creating the return value for the function, several options are available w
 
 Simply returning a vector of samples from the fitted model is by far the simplest approach to constructing a ``param'' function.  While it is quick-and-easy to implement, it lacks the descriptiveness of other methods, and restricts the ability of the developer to make use of API functions.  While this my be an insignificant loss to some, it typically will result in the developer writing harder-to-read code.  It is recommended that the developer that the developer use the slightly more sophisticated methods when possible.
 
-\subsubsubsection{Example Code for Simple Vector/Matrix Method}
+\subsubsection{Example Code for Simple Vector/Matrix Method}
 \begin{verbatim}
 param.default <- function(z, num) {
   mvrnorm(n=num, mu=coef(z), Sigma=vcov(z))
 }
 \end{verbatim}
 
-\subsubsubsection{Explanation}
+\subsubsection{Explanation}
 ``mvrnorm'' is the function that takes samples from a multivariate-normal distribution.  In the above example, the \emph{param.default} function returns a matrix with row size \emph{num} and column size equivalent to that of the variance-covariance matrix of the fitted model.  Zelig knows how to convert matrices of this type to a parameters object.
 
 % SECOND METHOD (LIST METHOD)
@@ -232,7 +232,7 @@ param.default <- function(z, num) {
 While the simple method of returning a vector or matrix from a \emph{param} function is extremely simple, it has no method for setting link or link-inverse functions for use within the actual simulation process.  That is, it does not provide a clear, easy-to-read method for simulating \emph{quantities of interest}.  By returning an indexed list - or a parameters object - the developer can provide clearly labeled and stored link and link-inverse functions, as well as, ancillary parameters.
 
 
-\subsubsubsection{Example of Indexed List Method with \emph{fam} Object Set}
+\subsubsection{Example of Indexed List Method with \emph{fam} Object Set}
 
 \begin{verbatim}
 param.logit <- function(z, num)
@@ -244,7 +244,7 @@ param.logit <- function(z, num)
 \end{verbatim}
 
 
-\subsubsubsection{Explanation of Indexed List with \emph{fam} Object Set Example}
+\subsubsection{Explanation of Indexed List with \emph{fam} Object Set Example}
 
 The above example shows how link and link-inverse functions (for a ``logit'' model) can be set using a ``family'' object.  Family objects exist for most statistical models - logit, probit, normal, Gaussian, et cetera - and come preset with values for link and link-inverses.  This method does not differ immensely from the simple, vector-only method; however, it allows for the use of several API functions - \emph{link}, \emph{linkinv}, \emph{coef}, \emph{alpha} - that improve the readability and simplicity of the model's implementation.
 
@@ -252,7 +252,7 @@ The \emph{param} function and the \emph{parameters} class offer methods for auto
 
 
 % ANOTHER METHOD
-\subsubsubsection{Example of Indexed List Method (with \emph{link} Function) Set}
+\subsubsection{Example of Indexed List Method (with \emph{link} Function) Set}
 
 \begin{verbatim}
 param.poisson <- function(z, num) {
@@ -268,7 +268,7 @@ param.poisson <- function(z, num) {
 \end{verbatim}
 
 
-\subsubsubsection{Explanation of Indexed List (with \emph{link} Function) Example}
+\subsubsection{Explanation of Indexed List (with \emph{link} Function) Example}
 
 The above example shows how a \emph{parameters} object can be created with by explicitly setting the statistical model's link function.  The \emph{linkinv} parameter is purely optional, since Zelig will create a numerical inverse if it is undefined.  However, the computation of the inverse is typically slower than non-iterative methods.  As a result of this, if the link-inverse is known, it should be set, using the \emph{linkinv} parameter.
 
@@ -346,7 +346,7 @@ In the above example,\emph{val1, val2} are data.frames, matrices, or lists repre
 % EXAMPLE CODE
 %
 
-\page break
+\pagebreak
 
 \subsubsection{Example \emph{qi} function (qi.ls.R)}
 

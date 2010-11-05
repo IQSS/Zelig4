@@ -34,7 +34,7 @@ for f in `cat models.txt`
   if [ $# -eq 0 ]
       then
       #echo "Sweave(\"$f.Rnw\")" | ${RCMD} --slave
-      $RCMD Sweave $f.Rnw
+      $RCMD CMD Sweave $f.Rnw
       echo "sweaving $f"
   fi
   
@@ -72,18 +72,18 @@ cp zinput.tex commandsRd
 cp Rd.sty commandsRd
 cp upquote.sty commandsRd
 
-Rdfiles=`ls ../../man/*.Rd`
-for rd in ${Rdfiles}
-  do
-    echo $rd
-    newname=`basename ${rd} .Rd`
-    echo $newname
-    R CMD Rdconv -t=latex ${rd} -o commandsRd/${newname}.tex
+# Rdfiles=`ls ../../man/*.Rd`
+# for rd in ${Rdfiles}
+#   do
+#     echo $rd
+#     newname=`basename ${rd} .Rd`
+#     echo $newname
+#     R CMD Rdconv -t=latex ${rd} -o commandsRd/${newname}.tex
   
-    ### perl -i -pe 's#HeaderA{#section{{\\tt #i' commandsRd/${newname}.tex
-    perl -i -pe 's#HeaderA{(.*)}{(.*)}{(.*)}#section{{\\tt \1}: \2}\\label{ss:\3}#i' commandsRd/${newname}.tex 
+#     ### perl -i -pe 's#HeaderA{#section{{\\tt #i' commandsRd/${newname}.tex
+#     perl -i -pe 's#HeaderA{(.*)}{(.*)}{(.*)}#section{{\\tt \1}: \2}\\label{ss:\3}#i' commandsRd/${newname}.tex 
 
-done
+# done
 
 
 ## create the big Zelig manual

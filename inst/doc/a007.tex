@@ -24,7 +24,7 @@
 + }
 > getcat <- function(m) Zelig:::ZeligDescribeModel(m)$category
 > mm <- sapply(models, getcat)
-> catsList <- Zelig:::.ModelCategories()
+> catsList <- Zelig:::.ZeligModelCategories()
 > out <- file("zeligmodels.html", "w+b")
 > cat("<ul id=\"models\">\n", file = out, sep = "")
 > for (cat in names(catsList)) {
