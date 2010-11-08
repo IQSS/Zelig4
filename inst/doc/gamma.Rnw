@@ -215,9 +215,11 @@ below.
 
 \subsection* {How to Cite} 
 
-\input{cites/gamma}
-\input{citeZelig}
+<<cite, echo=FALSE>>=
+Zelig:::.describe("gamma")
+@ 
 
+\input{citeZelig}
 
 \subsection* {See also}
 The gamma model is part of the stats package by \citet{VenRip02}.

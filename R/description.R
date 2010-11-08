@@ -57,8 +57,10 @@ description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
 # @descr: an description object
 # return: a character-string giving citation info
 cite <- function(descr) {
-  # catch error, and make due
-  if (!inherits(descr, "description"))
+  #
+  if (inherits(descr, "list"))
+    descr <- as.description(descr)
+  else if (!inherits(descr, "description"))
     descr <- description()
 
   # 
@@ -79,6 +81,7 @@ cite <- function(descr) {
   str <- paste(str, " in Kosuke Imai, Gary King, and Olivia Lau, ", sep="")
   str <- paste(str, "\"Zelig: Everyone's Statistical Software,\"", sep="")
   str <- paste(str, url, "\n", sep="")
+  str
 }
 
 

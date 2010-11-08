@@ -19,14 +19,17 @@ write(models, file='models.txt');
 
 
 ## citations
-getwd() -> wd
-dir.create(file.path(wd,"cites"))
+## getwd() -> wd
+## dir.create(file.path(wd,"cites"))
 
-for (m in models){
-  ##cat(m, file="kot.txt",append=TRUE)
-  res <- Zelig:::.GetModelCitationTex(m)
-  cat("To cite the \\emph{",m,"} Zelig model:\n","\\begin{verse}\n",res,"\n\\end{verse}", file = paste("cites/",m,".tex", sep = ""))
-}
+## for (m in models){
+##   ##cat(m, file="kot.txt",append=TRUE)
+##   res <- Zelig:::.GetModelCitationTex(m)
+##   cat("To cite the \\emph{", m, "} Zelig model:\n",
+##       "\\begin{verse}\n", res, "\n\\end{verse}",
+##       file = paste("cites/",m,".tex", sep = "")
+##       )
+## }
 
 
 # create html version of models for gary's web site

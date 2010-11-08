@@ -214,7 +214,10 @@ below.
 
 \subsection* {How to Cite} 
 
-\input{cites/probit}
+<<probitcite, echo=FALSE>>=
+Zelig:::.describe("probit")
+@ 
+
 \input{citeZelig}
 
 \subsection* {See also}

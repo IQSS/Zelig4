@@ -264,7 +264,9 @@ below.
 \end{itemize}
 
 \subsection* {How to Cite} 
-\input{cites/ls}
+<<lscite, echo=FALSE>>= 
+Zelig:::.describe("ls")
+@
 \input{citeZelig}
 
 \subsection* {See also}

@@ -1,27 +1,32 @@
-
+\SweaveOpts{results=hide, prefix.string=vigpics/negbin}
 \include{zinput}
-%\VignetteIndexEntry{Normal Regression  for Continuous Dependent Variables}
-%\VignetteDepends{Zelig, stats}
-%\VignetteKeyWords{model, normal,regression,continuous, least squares}
+%\VignetteIndexEntry{Negative Binomial Regression for Event Count Dependent Variables}
+%\VignetteDepends{Zelig, MASS}
+%\VignetteKeyWords{model, binomial,negative, regression, count}
 %\VignettePackage{Zelig}
-\usepackage{Sweave}
 \begin{document}
 \nobibliography*
+<<beforepkgs, echo=FALSE>>=
+ before=search()
+@
 
-\section{{\tt normal}: Normal Regression for Continuous Dependent Variables}
-\label{normal}
+<<loadLibrary, echo=F,results=hide>>=
+library(Zelig)
+@
 
-The Normal regression model is a close variant of the more standard
-least squares regression model (see \Sref{ls}). Both models specify a
-continuous dependent variable as a linear function of a set of
-explanatory variables.  The Normal model reports maximum likelihood
-(rather than least squares) estimates.  The two models differ only in
-their estimate for the stochastic parameter $\sigma$.
+
+\section{{\tt negbinom}: Negative Binomial Regression for Event
+Count Dependent Variables}\label{negbinom}
+
+Use the negative binomial regression if you have a count of events for
+each observation of your dependent variable.  The negative binomial
+model is frequently used to estimate over-dispersed event count
+models.
 
 \subsubsection{Syntax}
 
 \begin{verbatim}
-> z.out <- zelig(Y ~ X1 + X2, model = "normal", data = mydata)
+> z.out <- zelig(Y ~ X1 + X2, model = "negbinom", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
@@ -29,7 +34,7 @@ their estimate for the stochastic parameter $\sigma$.
 \subsubsection{Additional Inputs} 
 
 In addition to the standard inputs, {\tt zelig()} takes the following
-additional options for normal regression:  
+additional options for negative binomial regression:  
 \begin{itemize}
 \item {\tt robust}: defaults to {\tt FALSE}.  If {\tt TRUE} is
 selected, {\tt zelig()} computes robust standard errors via the {\tt
@@ -60,117 +65,79 @@ specified in {\tt method}.   See the {\tt sandwich} library and
 \end{itemize}
 \end{itemize}
 
-\subsubsection{Examples}
+\subsubsection{Example}
 
-\begin{enumerate}
-\item Basic Example with First Differences
-
-Attach sample data: 
-\begin{Schunk}
-\begin{Sinput}
-> data(macro)
-\end{Sinput}
-\end{Schunk}
-Estimate model:  
-\begin{Schunk}
-\begin{Sinput}
-> z.out1 <- zelig(unem ~ gdp + capmob + trade, model = "normal", 
-+     data = macro)
-\end{Sinput}
-\end{Schunk}
-Summarize of regression coefficients:  
-\begin{Schunk}
-\begin{Sinput}
-> summary(z.out1)
-\end{Sinput}
-\end{Schunk}
-Set explanatory variables to their default (mean/mode) values, with
-high (80th percentile) and low (20th percentile) values for trade: 
-\begin{Schunk}
-\begin{Sinput}
-> x.high <- setx(z.out1, trade = quantile(macro$trade, 0.8))
-> x.low <- setx(z.out1, trade = quantile(macro$trade, 0.2))
-\end{Sinput}
-\end{Schunk}
-Generate first differences for the effect of high versus low trade on
-GDP: 
-\begin{Schunk}
-\begin{Sinput}
-> s.out1 <- sim(z.out1, x = x.high, x1 = x.low)
-\end{Sinput}
-\end{Schunk}
-\begin{Schunk}
-\begin{Sinput}
-> summary(s.out1)
-\end{Sinput}
-\end{Schunk}
-%plot does not work 
-A visual summary of quantities of interest:  
+Load sample data:  
+<<Example.data>>=
+ data(sanction)
+@ 
+Estimate the model:  
+<<Example.zelig>>=
+ z.out <- zelig(num ~ target + coop, model = "negbinom", data = sanction)
+@ 
+<<Example.summary>>= 
+summary(z.out)
+@ 
+Set values for the explanatory variables to their default mean values:  
+<<Example.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulate fitted values:  
+<<Example.sim>>=
+ s.out <- sim(z.out, x = x.out)
+@
+<<Example.summary.sim>>= 
+summary(s.out)
+@ 
 \begin{center}
-\begin{Schunk}
-\begin{Sinput}
-> plot(s.out1)
-\end{Sinput}
-\end{Schunk}
-\includegraphics{vigpics/normal-ExamplesPlot}
+<<label=Example1Plot,fig=true>>= 
+ plot(s.out)
+@ 
 \end{center}
-
-\item Using Dummy Variables
-%the code in this section does not work well but there is no demo for this part either
- 
-Estimate a model with a dummy variable for each year and country (see
-\ref{factors} for help with dummy variables).  Note that you do not
-need to create dummy variables, as the program will automatically
-parse the unique values in the selected variables into dummy
-variables.    
-\begin{Schunk}
-\begin{Sinput}
-> z.out2 <- zelig(unem ~ gdp + trade + capmob + as.factor(year) + 
-+     as.factor(country), model = "normal", data = macro)
-\end{Sinput}
-\end{Schunk}
-Set values for the explanatory variables, using the default mean/mode
-variables, with country set to the United States and Japan,
-respectively: 
-Simulate quantities of interest:  
-%plot does not work 
-\begin{center}
-\end{center}
-\end{enumerate}
-
 \subsubsection{Model}
-Let $Y_i$ be the continuous dependent variable for observation $i$.
+Let $Y_i$ be the number of independent events that occur during a
+fixed time period. This variable can take any non-negative integer value.
+
 \begin{itemize}
-\item The \emph{stochastic component} is described by a univariate normal
-  model with a vector of means $\mu_i$ and scalar variance $\sigma^2$:
-  \begin{equation*}
-    Y_i \; \sim \; \textrm{Normal}(\mu_i, \sigma^2). 
-  \end{equation*}
+\item The negative binomial distribution is derived by letting the
+  mean of the Poisson distribution vary according to a fixed
+  parameter $\zeta$ given by the Gamma distribution. The
+  \emph{stochastic component} is given by
+   \begin{eqnarray*}
+     Y_i \mid \zeta_i & \sim & \textrm{Poisson}(\zeta_i \mu_i),\\
+     \zeta_i & \sim & \frac{1}{\theta}\textrm{Gamma}(\theta).
+   \end{eqnarray*}
+   The marginal distribution of $Y_i$ is then the negative binomial
+   with mean $\mu_i$ and variance $\mu_i + \mu_i^2/\theta$:
+   \begin{eqnarray*}
+   Y_i & \sim & \textrm{NegBinom}(\mu_i, \theta), \\
+       & = & \frac{\Gamma (\theta + y_i)}{y! \, \Gamma(\theta)} 
+             \frac{\mu_i^{y_i} \, \theta^{\theta}}{(\mu_i + \theta)^{\theta + y_i}},
+   \end{eqnarray*}
+   where $\theta$ is the systematic parameter of the Gamma
+   distribution modeling $\zeta_i$.  
 
-\item The \emph{systematic component} is 
-  \begin{equation*}
-    \mu_i \;= \; x_i \beta,
-  \end{equation*}
-  where $x_i$ is the vector of $k$ explanatory variables and $\beta$ is
-  the vector of coefficients.
-\end{itemize}
-
+ \item The \emph{systematic component} is given by
+   \begin{equation*}
+     \mu_i = \exp(x_i \beta)
+   \end{equation*}
+   where $x_i$ is the vector of $k$ explanatory variables and $\beta$ is
+   the vector of coefficients.
+ \end{itemize}
 
 \subsubsection{Quantities of Interest}
-
 \begin{itemize}
-\item The expected value ({\tt qi\$ev}) is the mean of simulations
-  from the the stochastic component, $$E(Y) = \mu_i = x_i \beta,$$
-  given a draw of $\beta$ from its posterior.  
+\item The expected values ({\tt qi\$ev}) are simulations of the mean
+  of the stochastic component.  Thus, $$E(Y) = \mu_i = \exp(x_i
+  \beta),$$ given simulations of $\beta$.  
+  
+\item The predicted value ({\tt qi\$pr}) drawn from the distribution
+  defined by the set of parameters $(\mu_i, \theta)$.
 
-\item The predicted value ({\tt qi\$pr}) is drawn from the distribution
-  defined by the set of parameters $(\mu_i, \sigma)$.  
-
-\item The first difference ({\tt qi\$fd}) is:
+\item The first difference ({\tt qi\$fd}) is
 \begin{equation*}
-\textrm{FD}\; = \;E(Y \mid x_1) -  E(Y \mid x)
+\textrm{FD} \; = \; E(Y | x_1) - E(Y \mid x)
 \end{equation*}
-
 \item In conditional prediction models, the average expected treatment
   effect ({\tt att.ev}) for the treatment group is 
     \begin{equation*} \frac{1}{\sum_{i=1}^n t_i}\sum_{i:t_i=1}^n \left\{ Y_i(t_i=1) -
@@ -195,14 +162,13 @@ Let $Y_i$ be the continuous dependent variable for observation $i$.
     $Y_i$ for observations in the treatment group, under the
     assumption that everything stays the same except that the
     treatment indicator is switched to $t_i=0$.
-
 \end{itemize}
 
 \subsubsection{Output Values}
 
 The output of each Zelig command contains useful information which you
 may view.  For example, if you run \texttt{z.out <- zelig(y \~\,
-  x, model = "normal", data)}, then you may examine the available
+  x, model = "negbinom", data)}, then you may examine the available
 information in \texttt{z.out} by using \texttt{names(z.out)},
 see the {\tt coefficients} by using {\tt z.out\$coefficients}, and
 a default summary of information through \texttt{summary(z.out)}.
@@ -214,12 +180,14 @@ below.
    \begin{itemize}
    \item {\tt coefficients}: parameter estimates for the explanatory
      variables.
+   \item {\tt theta}: the maximum likelihood estimate for the
+     stochastic parameter $\theta$.  
+   \item {\tt SE.theta}: the standard error for {\tt theta}.  
    \item {\tt residuals}: the working residuals in the final iteration
      of the IWLS fit.
-   \item {\tt fitted.values}: fitted values.  For the normal model,
-     these are identical to the {\tt linear predictors}.
-   \item {\tt linear.predictors}: fitted values.  For the normal
-     model, these are identical to {\tt fitted.values}.
+   \item {\tt fitted.values}: a vector of the fitted values for the systemic
+     component $\lambda$.  
+   \item {\tt linear.predictors}: a vector of $x_{i} \beta$.  
    \item {\tt aic}: Akaike's Information Criterion (minus twice the
      maximized log-likelihood plus twice the number of coefficients).
    \item {\tt df.residual}: the residual degrees of freedom.
@@ -243,12 +211,13 @@ below.
   Available quantities are:
 
    \begin{itemize}
-   \item {\tt qi\$ev}: the simulated expected values for the specified
+   \item {\tt qi\$ev}: the simulated expected values given the specified
      values of {\tt x}.
    \item {\tt qi\$pr}: the simulated predicted values drawn from the
-     distribution defined by $(\mu_i, \sigma)$.
-   \item {\tt qi\$fd}: the simulated first difference in the simulated
-     expected values for the values specified in {\tt x} and {\tt x1}.
+     distribution defined by $(\mu_i, \theta)$.  
+   \item {\tt qi\$fd}: the simulated first differences in the
+     simulated expected values given the specified values of {\tt x}
+     and {\tt x1}.
    \item {\tt qi\$att.ev}: the simulated average expected treatment
      effect for the treated from conditional prediction models.  
    \item {\tt qi\$att.pr}: the simulated average predicted treatment
@@ -258,33 +227,29 @@ below.
 
 \subsection* {How to Cite} 
 
-\input{cites/normal}
+<<negbinomcite, echo=FALSE>>=
+Zelig:::.describe("negbinom")
+@ 
+
 \input{citeZelig}
 
 \subsection* {See also}
-
-The normal model is part of the stats package by \citet{VenRip02}.
-Advanced users may wish to refer to \texttt{help(glm)} and
-\texttt{help(family)}, as well as \cite{McCNel89}. Robust standard
-errors are implemented via the sandwich package by \citet{Zeileis04}.
-Sample data are from \cite{KinTomWit00}.
+The negative binomial model is part of the MASS package by William N. Venable and Brian D. Ripley \citep{VenRip02}. Advanced users may wish to refer to \texttt{help(glm.nb)} as well as \cite{McCNel89}. Robust standard errors are implemented via sandwich package by Achim Zeileis \citep{Zeileis04}.Sample data are from \cite{Martin92}.
 
 \bibliographystyle{asa}
 \bibliography{gk,gkpubs}
+<<afterpkgs, echo=FALSE>>=
+ after<-search()
+ torm<-setdiff(after,before)
+ for (pkg in torm)
+ detach(pos=match(pkg,search()))
+@
  \end{document}
-
 
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: t
 %%% End: 
-
-
-
-
-
-
-
 
 
 

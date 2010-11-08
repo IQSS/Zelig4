@@ -19,25 +19,16 @@
 # return: a list of the loaded zelig models
 ZeligListModels <- function(zelig.only=FALSE) {
   results <- if (zelig.only)
-    ls(pattern="^zelig2\\", envir=asNamespace("Zelig"))
+    ls(pattern="^zelig2", envir=asNamespace("Zelig"))
   else
-    apropos("^zelig2\\", mode="function")
+    apropos("^zelig2", mode="function")
 
   # substitute and return
-  sub("^zelig2\\", "", results)
+  sub("^zelig2", "", results)
 }
 
-.GetModelCitationTex <- function(model.name) {
-  # next line should actually be most excellent
-  dummy <- "Be Excellent to Everyone."
-  class(dummy) <- model.name
-
-  # compute dummy object
-  cite.obj <- describe(model.name)
-
-  # return
-  cite(cite.obj)
-}
+.GetModelCitationTex <- function(model.name)
+  cite(ZeligDescribeModel(model.name))
 
 ZeligDescribeModel <- function(model.name, force=FALSE, schema="1.1") {
   dummy <-
@@ -47,7 +38,13 @@ It's just very beautiful to watch."
   class(dummy) <- model.name
 
   # describe
-  describe(dummy)
+  res <- describe(dummy)
+
+  # add model name
+  res$model <- model.name
+
+  # return
+  as.description(res)
 }
 
 
@@ -64,8 +61,6 @@ It's just very beautiful to watch."
        )
 }
 
-.describe <- function(model) {
-  dummy <- "I love baseball.  You know, it doesn't have to mean anything."
-  class(dummy) <- model
-  describe(model)
+.describe <- function(model.name) {
+  cite(ZeligDescribeModel(model.name))
 }

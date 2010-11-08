@@ -259,7 +259,9 @@ below.
 
 \subsection* {How to Cite} 
 
-\input{cites/normal}
+<<normalcite, echo=FALSE>>=
+Zelig:::.describe("normal")
+@ 
 \input{citeZelig}
 
 \subsection* {See also}

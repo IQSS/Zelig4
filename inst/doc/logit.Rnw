@@ -264,7 +264,9 @@ below.
 
 \subsection* {How to Cite} 
 
-\input{cites/logit}
+<<logitcite, echo=FALSE>>=
+Zelig:::.describe("logit")
+@ 
 \input{citeZelig}
 
 
