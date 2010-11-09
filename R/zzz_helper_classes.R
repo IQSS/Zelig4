@@ -23,3 +23,5 @@ zelig.kin <- function(parent, fitted, data=NULL) {
   class(z) <- c(z$name, "zelig")
   z  
 }
+# dummy zelig class - we should actually make this a bit more rigorous
+setClass("zelig", representation())
