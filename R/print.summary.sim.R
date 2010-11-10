@@ -70,7 +70,11 @@ print.summary.sim <- function(obj) {
 
     # display the title, then the value
     message(key)
-    print(val)
+
+    if (is.numeric(val))
+      print(round(val*(1000))/1000)
+    else
+      print(val)
   }
 
   # return invisibly

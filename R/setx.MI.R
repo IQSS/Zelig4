@@ -1,5 +1,4 @@
 setx.MI <- function(obj, ..., data=NULL) {
-  print(class(obj))
   s.x <- results <- list()
 
   # assign data, if NULL

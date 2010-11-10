@@ -45,5 +45,9 @@
 
   # add viggnettes menu
   #addVigs2WinMenu("Zelig")
+
+  # set class globally when the package is attached
+  setClass("zelig", representation(), where=.GlobalEnv)
+  setClass("MI", representation(), where=.GlobalEnv)
 }
 

@@ -11,7 +11,7 @@
 .GetGenerics.default <- function(zelig.object, envir=parent.frame()) {
   if (is.null(zelig.object$S4))
     stop(as.character(zelig.object$family[[1]]))
-  else if (zelig.object$S4)
+  else if (zelig.object$S4) 
     .GetGenericsS4(zelig.object, envir)
   else
     .GetGenericsS3(zelig.object, envir)
@@ -72,12 +72,14 @@
 
   # return function
   function (...) {
-    # get list of parameters,
-    # omitting function name
+    # get list of parameters
     params <- as.list(match.call())
 
-    # get the result object from the zelig object
+    # pass stored name as parameter
+    # so that Map applies this to ...
     params[[1]] <- stored.name
+
+    # get the result object from the zelig object
     params[[2]] <- ..1$result
 
 

@@ -5,8 +5,12 @@ parameters <- function(simulations, alpha,
                        link=NULL,
                        linkinv=NULL)
 {
-  # 
-  if (!missing(fam) && inherits(fam, "family")) {
+  #
+  if (!missing(fam) && isS4(fam)) {
+    link <- fam@link
+    linkinv <- fam@inverse
+  }
+  else if (!missing(fam) && inherits(fam, "family")) {
     link <- fam$linkfun
     linkinv <- fam$linkinv
   }

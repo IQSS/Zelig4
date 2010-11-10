@@ -20,8 +20,6 @@ zelig.kin <- function(parent, fitted, data=NULL) {
             )
 
   # make zelig object, and return
-  class(z) <- c(z$name, "zelig")
+  class(z) <- c("zelig", z$name)
   z  
 }
-# dummy zelig class - we should actually make this a bit more rigorous
-setClass("zelig", representation())

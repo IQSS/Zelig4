@@ -53,6 +53,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     else
       res[[key]] <- fn$other(data[,key])
   }
+
   # add explicitly set values
   for (key in names(dots)) {
     if (! key %in% colnames(data)) {
@@ -66,6 +67,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     else
       dots[[key]]
   }
+
 
   # make a tiny data-frame with
   # all the necessary columns
@@ -88,8 +90,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   mod <- model.matrix(terms(obj), data=d)
   mod <- as.data.frame(mod)
   rownames(mod) <- "coef:"
-
-
+  
   # build the setx object
   sx <- list(name   = obj$name,
              formula= formula(obj),

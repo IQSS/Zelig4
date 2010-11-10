@@ -2,7 +2,10 @@ summarize.MI <- function(qis) {
   summ.list <- list()
 
   for (q in qis$results) {
-    # get summary data for individual qi
+    # assig correct class
+    class(q) <- class(qis) %w/o% "MI"
+
+    # get summary data for individual qi    
     summ <- summarize(q)
 
     # bind rows, so that data is organized correctly
@@ -12,8 +15,21 @@ summarize.MI <- function(qis) {
 
   # name rows appropriately
   for (key in names(summ.list)) {
-    rownames(summ.list[[key]]) <- paste(qis$levels, ": ", sep="")
-    summ.list[[key]] <- summ.list[[key]][sort(rownames(summ.list[[key]])),]
+    data.labels <- paste(.space.out(qis$levels, gap=3),
+                         rownames(summ.list[[key]]),
+                         sep=" "
+                         )
+
+    # right-justify row names
+    data.labels <- format(data.labels, justify="right")
+
+
+    #
+    rownames(summ.list[[key]]) <- paste(data.labels, ": ", sep="")
+    
+
+    # ...
+    # summ.list[[key]] <- summ.list[[key]][sort(rownames(summ.list[[key]])),]
   }
 
   # assign class, for some reason
@@ -21,4 +37,23 @@ summarize.MI <- function(qis) {
 
   # return
   summ.list
+}
+
+
+.space.out <- function(lis, gap=1, fill="", trailing=TRUE) {
+  # ignore weird values for gap
+  if (gap < 1)
+    return(lis)
+
+  gap <- as.integer(gap)
+
+  trail <- as.integer(!trailing)
+  
+  len <- length(lis)
+  res <- vector("character", length=len + gap*(len-trail))
+
+  assign.vector <- (1:len)*(gap+1)-gap
+  res[assign.vector] <- lis
+  res[-assign.vector] <- fill
+  res
 }

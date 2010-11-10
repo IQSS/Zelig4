@@ -19,6 +19,12 @@ sim.default <- function(z,
 
   # compute quantities of interest
   res.qi <- as.qi( qi(z, x=x, x1=x1, param=param, num=num) )
+  class(res.qi) <- c(z$name, class(res.qi))
+
+  # this is kludge (for now)
+  if (inherits(z, "MI"))
+    class(res.qi) <- c("MI", class(res.qi))
+
 
   # build object
   s <- list(name     = z$name,

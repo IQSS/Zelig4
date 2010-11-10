@@ -24,6 +24,12 @@
              silent=TRUE
              )
 
+  res <- try(setMethod(name, signature="MI",
+                       where = .GlobalEnv,
+                       definition=.NewZeligMIGenericS4(name)
+                       ),
+             silent=FALSE
+             )
 
   if (inherits(res, "try-error")) {
     warning()
@@ -53,15 +59,44 @@
 
   # 
   f <- function(object, ...) {
-    #
+    # get list of parameters,
+    # ommitting function name
     params <- as.list(sys.call())[-1]
+
+    # get the result object from the zelig object
     params[[1]] <- eval.parent(params[[1]])$result
 
-    #
+    # call the function on the fitted model
     do.call(name, params)
   }
 
-  # 
+  # assign formals, so that they match perfectly
+  formals(f) <- fformals
+
+  # return
+  f
+}
+
+#
+#
+.NewZeligMIGenericS4 <- function(name) {
+  # get generic
+  fdef <- getGeneric(name)
+
+  #
+  fformals <- formals(fdef)
+  stored.name <- name
+
+  # define function
+  f <- function(object, ...) {
+    params <- as.list(sys.call())
+    params[[1]] <- stored.name
+    params[[2]] <- eval.parent(params[[2]])$result
+
+    #
+    do.call(Map, params)
+  }
+
   formals(f) <- fformals
 
   # return
@@ -72,7 +107,11 @@
 
 # @object: a zelig object
 .GetGenericsS4 <- function(object, envir=parent.frame()) {
-  .ListS4Generics(classes=class(object$result), env=env)
+  if (inherits(object$result, "list")) {
+    .ListS4Generics(classes=class(object$result[[1]]), env=env)
+  }
+  else
+    .ListS4Generics(classes=class(object$result), env=env)
 }
 
 
