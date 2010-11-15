@@ -17,22 +17,16 @@ cmvglm <- function(formula, model, ndim,data=NULL, fact=NULL){
     return (rhs)
   }
   tt<-terms(formula)
-
   attr(tt,"systEqns")<-names(formula)
-
   p<-make.parameters(tt,shape="matrix")
-
-
   vars<-rownames(p)
   cm<-vector("list", length(vars))
   names(cm)<-vars
   
-  for(i in 1:length(cm))
-    cm[[i]]<-diag(1, ndim)
+    for(i in 1:length(cm))
+      cm[[i]]<-diag(1, ndim)
 
   constrain<-attr(tt,"constraints")
-
-
   if(!is.logical(constrain)){
     tmp <- sort(colnames(constrain))
     for (i in 1:length(tmp)) {
@@ -48,15 +42,13 @@ cmvglm <- function(formula, model, ndim,data=NULL, fact=NULL){
         }
     }
   }
-
   for(i in rownames(p)){
     for(j in 1:ncol(p)){
       if(is.na(p[i,j]))
         cm[[i]][j,j]<-0
     }
   }
-
-
+    
  # if(!is.null(constant))
  #   for(i in 1:length(constant))
  #     for(j in 1:length(cm))
@@ -65,8 +57,6 @@ cmvglm <- function(formula, model, ndim,data=NULL, fact=NULL){
 
   for(i in 1:length(cm))
     cm[[i]]<-as.matrix(cm[[i]][,apply(cm[[i]], 2, sum)!=0])
-
-  
   rhs<-toBuildFormula(attr(tt,"indVars"))
   if(!(is.null(rhs)))
     rhs<-(paste("~",rhs))
@@ -87,6 +77,5 @@ cmvglm <- function(formula, model, ndim,data=NULL, fact=NULL){
     }
   }
   formula<-as.formula(paste(lhs,rhs))
-
   list("formula"=formula, "constraints"=cm)
 }
