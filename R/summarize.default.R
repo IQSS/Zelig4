@@ -12,33 +12,77 @@ summarize.default <- function(q) {
   repeat {
     item <- try(nextElem(i), silent=T)
 
+    # conditions end repeat loop
     if (inherits(item, "try-error"))
       break
 
+ 
     # for code clarity
     key <- item$key
     val <- item$value
 
-    #
-    if (is.numeric(val)) {
-      res[[key]] <- c(mean(val),
-                      sd(val),
-                      quantile(val, c(.5, .025, .975))
-                      )
-      names(res[[key]]) <- c("mean", "sd", "50%", "2.5%", "97.5%")
-    }
-    
-    else if (is.character(val) || is.factor(val))
-      res[[key]] <- c(table(val)/length(val))
 
-    else
-      res[[key]] <- NA
+    # conditions to skip a qi
+    if (length(val) < 1)
+      next
+
+    else if (length(val) == 1 && is.na(val))
+      next
+
+    
+    # make a matrix that is data-friendly
+    m <- if (is.numeric(val))
+      matrix(NA, nrow=ncol(val), ncol=5)
+    else if (is.character(val) || is.factor(val)) {
+      matrix(NA, nrow=ncol(val), ncol=length(unique(c(val))))
+    }
+
+    #
+    for (k in 1:ncol(val)) {
+      if (is.numeric(val[,k])) {
+        m[k,] <- c(
+                   mean(val[,k]),
+                   sd(val[,k]),
+                   quantile(val[,k], c(.5, .025, .975))
+                   )
+
+        #
+        colnames(m) <- c("mean", "sd", "50%", "2.5%", "97.5%")
+      }
+    
+      else if (is.character(val[,k]) || is.factor(val[,k])) {
+        result.table <- c(table(val[,k])/length(val[,k]))
+        result.table <- result.table[sort(names(result.table))]
+
+        m[k,] <- result.table
+        colnames(m) <- names(result.table)
+
+      }
+
+      else
+        m[k,] <- NA
+
+##       print(paste("red",
+##                   colnames(val)
+##                   )
+##             )
+
+      col.names <- colnames(val)
+      rownames(m) <- if (is.null(col.names))
+        ""
+      else
+        col.names
+    }
+
+    # add to list
+    res[[key]] <- m
   }
 
   # cast as class - for some reason - then return
   class(res) <- "summarized.qi"
   res
 }
+
 
 iter.summarized.qi <- function(s)
   iter(Map(function (x, y) list(key=x, value=y), names(s), s))

@@ -6,11 +6,14 @@ data(turnout)
 #####  Example 1:  Simple Example 
 
 ##  Generating empirical estimates:
-z.out1 <- zelig(vote ~ age + race, model = "logit", data = turnout)
+z.out1 <- zelig(vote ~ age, model = "logit",
+                data = mi(turnout[1:500,], turnout[501:1000,]),
+                by="race"
+                )
 
 
 ##  Viewing the regression output:
-summary(z.out1)
+#summary(z.out1)
 
 
 ##  Using setx to generate baseline and alternative velus for the

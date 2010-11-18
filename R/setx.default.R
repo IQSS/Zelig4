@@ -61,6 +61,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       next
     }
 
+
     res[[key]] <- if (is.factor(data[,key])) {
       factor(dots[[key]], levels=levels(data[,key]))
     }
@@ -72,6 +73,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # make a tiny data-frame with
   # all the necessary columns
   d <- data[1,]
+
 
   # give the computed values to those entries
   for (key in names(res)) {

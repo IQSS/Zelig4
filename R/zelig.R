@@ -118,7 +118,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   else
     .RegisterMethodsS4(c("terms", register(z)))
 
-  # pre-pend "MI" class to sets of results
+  # prepend "MI" class to sets of results
   if (is.list(z$result) && length(m) > 1)
     class(z) <- c("MI", class(z))
   else if (inherits(data, "mi"))
@@ -128,6 +128,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # citation
   if (cite) {
     descr <- as.description(describe(z))
+    message("\n")
     message(cite(descr))
   }
 

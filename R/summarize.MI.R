@@ -15,7 +15,11 @@ summarize.MI <- function(qis) {
 
   # name rows appropriately
   for (key in names(summ.list)) {
-    data.labels <- paste(.space.out(qis$levels, gap=3),
+    # add filler as needed
+    gap <- nrow(summ.list[[key]])/length(qis$levels) - 1
+
+    #
+    data.labels <- paste(.space.out(qis$levels, gap=gap),
                          rownames(summ.list[[key]]),
                          sep=" "
                          )
@@ -26,6 +30,8 @@ summarize.MI <- function(qis) {
 
     #
     rownames(summ.list[[key]]) <- paste(data.labels, ": ", sep="")
+
+
     
 
     # ...
