@@ -62,8 +62,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     if (inherits(d.f, "try-error"))
       break
 
+    # create zelig2* function
     zelig2 <- paste("zelig2", as.character(model), sep="")
     zelig2 <- get(zelig2, mode="function")
+
+    # call zelig2* function
     zc.list <- zelig2(model, formula, ..., data=d.f)
 
 

@@ -27,8 +27,23 @@ ZeligCall.default <- function(model, default=NULL, forward=NULL, params=NULL) {
   # create list of items to pass to function call
   params <- c(default, params[forward])
 
-  # build list
-  zc <- list(model = model, parameters = params)
+
+  # hide away params in a distant environment
+  # this:
+  #  * this makes the function signature look pertty)
+  #  * ensure we can refer to symbols correctly
+  #  * 
+  #
+  # ".store.values" is in "zzz_environment_hacks.R"
+  stored.values <- .store.values(params)
+
+  
+  # build object
+  zc <- list(
+             model = model,
+             parameters = stored.values$params,
+             envir = stored.values$envir
+             )
 
   # assign class, and return
   class(zc) <- "ZeligCall"

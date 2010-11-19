@@ -14,7 +14,8 @@ run.ZeligCall <- function(zc, ..., data=NULL) {
   }
 
   # run function
-  res <- do.call(zc$model, zc$parameters)
+  
+  res <- do.call(zc$model, zc$parameters, envir=zc$envir)
 
   # detach
   if (is.data.frame(data))
