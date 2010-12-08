@@ -1,9 +1,10 @@
+\documentclass{article}
+
+\usepackage{Zelig}
 \SweaveOpts{results=hide, prefix.string=vigpics/probit}
-\include{zinput}
-%\VignetteIndexEntry{Probit Regression for Dichotomous Dependent Variables}
-%\VignetteDepends{Zelig}
-%\VignetteKeyWords{model, probit,regression,dichotomous, binary}
-%\VignettePackage{Zelig}
+
+
+
 \begin{document}
 \nobibliography*
 <<beforepkgs, echo=FALSE>>=
@@ -214,11 +215,14 @@ below.
 
 \subsection* {How to Cite} 
 
-<<probitcite, echo=FALSE>>=
-Zelig:::.describe("probit")
-@ 
+How to cite this model in Zelig:
 
-\input{citeZelig}
+\begin{verse}
+  Kosuke Imai, Gary King, and Olivia Lau. 2007. "probit: Probit Regression for Dichotomous Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
+\end{verse}
+
+\CiteZelig
+
 
 \subsection* {See also}
 The probit model is part of the stats package by \citet{VenRip02}.

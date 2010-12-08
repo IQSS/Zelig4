@@ -1,0 +1,12 @@
+\BOOKMARK [0][-]{chapter.1}{Normal Regression for Continuous Dependent Variables}{}
+\BOOKMARK [1][-]{section.1.1}{normal: Normal Regression for Continuous Dependent Variables}{chapter.1}
+\BOOKMARK [0][-]{chapter.2}{Least Squares Regression for Continuous Dependent Variables}{}
+\BOOKMARK [1][-]{section.2.1}{ls: Least Squares Regression for Continuous Dependent Variables}{chapter.2}
+\BOOKMARK [0][-]{chapter.3}{Gamma Regression for Continuous, Positive Dependent Variables}{}
+\BOOKMARK [1][-]{section.3.1}{gamma: Gamma Regression for Continuous, Positive Dependent Variables}{chapter.3}
+\BOOKMARK [0][-]{chapter.4}{Poisson Regression for Event Count Dependent Variables}{}
+\BOOKMARK [1][-]{section.4.1}{poisson: Poisson Regression for Event Count Dependent Variables}{chapter.4}
+\BOOKMARK [0][-]{chapter.5}{Logistic Regression for Dichotomous Dependent Variables}{}
+\BOOKMARK [1][-]{section.5.1}{logit: Logistic Regression for Dichotomous Dependent Variables}{chapter.5}
+\BOOKMARK [0][-]{chapter.6}{Probit Regression for Dichotomous Dependent Variables}{}
+\BOOKMARK [1][-]{section.6.1}{probit: Probit Regression for Dichotomous Dependent Variables}{chapter.6}

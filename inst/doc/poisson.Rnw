@@ -1,9 +1,9 @@
+\documentclass{article}
+
+\usepackage{Zelig}
 \SweaveOpts{results=hide, prefix.string=vigpics/poisson}
-\include{zinput}
-%\VignetteIndexEntry{Poisson Regression for Event Count Dependent Variables}
-%\VignetteDepends{Zelig, stats}
-%\VignetteKeyWords{model, poisson,regression, count}
-%\VignettePackage{Zelig}
+
+
 \begin{document}
 \nobibliography*
 <<beforepkgs, echo=FALSE>>=
@@ -214,11 +214,11 @@ below.
 
 \subsection* {How to Cite} 
 
-<<poissoncite, echo=FALSE>>=
-Zelig:::.describe("poisson")
-@ 
-\input{citeZelig}
-
+How to cite this model in Zelig:
+\begin{verse}
+  Kosuke Imai, Gary King, and Olivia Lau. 2007. "poisson: Poisson Regression for Event Count Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
+\end{verse}
+\CiteZelig
 \subsection* {See also}
 The poisson model is part of the stats package by \citet{VenRip02}.
 Advanced users may wish to refer to \texttt{help(glm)} and

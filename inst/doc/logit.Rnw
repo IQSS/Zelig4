@@ -1,9 +1,9 @@
-\SweaveOpts{results=hide, prefix.string=vigpics/logit}
-\include{zinput}
-%\VignetteIndexEntry{Logistic Regression for Dichotomous Dependent Variables}
-%\VignetteDepends{Zelig, stats}
-%\VignetteKeyWords{model,logistic,dichotomous, regression}
-%\VignettePackage{Zelig}
+\documentclass{article}
+
+\usepackage{Zelig}
+\SweaveOpts{results=hide, prefix.string=vigpics/logit, pdf=FALSE, eps=TRUE}
+
+
 \begin{document}
 \nobibliography*
 <<beforepkgs, echo=FALSE>>=
@@ -264,11 +264,13 @@ below.
 
 \subsection* {How to Cite} 
 
-<<logitcite, echo=FALSE>>=
-Zelig:::.describe("logit")
-@ 
-\input{citeZelig}
+How to cite this model in Zelig:
+\begin{verse}
+  Kosuke Imai, Gary King, and Olivia Lau. 2008. "logit: Logistic Regression for Dichotomous Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
+\end{verse}
 
+
+\CiteZelig
 
 \subsection*{See also}
 

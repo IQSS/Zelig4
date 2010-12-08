@@ -1,9 +1,11 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{bibentry}
+
 \SweaveOpts{results=hide, prefix.string=vigpics/gamma}
-\include{zinput}
-%\VignetteIndexEntry{Gamma Regression for Continuous, Positive Dependent Variables}
-%\VignetteDepends{Zelig, MCMCpack}
-%\VignetteKeyWords{model,regression,gamma distribution}
-%\VignettePackage{Zelig, stats}
+
 \begin{document}
 \nobibliography*
 <<beforepkgs, echo=FALSE>>=
@@ -215,17 +217,19 @@ below.
 
 \subsection* {How to Cite} 
 
-<<cite, echo=FALSE>>=
-Zelig:::.describe("gamma")
-@ 
 
-\input{citeZelig}
+How to cite this model in Zelig:
+\begin{verse}
+  Kosuke Imai, Gary King, and Olivia Lau. 2007. "gamma: Gamma Regression for Continuous, Positive Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
+\end{verse}
+
+\CiteZelig 
 
 \subsection* {See also}
 The gamma model is part of the stats package by \citet{VenRip02}.
 Advanced users may wish to refer to \texttt{help(glm)} and
 \texttt{help(family)}, as well as \cite{McCNel89}. Robust standard
-errors are implemented via the sandwich package by \citet{Zeileis04}.
+verrors are implemented via the sandwich package by \citet{Zeileis04}.
 Sample data are from \cite{KinTomWit00}.
 
 \bibliographystyle{asa}
@@ -236,19 +240,4 @@ Sample data are from \cite{KinTomWit00}.
  for (pkg in torm)
  detach(pos=match(pkg,search()))
 @
- \end{document}
-
-
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% End: 
-
-
-
-
-
-
-
-
-
+\end{document}

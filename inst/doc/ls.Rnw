@@ -1,13 +1,14 @@
-\SweaveOpts{results=hide, prefix.string=vigpics/ls}
-\include{zinput}
-%\VignetteIndexEntry{Least Squares Regression for Continuous Dependent Variables}
-%\VignetteDepends{Zelig, stats}
-%\VignetteKeyWords{model,least squares,continuous, regression}
-%\VignettePackage{Zelig}
+\documentclass{article}
+
+\usepackage{Zelig}
+\SweaveOpts{results=hide, prefix.string=vigpics/gamma, eps=f, pdf=f}
+
+
 \begin{document}
 \nobibliography*
+
 <<beforepkgs, echo=FALSE>>=
- before=search()
+before=search()
 @
 
 <<loadLibrary, echo=F,results=hide>>=
@@ -264,10 +265,14 @@ below.
 \end{itemize}
 
 \subsection* {How to Cite} 
-<<lscite, echo=FALSE>>= 
-Zelig:::.describe("ls")
-@
-\input{citeZelig}
+
+
+How to cite this model in Zelig:
+\begin{verse}
+  Kosuke Imai, Gary King, and Olivia Lau. 2007. "ls: Least Squares Regression for Continuous Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
+\end{verse}
+
+\CiteZelig
 
 \subsection* {See also}
 The least squares regression is part of the stats package by William N.
