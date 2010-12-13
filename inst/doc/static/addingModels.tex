@@ -1,0 +1,539 @@
+\chapter{Adding Models and Methods to Zelig}
+\label{c:addingmodels}
+
+Zelig is highly modular.  You can add methods to Zelig \emph{and}, if
+you wish, release your programs as a stand-alone package.  By making
+your package compatible with Zelig, you will advertise your package
+and help it achieve a widespread distribution.
+
+This chapter assumes that your model is written as a function that
+takes a user-defined formula and data set (see Chapter \ref{s:new}),
+and returns a list of output that includes (at the very least) the
+estimated parameters and terms that describe the data used to fit the
+model.  You should choose a class (either S3 or S4 class) for this
+list of output, and provide appropriate methods for generic functions
+such as {\tt summary()}, {\tt print()}, {\tt coef()} and {\tt vcov()}.
+
+To add new models to Zelig, you need to provide six R functions,
+illustrated in Figure \ref{add}.  Let {\tt mymodel} be a new model
+with class {\tt "myclass"}. 
+
+\begin{figure*}[h!]
+\caption{Six functions (solid boxes) to implement a new Zelig model}
+\label{add}
+\begin{center}
+\setlength{\unitlength}{0.5mm}
+\begin{picture}(160,170)(0,0)
+\linethickness{0.75pt}
+
+\put(0,166){Estimate}
+
+\put(70,162){\line(0,-1){42}}
+\put(50,162){\dashbox{2}(40,12){{\tt zelig()}}}
+\multiput(70,144)(0,-24){2}{\line(1,0){9}}
+\put(80,138){\framebox(83,12){(1) {\tt zelig2mymodel()}}}
+\put(80,114){\framebox(57,12){(2) {\tt mymodel()}}}
+
+\put(0,96){Interpret}
+
+\put(70,92){\line(0,-1){42}}
+\put(50,92){\dashbox{2}(40,12){{\tt sim()}}}
+\multiput(70,74)(0,-24){2}{\line(1,0){9}}
+\put(80,68){\framebox(83,12){(3) {\tt param.myclass()}}}
+\put(80,44){\framebox(69,12){(4) {\tt qi.myclass()}}}
+
+\put(0,26){Plot}
+
+\put(50,0){\framebox(105,12){(6) {\tt plot.zelig.mymodel()}}}
+
+\end{picture}
+\end{center}
+\end{figure*}
+
+These functions are as follows:  
+\begin{enumerate}
+\item {\tt zelig2mymodel()} translates {\tt zelig()} arguments into
+the arguments for {\tt mymodel()}.
+\item {\tt mymodel()} estimates your statistical procedure.
+\item {\tt param.myclass()} simulates parameters for your model.
+Alternatively, if your model's parameters consist of one vector with a
+correspondingly observed variance-covariance matrix, you may write
+\emph{two} simple functions to substitute for {\tt param.myclass()}:  
+\begin{enumerate}
+\item {\tt coef.myclass()} to extract the coefficients from your model
+output, and
+\item {\tt vcov.myclass()} to extract the variance-covariance matrix
+from your model.  
+\end{enumerate}
+\item {\tt qi.myclass()} calculates expected values, simulates
+predicted values, and generates other quantities of interest for your
+model (applicable only to models that take explanatory variables).  
+\item {\tt plot.zelig.mymodel()} to plot the simulated quantities of
+interest from your model.  
+\item A {\bf reference manual page} to document the model.
+  (See~\Sref{s:format})
+\item A function ({\tt describe.mymodel()}) describing the inputs to
+your model, for use with a graphical user interface.  (See \Sref{describe.mymodel}).  
+\item An optional {\bf demo script} {\tt mymodel.R} which contains commented code for
+  the models contained in the example section of your reference manual
+  page.
+\end{enumerate}
+
+\section{Making the Model Compatible with Zelig}\label{compatible}
+
+Developers can develop a model, write the model-fitting function, and test it within the Zelig framework without explicit intervention from the Zelig team.  This modularity relies on two R programming conventions:
+
+\begin{enumerate}
+	\item{{\bf wrappers}, which pass arguments from R functions to other R functions or foreign function calls (such as in C, C++, or Fortran).  This step is facilitated by - as will be explained in detail in the upcoming chapter - the {\tt zelig2} functions.}
+	\item{{\bf classes}, which tell generic functions how to handle objects of a given class.  For a statistical model to be compliant with Zelig, the model-fitting function \emph{must} return a classed object.}
+\end{enumerate}
+
+Zelig implements a unique and simple method for incorporating existing statistical models which lets developers test \emph{within} the Zelig framework \emph{without} any modification of both their own code or the {\tt zelig} function itself.  The heart of this procedure is the {\tt zelig2} function, which acts as an interface between the {\tt zelig} function and the existing statistical model.  That is, the {\tt zelig2} function maps the user-input from the {\tt zelig} function into input for the existing statistical model's constructor function.  Specifically, a Zelig model requires:
+
+\begin{enumerate}
+	\item{An existing statistical model, which is invoked through a function call and returns an object}
+	\item{A {\tt zelig2} function which maps user-input from the {\tt zelig} function to the existing statistical model}
+	\item{A name for the {\tt \bf zelig} model, which can differ from the original name of the statistical model.}
+\end{enumerate}
+
+%% MOVED 1:39
+
+% THE ZELIG2 FUNCTION
+\subsubsection{The \emph{zelig2} Function}
+The following sections explain how to write a {\tt zelig2} function, given an arbitrary statistical model.  In the illustrative examples, the following conventions are used:
+
+\begin{description}
+	\item[model]{will refer to the name of the \emph{Zelig} model, not the name of the existing model - though these two names are not necessarily different.  If the developer names his model ``logit'' then model refers to ``logit''.}
+	\item[model\_function]{will refer to the name of function that produces the existing statistical model.  If the developer is writing a wrapper for R's built-in logit function, then \emph{model\_function} refers to ``glm''.}
+	\item[zelig2model]{will refer to the name of the {\tt zelig2} function.  If the developer names his model ``logit'', then \emph{zelig2model} refers to ``zelig2logit''.}
+\end{description}
+
+
+
+% WRITING THE ZELIG2 FUNCTION
+\subsubsection{Writing the \emph{zelig2} Function}
+
+The {\tt zelig2} function should follow several specific conventions:
+
+\begin{enumerate}
+	\item{The {\tt zelig2model} function should be simply named \emph{zelig2model}, where \emph{model} is the chosen name for the zelig package}
+	\item{The {\tt zelig2model} function itself should have arguments that list entirety of possible inputs to the {\tt model\_function}}
+	\item{The {\tt zelig2model} function should return a list of key-value pairs that represent the map from {\tt zelig} input to {\tt model\_function} input}
+\end{enumerate}
+
+
+% EXAMPLE USING zelig2logit
+\subsubsection{Example of a \emph{zelig2} Function}
+
+\begin{verbatim}
+zelig2logit <- function(model, formula, ..., data, weights=NULL)
+  alist(glm,                             # [1]
+        "formula",                       # [2]
+        "data",
+        "weights",
+        family = binomial(link="logit"), # [3]
+        model  = FALSE
+        )
+\end{verbatim}
+
+% EXPLANATION OF zelig2logit code
+The bracketed numbers in the previous example correspond to the numbers below:
+
+\begin{enumerate}
+	\item{The first entry of the returned list in a {\tt zelig2} call represents the name of the function call.  That is, it is the name of the function that the {\tt zelig2} function is wrapping.}
+	\item{Any character-string that does not have a key associated with it will simply forward user-input to that specified parameter.  That is, it will expect the {\tt zelig} function call to supply the value of character-string.}
+	\item{Any key-value pair will explicitly set the parameter specified \emph{by} the key \emph{to} its value.  That is, the left side of the equal specifies a parameter of the existing model and the value specifies that parameter's value.}
+\end{enumerate}
+
+% Equivalent code to the example
+% ...
+
+\subsubsection{Equivalent Function Call to the Example \emph{zelig2} Function}
+The above code is create an interface for the glm function (which returns a generalized linear model, specified by the {\tt family} parameter.  In effect, the above code maps user-input into the {\tt zelig} function to the following call to the {\tt glm} function.
+
+\begin{verbatim}
+glm(formula = formula,
+    data = data,
+    weights = weights,
+    family = binomial("logit"),
+    model = FALSE
+    )
+\end{verbatim}
+
+% Explanation of Above Code
+% ....
+\subsubsection{Explanation of the Example Code}
+
+\subsubsection{Return Values of a \emph{zelig2} Function}
+
+A {\tt zelig2model} function must always return either a list or an alist as its return value.  In most situations, alist is preferred, since it will place the results symbolically within the list.  This typically results in much cleaner looking print methods.
+
+The entries of the returned list have the following format:
+\begin{description}
+	\item[first entry]{is a function or character string specifying the {\tt model\_function}}
+	\item[character-strings with no key]{represent parameters that are simply forwarded to the {\tt model\_function} from the {\tt zelig} function.  Nothing will be computed, etc. on these values}
+	\item[key-value pairs]{Represent an explicitly set value for the parameter that matches ``key''.  This is useful for parameters that do not require user-input, or user-input that must be changed to interface correctly with the existing model}
+\end{description}
+
+
+% setx function
+%
+\subsubsection{The \emph{setx} Function}
+The Zelig software suite can typically work with the arbitrary {\tt zelig} object, so long as several functions are defined with the following names and outputs:
+
+\begin{description}
+	\item[terms]{returns a list of terms used to interpret {\tt data.frame} objects.  \emph{See {\tt help(terms)} for information concerning creating a {\tt terms} function}.}
+	\item[formula]{returns the formula passed into the existing statistical model.  This should typically be the exact value of {\tt formula} passed into the {\tt zelig} call.  This will not be the case, if extra parsing or editing of the {\tt formula} argument is done within the {\tt zelig2} function.}
+\end{description}
+
+If a model is failing to work with the {\tt setx} function, then the developer must either create valid versions of the the missing or undefined functions; or entirely rewrite the {\tt setx.model} function (where {\tt model} is the name of the Zelig model being written) to perform the correct type of operations.  Please note that the {\tt setx.model} function must return an object of class ``setx'' and the original class of the statistical model.  Please see the source code of {\tt setx.default} for reference.
+
+% SIM function
+\subsubsection{The \emph{sim} Function}
+
+Simulating \emph{quantities of interest} is an integral part of interpreting model results. To use the functionality built into the Zelig {\tt sim} procedure, you need to provide a way to simulate parameters (called a {\tt param} function), and a method for calculating or drawing \emph{quantities of interest} from the simulated parameters (called a {\tt qi} function).
+
+% boot is probably not working right now
+% \section{The \emph{boot} Function}
+
+% param function
+% ...
+\subsubsection{The \emph{param} Function}
+Whether you choose to use the default method, or write a model- specific method for simulating parameters, these functions require the same two inputs:
+
+\begin{itemize}
+	\item{{\tt object}, the object returned by the {\tt zelig} function}
+	\item{{\tt num}, the number of simulations to perform}
+\end{itemize}
+
+When creating the return value for the function, several options are available which are explored in detail in the following subsections.
+
+% FIRST METHOD TO SIMULATE PARAMETERS
+\subsubsection{Simplest Method: Returning a Vector/Matrix of Samples}
+
+Simply returning a vector of samples from the fitted model is by far the simplest approach to constructing a ``param'' function.  While it is quick-and-easy to implement, it lacks the descriptiveness of other methods, and restricts the ability of the developer to make use of API functions.  While this my be an insignificant loss to some, it typically will result in the developer writing harder-to-read code.  It is recommended that the developer that the developer use the slightly more sophisticated methods when possible.
+
+\subsubsection{Example Code for Simple Vector/Matrix Method}
+\begin{verbatim}
+param.default <- function(z, num) {
+  mvrnorm(n=num, mu=coef(z), Sigma=vcov(z))
+}
+\end{verbatim}
+
+\subsubsection{Explanation}
+``mvrnorm'' is the function that takes samples from a multivariate-normal distribution.  In the above example, the \emph{param.default} function returns a matrix with row size \emph{num} and column size equivalent to that of the variance-covariance matrix of the fitted model.  Zelig knows how to convert matrices of this type to a parameters object.
+
+% SECOND METHOD (LIST METHOD)
+% LIST METHODS
+% ------------
+% LOGIT EXAMPLE
+\subsubsection{List Method: Returning an Indexed List of Parameters}
+
+While the simple method of returning a vector or matrix from a \emph{param} function is extremely simple, it has no method for setting link or link-inverse functions for use within the actual simulation process.  That is, it does not provide a clear, easy-to-read method for simulating \emph{quantities of interest}.  By returning an indexed list - or a parameters object - the developer can provide clearly labeled and stored link and link-inverse functions, as well as, ancillary parameters.
+
+
+\subsubsection{Example of Indexed List Method with \emph{fam} Object Set}
+
+\begin{verbatim}
+param.logit <- function(z, num)
+  list(
+       coef  = mvrnorm(n=num, mu=coef(z), Sigma=vcov(z)),
+       alpha = NULL,
+       fam   = binomial(link="logit")
+       )
+\end{verbatim}
+
+
+\subsubsection{Explanation of Indexed List with \emph{fam} Object Set Example}
+
+The above example shows how link and link-inverse functions (for a ``logit'' model) can be set using a ``family'' object.  Family objects exist for most statistical models - logit, probit, normal, Gaussian, et cetera - and come preset with values for link and link-inverses.  This method does not differ immensely from the simple, vector-only method; however, it allows for the use of several API functions - \emph{link}, \emph{linkinv}, \emph{coef}, \emph{alpha} - that improve the readability and simplicity of the model's implementation.
+
+The \emph{param} function and the \emph{parameters} class offer methods for automating and simplifying a large amount of repetitive and cumbersome code that may come with building the arbitrary statistical model.  While both are in principle entirely optional - so long as the \emph{qi} function is well-written - they serve as a means to quickly and elegantly implement Zelig models.
+
+
+% ANOTHER METHOD
+\subsubsection{Example of Indexed List Method (with \emph{link} Function) Set}
+
+\begin{verbatim}
+param.poisson <- function(z, num) {
+  list(
+       coef = mvrnorm(n=num, mu=coef(z), Sigma=vcov(z)),
+       link = log,
+             
+       # because ``link'' is set,
+       # the next line is purely optional
+       linkinv = exp
+       )
+}
+\end{verbatim}
+
+
+\subsubsection{Explanation of Indexed List (with \emph{link} Function) Example}
+
+The above example shows how a \emph{parameters} object can be created with by explicitly setting the statistical model's link function.  The \emph{linkinv} parameter is purely optional, since Zelig will create a numerical inverse if it is undefined.  However, the computation of the inverse is typically slower than non-iterative methods.  As a result of this, if the link-inverse is known, it should be set, using the \emph{linkinv} parameter.
+
+The above example can also contain an \emph{alpha} parameter, in order to store important ancillary parameters - mean, standard deviation, gamma-scale, etc. - that would be necessary in the computation of \emph{quantities of interest}.
+
+
+% QUANTITIES OF INTEREST
+\subsection{The \emph{qi} Function}
+
+% Introduction Material
+For any Zelig model, the \emph{qi} function is ultimately the most important piece of code that must be written; it describes the actual process which simulates the \emph{quantities of interest}.  Because of the nature of this process - and the gamut of statistical packages and their underlying statistical model - it is rare that the simulation process can be generalized for arbitrary fitted models.  Despite this, it is possible to break down the simulation process into smaller steps.
+
+% Calculating
+\subsubsection{Calculating Quantities of Interest}
+All models require a model-specific method for calculating quantities of interest from the simulated parameters. For a model of class {\tt model}, the appropriate {\tt qi} function is {\tt qi.model}. This function should calculate, at the bare minimum, the following quantities of interest:
+
+\begin{description}
+	\item[E(Y:X)]{the expected values, calculated from the analytic solution for the expected value as a function of the systematic component and ancillary parameters.}
+	\item[Y:X]{the predicted values, drawn from a distribution defined by the predicted values. If R does not have a built-in random generator for your function, you may take a random draw from the uniform distribution and use the inverse CDF method to calculate predicted values.}
+	\item[E(Y:X1) - E(Y:X)]{first differences in the expected value, calculated by subtracting the expected values given the specified {\tt x} from the expected values given {\tt x1}.}
+\end{description}
+
+
+% QI FUNCTION SIGNATURE
+\subsection{The Function's Signature}
+
+
+% quick intro
+The \emph{qi} function's signature accepts 4 parameters:
+
+
+%
+\begin{description}
+	\item[@object:]{An object of type ``\emph{zelig}''.  This wraps the fitted model in the slot ``result''.}
+	\item[@x:]{An object of type ``\emph{setx}''.  This object is used to compute important coefficients, parameters, and features of the data.frame passed to the function call.}
+	\item[@x1:]{Also an object of type ``\emph{setx}''.  This object is used in a similar fashion, however its presence allows a variety of \emph{quantities of interest} to be computed.  Notably, this is a necessary parameter to compute first-differences.}
+	\item[@num:]{The number of simulations to compute}
+\end{description}
+
+
+% code example
+\subsubsection{Code Example: \emph{qi} Function Signature}
+\begin{verbatim}
+qi.model <- function(z, x=NULL, x1=NULL, num=1000) {
+  # start typing your code here
+  # ...
+  # ...
+}
+\end{verbatim}
+
+
+Note: In the above example, the function name ``qi.\_model'' is merely a placeholder.  In order to register a \emph{qi} function with zelig, the developer must follow the naming convention qi.\emph{your mode name}, where \emph{your\_model\_name} is the name of the developer's module.  For example, if a developer titled his or her zelig module ``logit'', then the corresponding \emph{qi} function is titled ``\emph{qi.logit}''.
+
+
+% QI FUNCTION RETURN VALUES
+\subsubsection{The Return Value}
+In order for Zelig to process the simulations, they must be returned in the following format:
+
+\begin{verbatim}
+  list(
+       "TITLE OF QI 1" = val1,
+       "TITLE OF QI 2" = val2,
+
+       # any number of title-val pairs
+       "TITLE OF QI N" = val.n
+       )
+\end{verbatim}
+
+
+In the above example,\emph{val1, val2} are data.frames, matrices, or lists representing the simulations of the \emph{quantities of interests}, and \emph{title1, title2} - and any number of titles - are character-strings that will act as human-readable descriptions of the \emph{quantities of interest}.  Once results are returned in this format, Zelig will convert the results into a machine-readable format and summarize the simulations into a comprehensible format.
+
+
+
+
+% EXAMPLE CODE
+%
+
+\pagebreak
+
+\subsubsection{Example \emph{qi} function (qi.ls.R)}
+
+
+\begin{verbatim}
+qi.logit <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+  coef <- coef(param)             # [1]
+  link.inverse <- linkinv(param)
+
+  eta <- coef %*% t(x)            # [2]
+  theta <- matrix(link.inverse(eta), nrow = nrow(coef))
+
+  ev <- theta                     # [3]
+  pr <- matrix(nrow=nrow(theta), ncol=ncol(theta))
+
+  ev2 <- pr2 <- fd <- NA          # [4]
+
+  for (i in 1:ncol(theta))        # [5]
+    pr[,i] <- as.character(rbinom(length(ev[,i]), 1, ev[,i]))
+
+
+  if (!is.null(x1)) {             # [6]
+    eta2 <- coef %*% t(x1)
+    theta2 <- matrix(link.inverse(eta2), nrow = nrow(coef))
+
+    ev2 <- theta2
+    pr2 <- matrix(nrow=nrow(theta2), ncol=ncol(theta2))
+
+    for (i in 1:ncol(theta))
+      pr2[,i] <- as.character(rbinom(length(ev[,i]), 1, ev[,i]))
+
+    fd <- ev2-ev
+  }
+
+  # return                          [7]
+  list("Expected Values: E(Y|X)" = ev,
+       "Predicted Values: Y|X" = pr,
+       "Expected Values (for X1)" = ev2,
+       "Predicted Values (for X1" = pr2,
+       "First Differences: E(Y|X1) - E(Y|X)" = fd
+       )
+}
+
+\end{verbatim}
+
+
+% EXPLANATION OF ABOVE CODE
+\subsubsection{\emph{qi.logit} Code Explanation}
+
+The following list corresponds to the numbered comments in the {\tt qi.logit} example:
+
+\begin{enumerate}
+	\item{Extract ancillary parameters and the inverse function from the {\tt parameters} object.  These are used later in simulating the \emph{quantities of interest}}
+	\item{Compute $\eta$ (eta) for the given statistical model, and apply the inverse link function to compute $\theta$ (theta)}
+	\item{Store $\theta$ in a matrix}
+	\item{Set our finite-differences, et cetera to {\tt NA}.  If the parameter {\tt x1} is {\tt NULL}, this will prevent unavailable \emph{quantities of interest} from being computed}
+	\item{Use the ancillary parameters that have been simulated to take random draws from a binomial distribution, this simulates the predicted values of our data-set}
+	\item{If the {\tt x1} parameter is not {\tt NULL}, we want to compute the expected values and predicted values for x1, as well.  This allows for that condition to be possible, while not exclusively depending on it occuring}
+	\item{The return value matches titles of the \emph{quantities of interest} with their actual values}
+\end{enumerate}
+
+
+
+%\section{Getting Ready for the GUI}  
+%
+%Zelig can work with a variety of graphical user interfaces (GUIs).  GUIs
+%work by knowing {\it a priori} what a particular model
+%accepts, and presenting only those options to the user in some sort of
+%graphical interface.  Thus, in order for your model to work with a
+%GUI, you must describe your model in terms that the GUI can
+%understand.  For models written using the guidelines in Chapter
+%\ref{s:new}, your model will be compatible with (at least)
+%the \hlink{Virtual Data Center}{http://thedata.org} GUI.  For
+%pre-existing models, you will need to create a {\tt describe.*()}
+%function for your model following the examples in
+%\Sref{describe.mymodel}.  
+
+\section{Formatting Reference Manual Pages}  \label{s:format}
+
+One of the primary advantages of Zelig is that it fully documents the
+included models, in contrast to the programming-orientation of R
+documentation which is organized by function.  Thus, we ask that Zelig
+contributors provide similar documentation, including the syntax and
+arguments passed to {\tt zelig()}, the systematic and stochastic
+components to the model, the quantities of interest, the output
+values, and further information (including references).  There are
+several ways to provide this information:  
+\begin{itemize}
+\item If you have an existing package documented using the .Rd help
+  format, {\tt help.zelig()} will automatically search R-help in
+  addition to Zelig help.
+\item If you have an existing package documented using on-line HTML
+  files with static URLs (like Zelig or MatchIt), you need to provide
+  a {\tt PACKAGE.url.tab} file which is a two-column table containing
+  the name of the function in the first column and the url in the
+  second.  (Even though the file extension is {\tt .url.tab}, the file
+  should be a tab- or space-delimited text file.)  For example:  
+\begin{verbatim}
+command       http://gking.harvard.edu/zelig/docs/Main_Commands.html
+model         http://gking.harvard.edu/zelig/docs/Specific_Models.html
+\end{verbatim}
+If you wish to test to see if your {\tt .url.tab} files works, simply
+place it in your R library/Zelig/data/ directory.  (You do not need to
+reinstall Zelig to test your {\tt .url.tab} file.)
+\item Preferred method:  You may provide a \LaTeXe\ {\tt .tex} file.  This document uses
+  the book style and supports commands from the following packages:
+  {\tt graphicx}, {\tt natbib}, {\tt amsmath}, {\tt amssymb}, {\tt
+    verbatim}, {\tt epsf}, and {\tt html}.  Because model pages are
+  incorporated into this document using {\tt $\backslash$include\{\}},
+  you should make sure that your document compiles before submitting
+  it.  Please adhere to the following conventions for your model page: 
+  \begin{enumerate}
+  \item All mathematical formula should be typeset using the {\tt
+      equation*} and {\tt array}, {\tt eqnarray*}, or {\tt align}
+    environments.  Please avoid {\tt displaymath}.  (It looks funny in
+    html.)
+  \item All commands or R objects should use the {\tt texttt}
+    environment.
+  \item The model begins as a subsection of a larger document, and
+    sections within the model page are of sub-subsection level.
+\item For stylistic consistency, please avoid using the {\tt
+    description} environment.
+\end{enumerate}
+
+Each \LaTeX\ model page should include the following elements.  Let
+{\tt contrib} specify the new model.
+
+\subsubsection*{Help File Template}
+\begin{verbatim}
+\subsection{{\tt contrib}: Full Name for [type] Dependent Variables}
+\label{contrib}
+
+\subsubsection{Syntax}
+
+\subsubsection{Examples}
+\begin{enumerate}
+\item First Example
+\item Second Example
+\end{enumerate}
+
+\subsubsection{Model}
+\begin{itemize}
+\item The observation mechanism, if applicable.
+\item The stochastic component.
+\item The systematic component.
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+\begin{itemize}
+\item The expected value of your distribution, including the formula
+  for the expected value as a function of the systemic component and
+  ancillary paramters.  
+\item The predicted value drawn from the distribution defined by the
+       corresponding expected value.  
+\item The first difference in expected values, given when x1 is specified.  
+\item Other quantities of interest.
+\end{itemize}
+
+\subsubsection{Output Values}
+\begin{itemize}
+\item From the {\tt zelig()} output stored in {\tt z.out}, you may
+  extract:
+   \begin{itemize}
+   \item 
+   \item 
+   \end{itemize}
+\item From {\tt summary(z.out)}, you may extract: 
+   \begin{itemize}
+   \item 
+   \item 
+   \end{itemize}
+\item From the {\tt sim()} output stored in {\tt s.out}:
+   \begin{itemize}
+   \item 
+   \item 
+   \end{itemize}
+\end{itemize}
+
+\subsubsection{Further Information}
+
+\subsubsection{Contributors}
+\end{verbatim}
+\end{itemize} 
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "~/zelig/docs/commands/zelig"
+%%% End: 

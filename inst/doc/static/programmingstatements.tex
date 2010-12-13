@@ -1,0 +1,236 @@
+\chapter{Programming Statements}
+
+This chapter introduces the main programming commands.  These include
+functions, if-else statements, for-loops, and special procedures for
+managing the inputs to statistical models.  
+
+\section{Functions}
+
+Functions are either built-in or user-defined sets of encapsulated
+commands which may take any number of arguments.  Preface a function
+with the {\tt function} statement and use the {\tt <-}
+operator to assign functions to objects in your workspace.  
+
+You may use functions to run the same procedure on different objects
+in your workspace.  For example, 
+\begin{verbatim}
+check <- function(p, q) { 
+ result <- (p - q)/q
+ result
+ }
+\end{verbatim}
+is a simple function with arguments {\tt p} and {\tt q} which
+calculates the difference between the $i$th elements of the vector
+{\tt p} and the $i$th element of the vector {\tt q} as a proportion of
+the $i$th element of {\tt q}, and returns the resulting vector.  For
+example, {\tt check(p = 10, q = 2)} returns 4.  You may omit the
+descriptors as long as you keep the arguments in the correct order:
+{\tt check(10, 2)} also returns 4.  You may also use other objects as
+inputs to the function.  If {\tt again = 10} and {\tt really = 2},
+then {\tt check(p = again, q = really)} and {\tt check(again, really)}
+also returns 4.
+
+Because functions run commands as a set, you should make sure that
+each command in your function works by testing each line of the
+function at the R prompt.
+
+\section{If-Statements}
+
+Use {\tt if} (and optionally, {\tt else}) to control the flow of R
+functions.  For example, let {\tt x} and {\tt y} be scalar numerical
+values:  
+\begin{verbatim}
+if (x == y) {                # If the logical statement in the ()'s is true,  
+  x <- NA                    #  then `x' is changed to `NA' (missing value). 
+}
+else {                       # The `else' statement tells R what to do if  
+  x <- x^2                   #  the if-statement is false.  
+} 
+\end{verbatim}
+As with a function, use {\tt \{} and {\tt \}} to define the set of commands associated
+with each if and else statement.  (If you include if
+statements inside functions, you may have multiple sets of nested
+curly braces.)
+
+\section{For-Loops}
+
+Use {\tt for} to repeat (loop) operations.  Avoiding loops by using matrix
+or vector commands is usually faster and more elegant, but loops are
+sometimes necessary to assign values.  If you are using a loop to
+assign values to a data structure, you must first initialize an empty
+data structure to hold the values you are assigning.
+
+Select a data structure compatible with the type of output your loop
+will generate.  If your loop generates a scalar, store it in a vector
+(with the $i$th value in the vector corresponding to the the $i$th run
+of the loop).  If your loop generates vector output, store them as
+rows (or columns) in a matrix, where the $i$th row (or column)
+corresponds to the $i$th iteration of the loop.  If your output
+consists of matrices, stack them into an array.  For list output (such
+as regression output) or output that changes dimensions in each
+iteration, use a list.  To initialize these data structures, use:
+\begin{verbatim}
+> x <- vector()                          # An empty vector of any length.
+> x <- list()                            # An empty list of any length.  
+\end{verbatim}
+The {\tt vector()} and {\tt list()} commands create a vector or list
+of any length, such that assigning {\tt x[5] <- 15} automatically
+creates a vector with 5 elements, the first four of which are empty
+values ({\tt NA}).  In contrast, the {\tt matrix()} and {\tt array()}
+commands create data structures that are restricted to their original
+dimensions.  
+\begin{verbatim}
+> x <- matrix(nrow = 5, ncol = 2)  # A matrix with 5 rows and 2 columns.
+> x <- array(dim = c(5,2,3))       # A 3D array of 3 stacked 5 by 2 matrices.
+\end{verbatim}
+If you attempt to assign a value at $(100, 200, 20)$ to either of
+these data structures, R will return an error message (``subscript is
+out of bounds'').  R does not automatically extend the
+dimensions of either a matrix or an array to accommodate additional
+values.  
+
+\paragraph{Example 1: Creating a vector with a logical statement} 
+\begin{verbatim}
+x <- array()             # Initializes an empty data structure.  
+for (i in 1:10) {        # Loops through every value from 1 to 10, replacing
+  if (is.integer(i/2)) { #  the even values in `x' with i+5.
+    x[i] <- i + 5 
+  }      
+}                        # Enclose multiple commands in {}.  
+\end{verbatim}
+You may use {\tt for()} inside or outside of functions.  
+
+\paragraph{Example 2: Creating dummy variables by hand}  
+
+\label{dummy}You may also use a loop to create a matrix of dummy
+variables to append to a data frame.  For example, to generate fixed
+effects for each state, let's say that you have {\tt mydata} which
+contains {\tt y}, {\tt x1}, {\tt x2}, {\tt x3}, and {\tt state}, with
+{\tt state} a character variable with 50 unique values.  There are
+three ways to create dummy variables: 1) with a built-in R command; 2)
+with one loop; or 3) with 2 for loops.  
+\begin{enumerate}
+\item R will create dummy variables on the fly from a single variable
+with distinct values.  
+\begin{verbatim}
+> z.out <- zelig(y ~ x1 + x2 + x3 + as.factor(state), 
+                 data = mydata, model = "ls")
+\end{verbatim}
+This method returns $k - 1$ indicators for $k$ states.  
+
+\item Alternatively, you can use a loop to create dummy variables by
+hand.  There are two ways to do this, but both start with the same
+initial commands. Using vector commands, first create an index of for
+the states, and initialize a matrix to hold the dummy variables:
+\begin{verbatim}  
+idx <- sort(unique(mydata$state))
+dummy <- matrix(NA, nrow = nrow(mydata), ncol = length(idx))
+\end{verbatim}  %$
+Now choose between the two methods.  
+\begin{enumerate}
+\item The first method is computationally inefficient, but more intuitive for users not
+accustomed to vector operations.  The first loop uses {\tt i} as in
+index to loop through all the rows, and the second loop uses {\tt j}
+to loop through all 50 values in the vector {\tt idx}, which
+correspond to columns 1 through 50 in the matrix {\tt dummy}.
+\begin{verbatim}
+for (i in 1:nrow(mydata)) {
+  for (j in 1:length(idx)) {
+    if (mydata$state[i,j] == idx[j]) {
+      dummy[i,j] <- 1
+    }
+    else {
+      dummy[i,j] <- 0
+    }
+  }
+}
+\end{verbatim}  % $
+Then add the new matrix of dummy variables to your data frame:
+\begin{verbatim}
+names(dummy) <- idx
+mydata <- cbind(mydata, dummy) 
+\end{verbatim}  
+
+\item As you become more comfortable with vector operations, you can
+replace the double loop procedure above with one loop:   
+\begin{verbatim}
+for (j in 1:length(idx)) { 
+  dummy[,j] <- as.integer(mydata$state == idx[j])
+}
+\end{verbatim} %$
+The single loop procedure evaluates each element in {\tt idx} against the vector {\tt mydata\$state}.  This creates a vector of $n$ {\tt
+    TRUE}/{\tt FALSE} observations, which you may transform to {\tt
+    1}'s and {\tt 0}'s using {\tt as.integer()}.  Assign the resulting
+  vector to the appropriate column in {\tt dummy}.  Combine the {\tt
+dummy} matrix with the data frame as above to complete the procedure.
+\end{enumerate}
+\end{enumerate}
+
+\paragraph{Example 3: Weighted regression with subsets}  
+
+Selecting the {\tt by} option in {\tt zelig()} partitions the data
+frame and then automatically loops the specified model through each
+partition.  Suppose that {\tt mydata} is a data frame with variables
+{\tt y}, {\tt x1}, {\tt x2}, {\tt x3}, and {\tt state}, with {\tt
+state} a factor variable with 50 unique values.  Let's say that you
+would like to run a weighted regression where each observation is
+weighted by the inverse of the standard error on {\tt x1}, estimated
+for that observation's state.  In other words, we need 
+to first estimate the model for each of the 50 states, calculate 1 /
+{\sc se}({\tt x1}$_j$) for each state $j = 1, \dots, 50$, and then
+assign these weights to each observation in {\tt mydata}.    
+\begin{itemize}
+\item Estimate the model separate for each state using the {\tt by}
+option in {\tt zelig()}:  
+\begin{verbatim}
+z.out <- zelig(y ~ x1 + x2 + x3, by = "state", data = mydata, model = "ls")
+\end{verbatim}
+Now {\tt z.out} is a list of 50 regression outputs.  
+\item Extract the standard error on {\tt x1} for each of the state
+level regressions.  
+\begin{verbatim}
+se <- array()                          # Initalize the empty data structure.
+for (i in 1:50) {                      # vcov() creates the variance matrix
+  se[i] <- sqrt(vcov(z.out[[i]])[2,2]) # Since we have an intercept, the 2nd 
+}                                      # diagonal value corresponds to x1.
+\end{verbatim}
+\item Create the vector of weights.  
+\begin{verbatim}
+wts <- 1 / se
+\end{verbatim}
+This vector {\tt wts} has 50 values that correspond to the 50 sets of
+state-level regression output in {\tt z.out}.  
+\item To assign the vector of weights to each observation, we need to
+match each observation's state designation to the appropriate state.
+For simplicity, assume that the states are numbered 1 through 50.
+\begin{verbatim}
+mydata$w <- NA            # Initalizing the empty variable
+for (i in 1:50) { 
+  mydata$w[mydata$state == i] <- wts[i]
+} 
+\end{verbatim} %$
+We use {\tt mydata\$state} as the index (inside the square brackets)
+to assign values to {\tt mydata\$w}.  Thus, whenever state equals 5
+for an observation, the loop assigns the fifth value in the vector
+{\tt wts} to the variable {\tt w} in {\tt mydata}.  If we had 500
+observations in {\tt mydata}, we could use this method to match each
+of the 500 observations to the appropriate {\tt wts}.
+
+If the states are character strings instead of integers, we can use a
+slightly more complex version
+\begin{verbatim}
+mydata$w <- NA
+idx <- sort(unique(mydata$state))
+for (i in 1:length(idx) { 
+  mydata$w[mydata$state == idx[i]] <- wts[i]
+}
+\end{verbatim}   
+
+\item Now we can run our weighted regression:  
+\begin{verbatim}
+z.wtd <- zelig(y ~ x1 + x2 + x3, weights = w, data = mydata, 
+               model = "ls")
+\end{verbatim}
+
+\end{itemize}  
+
