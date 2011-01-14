@@ -133,9 +133,9 @@ Simulate quantities of interest:
 @
 %plot does not work 
 \begin{center}
-<<label=DummyPlot,fig=true,echo=false>>= 
-# plot(s.out2)
-@ 
+%<<label=DummyPlot,fig=true,echo=false>>= 
+%# plot(s.out2)
+%@ 
 \end{center}
 \end{enumerate}
 

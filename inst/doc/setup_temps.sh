@@ -6,10 +6,10 @@ fi
 
 
 # PDFs directory
-if [ ! -d PDFs ]
-then
-    mkdir PDFs
-fi
+# if [ ! -d PDFs ]
+# then
+#     mkdir PDFs
+# fi
 
 
 # vigpics

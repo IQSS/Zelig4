@@ -22,6 +22,9 @@ all: make_docsIII.pl make_docsIII.conf run_sweave.sh
 # 	move tex files
 	mv *.tex texs/.
 
+#	copy
+	cp Rd2TeX/* texs/.
+
 #	build individual PDF's
 #	sh run_pdflatex.sh
 
@@ -29,7 +32,7 @@ all: make_docsIII.pl make_docsIII.conf run_sweave.sh
 	perl make_docsIII.pl conf=make_docsIII.conf dir=texs dest=$(DEST)
 
 #	i'm not the kind who likes to tell you
-	pdflatex $(DEST)
+	pdflatex -interaction nonstopmode $(DEST)
 
 
 html: 
@@ -39,3 +42,6 @@ clean:
 	rm -fr texs
 	rm -fr PDFs
 	rm -fr vigpics
+	rm *.aux
+	rm *.log
+	rm Rplots.pdf

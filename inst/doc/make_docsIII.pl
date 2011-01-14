@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 
+
 # (0) SUBROUTINE DEFINITIONS
 # **************************
 
@@ -12,6 +13,79 @@ sub uniq {
   grep { ! $hits->{$_}++ } @_;
 }
 
+
+# $a, $b: two dates formated like dd/dd/dddd
+# return: -1, 0, 1 - less than, equal, greater than
+sub date_cmp {
+  # convert left hand side into a triplet of numbers
+  $a =~ /(\d?\d)\/(\d?\d)\/(\d{4})/;
+  my ($lmon, $lday, $lyear) = ($1, $2, $3);
+
+  # convert right hand side into ... """
+  $b =~ /(\d?\d)\/(\d?\d)\/(\d{4})/;
+  my ($rmon, $rday, $ryear) = ($1, $2, $3);
+
+  # compare
+  return $lyear <=> $ryear unless $lyear == $ryear;
+  return $lmon <=> $rmon unless $lmon == $rmon;
+  $lday <=> $rday;
+}
+
+
+# $text: a blob of text
+# return: a unique list of packages
+sub get_packages {
+  my $text = shift;
+  $text =~ m/(\\usepackage(?:\[.*?\])?{.*?}(?:\[.*?\])?)/gs;
+}
+
+
+# @_: a list of package preamble commands
+# return: a reduced list - containing only the earliest dated
+#         of each package
+sub reduce_packages {
+  my @packages;
+  my @package_names = uniq map { m/\\usepackage{(.*?)}/ } @_;
+
+  for (@package_names) {
+    # generate regex
+    my $regex = qr{\\usepackage{$_}\[(.*?)\]};
+
+    # sort list of dates and get earliest
+    my @dates = sort { &date_cmp } map { m/$regex/ } @_;
+
+    my $date = shift @dates;
+
+    # construct earliest dated package
+    my $pack = q/\usepackage/;
+    $pack .= "{$_}";
+    $pack .= "[$date]" if defined $date;
+
+    push @packages, $pack;
+  }
+
+  @packages;
+}
+
+
+# get body of a blob of text (from a tex file)
+sub get_body {
+  my ($text) = shift;
+  $text =~ m/\\begin{document}(.*?)\\end{document}/s;
+  if ($text =~ m/\\begin{document}(.*?)\\end{document}/s) {
+    return $1;
+  }
+  else {
+    return $text;
+  }
+}
+
+
+# get title of a blob of text (from a tex file)
+sub get_title {
+  my ($title) = shift;
+  $title =~ m/\\title\{(.*?)\}/;
+}
 
 
 
@@ -154,91 +228,141 @@ my $sections = {};
 
 # holds file contents
 my $tex = "";
+my $postamble = "";
 
 # set file delimeter to EOF
 $/ = \0;
 
+# not a real word, I think
+# postamble holds the all the tex between \begin{document}...\end{...}
+# essentially, this is the text
+#
+$postamble = "";
 
-foreach my $fi (@file_list) {
-  my $title = $fi;
+#
+foreach my $line (@file_list) {
+  my $fi;
+  my $title;
 
-  ($fi, $title) = $fi =~ m/(.*?):(.*)$/s if ($fi =~ m/(.*?):(.*)/s);
 
-  $fi =~ s/^ *//g;
-  $fi =~ s/ *$//gm;
-
-  $title =~ s/^ *//g;
-  $title =~ s/ *$//gm;
-
-  $fi = "$fi.tex" unless $fi =~ m/.*\.tex$/;
-
-  # append directory to this
-  $fi = "$dir/$fi" if defined $dir and -d $dir;
-
-  # skip if doesn't exist
-  unless (open FI, $fi) {
-    print "*** file `$fi` not found\n";
+  # if the line is wrapped in braces
+  # then create a new part named from the text in braces
+  # and then process next line
+  if (($fi) = $line =~ m/^\{(.*?)\}$/s) {
+    $postamble .= "% BEGINNING OF PART\n";
+    $postamble .= "\\part{$fi}\n";
     next;
   }
 
+  elsif ($line =~ m/^\*\*\*$/) {
+    $postamble .= "\n\n\\appendix\n\n";
+    next;
+  }
+
+  elsif ($line =~ m/^\*\s*(.*)$/) {
+    $fi = $1;
+    $title = "";
+  }
+
+  elsif ($line =~ m/^:(.*)$/s) {
+    $fi = "";
+    $title = $1;
+  }
+
+  elsif ($line =~ m/(.*?):(.*)/s) {
+    ($fi, $title) = ($1, $2);
+  }
+
+  else {
+    $fi = $title = "";
+  }
+
+  next unless $title or $fi;
+
+  # split the word around the first colon
+  #($fi, $title) = $fi =~ m/(.*?):(.*)$/s if ($fi =~ m/(.*?):(.*)/s);
+
+  # trim whitespace of both sides of the colon (if there is a colon)
+  $fi =~ s/^\s+|\s+$//g;
+  $title =~ s/^\s+|\s+$//g;
+
+  # add a .tex extension if there is none
+  $fi = "$fi.tex" unless $fi =~ m/.*\.tex$/ or !$fi;
+
+
+  if ($title) {
+    $postamble .= "% CHAPTER $title\n";
+    $postamble .= "\\chapter[$title]{$title}\n\n";
+  }
+  # append directory to this
+  $fi = "$dir/$fi" if defined $dir and -d $dir and $fi;
+
+  # if doesn't exist, skip and warn the user
+
+  next unless $fi;
+  unless (open FI, $fi) {
+    print "*** warning: file `$fi` not found\n";
+    next;
+  }
+
+
+  # load entire tex file into a string
+  # NOTE: $/ = \0 # EOF
   $tex = <FI>;
 
-  $tex =~ m/\\begin{document}(.*?)\\end{document}/s;
+  # get body from FI, see subroutine for more info
+  my ($body) = get_body $tex;
 
-  $body->{$title} = $1 if defined $1;
+  #$postamble .= "% CHAPTER $title\n";
+  #$postamble .= "\\chapter[$title]{$title}\n\n";
+  $postamble .= $body;
 
-  $tex =~ s/\\begin{document}.*\\end{document}//gs;
 
-  #
-  push @packages, $tex =~ m/$pre->{packages}/gs;
-  push @classes, $tex =~ m/$pre->{classes}/gs;
-  push @styles, $tex =~ m/$pre->{styles}/gs;
-
-  #
-  for (keys %$cmds) {
-    push @commands, $tex =~ m/$cmds->{$_}/gs
-  }
+  # get packages from FI
+  push @packages, get_packages $tex;
 }
 
 
-
-
-# (5.5) FILTER REDUNDANT LIST ENTRIES
-# ***********************************
-
-if ( grep { m/(\[.*?\])$/s } @packages) {
-  map { s/(\[.*?\])$//gm } @packages;
-  # print "*** warning: ";
-  # print "makde_docs does not currently support working with dated packages";
-}
-
-
-@packages = uniq @packages;
+# remove redundant info
 @commands = uniq @commands;
 @classes = uniq @classes;
 @styles = uniq @styles;
+
+# usepackages has a few extra parameters
+@packages = reduce_packages @packages;
+
 
 
 
 # (6) BUILD DOCUMENT
 # ******************
-print DOC "\\documentclass{book}";
+print DOC "\\documentclass{book}\n\n";
 
-
-my ($m, $d, $y);
-my $earliest;
+print DOC "\\title{Zelig}\n";
+print DOC "\\author{Gary King}\n";
 
 
 if (@packages) {
   print DOC "\n\n\n% required packages\n";
+
+  # packages used in individual articles
+  print DOC "% package taken from TeX files:";
   print DOC join "\n", @packages;
-  print DOC "\\usepackage{Zinput}";
+
+  # required packages for any Zelig doc
+  print DOC "\n\n% Zinput (essential for Zelig docs)\n";
+  print DOC "\\usepackage{Zinput}\n";
+  print DOC "\\usepackage{Sweave}\n";
+  #print DOC "\\usepackage{Rd}\n";
+
+  # line spaces for tex-clarity
+  print DOC "\n\n";
 }
 
 
 if (@styles) {
-  print DOC "\n\n\n% required styles\n";
-  print DOC join "\n", @styles;
+  #print DOC "\n\n\n% required styles\n";
+  #print DOC join "\n", @styles;
 }
 
 
@@ -256,13 +380,11 @@ if (@classes) {
 }
 
 print DOC "\n\n\n% begin body\n";
-print DOC "\\begin{document}\n";
+print DOC "\\begin{document}\n\n\n";
 
-for (keys %$body) {
-  print DOC "\n\n\\chapter{$_}\n";
-  print DOC $body->{$_};
-  print DOC "\n\n";
-}
+print DOC "\\tableofcontents\n\n";
+
+print DOC $postamble;
 
 print DOC "\n\n% end body\n";
 print DOC "\\end{document}";
