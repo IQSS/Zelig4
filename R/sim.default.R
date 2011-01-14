@@ -1,6 +1,6 @@
 sim.default <- function(z,
-                        x=NULL, x1=NULL, num=1000,
-                        prev = NULL, bootstrap = FALSE,
+                        x=NULL, x1=NULL, y=NULL,
+                        num=1000, prev = NULL, bootstrap = FALSE,
                         boot.fn=NULL,
                         cond.data = NULL,
                         ...) {
@@ -15,10 +15,10 @@ sim.default <- function(z,
     warning("conditions are not yet supported")
 
   # "parameters"
-  param <- as.parameters(param(z, num=num, bootstrap=bootstrap), num=num)
+  param <- as.parameters(param(z, num=num), num=num)
 
   # compute quantities of interest
-  res.qi <- as.qi( qi(z, x=x, x1=x1, param=param, num=num) )
+  res.qi <- as.qi( qi(z, x=x, x1=x1, y=y, param=param, num=num) )
   class(res.qi) <- c(z$name, class(res.qi))
 
   # this is kludge (for now)

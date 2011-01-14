@@ -308,35 +308,3 @@ replace.call <- function(zobj, call1, call2) {
   # return object
   .result
 }
-
-
-# @name: a character-string specifying the name of a variable
-# @envir: an environment variable to search
-# @prefix: a character-string
-.prefix <- function(name, envir, prefix="zelig", sep=".") {
-
-  # check to make sure this is an environment variable
-  if (!is.environment(envir)) {
-    warning()
-    envir <- globalenv()
-  }
-
-  # ensure some name is returned
-  if (!is.character(c(name, prefix, sep))) {
-    warning()
-    name
-  }
-
-  else if (length(name) > 1 || length(prefix) > 1 || length(sep) > 1) {
-    warning()
-    name
-  }
-
-  else {
-    while(exists(name, envir=envir))
-      name <- paste(prefix, name, sep=sep)
-
-    # return if nothing wonky happened
-    name
-  }
-}

@@ -64,3 +64,60 @@ It's just very beautiful to watch."
 .describe <- function(model.name) {
   cite(ZeligDescribeModel(model.name))
 }
+
+
+# output: zelig's full citation
+.cite.zelig <- function() {
+  message()
+  message("To cite Zelig as a whole, please reference these two sources:")
+  message(
+"  Kosuke Imai, Gary King, and Olivia Lau. 2007. ``Zelig: Everyone's
+  Statistical Software,'' http://gking.harvard.edu/zelig/.
+
+  Kosuke Imai, Gary King, and Olivia Lau.  2008.  ``Toward a Commmon
+  Framework for Statistical Analysis and Development.'' Journal of
+  Computational and Graphical Statistics, Vol. 17, No. 4 (December),
+  pp. 892-913.
+
+")
+}
+
+
+# return: TeX style citation for producing Zelig documentation
+#         
+.cite.zelig.tex <- function() {
+  paste(
+        "To cite Zelig as a whole, please reference these two sources:",
+        "\\begin{verse}",
+        "  Kosuke Imai, Gary King, and Olivia Lau. 2007. ``Zelig: Everyone's",
+        "  Statistical Software,'' http://gking.harvard.edu/zelig/.",
+        "\\end{verse}",
+        "\\begin{verse}",
+        "  Kosuke Imai, Gary King, and Olivia Lau.  2008.  ``Toward a Commmon",
+        "  Framework for Statistical Analysis and Development.'' Journal of",
+        "  Computational and Graphical Statistics, Vol. 17, No. 4 (December),",
+        "  pp. 892-913.",
+        "\\end{verse}",
+        sep="\n"
+        )
+}
+
+
+ZeligListTitles <- function() {
+
+  #
+  models <- ZeligListModels()
+
+  #
+  lis <- list()
+
+  #
+  for (m in models)
+    lis[[m]] <- ZeligDescribeModel(m)$text
+
+  # turn into a vector with each entry having:
+  #  model_name: model_description
+  # e.g.
+  #  probit: Probit Regression for Dichotomous Dependent Variables
+  paste(names(lis), lis, sep=": ")
+}

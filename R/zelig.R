@@ -67,19 +67,23 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     zelig2 <- get(zelig2, mode="function")
 
     # call zelig2* function
-    zc.list <- zelig2(model, formula, ..., data=d.f)
+    zclist <- zelig2(model, formula, ..., data=d.f)
+
+    # interpret the return as function, hooks, and parameters
+    zclist <- .zelig2ify(zclist)
 
 
     # create zelig.call
-    zc <- ZeligCall(zc.list,
-                    params = params
-                    )
+    zc <- zelig.call(
+                     model  = zclist$.function,
+                     params = zclist$parameters
+                     )
 
-    # run the model
-    new.res <- run(zc, data=d.f)
+    new.res <- .run(zc, d.f)
 
     # test
     old.style.oop <- ! isS4(new.res)
+
 
     # append to list
     res[[k]] <- new.res
@@ -106,7 +110,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
             call    = match.call(),
             by      = by,
             mi      = reset(m),
-            func    = zc.list[[1]],
+            func    = zclist[[1]],
             levels  = m$levels,
             S4      = !old.style.oop
             )

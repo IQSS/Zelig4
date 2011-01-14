@@ -28,7 +28,7 @@ plot.sim <- function(sim.object, xlab = "", user.par=F, ...) {
     #
     if (is.numeric(val)) {
       val <- as.numeric(val)
-      truehist(val, main = key, xlab = xlab, ..., col=nextElem(colors))
+      truehist(val, main = key, xlab = xlab, h=100, ..., col=nextElem(colors))
     }
     else if (is.character(val) || is.factor(val)) {
       barplot(table(val), xlab=xlab, main=key, col=palette)
