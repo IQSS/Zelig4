@@ -4,7 +4,7 @@
 # @params:  list containing values that the user input
 # return:   a zelig.call object which is later used to call the
 #           foreign model
-zelig.call <- function(model, default=NULL, params=NULL) {
+zelig.call <- function(model, params=NULL, from.call=NULL) {
   # error-catching
   if (!is.function(model) && !is.character(model))
     stop("`model` slot must be a function")
@@ -30,7 +30,8 @@ zelig.call <- function(model, default=NULL, params=NULL) {
              model = model,
              parameters = stored.values$params,
              envir = stored.values$envir,
-             call  = call
+             call  = call,
+             oldcall = from.call
              )
 
   # assign class, and return

@@ -1,4 +1,4 @@
-qi.logit <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+qi.logit <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   #
   coef <- coef(param)
   link.inverse <- linkinv(param)

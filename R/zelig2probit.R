@@ -1,8 +1,10 @@
-zelig2probit <- function(model, formula, ..., data)
-  list("glm",
+zelig2probit <- function(model, formula, weights=NULL, ..., data)
+  list(
+       .function = "glm",
+
        formula = formula,
-       data = data,
        weights = weights,
-       family = binomial(link="probit"),
-       model  = F
+       family  = binomial(link="probit"),
+       model   = F,
+       data    = data
        )

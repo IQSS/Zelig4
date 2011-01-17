@@ -1,8 +1,10 @@
-zelig2logit <- function(model, formula, ..., data, weights=NULL)
-  list("glm",
-       "formula",
-       "data",
-       "weights",
-       family = binomial(link="logit"),
-       model  = F
+zelig2logit <- function(model, formula, weights=NULL, ..., data)
+  list(
+       .function = "glm",
+
+       formula = formula,
+       weights = weights,
+       family  = binomial(link="logit"),
+       model   = F,
+       data    = data
        )

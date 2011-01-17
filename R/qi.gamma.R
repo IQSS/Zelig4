@@ -1,4 +1,4 @@
-qi.gamma <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+qi.gamma <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # get parameters
   shape <- gamma.shape(z)
   alpha <- rnorm(num, mean = shape$alpha, sd = shape$SE)

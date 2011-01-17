@@ -22,8 +22,10 @@ description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
   if (!is.numeric(year))
     year <- as.numeric(format(Sys.Date(), "%Y"))
 
-  if (!is.character(model) || length(model) != 1)
+  if (!is.character(model) || length(model) != 1) {
+    print(model)
     stop("model must be a character-string")
+  }
 
   if (length(text) > 1)
     stop("text must be a character-vector of length 1")
@@ -76,11 +78,11 @@ cite <- function(descr) {
 
   # construct string.  This should be done much more elegantly
   # and with localization
-  str <- "How to cite this model in Zelig:\n"
-  str <- paste(str, descr$authors, ". ", descr$year, ". ", title, sep="")
-  str <- paste(str, " in Kosuke Imai, Gary King, and Olivia Lau, ", sep="")
+  str <- "How to cite this model in Zelig:\n  "
+  str <- paste(str, descr$authors, ". ", descr$year, ".\n  ", title, sep="")
+  str <- paste(str, "\n  in Kosuke Imai, Gary King, and Olivia Lau, ", sep="")
   str <- paste(str, "\"Zelig: Everyone's Statistical Software,\"", sep="")
-  str <- paste(str, url, "\n", sep="")
+  str <- paste(str, "\n  ", url, "\n", sep="")
   str
 }
 
@@ -97,6 +99,7 @@ as.description.description <- function(descr)
 # @descr: a list
 # return: a description object
 as.description.list <- function(descr) {
+
   text <- if (!is.null(descr$text))
     descr$text
   else if (!is.null(descr$description))

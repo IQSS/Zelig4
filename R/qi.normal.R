@@ -1,4 +1,4 @@
-qi.normal <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+qi.normal <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # get `num` samples from the underlying distribution
   coef <- coef(param)
   alpha <- alpha(param)

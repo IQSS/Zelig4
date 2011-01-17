@@ -1,4 +1,4 @@
-qi.negbinom <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+qi.negbinom <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   #
   coef <- coef(param)
   alpha <- alpha(param)

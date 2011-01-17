@@ -28,43 +28,11 @@
 }
 
 
-# @mc: a function call
-# return: an environment holding the evaluated expressions
-#         from the function call
-.store.call.envir <- function(mc, envir=new.env()) {
-  lis <- as.list(mc)[-1]
-
-  for (key in names(lis))
-    assign(key, eval(lis[[key]], envir=parent.frame()), envir=envir)
-
-  envir
-}
-
-
-hide <- function(...) {
-  if (missing(..2))
-    warning()
-
-  args <- c(...)
-  names <- names(args)
-
-  if (length(names) != length(args))
-    names <- c("object")
-
-  ret <- ..1
-  attr(ret, ".hide-display-name") <- ..2
-  class(ret) <- c("hide", class(ret))
-  ret
-}
-
-print.hide <- function(x, ...)
-  print(attr(x, ".hide-display-name"))
-
-
-# @name: a character-string specifying the name of a variable
-# @envir: an environment variable to search
-# @prefix: a character-string
-# @sep: a character-string that 
+# @name:   a character-string specifying the name of a variable
+# @envir:  an environment variable to search
+# @prefix: a character-string to prefix the string with
+#          this is applied until the name is unique
+# @sep:    a character-string that separates prefix and name
 .prefix <- function(name, envir, prefix="zelig", sep=".") {
 
   # check to make sure this is an environment variable
@@ -96,4 +64,27 @@ print.hide <- function(x, ...)
     # return if nothing wonky happened
     name
   }
+}
+
+
+# @.zc: a ZeligCall object
+# @.data: a data.frame
+# return: the object ran in an insulated environment
+.run <- function(...) {
+  # attach to ensure all the variables are known
+  attach(..1$envir)
+  attach(..2)
+
+  # run functin call
+  .result <- do.call(as.character(..1$call[[1]]),
+                     as.list(..1$call)[-1],
+                     envir=..1$envir
+                     )
+
+  # detach relevant stuff
+  detach(..1$envir)
+  detach(..2)
+
+  # return object
+  .result
 }

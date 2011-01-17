@@ -1,4 +1,4 @@
-qi.ls <- function(z, x=NULL, x1=NULL, num=1000, param=NULL, bootstrap=NULL) {
+qi.ls <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL, bootstrap=NULL) {
   # error-catching
   if (missing(x))
     stop("x cannot be missing while computing the `ls' model")

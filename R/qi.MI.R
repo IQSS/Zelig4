@@ -1,4 +1,4 @@
-qi.MI <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
+qi.MI <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   # split number of simulations between each model
   # this might not be intuitive for the user
   num <- round(num/length(z$result))
@@ -66,7 +66,7 @@ qi.MI <- function(z, x=NULL, x1=NULL, num=1000, param=NULL) {
       label <- paste(paste("data-set", number), label, sep=" | ")
 
     # compute qi
-    res.qi <- qi(kin, x=setx.item, x1=setx1.item, num=num, param=param.item)
+    res.qi <- qi(kin, x=setx.item, x1=setx1.item, y=y, num=num, param=param.item)
     qi.list[[label]] <- as.qi( res.qi )
   }
 

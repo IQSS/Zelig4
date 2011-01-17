@@ -7,9 +7,8 @@
 # @model:   character-string specifying the model to run
 # @data:    data.frame used to make sense of the formula
 # @...:     any parameters that need to be sent to the model
+# @by: 
 # @cite:    boolean specifying whether to output citation information
-# @depends: character-vector specifying model dependencies
-#
 # return:   a zelig object
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   if (!missing(by)) {
@@ -72,18 +71,21 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # interpret the return as function, hooks, and parameters
     zclist <- .zelig2ify(zclist)
 
-
     # create zelig.call
-    zc <- zelig.call(
-                     model  = zclist$.function,
-                     params = zclist$parameters
+    zc <- zelig.call(model  = zclist$.function,
+                     params = zclist$parameters,
+                     from.call = match.call()
                      )
 
+    # compute statistical model
     new.res <- .run(zc, d.f)
+
+    # apply first hook if it exists
+    if (!is.null(zclist$.hook))
+      new.res <- zclist$.hook(new.res, zc, match.call())
 
     # test
     old.style.oop <- ! isS4(new.res)
-
 
     # append to list
     res[[k]] <- new.res
@@ -134,7 +136,18 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   
   # citation
   if (cite) {
-    descr <- as.description(describe(z))
+    #
+    described <- describe(z)
+
+    #
+    descr <- description(
+                         authors = described$authors,
+                         year  = described$description,
+                         text  = described$text,
+                         url   = described$url,
+                         model = model
+                         )
+
     message("\n")
     message(cite(descr))
   }

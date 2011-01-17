@@ -1,7 +1,9 @@
 zelig2ls <- function(model, formula, ..., data, weights=NULL)
-  list("lm",
-       model = F,
-       "formula",
-       "weights",
-       "data"
+  list(
+       .function = "lm",
+
+       formula = formula,
+       weights = weights,
+       model   = F,
+       data    = data
        )

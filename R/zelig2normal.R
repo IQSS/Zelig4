@@ -1,8 +1,10 @@
-zelig2normal <- function(model, formula, ..., data)
-  list("glm",
-       "formula",
-       "data",
-       "weights",
-       family = gaussian,
-       model  = F
+zelig2normal <- function(model, formula, weights=NULL, ..., data)
+  list(
+       .function = "glm",
+
+       formula = formula,
+       weights = weights,
+       family  = gaussian,
+       model   = F,
+       data    = data
        )

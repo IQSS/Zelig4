@@ -1,8 +1,10 @@
-zelig2poisson <- function(model, formula, ..., data)
-  list("glm",
-       "formula",
-       "weights",
-       "data",
-       family = poisson,
-       model  = F
+zelig2poisson <- function(model, formula, weights=NULL, ..., data)
+  list(
+       .function ="glm",
+       
+       formula = formula,
+       weights = weights,
+       family  = poisson(),
+       model   = F,
+       data    = data
        )

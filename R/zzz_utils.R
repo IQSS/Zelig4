@@ -135,6 +135,17 @@ split.up <- function(args) {
 }
 
 
+# @args: a list of arguments with values that
+#        are ALREADY evaluated
+# return: a list organized that divides zelig-
+#         parameters from model parameters
+#
+# NOTE: zelig-parameters are prefixed with a
+#       dot, so as to avoid conflicts with
+#       standard variable naming conventions
+#
+# PS: this function primarily is an error-catcher,
+#     and thought organizer
 .zelig2ify <- function(args) {
   #
   if (!is.list(args))
@@ -149,25 +160,21 @@ split.up <- function(args) {
   args <- split.up(args)$wordful
 
   #
-  .function <- ".function"
-  .hook <- ".hook"
-  .final <- ".final"
-
-
-  #
-  if (is.null(args$`.function`)) {
+  if (is.null(args$.function)) {
     stop()
   }
 
   # move to variables
-  model.func <- args$`.function`
-  hook.func  <- args$`.hook`
-  final.func <- args$`.final`
+  model.func <- args$.function
+  hook.func  <- args$.hook
+  final.func <- args$.final
+  mi.func <- args$.mi
 
-  # remove from parameters list
-  args$`.function` <- NULL
-  args$`.hook` <- NULL
-  args$`.final` <- NULL
+  # remove zelig-parameters from args
+  args$.function <- NULL
+  args$.hook <- NULL
+  args$.final <- NULL
+  args$.mi <- NULL
 
   # return array
   # NOTE: arguably, this should be an object,
@@ -179,6 +186,7 @@ split.up <- function(args) {
        # optional functions
        .hook     = hook.func,
        .final    = final.func,
+       .mi = mi.func,
 
        # parameter list
        parameters = args
@@ -210,7 +218,6 @@ split.up <- function(args) {
                                topic=topic,
                                paths=directory
                                )
-
 
   # search package-help-dataabase, get Rd file as string
   utils:::.getHelpFile(file=path)
@@ -253,7 +260,7 @@ split.up <- function(args) {
   }
   else {
     warning("nothing was found")
-    c()
+    NULL
   }
 }
 
@@ -286,57 +293,7 @@ replace.call <- function(zobj, call1, call2) {
 }
 
 
-
-# @.zc: a ZeligCall object
-# @.data: a data.frame
-# return: the object ran in an insulated environment
-.run <- function(...) {
-  # 
-  attach(..1$envir)
-  attach(..2)
-
-  # run functin call
-  .result <- do.call(as.character(..1$call[[1]]),
-                     as.list(..1$call)[-1],
-                     envir=..1$envir
-                     )
-
-  # detach relevant stuff
-  detach(..1$envir)
-  detach(..2)
-
-  # return object
-  .result
-}
-
-
-# @name: a character-string specifying the name of a variable
-# @envir: an environment variable to search
-# @prefix: a character-string
-.prefix <- function(name, envir, prefix="zelig", sep=".") {
-
-  # check to make sure this is an environment variable
-  if (!is.environment(envir)) {
-    warning()
-    envir <- globalenv()
-  }
-
-  # ensure some name is returned
-  if (!is.character(c(name, prefix, sep))) {
-    warning()
-    name
-  }
-
-  else if (length(name) > 1 || length(prefix) > 1 || length(sep) > 1) {
-    warning()
-    name
-  }
-
-  else {
-    while(exists(name, envir=envir))
-      name <- paste(prefix, name, sep=sep)
-
-    # return if nothing wonky happened
-    name
-  }
+# @package: a character-string naming a package
+is.zelig.package <- function(package="") {
+  "Zelig" %in% tools:::pkgDepends(package)$Depends
 }

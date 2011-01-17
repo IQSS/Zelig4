@@ -1,8 +1,9 @@
 zelig2gamma <- function(model, formula, ..., data)
-  list("glm",
-       "formula",
-       "weights",
-       "data",
-       family = Gamma,
-       model  = F
+  list(
+       .function = "glm",
+
+       formula = formula,
+       family  = Gamma,
+       model   = F,
+       data    = data
        )
