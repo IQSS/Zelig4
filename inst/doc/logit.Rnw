@@ -1,13 +1,29 @@
 \documentclass{article}
 
+\title{
+  logit: Logistic Regression for Dichotomous
+  Dependent Variables
+}
+\author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
+
+
+\SweaveOpts{results=hide, prefix.string=vigpics/logit}
+
+\usepackage{bibentry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{url}
 \usepackage{Zelig}
-\SweaveOpts{results=hide, prefix.string=vigpics/logit, pdf=FALSE, eps=TRUE}
+\usepackage{Sweave}
 
 
 \begin{document}
+
 \nobibliography*
+
 <<beforepkgs, echo=FALSE>>=
- before=search()
+ before <- search()
 @
 
 <<loadLibrary, echo=F,results=hide>>=
@@ -262,44 +278,38 @@ below.
    \end{itemize}
 \end{itemize}
 
-\subsection* {How to Cite} 
-
-How to cite this model in Zelig:
-\begin{verse}
-  Kosuke Imai, Gary King, and Olivia Lau. 2008. "logit: Logistic Regression for Dichotomous Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
-\end{verse}
 
 
+
+
+
+\subsection*{How to Cite the Logit Model}
+\bibentry{ImaLauKin-logit11}
+
+\subsection*{How to Cite the Zelig Software Package}
 \CiteZelig
 
-\subsection*{See also}
 
+\subsection*{See also}
 The logit model is part of the stats package by \citet{VenRip02}.
 Advanced users may wish to refer to \texttt{help(glm)} and
 \texttt{help(family)}, as well as \cite{McCNel89}. Robust standard
 errors are implemented via the sandwich package by \citet{Zeileis04}.
 Sample data are from \cite{KinTomWit00}.
 
-\bibliographystyle{asa}
-\bibliography{gk,gkpubs}
+\bibliographystyle{plain}
+\bibliography{gk,gkpubs,core}
+
 <<afterpkgs, echo=FALSE>>=
  after<-search()
  torm<-setdiff(after,before)
  for (pkg in torm)
- detach(pos=match(pkg,search()))
+   detach(pos=match(pkg,search()))
 @
- \end{document}
+
+\end{document}
 
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: t
 %%% End: 
-
-
-
-
-
-
-
-
-

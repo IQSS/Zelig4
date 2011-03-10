@@ -1,11 +1,27 @@
 \documentclass{article}
 
-\usepackage{Zelig}
+\title{
+  negbinom: Negative Binomial Regression for Event
+  Count Dependent Variables
+}
+\author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
+
+
 \SweaveOpts{results=hide, prefix.string=vigpics/negbin}
+
+\usepackage{bibentry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{Zelig}
+\usepackage{Sweave}
 
 
 \begin{document}
+
 \nobibliography*
+
 <<beforepkgs, echo=FALSE>>=
  before=search()
 @
@@ -225,19 +241,16 @@ below.
    \end{itemize}
 \end{itemize}
 
-\subsection* {How to Cite} 
+\subsection*{How to Cite the Negative Binomial Model}
+\bibentry{ImaLauKin-negbinom11}
 
-How to cite this model in Zelig:
-\begin{verse}
-  Kosuke Imai, Gary King, and Olivia Lau. 2010. "negbinom" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
-\end{verse}
-
+\subsection*{How to Cite the Zelig Software Package}
 \CiteZelig
 
 \subsection* {See also}
 The negative binomial model is part of the MASS package by William N. Venable and Brian D. Ripley \citep{VenRip02}. Advanced users may wish to refer to \texttt{help(glm.nb)} as well as \cite{McCNel89}. Robust standard errors are implemented via sandwich package by Achim Zeileis \citep{Zeileis04}.Sample data are from \cite{Martin92}.
 
-\bibliographystyle{asa}
+\bibliographystyle{plain}
 \bibliography{gk,gkpubs}
 <<afterpkgs, echo=FALSE>>=
  after<-search()

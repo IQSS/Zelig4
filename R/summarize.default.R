@@ -1,10 +1,4 @@
 summarize.default <- function(q) {
-  # error-catching
-  if (is.null(q$titles) || is.null(q$stats))
-    stop("qi function missing qi's or their titles")
-
-
-  #
   i <- iter(q)
   res <- list()
 
@@ -62,10 +56,6 @@ summarize.default <- function(q) {
       else
         m[k,] <- NA
 
-##       print(paste("red",
-##                   colnames(val)
-##                   )
-##             )
 
       col.names <- colnames(val)
       rownames(m) <- if (is.null(col.names))

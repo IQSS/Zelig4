@@ -1,14 +1,33 @@
 \documentclass{article}
 
-\usepackage{Zelig}
-\SweaveOpts{results=hide, prefix.string=vigpics/gamma, eps=f, pdf=f}
+\title{
+  ls: Least Squares Regression for Continuous
+  Dependent Variables
+}
+\author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
 
+
+\SweaveOpts{results=hide, prefix.string=vigpics/ls}
+
+\usepackage{bibentry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{Zelig}
+\usepackage{Sweave}
+
+%\VignetteIndexEntry{Least Squares Regression for Continuous Dependent Variables}
+%\VignetteDepends{Zelig, stats}
+%\VignetteKeyWords{model,least squares,continuous, regression}
+%\VignettePackage{Zelig}
 
 \begin{document}
+
 \nobibliography*
 
 <<beforepkgs, echo=FALSE>>=
-before=search()
+ before=search()
 @
 
 <<loadLibrary, echo=F,results=hide>>=
@@ -127,36 +146,36 @@ Simulate quantities of interest:
 @ 
 \end{center}
 
-% \item Multiple responses (least squares regression will be fitted
-%   separately to each dependent variable)
-
-% Two responses for data set macro: 
-% <<Multiple.zelig>>=
-%  z.out3 <- zelig(cbind(unem, gdp) ~ capmob + trade,model = "ls", data = macro)
-% @
-% <<Multiple.zelig.summary>>=
-% summary(z.out3)
-% @    
-% Set values for the explanatory variables, using the default mean/mode
-% values, with country set to the United States and Japan, respectively:
-% <<Multiple.setx>>=
-%  x.US <- setx(z.out3, country = "United States")
-%  x.Japan <- setx(z.out3, country = "Japan")
-% @ 
-% Simulate quantities of interest:
-% <<Multiple.sim>>=
-%  s.out3 <- sim(z.out3, x = x.US, x1 = x.Japan)
-% @
-% Summary
-% <<Example4.sim.summary>>=
-% summary(s.out3)
-% @  
-% \begin{center}
-% <<label=Example4Plot,fig=true,echo=true,  width=7.5, height=6>>= 
-%  plot(s.out3)
-% @ 
-\end{center}
-
+%\item Multiple responses (least squares regression will be fitted
+%  separately to each dependent variable)
+%
+%Two responses for data set macro: 
+%<<Multiple.zelig>>=
+% z.out3 <- zelig(cbind(unem, gdp) ~ capmob + trade,model = "ls", data = macro)
+%@
+%<<Multiple.zelig.summary>>=
+%summary(z.out3)
+%@    
+%Set values for the explanatory variables, using the default mean/mode
+%values, with country set to the United States and Japan, respectively:
+%<<Multiple.setx>>=
+% x.US <- setx(z.out3, country = "United States")
+% x.Japan <- setx(z.out3, country = "Japan")
+%@ 
+%Simulate quantities of interest:
+%<<Multiple.sim>>=
+% s.out3 <- sim(z.out3, x = x.US, x1 = x.Japan)
+%@
+%Summary
+%<<Example4.sim.summary>>=
+%summary(s.out3)
+%@  
+%\begin{center}
+%<<label=Example4Plot,fig=true,echo=true,  width=7.5, height=6>>= 
+% plot(s.out3)
+%@ 
+%\end{center}
+%
 \end{enumerate}
 
 \subsubsection{Model}
@@ -264,29 +283,27 @@ below.
    \end{itemize}
 \end{itemize}
 
-\subsection* {How to Cite} 
+\subsection*{How to Cite the Least Squares Model}
+\bibentry{ImaLauKin-ls11}
 
-
-How to cite this model in Zelig:
-\begin{verse}
-  Kosuke Imai, Gary King, and Olivia Lau. 2007. "ls: Least Squares Regression for Continuous Dependent Variables" in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"http://gking.harvard.edu/zelig
-\end{verse}
-
+\subsection*{How to Cite the Zelig Software Package}
 \CiteZelig
+
 
 \subsection* {See also}
 The least squares regression is part of the stats package by William N.
 Venables and Brian D. Ripley \citep{VenRip02}.In addition, advanced users may wish to refer to \texttt{help(lm)} and \texttt{help(lm.fit)}.Robust standard errors are implemented via the sandwich package by Achim Zeileis \citep{Zeileis04}.Sample data are from \cite{KinTomWit00}.
 
-\bibliographystyle{asa}
-\bibliography{gk,gkpubs}
+\bibliographystyle{plain}
+\bibliography{gk,gkpubs,core}
+
 <<afterpkgs, echo=FALSE>>=
  after<-search()
  torm<-setdiff(after,before)
  for (pkg in torm)
  detach(pos=match(pkg,search()))
 @
- \end{document}
+\end{document}
 
 %%% Local Variables: 
 %%% mode: latex

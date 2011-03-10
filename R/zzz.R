@@ -10,17 +10,15 @@
   ver <- packageDescription(package.name, lib = mylib)$Version
   build.date <- packageDescription(package.name, lib = mylib)$Date
 
-  # blank leading line for readability
-  message()
 
   # build info
-  message("   ZELIG (Versions ", ver, ", built: ", build.date, ")")
+  cat("\n   ZELIG (Versions ", ver, ", built: ", build.date, ")\n")
 
   # cat, for readability of the message text
-  cat("+----------------------------------------------------------------+")
 
   # Zelig info - do not exceed 80char/line
-  message("
+  cat("
++----------------------------------------------------------------+
 +  Please refer to http://gking.harvard.edu/zelig for full       +
 +  documentation or help.zelig() for help with commands and      +
 +  models support by Zelig.                                      +
@@ -38,10 +36,9 @@
 +                                                                +
 +   To cite individual Zelig models, please use the citation     +
 +   format printed with each model run and in the documentation. +
-+----------------------------------------------------------------+")
++----------------------------------------------------------------+
 
-  # new-line
-  message()
+")
 
   # add viggnettes menu
   #addVigs2WinMenu("Zelig")

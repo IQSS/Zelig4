@@ -48,6 +48,34 @@ It's just very beautiful to watch."
 }
 
 
+TexCite <- function(model) {
+  # description object
+  descr <- ZeligDescribeModel(model)
+
+  # url
+  url <- "http://gking.harvard.edu/zelig"
+
+  # define title
+  title <- if (is.null(descr$text))
+    descr$model
+  else
+    paste(descr$model, ": ", descr$text, sep="")
+
+  # quote title string
+  title <- paste('"', title, '"', sep="")
+
+  # construct string
+  str <- paste(
+               "{\bf To cite this model in Zelig:}",
+               paste(descr$authors, descr$year, sep="."),
+               paste(title, "in Kosuke Imai, Gary King and Olivia Lau,"),
+               "\"Zelig: Everyone's Statistical Software,\"",
+               url,
+               sep = "\n"
+               )
+  str
+}
+
 # return: list of available model categories
 .ZeligModelCategories <- function() {
   list(continuous  = "Models for Continuous Dependent Variables",
@@ -85,7 +113,7 @@ It's just very beautiful to watch."
 
 # return: TeX style citation for producing Zelig documentation
 #         
-.cite.zelig.tex <- function() {
+cite.zelig.tex <- .cite.zelig.tex <- function() {
   paste(
         "To cite Zelig as a whole, please reference these two sources:",
         "\\begin{verse}",
@@ -120,4 +148,79 @@ ZeligListTitles <- function() {
   # e.g.
   #  probit: Probit Regression for Dichotomous Dependent Variables
   paste(names(lis), lis, sep=": ")
+}
+
+
+
+
+
+
+
+
+
+
+
+# @pkg: a character-string representing a package name
+# return: whether the package contains any zelig2-functions
+has.zelig2 <- function(pkg) {
+
+  env <- asNamespace(pkg)
+
+  hits <- grep("^zelig2*", ls(envir=env))
+
+  length(hits) > 0
+}
+
+
+# @package: a character-string representing a package name
+# return: whether the package lists Zelig as a dependency
+#         in its DESCRIPTION file
+depends.on.zelig <- function(package="") {
+  #
+  zcomp <- packageDescription(package, fields="Depends")
+
+  if (is.na(zcomp))
+    return(FALSE)
+
+  zcomp <- unlist(strsplit(zcomp, " *, *"))
+
+
+  "Zelig" %in% zcomp
+}
+
+
+# return: list of all zelig-dependent packages
+list.zelig.dependent.packages <- function() 
+  Filter(depends.on.zelig, .packages(all.available=TRUE))
+
+
+# return: list of all zelig models
+list.zelig.models <- function(with.namespace=TRUE) {
+  # list the zelig-dependent packages
+  pkgs <- list.zelig.dependent.packages()
+
+  # include the core package
+  pkgs <- c("Zelig", pkgs)
+
+  # initialize functions variable
+  functions <- NULL
+
+  # create a list of every zelig2 function
+  for (pkg in pkgs) {
+    # get all zelig2 functions, then get their model name
+    models <- ls(pattern="^zelig2", envir=asNamespace(pkg))
+    models <- sub("^zelig2", "", models)
+
+    # add to results list
+    functions[models] <- pkg
+  }
+
+  # return
+  if (with.namespace)
+    # with model-name as the key, and namespace as the value
+    functions
+  
+  else
+    # with just a list of models
+    names(functions)
 }

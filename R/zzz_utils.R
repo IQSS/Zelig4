@@ -90,7 +90,7 @@ zframe <- function(dataf, labels=NULL) {
     # warn if a specified key doesn't exist
     # then skip
     if (! key %in% names(zef)) {
-      warning()
+      warning(key, "does not exist")
       next
     }
 
@@ -149,11 +149,11 @@ split.up <- function(args) {
 .zelig2ify <- function(args) {
   #
   if (!is.list(args))
-    stop("How about I'm outside your window")
+    stop("zelig2 function did not return a list")
 
   #
   if (0 %in% nchar(names(args))) {
-    warning()
+    warning("zelig2 function contains an entry without a key-value pair")
   }
 
   #
@@ -161,7 +161,7 @@ split.up <- function(args) {
 
   #
   if (is.null(args$.function)) {
-    stop()
+    stop("no `.function' specified in zelig2function")
   }
 
   # move to variables
@@ -296,4 +296,18 @@ replace.call <- function(zobj, call1, call2) {
 # @package: a character-string naming a package
 is.zelig.package <- function(package="") {
   "Zelig" %in% tools:::pkgDepends(package)$Depends
+}
+
+
+is.zelig.compliant <- function(package="") {
+  #
+  zcomp <- packageDescription(package, fields="Zelig-Compliant")
+  zcomp <- tolower(zcomp)
+
+  #
+
+  if (! zcomp %in% c('yes', 'no'))
+    stop("")
+
+  zcomp == "yes"
 }

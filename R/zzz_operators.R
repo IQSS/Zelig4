@@ -7,9 +7,24 @@
 
 
 #
-"[[.qi" <- function(self, key)
-  list(title=self$titles[[key]], stat=self$stats[[key]])
+"[[.qi" <- function(self, key) {
 
+  res <- attr(self, ".index")[[key]]
+
+  if (is.null(attr(self, ".index")[[key]])) {
+    NULL
+  }
+  else {
+    do.call("$", list(self, attr(self, ".index")[[key]]))
+  }
+}
+
+
+## "$.qi" <- function(self, key) {
+##   key <- as.character(key)
+
+##   self
+## }
 
 "%.%" <- function(f, g) {
   if (!(is.function(f) && is.function(g)))

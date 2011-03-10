@@ -148,8 +148,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
                          model = model
                          )
 
-    message("\n")
-    message(cite(descr))
+    cat("\n\n")
+   cat(cite(descr), "\n")
   }
 
   z

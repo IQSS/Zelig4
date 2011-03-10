@@ -4,26 +4,24 @@ print.summary.sim <- function(obj) {
     stop("stats object cannot be NULL")
 
   # new-line
-  message()
+  cat("\n")
 
   # print model name
-  cat("Model: ")
-  message(obj$model)
+  cat("Model: ", obj$model, "\n")
 
   # print number of simulations
-  cat("Number of simulations: ")
-  message(obj$iterations)
+  cat("Number of simulations: ", obj$iterations, "\n")
 
   # new-line
-  message()
+  cat("\n")
 
   # important value of x
   if (!is.null(obj$x$matrix)) {
-    message("Values of X")
+    cat("Values of X\n")
     print(obj$x$matrix)
 
     # new-line
-    message()
+    cat("\n")
   }
   else if (is.list(obj$x$s.x)) {
     # add special hooks here?
@@ -33,15 +31,15 @@ print.summary.sim <- function(obj) {
 
   # important value of x1
   if (!is.null(obj$x1$matrix)) {
-    message("Values of X1")
+    cat("Values of X1\n")
     print(obj$x1$matrix)
 
     # new-line
-    message()
+    cat("\n")
   }
 
   # new-line
-  message()
+  cat("\n")
 
   #
   i <- iter(obj$stats)
@@ -66,10 +64,11 @@ print.summary.sim <- function(obj) {
     if (first.iter)
       first.iter <- F
     else
-      message()
+      cat("\n")
 
     # display the title, then the value
-    message(key)
+    cat(key, "\n")
+    #print(as.name(key))
 
     if (is.numeric(val))
       print(round(val*(1000))/1000)
