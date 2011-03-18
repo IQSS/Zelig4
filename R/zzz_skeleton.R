@@ -8,9 +8,9 @@
   r.path <- file.path(path, pkg, 'R')
 
   # source files
-  #zelig2 <- system.file('templates', 'zelig2.R', package="Zelig")
-  #param <- system.file('templates', 'param.R', package="Zelig")
-  #qi <- system.file('templates', 'qi.R', package="Zelig")
+  zelig2 <- system.file('templates', 'zelig2.R', package="Zelig")
+  param <- system.file('templates', 'param.R', package="Zelig")
+  qi <- system.file('templates', 'qi.R', package="Zelig")
 
   # create R directory
   dir.create(r.path, showWarnings=FALSE)
@@ -22,6 +22,18 @@
 
   # create blank files
   file.create(zelig2.dest, param.dest, qi.dest)
+
+  # substitute instances of '\\model\\' ot the value of model
+  zelig2.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = zelig2))
+  param.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = param))
+  qi.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = qi))
+
+  # write to file
+  writeLines(zelig2.lines, con = zelig2.dest)
+  writeLines(param.lines, con = param.dest)
+  writeLines(qi.lines, con = qi.dest)
+
+  TRUE
 }
 
 
