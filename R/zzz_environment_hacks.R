@@ -13,6 +13,19 @@
 
   #
   for (key in names) {
+
+    # if the value is tagged as being literal,
+    # extract the actual value
+    if (inherits(params[[key]], "literal")) {
+      named.params[[key]] <- params[[key]]$value
+      next;
+    }
+
+
+    # Everything below here gets processed
+    # in the default manner
+    # .............
+    
     # prefix keyname if there is an overlap
     keyname <- .prefix(key, envir=e, prefix="stored")
 
@@ -67,15 +80,17 @@
 }
 
 
-# @.zc: a ZeligCall object
-# @.data: a data.frame
-# return: the object ran in an insulated environment
+#' Run Model Fitting Function in Encapsulated Environment
+#' description This needs a little work
+#' param ..1 a zelig.call object
+#' param ..2 an environment object
+#' value the object ran in an insulated environment
 .run <- function(...) {
   # attach to ensure all the variables are known
   attach(..1$envir)
   attach(..2)
 
-  # run functin call
+  # run function call
   .result <- do.call(as.character(..1$call[[1]]),
                      as.list(..1$call)[-1],
                      envir=..1$envir
@@ -87,4 +102,20 @@
 
   # return object
   .result
+}
+
+
+#' Attach Environment and Evaluate Expression
+#' param ..1 an expression to evaluate
+#' param ..2 the environment to evaluate the expression in
+#' value evaluation of ..1
+eval.in <- .call <- function (...) {
+
+  attach(..2)
+
+  res <- suppressMessages((..1))
+
+  detach(..2)
+
+  res
 }

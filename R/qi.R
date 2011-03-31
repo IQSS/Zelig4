@@ -1,6 +1,17 @@
-qi <- function(z, x=NULL, x1=NULL, ...) {
+#' Generic Method for Computing Quantities of Interest
+#' param obj a zelig object
+#' param x a setx object
+#' param x1 an optional setx object
+#' param y this parameter is reserved for simulating average treatment effects,
+#'         though this feature is currently supported only by a
+#'         handful of models
+#' param num an integer specifying the number of simulations to compute
+#' param param a parameters object
+#' value a list of key-value pairs specifying pairing titles of
+#'       quantities of interest with their simulations
+qi <- function(obj, x=NULL, x1=NULL, y=NULL, param=NULL, num) {
   # error-catching
-  if (!inherits(z, "zelig"))
+  if (!inherits(obj, "zelig"))
     stop("z must be of type \"zelig\"")
 
   if (!(is.null(x) || inherits(x, "setx")))

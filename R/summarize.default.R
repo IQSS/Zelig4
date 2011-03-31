@@ -23,6 +23,9 @@ summarize.default <- function(q) {
     else if (length(val) == 1 && is.na(val))
       next
 
+    else if (all(is.na(val)))
+      next
+
     
     # make a matrix that is data-friendly
     m <- if (is.numeric(val))
@@ -47,6 +50,7 @@ summarize.default <- function(q) {
       else if (is.character(val[,k]) || is.factor(val[,k])) {
         result.table <- c(table(val[,k])/length(val[,k]))
         result.table <- result.table[sort(names(result.table))]
+
 
         m[k,] <- result.table
         colnames(m) <- names(result.table)

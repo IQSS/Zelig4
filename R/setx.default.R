@@ -1,10 +1,14 @@
+
 setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # expand the dots
   dots <- list(...)
 
   # init important objects  
-  vars.obj <- as.character(all.vars(formula(obj)[[3]]))
-  not.vars <- as.character(all.vars(formula(obj)[[2]]))
+
+  form <- .call(formula(obj), obj$envir)
+
+  vars.obj <- as.character(all.vars(form[[3]]))
+  not.vars <- as.character(all.vars(form[[2]]))
   env.obj <- NULL
 
   # explanatory variables
@@ -61,7 +65,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       next
     }
 
-
     res[[key]] <- if (is.factor(data[,key])) {
       factor(dots[[key]], levels=levels(data[,key]))
     }
@@ -73,7 +76,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # make a tiny data-frame with
   # all the necessary columns
   d <- data[1,]
-
 
   # give the computed values to those entries
   for (key in names(res)) {
@@ -89,20 +91,24 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # this is a cleaner but still hackneyed
   # of the data.frame casting that's done
   # in the original setx
-  mod <- model.matrix(terms(obj), data=d)
+
+  mod <- model.matrix(form, data = d)
   mod <- as.data.frame(mod)
-  rownames(mod) <- "coef:"
+  rownames(mod) <- "coef"
   
   # build the setx object
   sx <- list(name   = obj$name,
-             formula= formula(obj),
+             formula= form,
              matrix = mod,
              values = res,
              fn     = fn,
              cond   = cond,
              new.data = data,
+             updated  = d,
              special.parameters = list(...),
-             label = ""
+             label = "",
+             explan = vars.obj,
+             pred   = not.vars
              )
 
   # set class and return

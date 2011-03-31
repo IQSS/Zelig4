@@ -12,9 +12,9 @@
   if (is.null(zelig.object$S4))
     stop(as.character(zelig.object$family[[1]]))
   else if (zelig.object$S4) 
-    .GetGenericsS4(zelig.object, envir)
+    suppressWarnings(.GetGenericsS4(zelig.object, envir))
   else
-    .GetGenericsS3(zelig.object, envir)
+    suppressWarnings(.GetGenericsS3(zelig.object, envir))
 }
 
 .GetGenericsS3 <- function(zelig.object, envir=parent.frame()) {

@@ -1,15 +1,11 @@
-# author: Matt Owen
-# date:   7/1/2010
-# info:   constructor for zelig objects
-
-
-# @formula: formula object used to create the model
-# @model:   character-string specifying the model to run
-# @data:    data.frame used to make sense of the formula
-# @...:     any parameters that need to be sent to the model
-# @by: 
-# @cite:    boolean specifying whether to output citation information
-# return:   a zelig object
+#' Method for Fitting Statistical Models
+#' param formula formula object used to create the model
+#' param model character-string specifying the model to run
+#' param data data.frame used to make sense of the formula
+#' param ... any parameters that need to be sent to the model
+#' param by a character-string
+#' param cite boolean specifying whether to output citation information
+#' value a zelig object
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   if (!missing(by)) {
     if (any(by %in% all.vars(formula))) {
@@ -24,7 +20,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   }
 
   # expand dot arguments
-  dots <- list(...)
+  dots <- list()
 
   # get non-dot arguments in a general fashion
   notdots <- as.list(match.call(expand.dots=F)[-1])
@@ -37,6 +33,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
   # build parameter list (including optional parameters)
   params <- c(dots, notdots)
+
 
   # construct model object
   class(model) <- model
@@ -51,6 +48,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # initialize variables for loop
   k <- 1
   res <- list()
+  res.env <- list()
 
   # repeat
   repeat {
@@ -66,10 +64,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     zelig2 <- get(zelig2, mode="function")
 
     # call zelig2* function
-    zclist <- zelig2(model, formula, ..., data=d.f)
+    zclist <- zelig2(formula, ..., data=d.f)
 
     # interpret the return as function, hooks, and parameters
     zclist <- .zelig2ify(zclist)
+
 
     # create zelig.call
     zc <- zelig.call(model  = zclist$.function,
@@ -79,16 +78,20 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
     # compute statistical model
     new.res <- .run(zc, d.f)
+    new.env <- zc$envir
 
     # apply first hook if it exists
-    if (!is.null(zclist$.hook))
+    if (!is.null(zclist$.hook)) {
+      zclist$.hook <- get(zclist$.hook, mode='function')
       new.res <- zclist$.hook(new.res, zc, match.call())
+    }
 
     # test
     old.style.oop <- ! isS4(new.res)
 
     # append to list
     res[[k]] <- new.res
+    res.env[[k]] <- new.env
     k <- k+1
   }
 
@@ -96,8 +99,10 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # (because both should be in order)
   
   # this is kludge.  can we (I) clean this up?
-  if (!inherits(data, "mi") && is.null(by))
+  if (!inherits(data, "mi") && is.null(by)) {
     res <- res[[1]]
+    res.env <- res.env[[1]]
+  }
 
   # run clean-up hooks on every result
   # ...
@@ -107,6 +112,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   z <- list(name    = as.character(model),
             formula = formula,
             result  = res,
+            envir   = res.env,
             args    = list(...),
             data    = data,
             call    = match.call(),
