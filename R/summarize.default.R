@@ -48,9 +48,8 @@ summarize.default <- function(q) {
       }
     
       else if (is.character(val[,k]) || is.factor(val[,k])) {
-        result.table <- c(table(val[,k])/length(val[,k]))
+        result.table <- c(table.levels(val[,k], levels = levels(val))/length(val[,k]))
         result.table <- result.table[sort(names(result.table))]
-
 
         m[k,] <- result.table
         colnames(m) <- names(result.table)
@@ -75,6 +74,34 @@ summarize.default <- function(q) {
   # cast as class - for some reason - then return
   class(res) <- "summarized.qi"
   res
+}
+
+#
+#
+.result.table <- function () {
+
+}
+
+
+#' Create a table, but ensure that the correct
+#' columns exist. In particular, this allows for
+#' entires with zero as a value, which is not
+#' the default for standard tables
+#' param x a vector
+#' param levels a vector of levels
+#' param ... parameters for table
+#" value a table
+table.levels <- function (x, levels, ...) {
+  # if levels are not explicitly set, then
+  # search inside of x
+  if (missing(levels)) {
+    levels <- attr(x, 'levels')
+    table(factor(x, levels=levels), ...)
+  }
+
+  # otherwise just do the normal thing
+  else
+    table(factor(x), ...)
 }
 
 
