@@ -1,8 +1,16 @@
-# @authors: a character-vector of author names
-# @year: a numeric specifying the year
-# @model: a character-string specigying model name (should be always empty)
-# @text: a character-string
-# @url: a character-string specifying the models source homepage
+#' Constructor for the `description' class
+#'
+#' @param authors a character-vector of author names
+#' @param year a numeric specifying the year
+#' @param model a character-string specigying model 
+#'        name (should be always empty)
+#' @param text a character-string specifying the title
+#'        of the model (a longer name than model)
+#' @param url a character-string specifying the models
+#'        source homepage
+#' @return an object of type `description'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
                         year=NULL, model="", text="", url="",
                         category = NULL) {
@@ -56,8 +64,12 @@ description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
 }
 
 
-# @descr: an description object
-# return: a character-string giving citation info
+#' Citation information for a `description' object
+#'
+#' @param descr an object of type `description'
+#' @return a character-string giving citation info
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 cite <- function(descr) {
   #
   if (inherits(descr, "list"))
@@ -87,17 +99,32 @@ cite <- function(descr) {
 }
 
 
-# declare factory-method generic
-as.description <- function(...)
+#' Generic method for casting `description' objects
+#'
+#' @param descr an object to cast an object of type `description'
+#' @return an object of type `description'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.description <- function(descr, ...)
   UseMethod("as.description")
 
-# @descr: a description object
-# return: the same description object
-as.description.description <- function(descr)
+
+#' description -> description
+#'
+#' @param descr an object of type `description'
+#' @return the same object
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.description.description <- function(descr, ...)
   descr
 
-# @descr: a list
-# return: a description object
+
+#' list -> description
+#'
+#' @param descr a list
+#' @return an object of type `description'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.description.list <- function(descr) {
 
   text <- if (!is.null(descr$text))

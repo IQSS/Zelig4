@@ -1,4 +1,14 @@
-print.setx <- function(z) {
+#' Print values of `setx' objects
+#'
+#' @S3method print setx
+#'
+#' @param x a `setx' object
+#' @param ... ignored parameters
+#' @return the value of x (invisibly)
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.setx <- function(x, ...) {
+  z <- x
   # new-line
   message()
 

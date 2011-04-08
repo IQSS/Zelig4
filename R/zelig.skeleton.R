@@ -1,13 +1,15 @@
-#' creates a skeleton zelig package
-#' param pkg a character-string specifying the name of the Zelig package
-#' param models a vector of strings specifying models to be included in the package
-#' param author a vector of strings specifying contributors to the package
-#' param environment - ignored -
-#' param path a character-string specifying the path to the package
-#' param force a logical specifying whether to overwrite files and create necessary directories
-#' param email a string specifying the email address of the package's maintainer
-#' param depends a vector of strings specifying package dependencies
-#' return nothing
+#' Creates a skeleton zelig package
+#' @param pkg a character-string specifying the name of the Zelig package
+#' @param models a vector of strings specifying models to be included in the package
+#' @param author a vector of strings specifying contributors to the package
+#' @param environment - ignored -
+#' @param path a character-string specifying the path to the package
+#' @param force a logical specifying whether to overwrite files and create necessary directories
+#' @param email a string specifying the email address of the package's maintainer
+#' @param depends a vector of strings specifying package dependencies
+#' @return nothing
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig.skeleton <- function (
     pkg, models=c(), author=c(),
     environment = .GlobalEnv,

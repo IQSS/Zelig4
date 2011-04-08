@@ -1,3 +1,9 @@
+#' Describe the `poisson' model to Zelig
+#'
+#' @param ... ignored parameters
+#' @return a list to be processed by `as.description'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 describe.poisson <- function(...) {
   # parameters object
   parameters <- list(lambda = list(

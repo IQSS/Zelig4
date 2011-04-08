@@ -1,17 +1,45 @@
-# generic
-as.qi <- function(s) UseMethod("as.qi")
+#' Generic method for casting various objects as
+#' `qi' objects
+#'
+#' @param s the object to be casted
+#' @return an object of type `qi'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.qi <- function(s)
+  UseMethod("as.qi")
 
 
-# default
-as.qi.default <- function(self)
+#' ??? -> qi
+#'
+#' @param s any unsupported object
+#' @return an object of type `qi'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.qi.default <- function(s)
   stop("as.qi does not yet support this data-type")
 
 
-# do nothing, obviously
-as.qi.qi <- function(q) q
+#' qi -> qi
+#'
+#' @param s an object of type `qi'
+#' @return s an object of type `qi'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.qi.qi <- function(s)
+  s
 
 
-# list
+#' list -> qi
+#'
+#' This function has a lot of room to go wrong. It tries
+#' to detect whether the zelig model is old-style or
+#' new-style (as of 4/4/2011). Eventually this should be
+#' phased out.
+#' 
+#' @param s a list
+#' @return an object of type `qi'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.qi.list <- function(s) {
   #q <- list(titles=list(), stats=list())
   titles <- list()
@@ -19,20 +47,6 @@ as.qi.list <- function(s) {
 
   # divide the list into ones with/without keys
   keys <- split.up(s)
-
-  # add untitled entries, and give them a title
-##   if (length(keys$wordless)) {
-##     for (entry.count in 1:length(keys$wordless)) {
-##       # title the untitled qi's
-##       title <- gettext("Untitled QI #")
-##       title <- paste(title, entry.count, sep="")
-
-##       # add entries
-##       titles[['']] <- title
-##       stats[['']] <- keys$wordless[[entry.count]]
-##     }
-##   }
-
 
   fail.names <- paste("qi", 1:length(s), sep="")
   success.names <- unlist(Map(.acronym, names(s), fail=''))
@@ -76,10 +90,15 @@ as.qi.list <- function(s) {
 }
 
 
-# @qi:    qi object
-# result: nothing
-# effect: prints qi object
-print.qi <- function(self) {
+#' Print a `qi' object in human-readable form
+#'
+#' @param x a qi object
+#' @return the object that was printed
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.qi <- function(x, ...) {
+  self <- x
+
   # error-catching
   if (length(self$titles) != length(self$stats))
     stop("corrupted object!  titles and stats length mismatch")
@@ -98,6 +117,8 @@ print.qi <- function(self) {
     if (k != qi.length)
       message()
   }
+
+  invisible(x)
 }
 
 
@@ -218,8 +239,3 @@ iter.qi <- function(q) {
   # return
   final.list
 }
-
-
-
-
-

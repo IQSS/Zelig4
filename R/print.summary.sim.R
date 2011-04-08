@@ -1,4 +1,15 @@
-print.summary.sim <- function(obj) {
+#' Print values of a summarized `sim' object
+#'
+#' @S3method print summary.sim
+#'
+#' @param obj a `summary.sim' object
+#' @param ... ignored parameters
+#' @return the value of the `summary.sim' object (invisibly)
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.summary.sim <- function(x, ...) {
+  obj <- x
+
   # prints typically have qi, and qi.names defined as part of the summary object
   if (is.null(obj$stats))
     stop("stats object cannot be NULL")

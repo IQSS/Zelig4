@@ -1,3 +1,12 @@
+#' ??? For use with cmvglm
+#'
+#' @param terms ???
+#' @param shape ???
+#' @param ancillary ???
+#' @param eqns ???
+#' @return ???
+#' @export
+#' author Kosuke Imai and Olivia Lau
 make.parameters <- function(terms, shape = "vector", ancillary = TRUE,eqns=NULL) {
   if (!shape %in% c("matrix", "vector"))
     stop("not a valid 'shape' for parameters.  Choose from \"matrix\" or \"vector\".")

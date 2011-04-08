@@ -1,6 +1,6 @@
-# @x: setx object
-# return: a transposed matrix
-# **note: function used to maintain both backwards
-#         compatibility and ease-of-use
+#' Matrix transpose of a setx object
+#' @S3method setx object
+#' @param x a `setx' object
+#' @return: a transposed matrix
 t.setx <- function(x)
   t(x$matrix)

@@ -1,4 +1,15 @@
-xxxprint.summary.MI.sim <- function(obj) {
+#' Print values of summary data for simulations of multiply-imputed data
+#'
+#' @S3method print summary.MI.sim
+#'
+#' @param x a `summary.MI.sim' object, which is the result of calling `summary'
+#'          on a `sim' object
+#' @param ... ignored parameters
+#' @return the value of the `summary.MI.sim' object (invisibly)
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.summary.MI.sim <- function(x, ...) {
+  obj <- x
 
   print.summary.sim((obj))
   stop()

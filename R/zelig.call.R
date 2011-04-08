@@ -1,9 +1,11 @@
-# @model:   character-string or function for the model to call
-# @default: list of values that are set statically (no user-input)
-# @forward: list of values that the user must set at run-time
-# @params:  list containing values that the user input
-# return:   a zelig.call object which is later used to call the
-#           foreign model
+#' Constructor for `zelig.call' object
+#' @param model character-string or function for the model to call
+#' @param params list containing values that the user input
+#' @param the original Zelig call
+#' @return: a zelig.call object which is later used to call the
+#'          foreign model
+#' @export 
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig.call <- function(model, params=NULL, from.call=NULL) {
   # error-catching
   if (!is.function(model) && !is.character(model))

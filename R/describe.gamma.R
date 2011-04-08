@@ -1,3 +1,9 @@
+#' Describe the `gamma' model to Zelig
+#'
+#' @param ... ignored parameters
+#' @return a list of important information
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 describe.gamma <- function(...) {
   # parameters object
   parameters <- list(lambda = list(

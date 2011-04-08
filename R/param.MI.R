@@ -1,4 +1,13 @@
-param.MI <- function(z, num, bootstrap) {
+#' param method for multiply-imputed data
+#'
+#' @S3method param MI
+#' 
+#' @param obj a `zelig' object
+#' @param num an integer specifying the number of simulations to sample
+#' @return a list to be cast as a `parameters' object
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+param.MI <- function(z, num, ...) {
   # init
   res <- list()
   zelig.iter <- iter(z$result)
@@ -16,7 +25,7 @@ param.MI <- function(z, num, bootstrap) {
     kin <- zelig.kin(z, zelig.item)
 
     # append to result list
-    res[['']] <- as.parameters(param(kin, num, bootstrap), num=num)
+    res[['']] <- as.parameters(param(kin, num, ...), num=num)
   }
 
   param.obj <- list(results=res)

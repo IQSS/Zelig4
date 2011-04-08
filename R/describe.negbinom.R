@@ -1,4 +1,10 @@
-describe.negbin <- function(...) {
+#' Describe the `negbinom' model to Zelig
+#' `negbinom' stands for 'negative binomial'
+#' @param ... ignored parameters
+#' @return a list to be processed by `as.description'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+describe.negbinom <- function(...) {
   # parameters object
   parameters <- list(pi = list(
                        equations = c(1, 1),

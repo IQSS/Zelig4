@@ -1,10 +1,24 @@
-# @...:
-# **note: declares generic
-as.parameters <- function(...) UseMethod("as.parameters")
+#' Generic method for casting various objects as a
+#' `parameters' object
+#' 
+#' @param params the object to be casted
+#' @... 
+#' @return an object of type `parameters'
+#' @export
+#' @author Matt Owen \email{mowen@@ig.harvard.edu}
+as.parameters <- function(params, ...)
+  UseMethod("as.parameters")
 
-# @params: a list object
-# @num:    number of simulations
-as.parameters.list <- function(params, num=NULL) {
+
+#' list -> parameters
+#' @param params a list object
+#' @param num an integer specifying the number of simulations
+#'        to be taken
+#' @param ... ignored parameters
+#' @return an object of type `parameters'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.parameters.list <- function(params, num=NULL, ...) {
   #
   coefficients <- if ("simulations" %in% names(params))
     params$simulations
@@ -36,29 +50,31 @@ as.parameters.list <- function(params, num=NULL) {
 }
 
 
-# @params: a parameters object
-# return:  same parameter object
-# **note:  this is an identity function
+#' parameters -> parameters
+#'
+#' @param paramss a parameters object
+#' @param ... ignored parameters
+#' @return the same parameter object
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.parameters <- function(params, ...)
   params
 
 
-# @object: any non-supported data-type
-# return:  the object passed in
-# **note:  identity, but with a warning
-as.parameters.default <- function(p, num=NULL) {
+#' ??? -> parameters
+#' @param params any non-supported data-type
+#' @return the object passed in
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+as.parameters.default <- function(params, num=NULL, ...) {
   if (!missing(num)) {
     alpha <- if (num < nrow(p))
-      tail(p, -num)
+      tail(params, -num)
 
     #
-    parameters(simulations=head(p, num), alpha=alpha)
+    parameters(simulations=head(params, num), alpha=alpha)
   }
   
   else
-    parameters(simulations=p, alpha=NULL)
-}
-
-#
-"[.parameters" <- function() {
+    parameters(simulations=params, alpha=NULL)
 }

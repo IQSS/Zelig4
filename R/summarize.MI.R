@@ -1,3 +1,11 @@
+#' Summarize simualted quantities of interest for multiply-imputed data
+#' 
+#' @S3method summarize default
+#'
+#' @param qis a `qi' object, storing simulations of quantities of interest
+#' @return a `summarized.qi' object
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summarize.MI <- function(qis) {
   summ.list <- list()
 
