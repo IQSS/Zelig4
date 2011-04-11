@@ -33,9 +33,8 @@ Dependent Variables}\label{poisson}
 
 Use the Poisson regression model if the observations of your dependent
 variable represents the number of independent events that occur during
-a fixed period of time (see the negative binomial model, \Sref{negbin},
-for over-dispersed event counts.)  For a Bayesian implementation of
-this model, see \Sref{poisson.bayes}.  
+a fixed period of time (see the negative binomial model, \Sref{negbinom},
+for over-dispersed event counts.).  
 
 \subsubsection{Syntax}
 

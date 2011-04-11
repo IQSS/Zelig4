@@ -34,9 +34,7 @@ library(Zelig)
 Variables}\label{logit}
 
 Logistic regression specifies a dichotomous dependent variable as a
-function of a set of explanatory variables.  For a Bayesian
-implementation, see \Sref{logit.bayes}.  
-
+function of a set of explanatory variables.
 \subsubsection{Syntax}
 
 \begin{verbatim}

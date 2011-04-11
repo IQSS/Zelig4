@@ -1,7 +1,7 @@
 \documentclass{article}
 
 \title{
-  logit: Logistic Regression for Dichotomous
+  probit: Probit Regression for Dichotomous
   Dependent Variables
 }
 \author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
@@ -35,8 +35,7 @@ library(Zelig)
 \section{{\tt probit}: Probit Regression for Dichotomous Dependent Variables}\label{probit}
 
 Use probit regression to model binary dependent variables
-specified as a function of a set of explanatory variables.  For a
-Bayesian implementation of this model, see \Sref{probit.bayes}.  
+specified as a function of a set of explanatory variables.  
 
 \subsubsection{Syntax}
 \begin{verbatim}
