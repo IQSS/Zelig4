@@ -163,8 +163,8 @@ nextElem.mi <- function(m, keys.only=F, as.pair=F) {
 
 #' Reset method for `mi' objects
 #'
-#' @param m 
-#' @return 
+#' @param m an `mi' object 
+#' @return the same object with the iterator reset
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 reset.mi <- function(m) {

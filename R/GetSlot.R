@@ -21,7 +21,7 @@ GetSlot <- function(obj, key, ...)
 #'            of the variable to extract
 #' @param ... ignored parameters
 #' @return stops before it can return anything (as of 4/4/2011)
-#' @export
+#' @export "[[.MI"
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 "[[.MI" <- function(obj, key, ...)
   stop("under construction")

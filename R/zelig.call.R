@@ -2,8 +2,8 @@
 #' @param model character-string or function for the model to call
 #' @param params list containing values that the user input
 #' @param the original Zelig call
-#' @return: a zelig.call object which is later used to call the
-#'          foreign model
+#' @return a zelig.call object which is later used to call the
+#'         foreign model
 #' @export 
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig.call <- function(model, params=NULL, from.call=NULL) {

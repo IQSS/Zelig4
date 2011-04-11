@@ -1,8 +1,8 @@
-#' Generic method for casting various objects as a
+#z' Generic method for casting various objects as a
 #' `parameters' object
 #' 
 #' @param params the object to be casted
-#' @... 
+#' @param ... 
 #' @return an object of type `parameters'
 #' @export
 #' @author Matt Owen \email{mowen@@ig.harvard.edu}
@@ -68,7 +68,7 @@ as.parameters.parameters <- function(params, ...)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.default <- function(params, num=NULL, ...) {
   if (!missing(num)) {
-    alpha <- if (num < nrow(p))
+    alpha <- if (num < nrow(params))
       tail(params, -num)
 
     #

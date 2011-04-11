@@ -1,4 +1,5 @@
 #' Generic Method for Computing Quantities of Interest
+#'
 #' @param obj a `zelig' object
 #' @param x a `setx' object or NULL
 #' @param x1 an optional `setx' object

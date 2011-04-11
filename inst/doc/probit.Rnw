@@ -17,6 +17,10 @@
 \usepackage{Zelig}
 \usepackage{Sweave}
 
+%\VignetteIndexEntry{Probit Regression for Dichotomous Dependent Variables}
+%\VignetteDepends{Zelig, stats}
+%\VignetteKeyWords{model,least squares,continuous, regression}
+%\VignettePackage{Zelig}
 
 \begin{document}
 

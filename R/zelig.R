@@ -1,11 +1,13 @@
 #' Method for Fitting Statistical Models
-#' param formula formula object used to create the model
-#' param model character-string specifying the model to run
-#' param data data.frame used to make sense of the formula
-#' param ... any parameters that need to be sent to the model
-#' param by a character-string
-#' param cite boolean specifying whether to output citation information
-#' value a zelig object
+#' @param formula formula object used to create the model
+#' @param model character-string specifying the model to run
+#' @param data data.frame used to make sense of the formula
+#' @param ... any parameters that need to be sent to the model
+#' @param by a character-string
+#' @param cite boolean specifying whether to output citation information
+#' @return a zelig object
+#' @export
+#' @author Matt Owen and Kosuke Imai and Olivia Lau and Gary King \email{mowen@@iq.harvard.edu}
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   if (!missing(by)) {
     if (any(by %in% all.vars(formula))) {

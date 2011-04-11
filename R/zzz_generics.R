@@ -1,4 +1,3 @@
-#
 .GetGenerics <- function(...) UseMethod(".GetGenerics")
 
 # needs work
@@ -40,7 +39,7 @@
   meth.list <- sort(unique(c(meth.list,
                              names(get(".knownS3Generics")))))
 
-  meth.list %w/o% flist
+  meth.list[ ! meth.list %in% flist ]
 }
 
 

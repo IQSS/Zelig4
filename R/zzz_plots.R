@@ -1,3 +1,23 @@
+#' rocplot
+#' @param y1
+#' @param y2
+#' @param fitted1
+#' @param fitted2
+#' @param cutoff
+#' @param lty1
+#' @param lty2
+#' @param lwd1
+#' @param lwd2
+#' @param col1
+#' @param col2
+#' @param main
+#' @param xlab
+#' @param ylab
+#' @param plot
+#' @param ...
+#' @return a list of relevant statistics
+#' @export
+#" @author Kosuke Imai and Olivia Lau
 rocplot <- function(y1, y2, fitted1, fitted2,
                     cutoff = seq(from=0, to=1, length=100), lty1="solid",
                     lty2="dashed", lwd1=par("lwd"), lwd2=par("lwd"),

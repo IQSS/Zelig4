@@ -11,7 +11,7 @@ summarize.MI <- function(qis) {
 
   for (q in qis$results) {
     # assig correct class
-    class(q) <- class(qis) %w/o% "MI"
+    class(q) <- class(q)[ ! class(q) %in% "MI" ]
 
     # get summary data for individual qi    
     summ <- summarize(q)
@@ -35,12 +35,8 @@ summarize.MI <- function(qis) {
     # right-justify row names
     data.labels <- format(data.labels, justify="right")
 
-
     #
     rownames(summ.list[[key]]) <- paste(data.labels, ": ", sep="")
-
-
-    
 
     # ...
     # summ.list[[key]] <- summ.list[[key]][sort(rownames(summ.list[[key]])),]

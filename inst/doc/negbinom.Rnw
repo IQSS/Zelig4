@@ -17,6 +17,10 @@
 \usepackage{Zelig}
 \usepackage{Sweave}
 
+%\VignetteIndexEntry{Negative Binomial Regression for Event Count Dependent Variables}
+%\VignetteDepends{Zelig, stats}
+%\VignetteKeyWords{model,least squares,continuous, regression}
+%\VignettePackage{Zelig}
 
 \begin{document}
 
@@ -251,7 +255,7 @@ below.
 The negative binomial model is part of the MASS package by William N. Venable and Brian D. Ripley \citep{VenRip02}. Advanced users may wish to refer to \texttt{help(glm.nb)} as well as \cite{McCNel89}. Robust standard errors are implemented via sandwich package by Achim Zeileis \citep{Zeileis04}.Sample data are from \cite{Martin92}.
 
 \bibliographystyle{plain}
-\bibliography{gk,gkpubs}
+\bibliography{gk,gkpubs,core}
 <<afterpkgs, echo=FALSE>>=
  after<-search()
  torm<-setdiff(after,before)

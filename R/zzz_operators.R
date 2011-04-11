@@ -39,5 +39,5 @@
 # @right: a list or vector
 # return: left without any elements from right
 # note: this is not commutative
-"%w/o%" <- function(left, right)
-  left[ ! left %in% right ]
+#"%w/o%" <- function(left, right)
+#  left[ ! left %in% right ]

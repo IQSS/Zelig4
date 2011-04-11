@@ -3,7 +3,7 @@
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'
 #' @export
-#' author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 describe.logit <- function(...) {
   # parameters object
   parameters <- list(pi = list(

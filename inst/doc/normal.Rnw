@@ -17,6 +17,11 @@
 \usepackage{Zelig}
 \usepackage{Sweave}
 
+%\VignetteIndexEntry{Normal Regression for Continuous Dependent Variables}
+%\VignetteDepends{Zelig, stats}
+%\VignetteKeyWords{model,least squares,continuous, regression}
+%\VignettePackage{Zelig}
+
 \begin{document}
 
 \nobibliography*
@@ -292,7 +297,7 @@ errors are implemented via the sandwich package by \citet{Zeileis04}.
 Sample data are from \cite{KinTomWit00}.
 
 \bibliographystyle{plain}
-\bibliography{gk,gkpubs, core}
+\bibliography{gk,gkpubs,core}
 <<afterpkgs, echo=FALSE>>=
  after<-search()
  torm<-setdiff(after,before)

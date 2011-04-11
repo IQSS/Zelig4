@@ -1,4 +1,3 @@
-#' 
 literal <- function (obj, type = NULL) {
 
   call <- match.call()

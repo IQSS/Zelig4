@@ -147,6 +147,6 @@
 
   # return
   flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register")
-  matches %w/o% flist
+  matches[ ! matches %in% flist ]
 }
 
