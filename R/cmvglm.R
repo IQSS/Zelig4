@@ -1,3 +1,5 @@
+#' @author Kosuke Imai and Olivia Lau
+#' @export
 cmvglm <- function(formula, model, ndim,data=NULL, fact=NULL){
 
   toBuildFormula<-function(Xnames,sepp="+"){

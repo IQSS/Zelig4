@@ -47,7 +47,7 @@ plot.sim <- function(x, xlab = "", ...) {
       barplot(table(val), xlab=xlab, main=key, col=palette)
     }
 
-    else if (is.na(val))
+    else if (is.qi(val))
       next
 
     else

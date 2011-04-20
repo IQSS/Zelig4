@@ -32,7 +32,6 @@
              )
 
   if (inherits(res, "try-error")) {
-    warning()
     FALSE
   }
 
@@ -146,7 +145,7 @@
   }
 
   # return
-  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register")
+  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register", 'summary')
   matches[ ! matches %in% flist ]
 }
 

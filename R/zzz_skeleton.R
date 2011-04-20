@@ -11,6 +11,7 @@
   zelig2 <- system.file('templates', 'zelig2.R', package="Zelig")
   param <- system.file('templates', 'param.R', package="Zelig")
   qi <- system.file('templates', 'qi.R', package="Zelig")
+  describe <- system.file('templates', 'describe.R', package="Zelig")
 
   # create R directory
   dir.create(r.path, showWarnings=FALSE)
@@ -19,6 +20,7 @@
   zelig2.dest <- file.path(r.path, paste('zelig2', model, '.R', sep=""))
   param.dest <- file.path(r.path, paste('param', model, 'R', sep="."))
   qi.dest <- file.path(r.path, paste('qi', model, 'R', sep="."))
+  describe.dest <- file.path(r.path, paste('describe', model, 'R', sep="."))
 
   # create blank files
   file.create(zelig2.dest, param.dest, qi.dest)
@@ -27,11 +29,13 @@
   zelig2.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = zelig2))
   param.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = param))
   qi.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = qi))
+  describe.lines <- gsub('\\\\\\\\model\\\\\\\\', model, readLines(con = qi))
 
   # write to file
   writeLines(zelig2.lines, con = zelig2.dest)
   writeLines(param.lines, con = param.dest)
   writeLines(qi.lines, con = qi.dest)
+  writeLines(describe.lines, con = describe.dest)
 
   TRUE
 }
@@ -56,7 +60,6 @@
       'and',
       tail(author, 1)
       )
-
   else
     author
 

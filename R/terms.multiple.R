@@ -5,7 +5,12 @@
 ## -if mu=y~x:z then the attr(tt,"variable") gives list(y,x:z). Should it be list(y,x,z) ??
 ## -
 
-
+#' Extract Terms from Multiple-component Formulas
+#' @param x a formula object
+#' @param data a data.frame or NULL
+#' @return the terms attribute
+#' @S3method terms multiple
+#' @author Kosuke Imai and Olivia Lau
 terms.multiple<-function(x, data=NULL,...){
         object <- x
         termsexist<-attr(object,"terms")

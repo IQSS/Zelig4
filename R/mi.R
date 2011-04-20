@@ -134,9 +134,24 @@ nextElem.mi <- function(m, keys.only=F, as.pair=F) {
     return(item)
   }
 
+
+  # the following is kludge that is useful for formatting
+  # mi objects that have multiple data-frames
+  # ...
+  # that is, it specifies the leading column as being 
+  # title "data #", so that we have an explicit title
+  # for an otherwise untitled label
+  pretty.item <- item[1, ]
+  names <- names(pretty.item)
+  
+  if (names[1] == '')
+    names[1] <- 'data'
+
+  names(pretty.item) <- names
+
   # if we don't want a data.frame
   if (keys.only)
-    return(item)
+    return(pretty.item)
 
   # build parameter list
   list.item <- as.list(item)
@@ -155,7 +170,7 @@ nextElem.mi <- function(m, keys.only=F, as.pair=F) {
 
   # return filtered data.frame
   if (as.pair)
-    list(key=item, value=zef[list.item])
+    list(key=pretty.item, value=zef[list.item])
   else
     zef[list.item]
 }
@@ -170,6 +185,79 @@ nextElem.mi <- function(m, keys.only=F, as.pair=F) {
 reset.mi <- function(m) {
   assign('i', 0, env=m$iter$state)
   invisible(m)
+}
+
+
+#' Get List of Labels from MI object
+#' @param obj an mi object
+#' @param ... ignored (for now) parameters
+#' @return a vector of character-strings
+#' @export
+get.mi.labels <- function(obj, ...) {
+  # get old position of iterator
+  old.pos <- get('i', env=obj$iter$state)
+
+  # reset iterater
+  reset(obj)
+
+  # NULL 
+  mi.labels <- c()
+
+  repeat {
+
+    item <- try(nextElem(obj, keys.only=TRUE))
+
+    if (inherits(item, 'try-error'))
+      break
+
+
+    # all( suppressWarning(as.numeric(x) == x) )
+
+    # cat('names = ')
+    # print(names(item))
+
+    # zip together lists
+
+    smoosh <- label.from.key(item)
+
+
+    mi.labels <- c(mi.labels, smoosh)
+
+  }
+
+  # restore old iterator position
+  assign('i', old.pos, env=obj$iter$state)
+
+  # return the list of labels
+  mi.labels
+}
+
+
+#' Label from MI Key
+#' This produced a human-readable label from a named
+#' character vector. This is primarily used by the zelig
+#' function to give reasonable names to simulated
+#' quantities of interest. That is, we can differentiate
+#' several imputed data.frames from one another by which
+#' key we read
+#' @param key a vectory of character-string
+#' @return a character-string
+label.from.key <- function(key) {
+  item <- key
+
+  if (names(item)[1] == 'data') {
+    head.sep <- ' '
+    join.sep <- ': '
+  }
+  else {
+    head.sep <- '='
+    join.sep <- ', '
+  }
+
+  head <- paste(names(item)[1], item[1], sep=head.sep)
+  tail <- paste(names(item)[-1], item[-1], sep='=', collapse=', ')
+
+  paste(c(head, tail), collapse=join.sep)
 }
 
 

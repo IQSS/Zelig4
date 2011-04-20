@@ -12,7 +12,7 @@
 #'         quantities of interest with their simulations
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi <- function(obj, x=NULL, x1=NULL, y=NULL, param=NULL, num) {
+qi <- function(obj, x=NULL, x1=NULL, y=NULL, num, param=NULL) {
   # error-catching
   if (!inherits(obj, "zelig"))
     stop("z must be of type \"zelig\"")

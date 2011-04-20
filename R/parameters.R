@@ -17,6 +17,9 @@ parameters <- function(simulations, alpha,
                        link=NULL,
                        linkinv=NULL)
 {
+  if (is.function(fam))
+    fam <- fam()
+
   #
   if (!missing(fam) && isS4(fam)) {
     link <- fam@link

@@ -1,3 +1,5 @@
+#' @author Kosuke Imai and Olivia Lau
+#' @export
 parse.formula<-function( formula, model,data=NULL){
         if(class(formula)[[1]]=="multiple")
           return(formula)

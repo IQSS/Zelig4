@@ -9,6 +9,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.matrix.setx <- function(x, ...) {
   if (!is.null(x$matrix))
+    #as.matrix(x$updated[, x$explan])
     x$matrix
   
   else

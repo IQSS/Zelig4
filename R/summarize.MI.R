@@ -7,9 +7,11 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summarize.MI <- function(qis) {
+
   summ.list <- list()
 
   for (q in qis$results) {
+    message("#")
     # assig correct class
     class(q) <- class(q)[ ! class(q) %in% "MI" ]
 
@@ -44,6 +46,8 @@ summarize.MI <- function(qis) {
 
   # assign class, for some reason
   class(summ.list) <- "summarized.qi"
+
+  print(summ.list)
 
   # return
   summ.list

@@ -3,6 +3,7 @@
 ## and returns the most reduced form of that formula
 ## 
 
+#' @export
 reduceMI <-function(f){
         if(class(f)=="list")
           f <- structuralToReduced(f)
@@ -58,6 +59,7 @@ structuralToReduced <- function(f){
 ##  possible errors: What if input is not in reduced form?
 ##                   Maybe call reduceMI first??
 
+#' @export
 tolmerFormat<-function(f){
         lhs <- f[[2]]
         tt <- terms(f, specials="tag")
@@ -251,6 +253,7 @@ return (c(src %w/o% src[index],dest))
 #         random = ~ 1 + Days)
 #
 
+#' @export
 .getRandAndFixedTerms <- function (fml){
         f <- function(x){
                 as.formula(paste("~",paste(x, collapse = "+")))

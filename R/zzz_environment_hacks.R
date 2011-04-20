@@ -81,17 +81,19 @@
 
 
 #' Run Model Fitting Function in Encapsulated Environment
-#' description This needs a little work
-#' param ..1 a zelig.call object
-#' param ..2 an environment object
-#' value the object ran in an insulated environment
+#' @description This needs a little work
+#' @param ..1 a zelig.call object
+#' @param ..2 an environment object
+#' @return the object ran in an insulated environment
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .run <- function(...) {
   # attach to ensure all the variables are known
   attach(..1$envir)
   attach(..2)
 
   # run function call
-  .result <- do.call(as.character(..1$call[[1]]),
+  .result <- do.call(as.character(..1$call[[1L]]),
                      as.list(..1$call)[-1],
                      envir=..1$envir
                      )
@@ -106,16 +108,37 @@
 
 
 #' Attach Environment and Evaluate Expression
-#' param ..1 an expression to evaluate
-#' param ..2 the environment to evaluate the expression in
-#' value evaluation of ..1
+#' @param ..1 an expression to evaluate
+#' @param ..2 the environment to evaluate the expression in
+#' @return evaluation of ..1
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 eval.in <- .call <- function (...) {
-
   attach(..2)
-
   res <- suppressMessages((..1))
-
   detach(..2)
-
   res
+}
+
+
+#' Apply Function Call to Zelig Objects Result Slot
+#' @aliases . ... 
+#' @param expr an expression to lazily-evaluate
+#' @param envir ignored until later versions
+#' @return the result of applying the expression to the 
+#'         `result' slot of the first parameter
+#'
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#'
+#' @example 
+#' data(vote)
+#' z.out <- zelig(vote ~ race + educate, model='logit', data=vote)
+#' result(vcov(z.out))
+#' # or:
+#' ...(vcov(z.out))
+. <- ... <- result <- function(expr, envir) {
+  expr <- substitute(expr)
+  expr[[2L]] <- eval(expr[[2L]])$result
+  eval(expr, envir)
 }

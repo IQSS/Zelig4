@@ -9,6 +9,6 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summary.MI.sim <- function(object, ...) {
   res <- NextMethod()
-  class(res) <- c(s$name, "summary.MI.sim", "summary.sim")
+  class(res) <- c(object$name, "summary.MI.sim", "summary.sim")
   res
 }

@@ -25,43 +25,62 @@ summarize.default <- function(q) {
 
 
     # conditions to skip a qi
-    if (length(val) < 1)
-      next
-
-    else if (length(val) == 1 && is.na(val))
+    if (!is.qi(val))
       next
 
     else if (all(is.na(val)))
       next
-
     
     # make a matrix that is data-friendly
-    m <- if (is.numeric(val))
+    m <- if (is.numeric(val)) {
       matrix(NA, nrow=ncol(val), ncol=5)
+    }
     else if (is.character(val) || is.factor(val)) {
-      matrix(NA, nrow=ncol(val), ncol=length(unique(c(val))))
+      levels <- levels(val)
+
+      if (is.null(levels)) {
+        #warning("Indeterminate number of levels for qi: ", key)
+        unique(c(val))
+      }
+
+      levels <- sort(levels)
+
+      matrix(NA, nrow=ncol(val), ncol=length(levels), dimnames=list(NULL, levels))
     }
 
     #
     for (k in 1:ncol(val)) {
       if (is.numeric(val[,k])) {
-        m[k,] <- c(
-                   mean(val[,k]),
-                   sd(val[,k]),
-                   quantile(val[,k], c(.5, .025, .975))
-                   )
+        row <-c(
+                mean(val[,k], na.rm = TRUE),
+                sd(val[,k], na.rm = TRUE),
+                quantile(val[,k], c(.5, .025, .975), na.rm=TRUE)
+                ) 
+        m[k,] <- row
+
 
         #
         colnames(m) <- c("mean", "sd", "50%", "2.5%", "97.5%")
       }
     
       else if (is.character(val[,k]) || is.factor(val[,k])) {
-        result.table <- c(table.levels(val[,k], levels = levels(val))/length(val[,k]))
-        result.table <- result.table[sort(names(result.table))]
+
+        # A table specifying the _percentage_ of simulations matching
+        # each particular level of the factor qi's
+        result.table <- table.levels(val[,k], levels = levels)
+        result.table <- result.table/length(val[,k])
+
+        # A character-vector specifying the factors found in the qi
+        factor.names <- sort(names(result.table))
+
+        # This should prevent size errors for qi's with
+        # a NULL levels attribute
+        # in particular, it resolves issues 
+        m[k, ] <- 0
+        m[k, factor.names] <- result.table[factor.names]
 
         m[k,] <- result.table
         colnames(m) <- names(result.table)
-
       }
 
       else
@@ -84,10 +103,23 @@ summarize.default <- function(q) {
   res
 }
 
-#
-#
-.result.table <- function () {
 
+#' Test If Value is Interpretable as a QI
+#' @param qi a potential quantity of interest
+#' @return a logical specifying whether this value should or should-not
+#'         be output
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+is.qi <- function(qi) {
+  if (is.null(qi))
+    FALSE
+
+  if (!length(qi))
+    FALSE
+
+  if (all(is.na(qi)))
+    FALSE
+
+  TRUE
 }
 
 
@@ -95,10 +127,11 @@ summarize.default <- function(q) {
 #' columns exist. In particular, this allows for
 #' entires with zero as a value, which is not
 #' the default for standard tables
-#' param x a vector
-#' param levels a vector of levels
-#' param ... parameters for table
-#" value a table
+#' @param x a vector
+#' @param levels a vector of levels
+#' @param ... parameters for table
+#' @return a table
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 table.levels <- function (x, levels, ...) {
   # if levels are not explicitly set, then
   # search inside of x
@@ -108,10 +141,27 @@ table.levels <- function (x, levels, ...) {
   }
 
   # otherwise just do the normal thing
-  else
-    table(factor(x), ...)
+  else {
+    table(factor(x, levels=levels), ...)
+  }
 }
 
 
-iter.summarized.qi <- function(s)
+#' @S3method iter summarized.qi
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+iter.summarized.qi <- function(s) {
   iter(Map(function (x, y) list(key=x, value=y), names(s), s))
+}
+
+
+#' @S3method iter qi
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+iter.qi <- function(s) {
+  lis <- list()
+  indices <- names(attr(s, '.index'))
+
+  for (index in indices)
+    lis[[index]] <- list(key = index, value = s[[index]])
+
+  iter(lis)
+}

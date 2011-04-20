@@ -11,8 +11,12 @@
 print.summary.MI.sim <- function(x, ...) {
   obj <- x
 
-  print.summary.sim((obj))
-  stop()
+  print(obj$stats)
+  print(length(obj$stats))
+  print(names(obj))
+  print(obj$titles)
+
+
   # prints typically have qi, and qi.names defined as part of the summary object
   if (is.null(obj$qi.stat) || is.null(obj$qi.name)) {
     stop("qi.stat or qi.name cannot be NULL")

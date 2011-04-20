@@ -57,6 +57,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # get the next data.frame
     d.f <- try(nextElem(m), silent=T)
 
+    #key <- d.f$key
+    #d.f <- d.f$value
+
     # catch end-of-list error
     if (inherits(d.f, "try-error"))
       break
@@ -97,6 +100,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     k <- k+1
   }
 
+  names(res) <- get.mi.labels(m)
+  names(res.env) <- get.mi.labels(m)
+
   # appropriately name each entry
   # (because both should be in order)
   
@@ -122,7 +128,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
             mi      = reset(m),
             func    = zclist[[1]],
             levels  = m$levels,
-            S4      = !old.style.oop
+            S4      = !old.style.oop,
+            parent  = parent.frame(),
+            zc = zclist
             )
 
   # always attach the model name,

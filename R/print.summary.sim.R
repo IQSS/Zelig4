@@ -29,21 +29,20 @@ print.summary.sim <- function(x, ...) {
   # important value of x
   if (!is.null(obj$x$matrix)) {
     cat("Values of X\n")
-    print(obj$x$matrix)
+    print(as.matrix(obj$x$updated[, obj$x$explan]))
 
     # new-line
     cat("\n")
   }
   else if (is.list(obj$x$s.x)) {
     # add special hooks here?
-    # polymorphism for this stuff?
-    #print(obj$x$s.x[[1]]$matrix)
   }
 
   # important value of x1
   if (!is.null(obj$x1$matrix)) {
     cat("Values of X1\n")
-    print(obj$x1$matrix)
+
+    print(as.matrix(obj$x1$updated[, obj$x1$explan]))
 
     # new-line
     cat("\n")
@@ -67,8 +66,7 @@ print.summary.sim <- function(x, ...) {
     key <- item$key
     val <- item$value
 
-    #
-    if (is.na(val) || (is.list(val) && !length(val)) || is.null(val))
+    if (!is.qi(val))
       next
 
     # for proper whitespace formatting

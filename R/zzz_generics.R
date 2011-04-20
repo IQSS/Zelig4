@@ -35,7 +35,7 @@
   }
 
   # final list
-  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register")
+  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register", 'summary')
   meth.list <- sort(unique(c(meth.list,
                              names(get(".knownS3Generics")))))
 
