@@ -24,12 +24,9 @@ summarize.default <- function(q) {
     val <- item$value
 
 
-    # conditions to skip a qi
     if (!is.qi(val))
       next
 
-    else if (all(is.na(val)))
-      next
     
     # make a matrix that is data-friendly
     m <- if (is.numeric(val)) {
@@ -40,7 +37,7 @@ summarize.default <- function(q) {
 
       if (is.null(levels)) {
         #warning("Indeterminate number of levels for qi: ", key)
-        unique(c(val))
+        levels <- unique(c(val))
       }
 
       levels <- sort(levels)
@@ -86,7 +83,6 @@ summarize.default <- function(q) {
       else
         m[k,] <- NA
 
-
       col.names <- colnames(val)
       rownames(m) <- if (is.null(col.names))
         ""
@@ -111,13 +107,13 @@ summarize.default <- function(q) {
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 is.qi <- function(qi) {
   if (is.null(qi))
-    FALSE
+    return(FALSE)
 
-  if (!length(qi))
-    FALSE
+  else if (!length(qi))
+    return(FALSE)
 
-  if (all(is.na(qi)))
-    FALSE
+  else if (all(is.na(qi)))
+    return(FALSE)
 
   TRUE
 }

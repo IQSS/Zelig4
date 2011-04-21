@@ -16,6 +16,8 @@ summary(z.out1)
 ##  explanatory variables.  
 
 x.out1 <- setx(z.out1)
+x.out1
+
 
 ##  Simulating quantities of interest (predicted probabilites, risk
 ##  ratios, and risk differences):
@@ -23,7 +25,6 @@ x.out1 <- setx(z.out1)
 s.out1 <- sim(z.out1, x = x.out1)
 
 ## Summarizing the simulated quantities of interest:
-summary(s.out1)
 
 ## Diagnostic plot of the s.out:
 
@@ -34,11 +35,11 @@ plot(s.out1)
 
 x.low <- setx(z.out1, educate = quantile(turnout$educate, prob = 0.75))
 x.high <- setx(z.out1, educate = quantile(turnout$educate, prob = 0.25))
-
+x.low
+x.high
 
 s.out2 <- sim(z.out1, x = x.low, x1 = x.high)
 
-summary(s.out2)
 
 plot(s.out2)
 

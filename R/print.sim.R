@@ -10,5 +10,7 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.sim <- function(x, ...) {
-  print(NULL)
+  o <- x
+  class(o) <- 'list'
+  print(o)
 }

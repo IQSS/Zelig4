@@ -26,6 +26,8 @@ s.out1 <- sim(z.out1, x = x.out1)
 ## Summarizing the simulated quantities of interest:
 summary(s.out1)
 
+q()
+
 ## Diagnostic plot of the s.out:
 
 plot(s.out1)

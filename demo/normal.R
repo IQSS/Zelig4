@@ -17,41 +17,14 @@ summary(z.out1)
 x.high <- setx(z.out1, trade = quantile(macro$trade, 0.8))
 x.low <- setx(z.out1, trade = quantile(macro$trade, 0.2))
 
+x.high
+x.low
+
 # Generate first differences for the effect of high versus low trade on
 # GDP:
 
 s.out1 <- sim(z.out1, x = x.high, x1 = x.low)
 
-summary(s.out1)
-
 # Generate a second set of fitted values and a plot:
 
 plot(s.out1)
-
-#####  Example 2:  Using Dummy Variables #####
-
-# Estimate a model with a dummy variable for each year and country.  
-# Note that you do not need to create dummy variables, as the program 
-# will automatically parse the unique values in the selected variables 
-# into dummy variables.  
-#user.prompt()
-#z.out2 <- zelig(unem ~ gdp + trade + capmob + as.factor(year) 
-#                    + as.factor(country), model = "normal", data = macro)
-
-# Set values for the explanatory variables, using the default mean/mode
-# values, with country set to the United States and Japan, respectively:
-#user.prompt()
-#x.US <- setx(z.out2, country = "United States")
-#x.Japan <- setx(z.out2, country = "Japan")
-
-# Simulate quantities of interest:
-#user.prompt()
-#s.out2 <- sim(z.out2, x = x.US, x1 = x.Japan)
-#user.prompt()
-#summary(s.out2) 
-
-# Plot differences:  
-#user.prompt()
-#plot(s.out2)
-
-
