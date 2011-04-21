@@ -51,6 +51,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   k <- 1
   res <- list()
   res.env <- list()
+  frames <- list()
 
   # repeat
   repeat {
@@ -97,11 +98,18 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # append to list
     res[[k]] <- new.res
     res.env[[k]] <- new.env
+    frames[[k]] <- d.f
+
     k <- k+1
   }
 
-  names(res) <- get.mi.labels(m)
-  names(res.env) <- get.mi.labels(m)
+  key.labels <- get.mi.labels(m)
+
+  names(res) <- key.labels
+  names(res.env) <- key.labels
+  names(frames) <- key.labels
+
+  big.list <- list()
 
   # appropriately name each entry
   # (because both should be in order)
@@ -110,6 +118,32 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   if (!inherits(data, "mi") && is.null(by)) {
     res <- res[[1]]
     res.env <- res.env[[1]]
+    frames <- frames[[1]]
+  }
+
+  else {
+    for (key in key.labels) {
+      
+      big.list[[key]] <- list(
+                              name = as.character(model),
+                              formula = formula,
+                              result = res[[key]],
+                              envir = res.env[[key]],
+                              args = list(...),
+                              data = frames[[key]],
+                              call = match.call(),
+                              by = by,
+                              mi = NULL,
+                              func = zclist[[1]],
+                              levels = NULL,
+                              S4 = !old.style.oop,
+                              parent = parent.frame(),
+                              zc = zclist,
+                              list = NULL
+                              )
+      class(big.list[[key]]) <- c('zelig', model)
+    }
+
   }
 
   # run clean-up hooks on every result
@@ -130,7 +164,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
             levels  = m$levels,
             S4      = !old.style.oop,
             parent  = parent.frame(),
-            zc = zclist
+            zc = zclist,
+            list = big.list
             )
 
   # always attach the model name,
@@ -165,7 +200,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
                          )
 
     cat("\n\n")
-   cat(cite(descr), "\n")
+    cat(cite(descr), "\n")
   }
 
   z

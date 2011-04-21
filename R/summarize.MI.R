@@ -8,6 +8,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summarize.MI <- function(qis) {
 
+  message("...")
   summ.list <- list()
 
   for (q in qis$results) {

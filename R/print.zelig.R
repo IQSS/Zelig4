@@ -18,5 +18,5 @@ print.zelig <- function(x, ...) {
 
   message("result object")
   print(summary(x$result))
-  invisble(x)
+  invisible(x)
 }

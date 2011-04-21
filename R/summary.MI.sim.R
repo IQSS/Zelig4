@@ -8,6 +8,7 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summary.MI.sim <- function(object, ...) {
+  print("....")
   res <- NextMethod()
   class(res) <- c(object$name, "summary.MI.sim", "summary.sim")
   res
