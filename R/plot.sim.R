@@ -23,6 +23,7 @@ plot.sim <- function(x, xlab = "", ...) {
   else if (is.null(x$x1) || is.na(x$x1)) {
 
     panels <- matrix(1:2, nrow=2)
+    palette <- c('black', 'black')
 
     # the plotting device:
     # +--------+
@@ -35,6 +36,7 @@ plot.sim <- function(x, xlab = "", ...) {
   else {
 
     panels <- matrix(c(1, 3, 5, 2, 4, 5), ncol=2)
+    palette <- c('red', 'navy', 'red', 'navy', 'black', 'black')
 
     # the plotting device:
     #
@@ -54,8 +56,7 @@ plot.sim <- function(x, xlab = "", ...) {
   i <- iter(sim.object$qi)
 
   # all the beautiful colors
-  palette <- 312:325
-  colors <- iter(c("seagreen2", "skyblue", "gray"), recycle=T)
+  colors <- iter(palette, recycle=T)
 
   # loop through all the qi simulations
   repeat {
@@ -69,18 +70,18 @@ plot.sim <- function(x, xlab = "", ...) {
     # for code-clarity
     key <- item$key
     val <- item$value
-
+    color <- nextElem(colors)
     #
     if (is.numeric(val)) {
       val <- as.numeric(val)
-      plot(density(val), main = key, col=palette)
+      plot(density(val), main = key, col=color)
     }
     else if (is.character(val) || is.factor(val)) {
-      barplot(table(val), xlab=xlab, main=key, col=palette)
+      barplot(table(val), xlab=xlab, main=key, col=color)
     }
 
     else if (!is.na(val))
-      warning()
+      warning('The Quantity of Interest "', key, '" has no valid printing method.')
   }
 
   # restore old state

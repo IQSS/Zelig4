@@ -14,11 +14,27 @@
   #
   for (key in names) {
 
-    # if the value is tagged as being literal,
-    # extract the actual value
+    # the following if-statements are meant to prevent the storage of
+    # small call-function readable data-types. That is, these things
+    # are very easily printable and have no need to be tucked away
+    if (inherits(params[[key]], 'formula')) {
+      named.params[[key]] <- params[[key]]
+      next
+    }
+
+    if (is.character(params[[key]])) {
+      named.params[[key]] <- params[[key]]
+      next
+    }
+
+    if (is.numeric(params[[key]])) {
+      named.params[[key]] <- params[[key]]
+      next
+    }
+
     if (inherits(params[[key]], "literal")) {
       named.params[[key]] <- params[[key]]$value
-      next;
+      next
     }
 
 

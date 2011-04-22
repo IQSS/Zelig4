@@ -1,0 +1,109 @@
+
+R version 2.12.1 (2010-12-16)
+Copyright (C) 2010 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #
+> library(Zelig)
+Loading required package: MASS
+Loading required package: iterators
+Loading required package: survival
+Loading required package: splines
+
+   ZELIG (Versions  4.0-0 , built:  2010-09-28 )
+
++----------------------------------------------------------------+
++  Please refer to http://gking.harvard.edu/zelig for full       +
++  documentation or help.zelig() for help with commands and      +
++  models support by Zelig.                                      +
++                                                                +
++  Zelig project citations:                                      +
++    Kosuke Imai, Gary King, and Olivia Lau.  (2009).            +
++    ``Zelig: Everyone's Statistical Software,''                 +
++    http://gking.harvard.edu/zelig                              +
++   and                                                          +
++    Kosuke Imai, Gary King, and Olivia Lau. (2008).             +
++    ``Toward A Common Framework for Statistical Analysis        +
++    and Development,'' Journal of Computational and             +
++    Graphical Statistics, Vol. 17, No. 4 (December)             +
++    pp. 892-913.                                                +
++                                                                +
++   To cite individual Zelig models, please use the citation     +
++   format printed with each model run and in the documentation. +
++----------------------------------------------------------------+
+
+> 
+> data(turnout)
+> 
+> z.out1 <- zelig(vote ~ age + race, model = "logit", data = turnout)
+
+
+How to cite this model in Zelig:
+  Kosuke Imai, Gary King, and Olivia Lau. 2011.
+  "logit: Logistic Regression for Dichotomous Dependent Variables"
+  in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"
+  http://gking.harvard.edu/zelig
+ 
+> 
+> x.out1 <- setx(z.out1, age = 36, race = "white")
+> 
+> s.out1 <- sim(z.out1, x = x.out1)
+> 
+> summary(z.out1)
+
+Call:
+glm(formula = vote ~ age + race, family = stored.family, data = stored.data, 
+    model = model)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.9268  -1.2962   0.7072   0.7766   1.0723  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) 0.038365   0.176920   0.217 0.828325    
+age         0.011263   0.003053   3.689 0.000225 ***
+racewhite   0.645551   0.134482   4.800 1.58e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2266.7  on 1999  degrees of freedom
+Residual deviance: 2228.8  on 1997  degrees of freedom
+AIC: 2234.8
+
+Number of Fisher Scoring iterations: 4
+
+> vcov(z.out1)
+              (Intercept)           age     racewhite
+(Intercept)  0.0313007922 -3.926136e-04 -1.408692e-02
+age         -0.0003926136  9.322307e-06 -1.611660e-05
+racewhite   -0.0140869157 -1.611660e-05  1.808538e-02
+> coef(z.out1)
+(Intercept)         age   racewhite 
+ 0.03836527  0.01126321  0.64555103 
+> x.out1
+
+model name: logit       
+formula:    vote ~ age + race
+cond:       No
+results of fn:
+  age  = 36
+  race = white
+
+> plot(s.out1)
+> 

@@ -1,0 +1,150 @@
+
+R version 2.12.1 (2010-12-16)
+Copyright (C) 2010 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> #
+> library(Zelig)
+Loading required package: MASS
+Loading required package: iterators
+Loading required package: survival
+Loading required package: splines
+
+   ZELIG (Versions  4.0-0 , built:  2010-09-28 )
+
++----------------------------------------------------------------+
++  Please refer to http://gking.harvard.edu/zelig for full       +
++  documentation or help.zelig() for help with commands and      +
++  models support by Zelig.                                      +
++                                                                +
++  Zelig project citations:                                      +
++    Kosuke Imai, Gary King, and Olivia Lau.  (2009).            +
++    ``Zelig: Everyone's Statistical Software,''                 +
++    http://gking.harvard.edu/zelig                              +
++   and                                                          +
++    Kosuke Imai, Gary King, and Olivia Lau. (2008).             +
++    ``Toward A Common Framework for Statistical Analysis        +
++    and Development,'' Journal of Computational and             +
++    Graphical Statistics, Vol. 17, No. 4 (December)             +
++    pp. 892-913.                                                +
++                                                                +
++   To cite individual Zelig models, please use the citation     +
++   format printed with each model run and in the documentation. +
++----------------------------------------------------------------+
+
+> 
+> data(turnout)
+> 
+> z.out2 <-  zelig(
++                  vote ~ race + educate,
++                  model = "logit",
++                  data = turnout
++                  )
+
+
+How to cite this model in Zelig:
+  Kosuke Imai, Gary King, and Olivia Lau. 2011.
+  "logit: Logistic Regression for Dichotomous Dependent Variables"
+  in Kosuke Imai, Gary King, and Olivia Lau, "Zelig: Everyone's Statistical Software,"
+  http://gking.harvard.edu/zelig
+ 
+> 
+> summary(z.out2)
+
+Call:
+glm(formula = vote ~ race + educate, family = stored.family, 
+    data = stored.data, model = model)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.2064  -0.8848   0.6710   0.7208   1.7192  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -1.2189     0.2155  -5.657 1.54e-08 ***
+racewhite     0.5022     0.1403   3.581 0.000343 ***
+educate       0.1610     0.0164   9.818  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2266.7  on 1999  degrees of freedom
+Residual deviance: 2138.3  on 1997  degrees of freedom
+AIC: 2144.3
+
+Number of Fisher Scoring iterations: 4
+
+> 
+> x.high <- setx(z.out2, educate = quantile(turnout$educate, prob = 0.75))
+> x.low <- setx(z.out2, educate = quantile(turnout$educate, prob = 0.25))
+> 
+> s.out2 <- sim(z.out2, x = x.high, x1 = x.low)
+> 
+> summary(z.out2)
+
+Call:
+glm(formula = vote ~ race + educate, family = stored.family, 
+    data = stored.data, model = model)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.2064  -0.8848   0.6710   0.7208   1.7192  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -1.2189     0.2155  -5.657 1.54e-08 ***
+racewhite     0.5022     0.1403   3.581 0.000343 ***
+educate       0.1610     0.0164   9.818  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2266.7  on 1999  degrees of freedom
+Residual deviance: 2138.3  on 1997  degrees of freedom
+AIC: 2144.3
+
+Number of Fisher Scoring iterations: 4
+
+> vcov(z.out2)
+             (Intercept)     racewhite       educate
+(Intercept)  0.046424619 -0.0136407119 -0.0028580067
+racewhite   -0.013640712  0.0196726486 -0.0002265806
+educate     -0.002858007 -0.0002265806  0.0002689055
+> coef(z.out2)
+(Intercept)   racewhite     educate 
+ -1.2189037   0.5022257   0.1610007 
+> x.high
+
+model name: logit       
+formula:    vote ~ race + educate
+cond:       No
+results of fn:
+  race    = white
+  educate = 14
+
+> x.low
+
+model name: logit       
+formula:    vote ~ race + educate
+cond:       No
+results of fn:
+  race    = white
+  educate = 10
+
+> plot(s.out2)
+> 

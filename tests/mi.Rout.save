@@ -1,0 +1,171 @@
+
+R version 2.12.1 (2010-12-16)
+Copyright (C) 2010 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(Zelig)
+Loading required package: MASS
+Loading required package: iterators
+Loading required package: survival
+Loading required package: splines
+
+   ZELIG (Versions  4.0-0 , built:  2010-09-28 )
+
++----------------------------------------------------------------+
++  Please refer to http://gking.harvard.edu/zelig for full       +
++  documentation or help.zelig() for help with commands and      +
++  models support by Zelig.                                      +
++                                                                +
++  Zelig project citations:                                      +
++    Kosuke Imai, Gary King, and Olivia Lau.  (2009).            +
++    ``Zelig: Everyone's Statistical Software,''                 +
++    http://gking.harvard.edu/zelig                              +
++   and                                                          +
++    Kosuke Imai, Gary King, and Olivia Lau. (2008).             +
++    ``Toward A Common Framework for Statistical Analysis        +
++    and Development,'' Journal of Computational and             +
++    Graphical Statistics, Vol. 17, No. 4 (December)             +
++    pp. 892-913.                                                +
++                                                                +
++   To cite individual Zelig models, please use the citation     +
++   format printed with each model run and in the documentation. +
++----------------------------------------------------------------+
+
+> 
+> 
+> #  Attaching the sample turnout dataset:
+> data(turnout)
+> 
+> #  Generating empirical estimates:
+> z.out1 <- zelig(
++                 vote ~ age,
++                 model = "logit",
++                 data = mi(turnout[1:500,], turnout[501:1000,]),
++                 by = "race",
++                 cite = FALSE
++                 )
+> 
+> #  Using setx to generate baseline and alternative velus for the
+> #  explanatory variables.  
+> 
+> x.out1 <- setx(z.out1, age = 36, race = "white")
+> 
+> # Simulate quantities of interest
+> 
+> s.out1 <- sim(z.out1, x=x.out1)
+> 
+> summary(z.out1)
+$`data 1: race=others`
+
+Call:
+glm(formula = vote ~ age, family = stored.family, data = stored.data, 
+    model = model)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.8690  -1.3868   0.7041   0.8522   0.9816  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept) 0.001855   0.744015   0.002    0.998
+age         0.023895   0.017180   1.391    0.164
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 77.977  on 66  degrees of freedom
+Residual deviance: 75.892  on 65  degrees of freedom
+AIC: 79.892
+
+Number of Fisher Scoring iterations: 4
+
+
+$`data 2: race=others`
+
+Call:
+glm(formula = vote ~ age, family = stored.family, data = stored.data, 
+    model = model)
+
+Deviance Residuals: 
+   Min      1Q  Median      3Q     Max  
+-1.409  -1.310   1.001   1.048   1.071  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)
+(Intercept) 0.163546   0.606342   0.270    0.787
+age         0.004362   0.013591   0.321    0.748
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 111.27  on 81  degrees of freedom
+Residual deviance: 111.17  on 80  degrees of freedom
+AIC: 115.17
+
+Number of Fisher Scoring iterations: 4
+
+
+$`data 1: race=white`
+
+Call:
+glm(formula = vote ~ age, family = stored.family, data = stored.data, 
+    model = model)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.0717   0.5298   0.6424   0.7208   0.8117  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)  
+(Intercept) 0.667072   0.324358   2.057   0.0397 *
+age         0.016125   0.007192   2.242   0.0249 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 437.20  on 432  degrees of freedom
+Residual deviance: 431.91  on 431  degrees of freedom
+AIC: 435.91
+
+Number of Fisher Scoring iterations: 4
+
+
+$`data 2: race=white`
+
+Call:
+glm(formula = vote ~ age, family = stored.family, data = stored.data, 
+    model = model)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.0581   0.5415   0.6706   0.7735   0.8871  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)  
+(Intercept) 0.405314   0.323730   1.252   0.2106  
+age         0.018006   0.007099   2.536   0.0112 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 452.90  on 417  degrees of freedom
+Residual deviance: 446.15  on 416  degrees of freedom
+AIC: 450.15
+
+Number of Fisher Scoring iterations: 4
+
+
+> 
