@@ -12,14 +12,46 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 plot.sim <- function(x, xlab = "", ...) {
   sim.object <- x
+
   # save old state
   old.par <- par(no.readonly=T)
 
+
+  if (is.null(x$x))
+    return(par(old.par))
+
+  else if (is.null(x$x1) || is.na(x$x1)) {
+
+    panels <- matrix(1:2, nrow=2)
+
+    # the plotting device:
+    # +--------+
+    # |   1    |
+    # +--------+
+    # |   2    |
+    # +--------+
+  }
+
+  else {
+
+    panels <- matrix(c(1, 3, 5, 2, 4, 5), ncol=2)
+
+    # the plotting device:
+    #
+    # +-----------+
+    # |  1  |  2  |
+    # +-----+-----+
+    # |  3  |  4  |
+    # +-----+-----+
+    # |     5     |
+    # +-----------+
+  }
+
+  layout(panels)
+
+
   # get iterator object
   i <- iter(sim.object$qi)
-
-  # 
-  par(mfrow=c(ceiling(length(sim.object$qi)/2), 2))
 
   # all the beautiful colors
   palette <- 312:325
@@ -41,16 +73,13 @@ plot.sim <- function(x, xlab = "", ...) {
     #
     if (is.numeric(val)) {
       val <- as.numeric(val)
-      truehist(val, main = key, xlab = xlab, h=100, ..., col=nextElem(colors))
+      plot(density(val), main = key, col=palette)
     }
     else if (is.character(val) || is.factor(val)) {
       barplot(table(val), xlab=xlab, main=key, col=palette)
     }
 
-    else if (is.qi(val))
-      next
-
-    else
+    else if (!is.na(val))
       warning()
   }
 
