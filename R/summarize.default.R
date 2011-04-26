@@ -1,7 +1,5 @@
-#' Summarize simualted quantities of interest
-#' 
+#' Summarize Simualted Quantities of Interest
 #' @S3method summarize default
-#'
 #' @param q a `qi' object, storing simulations of quantities of interest
 #' @return a `summarized.qi' object
 #' @export

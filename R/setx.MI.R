@@ -1,4 +1,5 @@
-#' 
+#' Set Explanatory Variables for Multiply Imputed Data-sets
+#' @export
 setx.MI <- function(obj, ..., data = NULL) {
 
   results.list <- list()

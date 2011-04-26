@@ -1,9 +1,15 @@
-#' Generic method for casting various objects as
-#' `qi' objects
-#'
+#' Generic Method for Converting Various Objects into 'qi' Objects
+#' 'qi' objects are list-style objects used by the 'summarize' function to 
+#' compute simple summaries about the simulated data. For readability and
+#' and simplicity purposes, the 'qi' function typically returns a list of
+#' named simulations. This list is converted internally by Zelig into a 'qi'
+#' object so that several methods can be easily applied to the Quantities of
+#' Interest: plot, summarize, and print
+#' @note These functions are primarily used internall by Zelig and should not
+#'   be used in the Global namespace.
 #' @param s the object to be casted
 #' @return an object of type `qi'
-#' @export
+#' @seealso as.qi.default as.qi.qi as.qi.list
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.qi <- function(s)
   UseMethod("as.qi")
@@ -30,12 +36,12 @@ as.qi.qi <- function(s)
 
 
 #' list -> qi
-#'
-#' This function has a lot of room to go wrong. It tries
-#' to detect whether the zelig model is old-style or
-#' new-style (as of 4/4/2011). Eventually this should be
-#' phased out.
-#' 
+#' This function has a lot of room to go wrong. It tries o detect whether the
+#' zelig model is old-style or new-style (as of 4/4/2011). Eventually this
+#' feature should be phased out.
+#' @note This method has peculiar behavior when the list contains only two
+#' elements. The crucial fix is to simply remove the portion of code which
+#' intentionally implements this perculiar behavior.
 #' @param s a list
 #' @return an object of type `qi'
 #' @export
@@ -91,7 +97,6 @@ as.qi.list <- function(s) {
 
 
 #' Print a `qi' object in human-readable form
-#'
 #' @param x a qi object
 #' @return the object that was printed
 #' @export
@@ -122,19 +127,34 @@ print.qi <- function(x, ...) {
 }
 
 
-#
-names.qi <- function(q) {
-  nameless <- unlist(q$titles)
+#' The Names of a 'qi' Object
+#' Function to get the names of a 'qi' object. This function does not entirely
+#' parallel the functionality of traditional 'names' methods; this is because
+#' the \code{$} operator has been overloaded to support a unique style of value
+#' extraction. For technical details, please see the source code.
+#' @note No method exists to set the names of a 'qi' object, once it is 
+#'   constructed. This will be a feature added later.
+#' @param q a 'qi' object
+#' @return a character-vector containing the names of the Quantities of
+#'   Interest
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+names.qi <- function(x) {
+  nameless <- unlist(x$titles)
   names(nameless) <- NULL
   nameless
 }
 
 
-# pair-wise key assignment
-iter.qi <- function(q) {
-  #print(attr(q, ".index"))
-  #print(q[["Expected Values: Pr(Y=j|X)"]])
-
+#' Construct an Iterator from a 'qi' Object
+#' @param obj a 'qi' object
+#' @param ... ignored parameters
+#' @return an Iterator of lists containing two keys: key and value. This is 
+#'   so that every simulated Quantity of Interest comes paired with its title.
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+iter.qi <- function(obj, ...) {
+  q <- obj
   iter(
        Map(
            function(x) list(key=x, value=q[[x]]),
@@ -142,21 +162,23 @@ iter.qi <- function(q) {
            )
        )
 }
-     
 
 
-#
-## length.qi <- function(q) {
-##   len <- length(q$titles)
-
-##   for (val in q$stats)
-##     len <- len - all(is.na(val))
-
-##   len
-## }
-
-
-
+#' Convert a Vector of Character Strings into Acronyms
+#' This function will convert a vector of character strings into their
+#' appropriately titled acronym forms. That is, the two Quantity of Interest
+#' titles:
+#' \begin{itemize}
+#'    \item "Expected Values (for X): E(Y|X)"
+#'    \item "Expected Values (for X1): E(Y|X1)"
+#' \end{itemize}
+#' The result will be: "ev" and "ev". That is, the acronym will not contain
+#' information kept in paranetheses or after a colon. 
+#' @note This function currently includes preopositions as parts of acroynms
+#' @param str a vector of character strings to convert into acronymns
+#' @param fail a result to produce upon failure
+#' @return a vector of character-strings
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .acronym <- function(str, fail=str) {
   ignored.words <- c(
                      "in", "for", "by",
@@ -204,26 +226,26 @@ iter.qi <- function(q) {
 }
 
 
-
-
-
-
-# @vec: a vector of character-strings
+#' Append Numbers to Identically Valued Strings
+#' This function ensures that vectors of strings are uniquely named.
+#' @note This function is used in tandem with '.acronym' to correctly produce
+#'   short-names for quantities of interest.
+#' @param vec a vector of character-string
+#' @return a vector of character-strings of shorter length. Duplicate hits on
+#'   short-titled names append a number to the end. E.g.: the character vector
+#'   if vec equals c('ev', 'ev', 'pr'), then the result will be:
+#'   c('ev1', 'ev2', 'pr')
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .number.list <- function(vec) {
-
-  #
   if (!is.character(vec)) {
     warning()
     return(vec)
   }
 
-  #
   final.list <- c()
   unique.vec <- unique(vec)
 
-  #
   for (k in 1:length(vec)) {
-
     val <- vec[k]
 
     hits <- sum(val == vec[1:k])
@@ -234,7 +256,6 @@ iter.qi <- function(q) {
     else
       val
   }
-
 
   # return
   final.list

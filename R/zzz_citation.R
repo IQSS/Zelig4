@@ -1,9 +1,12 @@
-# THIS FILE CONTAINS CITATION-RELATED FUNCTIONS
-# (PREVIOUSLY vdc.R) --------------------------
-# ---------------------------------------------
+# This function contains methods used for citing statistical models, and shares
+# many similarities with the old 'vdc.R' file
 
-# @model.name: 
-# @...: nothing (for backwards compatibility
+#' Describe a Zelig Model
+#'
+#' @param model.name 
+#' @param ... ignored parameters
+#' @return a 'description' object containing citation information
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .ZeligDescribeModel <- function(model.name, ...) {
   # lie to zelig
   dummy.zelig <- "dummy"
@@ -13,10 +16,15 @@
   as.description(describe(dummy.zelig))
 }
 
-
-# @zelig.only: a boolean specifying whether we want to search
-#              only the Zelig namespace
-# return: a list of the loaded zelig models
+#' Get a Character-Vector of All Models with a 'zelig2' Function
+#'
+#' @note In order for a Zelig model to either execute correctly or be listed as
+#'   a legal Zelig model, the function name must be prefixed with 'zelig2'.
+#' @param zelig.only a boolean specifying whether we want to search only the 
+#'   Zelig namespace
+#' @return a character-vector of the Zelig models loaded on the user's machine
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 ZeligListModels <- function(zelig.only=FALSE) {
   results <- if (zelig.only)
     ls(pattern="^zelig2", envir=asNamespace("Zelig"))
@@ -27,10 +35,25 @@ ZeligListModels <- function(zelig.only=FALSE) {
   sub("^zelig2", "", results)
 }
 
+#' Get a Text-Block of Citation Information about a Zelig Model
+#' 
+#' @note This function is strictly used internally by Zelig
+#' @param model.name the name of a Zelig model
+#' @return a block of text giving a human readable (and APA compliant) block
+#'   citation text
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .GetModelCitationTex <- function(model.name)
   cite(ZeligDescribeModel(model.name))
 
-ZeligDescribeModel <- function(model.name, force=FALSE, schema="1.1") {
+#' Produce a 'description' Object from the Name of a Model
+#' @note The 'description' object is a list-style object containing citation
+#'   information
+#' @param model.name a character-string specifying a Zelig model
+#' @return a 'description' object specified by the 'model.name' parameter. This
+#'   object is created by executing the specified Zelig models' 'describe'
+#'   function
+#' @export
+ZeligDescribeModel <- function(model.name) {
   dummy <-
     "I love baseball.  You know, it doesn't have to mean anything.
 It's just very beautiful to watch."
@@ -47,7 +70,11 @@ It's just very beautiful to watch."
   as.description(res)
 }
 
-
+#' Get a TeX-style Citation
+#' @param model a character-string specifying the name of the Zelig model of which 
+#'   to describe in TeX-style
+#' @return a string to be rendered as part of a LaTeX-style document
+#' @export
 TexCite <- function(model) {
   # description object
   descr <- ZeligDescribeModel(model)
@@ -76,7 +103,12 @@ TexCite <- function(model) {
   str
 }
 
-# return: list of available model categories
+#' Get a List of Categories for Describing Zelig Models
+#' @note This feature is being deprecated, as original functionality with the
+#'   Dataverse Project \url{thedata.org} is being reevaluated.
+#' @return a list of character-string specifying legal category types (as the
+#'   keys of the list) and their human-counterparts (as the values)
+#' @export
 .ZeligModelCategories <- function() {
   list(continuous  = "Models for Continuous Dependent Variables",
        dichotomous = "Models for Dichotomous Dependent Variables",
@@ -89,48 +121,9 @@ TexCite <- function(model) {
        )
 }
 
-.describe <- function(model.name) {
-  cite(ZeligDescribeModel(model.name))
-}
-
-
-# output: zelig's full citation
-.cite.zelig <- function() {
-  message()
-  message("To cite Zelig as a whole, please reference these two sources:")
-  message(
-"  Kosuke Imai, Gary King, and Olivia Lau. 2007. ``Zelig: Everyone's
-  Statistical Software,'' http://gking.harvard.edu/zelig/.
-
-  Kosuke Imai, Gary King, and Olivia Lau.  2008.  ``Toward a Commmon
-  Framework for Statistical Analysis and Development.'' Journal of
-  Computational and Graphical Statistics, Vol. 17, No. 4 (December),
-  pp. 892-913.
-
-")
-}
-
-
-# return: TeX style citation for producing Zelig documentation
-#         
-cite.zelig.tex <- .cite.zelig.tex <- function() {
-  paste(
-        "To cite Zelig as a whole, please reference these two sources:",
-        "\\begin{verse}",
-        "  Kosuke Imai, Gary King, and Olivia Lau. 2007. ``Zelig: Everyone's",
-        "  Statistical Software,'' http://gking.harvard.edu/zelig/.",
-        "\\end{verse}",
-        "\\begin{verse}",
-        "  Kosuke Imai, Gary King, and Olivia Lau.  2008.  ``Toward a Commmon",
-        "  Framework for Statistical Analysis and Development.'' Journal of",
-        "  Computational and Graphical Statistics, Vol. 17, No. 4 (December),",
-        "  pp. 892-913.",
-        "\\end{verse}",
-        sep="\n"
-        )
-}
-
-
+#' List the Titles of the Zelig Statistical Models
+#' @return a list of manual titles for the Zelig software 
+#' @export
 ZeligListTitles <- function() {
 
   #
@@ -150,33 +143,25 @@ ZeligListTitles <- function() {
   paste(names(lis), lis, sep=": ")
 }
 
-
-
-
-
-
-
-
-
-
-
-# @pkg: a character-string representing a package name
-# return: whether the package contains any zelig2-functions
+#' Whether an Arbitrary R-package has a Zelig2 Function within Its Namespace
+#' @note This function is used primarily internally to determine whether a
+#'   a package is contributing a function to the Zelig software suite
+#' @param pkg a character-string representing a package name
+#' @return: whether the package contains any zelig2-functions
+#' @export
 has.zelig2 <- function(pkg) {
-
   env <- asNamespace(pkg)
-
   hits <- grep("^zelig2*", ls(envir=env))
-
   length(hits) > 0
 }
 
-
-# @package: a character-string representing a package name
-# return: whether the package lists Zelig as a dependency
-#         in its DESCRIPTION file
+#' Whether a Statistical Package Depends on the Zelig Software Suite
+#' @note This function is used primarily internally to determine whether a
+#'   a package is contributing a function to the Zelig software suite
+#' @param package a character-string representing a package name
+#' @return whether the package lists Zelig as a dependency in its DESCRIPTION
+#' @export
 depends.on.zelig <- function(package="") {
-  #
   zcomp <- packageDescription(package, fields="Depends")
 
   if (is.na(zcomp))
@@ -184,17 +169,21 @@ depends.on.zelig <- function(package="") {
 
   zcomp <- unlist(strsplit(zcomp, " *, *"))
 
-
   "Zelig" %in% zcomp
 }
 
-
-# return: list of all zelig-dependent packages
+#' Get a List of Packages Installed on the Current Machine that Depend on Zelig
+#' @note This function is used primarily internally to determine whether a
+#'   a package is contributing a function to the Zelig software suite
+#' @return a character-vector of all zelig-dependent packages on the current
+#'   machine
 list.zelig.dependent.packages <- function() 
   Filter(depends.on.zelig, .packages(all.available=TRUE))
 
-
-# return: list of all zelig models
+#' List Zelig Models Installed on the Current Machine
+#' @note This list is not necessarily complete
+#' @param with.namespace a boolean specifying whether 
+#' @return list of all zelig models
 list.zelig.models <- function(with.namespace=TRUE) {
   # list the zelig-dependent packages
   pkgs <- list.zelig.dependent.packages()

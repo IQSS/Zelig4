@@ -1,9 +1,9 @@
-# @...:   a set of lists to mix together
-# return: all the combinations with repetition
-#
-# **note: maybe can be done better with recursion?
-#         I think it might not got better than this
-#         without having specific patterns known
+#' Produce All Combinations of a Set of Lists
+#' @note This function is used internall by the 'mi' constructors in order to
+#'   produce the complete set of combinations of data-frames and factors by
+#'   to subset the data-frames.
+#' @param ... a set of lists to mix together
+#' @return all the combinations of the lists with repetition
 .combine <- function(...) {
   # expand dot arguments
   dots <- list(...)
@@ -105,14 +105,44 @@ zframe <- function(dataf, labels=NULL) {
   zef
 }
 
-#
+#' Extract the Data-Frame
+#' @note This method is only intended for internal use by Zelig; its
+#'   functionality lacks enough polish for interactive use by users or use by
+#'   other software packages (without reading this warning).
+#' @param zef a 'zframe' object
+#' @return a data.frame
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.data.frame.zframe <- function(zef)
   zef$data
 
 
-#
-chop.up <- function(...) split.up(list(...))
+#' Split a Parameter List into Two Lists
+#' @note This is essentially a wrapper function for \link{split.up}. This
+#'   was used internally by Zelig, but now is primarily syntactical sugar for
+#'   less important features.
+#' @param ... a mix of parameters of any time
+#' @return a list containing two entries: the key-value paired entires (titled
+#'   wordful) and the unkeyed entried (titled wordless)
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @example
+#' chop.up(x=1, 2, "red", y=2)
+#' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
+#' @seealso split.up
+chop.up <- function(...)
+  split.up(list(...))
 
+#' Split a List into Two Lists
+#' This functions takes any list, and splits into two lists - one containing
+#' the values of arguments with specifically specified values and those without
+#' specified values.
+#' @note This function is a good candidate for deprecation
+#' @param args a list
+#' @return a list containing two entries: the key-value paired entires (titled
+#'   wordful) and the unkeyed entried (titled wordless)
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @example
+#' chop.up(list(x=1, 2, "red", y=2))
+#' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
 split.up <- function(args) {
   wordless <- list()
   wordful <- list()
@@ -135,7 +165,10 @@ split.up <- function(args) {
 }
 
 
-# @args: a list of arguments with values that
+#' Convert a Return-value from a 'zelig2' Function into Meaningful Parameters
+#' 
+#'
+# @param args a list of arguments with values that
 #        are ALREADY evaluated
 # return: a list organized that divides zelig-
 #         parameters from model parameters

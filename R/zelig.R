@@ -1,13 +1,51 @@
-#' Method for Fitting Statistical Models
-#' @param formula formula object used to create the model
-#' @param model character-string specifying the model to run
-#' @param data data.frame used to make sense of the formula
-#' @param ... any parameters that need to be sent to the model
-#' @param by a character-string
-#' @param cite boolean specifying whether to output citation information
-#' @return a zelig object
+#' Estimating a Statistical Model
+#'
+#' The zelig command estimates a variety of statistical
+#' models.  Use \code{zelig} output with \code{setx} and \code{sim} to compute
+#' quantities of interest, such as predicted probabilities, expected values, and
+#' first differences, along with the associated measures of uncertainty
+#' (standard errors and confidence intervals).#' @aliases Zelig
+#'
+#' @param formula a symbolic representation of the model to be
+#'   estimated, in the form \code{y \~\, x1 + x2}, where \code{y} is the
+#'   dependent variable and \code{x1} and \code{x2} are the explanatory
+#'   variables, and \code{y}, \code{x1}, and \code{x2} are contained in the
+#'   same dataset.  (You may include more than two explanatory variables,
+#'   of course.)  The \code{+} symbol means ``inclusion'' not
+#'   ``addition.''  You may also include interaction terms and main
+#'   effects in the form \code{x1*x2} without computing them in prior
+#'   steps; \code{I(x1*x2)} to include only the interaction term and
+#'   exclude the main effects; and quadratic terms in the form
+#'   \code{I(x1^2)}
+#' @param model the name of a statistical model.
+#'   Type \code{help.zelig("models")} to see a list of currently supported
+#'   models
+#' @param data the name of a data frame containing the variables
+#'   referenced in the formula, or a list of multiply imputed data frames
+#'   each having the same variable names and row numbers (created by
+#'   \code{mi}) 
+#' @param ... additional arguments passed to \code{zelig},
+#'   depending on the model to be estimated
+#' @param by a factor variable contained in \code{data}.  Zelig will subset
+#'   the data frame based on the levels in the \code{by} variable, and
+#'   estimate a model for each subset.  This a particularly powerful option
+#'   which will allow you to save a considerable amount of effort.  For
+#'   example, to run the same model on all fifty states, you could type:
+#'   \code{z.out <- zelig(y ~ x1 + x2, data = mydata, model = "ls", by = "state")}
+#'   You may also use \code{by} to run models using MatchIt subclass
+#' @param cite If is set to "TRUE" (default), the model citation will be
+#' @return Depending on the class of model selected, \code{zelig} will return
+#'   an object with elements including \code{coefficients}, \code{residuals},
+#'   and \code{formula} which may be summarized using
+#'   \code{summary(z.out)} or individually extracted using, for example,
+#'   \code{z.out\$coefficients}.  See the specific models listed above
+#'   for additional output values, or simply type \code{names(z.out)}.  
+#'
+#' @name zelig
 #' @export
-#' @author Matt Owen and Kosuke Imai and Olivia Lau and Gary King \email{mowen@@iq.harvard.edu}
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, Olivia Lau, and Gary King 
+#'         Maintainer: Matt Owen \email{monwe@@iq.harvard.edu}
+#' @keywords package
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   if (!missing(by)) {
     if (any(by %in% all.vars(formula))) {
@@ -46,6 +84,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
   # create a data.frame iterator
   m <- mi(data, by=by)
+  m <- reset(m)
 
   # initialize variables for loop
   k <- 1
@@ -56,14 +95,12 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # repeat
   repeat {
     # get the next data.frame
-    d.f <- try(nextElem(m), silent=T)
-
-    #key <- d.f$key
-    #d.f <- d.f$value
+    d.f <- try(nextElem.mi(m), silent=TRUe)
 
     # catch end-of-list error
-    if (inherits(d.f, "try-error"))
+    if (inherits(d.f, "try-error")) {
       break
+    }
 
     # create zelig2* function
     zelig2 <- paste("zelig2", as.character(model), sep="")

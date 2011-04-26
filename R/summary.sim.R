@@ -1,10 +1,8 @@
 #' Method for summarizing simulations of quantities of interest
-#'
-#' @S3method summary MI.sim
-#'
-#' @param object a `MI.sim' object
+#' @S3method summary sim
+#' @param object a 'MI.sim' object
 #' @param ... ignored parameters
-#' @return a `summarized.MI.sim' object
+#' @return a 'summarized.MI.sim' object
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summary.sim <- function(object, ...) {

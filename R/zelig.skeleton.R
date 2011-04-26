@@ -10,6 +10,7 @@
 #' @return nothing
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @Nothing
 zelig.skeleton <- function (
     pkg, models=c(), author=c(),
     environment = .GlobalEnv,

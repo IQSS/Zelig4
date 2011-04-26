@@ -1,5 +1,8 @@
-# @params: a list of parameters to create a Zelig Call
-# return: a list containing:
+#' Store Named Values in an Newly Created Environment
+#' @ZZZ
+#' @note This function is exclusively used internally by Zelig
+#' @param params a list of parameters to create a Zelig Call
+#' @return a list containing:
 #           * parameters - a list of symbols
 #           * envir - an environment where variables
 #             contained in envir exist
@@ -57,11 +60,13 @@
 }
 
 
-# @name:   a character-string specifying the name of a variable
-# @envir:  an environment variable to search
-# @prefix: a character-string to prefix the string with
-#          this is applied until the name is unique
-# @sep:    a character-string that separates prefix and name
+#' Append a Prefix to a Character String
+#' @note This function is exclusively used internally by Zelig
+#' @param name a character-string specifying the name of a variable
+#' @param envir an environment variable to search
+#' @param prefix a character-string to prefix the string with
+#'   this is applied until the name is unique
+#' @param sep a character-string that separates prefix and name
 .prefix <- function(name, envir, prefix="zelig", sep=".") {
 
   # check to make sure this is an environment variable
@@ -97,11 +102,10 @@
 
 
 #' Run Model Fitting Function in Encapsulated Environment
-#' @description This needs a little work
+#' @note This function is exclusively used internally Zelig
 #' @param ..1 a zelig.call object
 #' @param ..2 an environment object
 #' @return the object ran in an insulated environment
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .run <- function(...) {
   # attach to ensure all the variables are known
@@ -138,15 +142,12 @@ eval.in <- .call <- function (...) {
 
 
 #' Apply Function Call to Zelig Objects Result Slot
-#' @aliases . ... 
+#' @asdasd
 #' @param expr an expression to lazily-evaluate
 #' @param envir ignored until later versions
 #' @return the result of applying the expression to the 
 #'         `result' slot of the first parameter
-#'
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#'
 #' @example 
 #' data(vote)
 #' z.out <- zelig(vote ~ race + educate, model='logit', data=vote)

@@ -1,22 +1,40 @@
-#z' Generic method for casting various objects as a
-#' `parameters' object
+#' Generic Method for Converting Objects into 'parameters'
+#'
+#' Converts list-style objects into Parameter lists primarily used by the 'qi'
+#' methods. These list-style objects may contain keys specifying: 'link' (the 
+#' link function of a statistical model), 'linkinv' (the inverse-link
+#'function), 'family' (a object of 'family' class used to specify the model's
+#' classification), 'alpha' (a vector of ancillary parameters, and 'simulations'
+#' (a vector of simulated draws from the model's underlying distribution.
+#'
+#' @note Only three scenarios may exist - converting 'parameters' to
+#'   'parameters', 'list' to 'parameters', and vectors to 'parameters'. The
+#'   third in particular is needed only for backwards compatibility, and support
+#'   will likely be deprecated.
+#'
+#'   Furthermore, this function should be exlusively used implicitly and
+#'   by Zelig.
 #' 
 #' @param params the object to be casted
 #' @param ... 
 #' @return an object of type `parameters'
-#' @export
+#' @seealso as.parameters.list as.parameters.parameters, as.parameters.default
 #' @author Matt Owen \email{mowen@@ig.harvard.edu}
 as.parameters <- function(params, ...)
   UseMethod("as.parameters")
 
 
 #' list -> parameters
+#'
+#' The list may contain: 'link', 'linkinv', 'family', 'alpha', and
+#' 'simulations' keys.
+#'
 #' @param params a list object
 #' @param num an integer specifying the number of simulations
 #'        to be taken
 #' @param ... ignored parameters
 #' @return an object of type `parameters'
-#' @export
+#' @seealso as.parameters
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.list <- function(params, num=NULL, ...) {
   #
@@ -49,22 +67,21 @@ as.parameters.list <- function(params, num=NULL, ...) {
   parameters(coefficients, alpha, fam=fam, link=link, linkinv=linkinv)
 }
 
-
 #' parameters -> parameters
+#' This is merely an identity function when casting 'parameters' objects into
+#' 'parameters'.
 #'
 #' @param paramss a parameters object
 #' @param ... ignored parameters
 #' @return the same parameter object
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.parameters <- function(params, ...)
   params
 
-
 #' ??? -> parameters
+#' @note This, in future revisions, should throw warnings about deprecation.
 #' @param params any non-supported data-type
 #' @return the object passed in
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.default <- function(params, num=NULL, ...) {
   if (!missing(num)) {

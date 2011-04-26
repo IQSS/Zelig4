@@ -1,3 +1,4 @@
+#' Simulate Multiply Imputed Data
 #' @S3method sim MI
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}

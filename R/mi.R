@@ -1,22 +1,36 @@
-#' Generic constructor for `mi' objects
+#' Bundle Multiply Imputed Data Sets as a List
 #' 
-#' @param ... an object or set objects to cast as an `mi' object
+#' The mi constructor bundles several data-frames with identical 
+#' columns into a single object. This allows for several analyses
+#' to be executed sequentially.
+#'
+#' @usage
+#' mi(datafram1, datafram2, by = 'column.name')
+#'
+#' @param ... an object or set objects to cast as an 'mi' object
 #' @param by a character-string specifying a column name
-#'           in a data.frame to subset
-#' @return an object of type `mi'
+#'           in a data-frame to subset
+#' @return an object of type 'mi'
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @seealso The full Zelig manual is available at
+#'   \url{http://gking.harvard.edu/zelig}
+#'
+#' @example
+#' data(immi1, immi2, immi3, immi4, immi5)
+#' mi(immi1, immi2, immi3, immi4, immi5)
 mi <- function(..., by=NULL) {
   UseMethod("mi")
 }
 
 
-#' Construct an `mi' object from a set of data.frames
+#' Construct an 'mi' object from a set of data-frames
 #' 
 #' @param ... a set of data.frame's
 #' @param by a character-string specifying a column of a data.frame
 #'           to use for multiple imputation
 #' @return an object of type `mi'
+#' @S3method mi default
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 mi.default <- function(..., by = NULL) {
@@ -27,17 +41,17 @@ mi.default <- function(..., by = NULL) {
 }
 
 
-#' Construct an `mi' object from another `mi' object
-#'
+#' Construct an 'mi' object from another 'mi' object
 #' This cosntructor differs from an identity operation
-#' by applying the `by' parameter.
+#' by applying the 'by' parameter.
 #'
-#' @param m an object of type `mi'
+#' @S3method mi mi
+#' @export
+#' @param m an object of type 'mi'
 #' @param ... ignored parameters
 #' @param by a character-string specifying a calumn of the data.frames
-#'           used in the `mi' object.
-#' @return an object of type `mi'
-#' @export
+#'           used in the 'mi' object.
+#' @return an object of type 'mi'
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 mi.mi <- function(m, ..., by=NULL) {
   if (missing(by))
@@ -47,9 +61,16 @@ mi.mi <- function(m, ..., by=NULL) {
 }
 
 
-#' Construct an `mi' object from a list of data.frame's
+#' Construct an 'mi' object from a list of data.frame's
 #'
-# @param lis a list of data.frames
+#' This is the main constructor; all other constructors - in one fashion
+#' or another - call this method to construct the final list of data-frames.
+#' Care should be taken when developing code for this method, as it can
+#' cause a myriad of additional problems.
+#'
+#' @S3method mi list
+#' @export
+#' @param lis a list of data.frames
 #' @param by a character-string specifying a calumn of the data.frames
 #'           used in the `mi' object.
 #' @param data.labels a vector of character-strings that specify the
@@ -57,7 +78,6 @@ mi.mi <- function(m, ..., by=NULL) {
 #'                    ignored, and is included exclusively for future
 #'                    Zelig releases
 #' @return an object of type `mi'
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.}
 mi.list <- function(lis, by=NULL, data.labels=NULL) {
   # error-catching
@@ -103,34 +123,47 @@ mi.list <- function(lis, by=NULL, data.labels=NULL) {
 
 
 #' Generic method for resetting an iterator
-#'
+#' Resets the incrementor of an iterator
+#' @note This method is not exported; it is used internally
+#'   by Zelig, but is not registered for use in the Global
+#'   namespace or search path. It is unclear whether the 
+#'   'reset' method is a desirable feature
 #'
 #' @param ... a list of parameters including the object
 #'            to be `reset'
-#' @return the reset object
-reset <- function(...) UseMethod("reset")
+#' @return the original object, except with its internatl
+#'   iterator pointing to the first element of its list
+#' @export
+reset <- function(...)
+  UseMethod("reset")
 
 
-#' Extract the next data.frame from an `mi' object
-#'
-#' @param m an object of type `mi'
+#' Extract the next data-frame from an 'mi' object
+#' Produces the next data-frame from the iterator list. If
+#' the 'keys.only' parameter  is set to TRUE (defaults FALSE), then
+#' exclusively the human-readable label is listed. If the 'as.pair'
+#' parametet is set to TRUE (defaults FALSE), then a list containing
+#' two entries ("key" and "value") are displayed. "key" contains the
+#' label of the data-frame as a character string, and "value" contains
+#' the actual subsetted data-frame.
+#' @S3method nextElem mi
+#' @param obj an object of type 'mi'
+#' @param ... ignored parameters
 #' @param keys.only a boolean specifying whether the return value
-#'                  should exclusively be the title of the next
-#'                  data.frame or the key-value pair of the title
-#'                  and the actual data.frame
+#'   should exclusively be the title of the next data.frame or
+#'   the key-value pair of the title and the actual data.frame
 #' @param as.pair a boolean specifying whether the next element should
 #'                be return as a key-value pair
 #' @return the next data.frame, title of the data.frame, or key-value
 #'         pair of title and data.frame
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-nextElem.mi <- function(m, keys.only=F, as.pair=F) {
+nextElem.mi <- function(obj, ..., keys.only=F, as.pair=F) {
   # assign value with error-checking
-  item <- try(nextElem(m$iter), silent=T)
+  item <- try(nextElem(obj$iter), silent=TRUE)
 
-  # catch `stopIteration` error
+  # catch 'stopIteration' error
   if (inherits(item, "try-error")) {
-    reset(m)
+    reset(obj)
     return(item)
   }
 
@@ -162,11 +195,11 @@ nextElem.mi <- function(m, keys.only=F, as.pair=F) {
   i <- as.numeric(item[[1]])
 
   # if no "by" arguments were passed
-  if (length(m$by) < 1)
-    return(m$data[[i]])
+  if (length(obj$by) < 1)
+    return(obj$data[[i]])
 
   # cast as zframe, so we can filter
-  zef <- zframe(m$data[[i]])
+  zef <- zframe(obj$data[[i]])
 
   # return filtered data.frame
   if (as.pair)
@@ -176,11 +209,10 @@ nextElem.mi <- function(m, keys.only=F, as.pair=F) {
 }
 
 
-#' Reset method for `mi' objects
-#'
-#' @param m an `mi' object 
+#' Reset method for 'mi' objects
+#' @S3method reset mi
+#' @param m an 'mi' object 
 #' @return the same object with the iterator reset
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 reset.mi <- function(m) {
   assign('i', 0, env=m$iter$state)
@@ -191,8 +223,8 @@ reset.mi <- function(m) {
 #' Get List of Labels from MI object
 #' @param obj an mi object
 #' @param ... ignored (for now) parameters
-#' @return a vector of character-strings
-#' @export
+#' @return a vector of character-strings detailing - in human
+#'   readable format - the titles of each 
 get.mi.labels <- function(obj, ...) {
   # get old position of iterator
   old.pos <- get('i', env=obj$iter$state)
@@ -204,25 +236,14 @@ get.mi.labels <- function(obj, ...) {
   mi.labels <- c()
 
   repeat {
-
     item <- try(nextElem(obj, keys.only=TRUE))
 
     if (inherits(item, 'try-error'))
       break
 
-
-    # all( suppressWarning(as.numeric(x) == x) )
-
-    # cat('names = ')
-    # print(names(item))
-
-    # zip together lists
-
     smoosh <- label.from.key(item)
 
-
     mi.labels <- c(mi.labels, smoosh)
-
   }
 
   # restore old iterator position
@@ -234,14 +255,19 @@ get.mi.labels <- function(obj, ...) {
 
 
 #' Label from MI Key
+#'
 #' This produced a human-readable label from a named
 #' character vector. This is primarily used by the zelig
 #' function to give reasonable names to simulated
 #' quantities of interest. That is, we can differentiate
 #' several imputed data.frames from one another by which
-#' key we read
-#' @param key a vectory of character-string
+#' key we read.
+#'
+#' @note This method is not exported, and is exclusively used
+#'   internetally by Zelig
+#' @param key a vectory of character-strings
 #' @return a character-string
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 label.from.key <- function(key) {
   item <- key
 
@@ -261,14 +287,20 @@ label.from.key <- function(key) {
 }
 
 
-#' Length method for `mi' objects
+#' Length Method for 'mi' Objects
 #'
-#' @param m an object of type `mi'
-#' @return an integer specifying the number of
-#'         data.frame's that are contained within
-#'         within the `mi' object
-#' @export
+#' Compute the length of the number data-frames to be
+#' expected. This function is primarily used internally by
+#' Zelig.
+#'
+#' @S3method length mi
+#' @note This function is exported, since it could be a
+#'   conceivably useful feature for end-users.
+#'
+#' @param m an object of type 'mi'
+#' @return an integer specifying the number of subsetted
+#'   data-frame's that are contained within within the 
+#'   'mi' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-# return: number of data-frame subsets
-length.mi <- function(m)
-  nrow(m$iter$state$obj)
+length.mi <- function(x)
+  nrow(x$iter$state$obj)
