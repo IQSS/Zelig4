@@ -38,8 +38,14 @@ qi.summarize <- function (title, x, ...) {
 }
 
 #' Print Method for Summarized Quantities of Interest
+#' @usage \method{print}{qi.summarized}(x, \dots)
 #' @S3method print qi.summarized
+#' @param x a 'summarized.qi' object
+#' @param ... parameters to be passed to the specific print functions
+#' @return x (invisibly)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @seealso \link{special_print_MATRIX} and
+#'   \link{special_print_LIST}
 print.qi.summarized <- function (x, ...) {
 
   if (attr(x, 'print') == 'matrix')
@@ -53,6 +59,12 @@ print.qi.summarized <- function (x, ...) {
 }
 
 #' Method for Printing Summarized QI's in a Matrix Form
+#' @name special_print_MATRIX
+#' @aliases special_print_MATRIX
+#' @note This function is used internall by Zelig
+#' @param x a 'summarized.qi' object
+#' @param ... additional parameters
+#' @return x (invisibly)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .print.qi.summarized.MATRIX <- function (x, ...) {
   m <- matrix(NA, 0, 0)
@@ -70,6 +82,12 @@ print.qi.summarized <- function (x, ...) {
 }
 
 #' Method for Printing Summarized QI's in a List Form
+#' @name special_print_LIST
+#' @aliases special_print_LIST
+#' @note This function is used internall by Zelig
+#' @param x a 'summarized.qi' object
+#' @param ... additional parameters to be used by the 'print.matrix' method
+#' @return x (invisibly)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 .print.qi.summarized.LIST <- function (x, ...) {
 

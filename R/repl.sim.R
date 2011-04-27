@@ -1,21 +1,22 @@
-#' Method for replicating quantities of interest
-#' @param obj a `zelig' object
-#' @param x a `setx' object
-#' @param x1 a secondary `setx' object used to perform
-#'           particular computations of quantities of interest
-#' @param y a parameter reserved for the computation of particular
-#'          quantities of interest (average treatment effects). Few
-#'          models currently support this parameter
+#' Method for Replicating Simulated Quantities of Interest
+#' @param object a 'zelig' object
+#' @param x a 'setx' object
+#' @param x1 a secondary 'setx' object used to perform particular computations
+#'   of quantities of interest
+#' @param y a parameter reserved for the computation of particular quantities of
+#'   interest (average treatment effects). Few models currently support this
+#'   parameter
 #' @param num an integer specifying the number of simulations to compute
 #' @param prev ignored
 #' @param bootstrap ignored
 #' @param boot.fn ignored
 #' @param cond.data ignored
 #' @param ... special parameters which are reserved for future versions of Zelig
-#' @return a `sim' object storing the replicated quantities of interest
+#' @return a 'sim' object storing the replicated quantities of interest
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-repl.sim <- function(object, x=NULL, x1=NULL, num=1000,
+repl.sim <- function(object, x=NULL, x1=NULL, y=NULL,
+                     num=1000,
                      prev = NULL, bootstrap = FALSE,
                      boot.fn=NULL,
                      cond.data = NULL, ...) {

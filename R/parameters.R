@@ -63,27 +63,34 @@ alpha <- function(param)
   param$alpha
 
 
-#' Extract simulations from `parmaeters' objects
-#' 
-#' @aliases simulations.parameters
+#' Extract Simulations from 'parmaeters' Objects
+#' @note This function may not differ at all from coef.default
 #' @S3method coef parameters
-#' @param a `parameters' object
+#' @param object a 'parameters' object
+#' @param \dots ignored
 #' @return simulations, specified by the Zelig model, of
 #'         the ancillary parameters
 #' @export 
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-coef.parameters <- function(param) {
-  param$coef
+coef.parameters <- function(object, ...) {
+  object$coef
 }
   
+#' Extract Simulations from 'parmaeters' Objects
+#' @note This function may not differ at all from coef.default
+#' @S3method coef parameters
+#' @param object a 'parameters' object
+#' @param \dots ignored
+#' @return simulations, specified by the Zelig model, of
+#'         the ancillary parameters
+#' @export 
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+simulations.parameters <- function(object, ...)
+  object$coefficients
 
-simulations.parameters <- function(param)
-  param$coefficients
 
-
-#' Method for extracting the link function from `parameters' objects
-#'
-#' @param param a `parameters' object
+#' Method for extracting the link function from 'parameters' objects
+#' @param param a 'parameters' object
 #' @return the link function specified by the `param' function for the
 #'         given Zelig model
 #' @export
@@ -92,10 +99,10 @@ link <- function(param)
   param$link
 
 
-#' Method for extracting the inverse link function from `parameters' objects
+#' Method for extracting the inverse link function from 'parameters' objects
 #'
-#' @param param a `parameters' object
-#' @return the inverse link function specified by the `param' function for the
+#' @param param a 'parameters' object
+#' @return the inverse link function specified by the 'param' function for the
 #'         given Zelig model
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}

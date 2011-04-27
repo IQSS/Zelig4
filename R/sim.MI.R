@@ -1,8 +1,19 @@
 #' Simulate Multiply Imputed Data
+#' @usage \method{sim}{MI}(obj, x=NULL, x1=NULL, y=NULL, num=1000)
 #' @S3method sim MI
-#' @export
+#' @param obj a 'zelig.MI' object containing several fits for two or more 
+#'   subsetted data-frames
+#' @param x a 'setx.mi' object containing explanatory variables for each
+#'   fitted model
+#' @param x1 a 'setx.mi' object containing explanatory variables for each
+#'   fitted model
+#' @param y this feature is currently unimplemented
+#' @param num an integer specifying the number of simulations to compute
+#' @return a 'sim.MI' with simulated quantities of interest for each fitted
+#'   contained by 'obj'
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-sim.MI <- function(obj, x = NULL, x1 = NULL, y = NULL, num = 1000) {
+#' @seealso \link{sim}
+sim.MI <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000) {
 
   sim.results <- list()
 

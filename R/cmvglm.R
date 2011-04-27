@@ -1,3 +1,9 @@
+#' cmvglm
+#' @param formula a formula
+#' @param model the names of the Zelig model
+#' @param ndim the number of dimensions in the statistical model
+#' @param data a data-frame
+#' @param fact ???
 #' @author Kosuke Imai and Olivia Lau
 #' @export
 cmvglm <- function(formula, model, ndim,data=NULL, fact=NULL){

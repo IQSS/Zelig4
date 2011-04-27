@@ -1,8 +1,6 @@
-#' Print values of a summarized `sim' object
-#'
+#' Print Values of a Summarized 'sim' Object
 #' @S3method print summary.sim
-#'
-#' @param obj a `summary.sim' object
+#' @param x a 'summary.sim' object
 #' @param ... ignored parameters
 #' @return the value of the `summary.sim' object (invisibly)
 #' @export
@@ -11,38 +9,38 @@ print.summary.sim <- function(x, ...) {
   obj <- x
 
   # prints typically have qi, and qi.names defined as part of the summary object
-  if (is.null(obj$stats))
+  if (is.null(x$stats))
     stop("stats object cannot be NULL")
 
   # new-line
   cat("\n")
 
   # print model name
-  cat("Model: ", obj$model, "\n")
+  cat("Model: ", x$model, "\n")
 
   # print number of simulations
-  cat("Number of simulations: ", obj$iterations, "\n")
+  cat("Number of simulations: ", x$iterations, "\n")
 
   # new-line
   cat("\n")
 
   # important value of x
-  if (!is.null(obj$x$matrix)) {
+  if (!is.null(x$x$matrix)) {
     cat("Values of X\n")
-    print(as.matrix(obj$x$updated[, obj$x$explan]))
+    print(as.matrix(x$x$updated[, x$x$explan]))
 
     # new-line
     cat("\n")
   }
-  else if (is.list(obj$x$s.x)) {
+  else if (is.list(x$x$s.x)) {
     # add special hooks here?
   }
 
   # important value of x1
-  if (!is.null(obj$x1$matrix)) {
+  if (!is.null(x$x1$matrix)) {
     cat("Values of X1\n")
 
-    print(as.matrix(obj$x1$updated[, obj$x1$explan]))
+    print(as.matrix(x$x1$updated[, x$x1$explan]))
 
     # new-line
     cat("\n")
@@ -52,7 +50,7 @@ print.summary.sim <- function(x, ...) {
   cat("\n")
 
   #
-  i <- iter(obj$stats)
+  i <- iter(x$stats)
   first.iter <- T
 
   repeat {
@@ -86,5 +84,5 @@ print.summary.sim <- function(x, ...) {
   }
 
   # return invisibly
-  invisible(obj)
+  invisible(x)
 }

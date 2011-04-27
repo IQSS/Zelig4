@@ -1,15 +1,12 @@
-#' Describe the type of model that this Zelig
-#' object used to fit the data-set
-#'
-#' @param obj a `zelig' object
+#' Get Description Object Used to Cite this Zelig Model
+#' @note This function should be reevaluated in design, since 'description'
+#'   objects are exclusively used internally. In particular, this method would
+#'   be more useful to users as a 'cite' method.
+#' @param object a 'zelig' object
 #' @param ... ignored parameters
-#' @return a list specified by describe. + `model name'
-#'         of this fitted model
+#' @return a 'description' object used internally to produce citation text
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-describe.zelig <- function(zelig.obj, ...) {
-
-  append(list(model=zelig.obj$name),
-         NextMethod("describe")
-         )
+describe.zelig <- function(object, ...) {
+  append(list(model=object$name), NextMethod("describe"))
 }

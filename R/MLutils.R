@@ -1,9 +1,11 @@
-###
-## Take a formula in any of the reduced form or in a structural form
-## and returns the most reduced form of that formula
-## 
-
+#' Reduce MI Formulas
+#' Take a formula in any of the reduced form or in a structural form and return
+#' the most reduced form of that formula
+#' @note This formula is used primarily by 'zelig2' functions of multivariate
+#'   Zelig models
+#' @param f a formula
 #' @export
+#' @author Ferdinand Alimadhi, Kosuke Imai, and Olivia Lau
 reduceMI <-function(f){
         if(class(f)=="list")
           f <- structuralToReduced(f)
@@ -11,13 +13,12 @@ reduceMI <-function(f){
 }
 
 
-##
-# Transform the multilevel's structural form formulas into
-# reduced form
-# input: formula in structural form ( a list of formulas)
-# output: formula in reduced form
-# possible bugs: What if class(f) is multiple and not list??
-
+#' Transform the Multilevel's Structural Formulas Into Reduced Form
+#' @param f a list of formulas
+#' @return a formula in reduced form
+#' @export
+#' @author Ferdinand Alimadhi, Kosuke Imai, and Olivia Lau
+# possible bug: what if class(f) is 'multiple' and not a list?
 structuralToReduced <- function(f){
 
         ## input should be a list
@@ -52,14 +53,14 @@ structuralToReduced <- function(f){
         return(res)
 }
 
-###
-##  take a formula in the reduced form and return it in
-##  lmer representation (basically remove starting "tag"
-##  of each term)
-##  possible errors: What if input is not in reduced form?
-##                   Maybe call reduceMI first??
-
+#' Convert a Formula into 'lmer' Representation from Reduced Form
+#' Take a formula in its reducd from and return it as a 'lmer' representation
+#' (from the lme4 package). This is basically removing the starting 'tag' from
+#' each term.
+#' @param f a formula in reduced form
+#' @return the 'lmer' representation of 'f'
 #' @export
+#' @author Ferdinand Alimadhi, Kosuke Imai, and Olivia Lau
 tolmerFormat<-function(f){
         lhs <- f[[2]]
         tt <- terms(f, specials="tag")
@@ -73,11 +74,12 @@ tolmerFormat<-function(f){
         return(res)
 }
 
-
-###
-## given a formula in a reduced from, output the most reduced one
-##
-
+#' Further Reduce Formulas in Reduced Form
+#' Given a formula in a reduced form, output the most reduced one.
+#' @param f a formula in reduced form
+#' @return an even-more reduced formula
+#' @export
+#' @author Ferdinand Alimadhi, Kosuke Imai, and Olivia Lau
 .reduceFurther <- function(f){
         
         if(length(f)!=3)

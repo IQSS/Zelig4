@@ -1,14 +1,15 @@
-#' Constructor for the `description' class
+#' Constructor for the 'description' class
 #'
 #' @param authors a character-vector of author names
 #' @param year a numeric specifying the year
-#' @param model a character-string specigying model 
-#'        name (should be always empty)
-#' @param text a character-string specifying the title
-#'        of the model (a longer name than model)
-#' @param url a character-string specifying the models
-#'        source homepage
-#' @return an object of type `description'
+#' @param model a character-string specifying model name
+#' @param text a character-string specifying the title of the model. This
+#'   typically includes more exact information than 'model'. E.g., for the
+#'   'logit' the title 'Logistic Regression for Dichotomous Variables' would be
+#'   a suitable text parameter.
+#' @param url a character-string specifying the model's software page
+#' @param category deprecated until data-verse bindings are reevaluated
+#' @return an object of type 'description'
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
@@ -64,9 +65,8 @@ description <- function(authors=c("Kosuke Imai", "Gary King", "Olivia Lau"),
 }
 
 
-#' Citation information for a `description' object
-#'
-#' @param descr an object of type `description'
+#' Citation information for a 'description' object
+#' @param descr an object of type 'description'
 #' @return a character-string giving citation info
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
@@ -99,19 +99,23 @@ cite <- function(descr) {
 }
 
 
-#' Generic method for casting `description' objects
-#'
-#' @param descr an object to cast an object of type `description'
-#' @return an object of type `description'
+#' Generic Method for Casting 'description' Objects
+#' This method converts the result of a call to the 'describe' method into an 
+#' object parseble by Zelig. Currently conversions only exist for lists and
+#' 'description' objects.
+#' @param descr an object to cast an object of type 'description'
+#' @param ... parameters which are reserved for future Zelig revisions
+#' @return an object of type 'description'
 #' @export
+#' @seealso as.description.description as.description.list
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.description <- function(descr, ...)
   UseMethod("as.description")
 
 
 #' description -> description
-#'
-#' @param descr an object of type `description'
+#' @param descr an object of type 'description'
+#' @param ... ignored
 #' @return the same object
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
@@ -120,12 +124,12 @@ as.description.description <- function(descr, ...)
 
 
 #' list -> description
-#'
 #' @param descr a list
-#' @return an object of type `description'
+#' @param ... ignored
+#' @return an object of type 'description'
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-as.description.list <- function(descr) {
+as.description.list <- function(descr, ...) {
 
   text <- if (!is.null(descr$text))
     descr$text

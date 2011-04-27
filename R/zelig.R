@@ -4,7 +4,7 @@
 #' models.  Use \code{zelig} output with \code{setx} and \code{sim} to compute
 #' quantities of interest, such as predicted probabilities, expected values, and
 #' first differences, along with the associated measures of uncertainty
-#' (standard errors and confidence intervals).#' @aliases Zelig
+#' (standard errors and confidence intervals).
 #'
 #' @param formula a symbolic representation of the model to be
 #'   estimated, in the form \code{y \~\, x1 + x2}, where \code{y} is the

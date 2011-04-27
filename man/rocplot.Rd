@@ -1,26 +1,47 @@
 \name{rocplot}
 \alias{rocplot}
-\title{rocplot...}
-\usage{rocplot(y1, y2, fitted1, fitted2, cutoff=seq(from = 0, to = 1, length =
-    100), lty1="solid", lty2="dashed", lwd1=par("lwd"),
-    lwd2=par("lwd"), col1=par("col"), col2=par("col"), main="ROC
-    Curve", xlab="Proportion of 1's Correctly Predicted",
-    ylab="Proportion of 0's Correctly Predicted", plot=TRUE, ...)}
-\description{rocplot}
-\value{a list of relevant statistics}
-\arguments{\item{y1}{}
-\item{y2}{}
-\item{fitted1}{}
-\item{fitted2}{}
-\item{cutoff}{}
-\item{lty1}{}
-\item{lty2}{}
-\item{lwd1}{}
-\item{lwd2}{}
-\item{col1}{}
-\item{col2}{}
-\item{main}{}
-\item{xlab}{}
-\item{ylab}{}
-\item{plot}{}
-\item{...}{}}
+\title{Receiver Operator Characteristic Plots...}
+\usage{rocplot(
+y1, y2, fitted1, fitted2,
+cutoff=seq(from = 0, to = 1, length =100),
+lty1="solid", lty2="dashed", lwd1=par("lwd"),
+lwd2=par("lwd"), col1=par("col"), col2=par("col"),
+main="ROC Curve", xlab="Proportion of 1's Correctly Predicted",
+ylab="Proportion of 0's Correctly Predicted", plot=TRUE,
+...)}
+\description{Receiver Operator Characteristic Plots}
+\details{The 'rocplot' command generates a receiver operator characteristic plot to
+compare the in-sample (default) or out-of-sample fit for two logit or probit
+regressions.}
+\value{if plot is TRUE, rocplot simply generates a plot. Otherwise, a list
+with the following is produced:
+\item{roc1}{a matrix containing a vector of x-coordinates and
+y-coordinates corresponding to the number of ones and zeros correctly
+predicted for the first model.}
+\item{roc2}{a matrix containing a vector of x-coordinates and
+y-coordinates corresponding to the number of ones and zeros correctly
+predicted for the second model.}
+\item{area1}{the area under the first ROC curve, calculated using
+Reimann sums.}
+\item{area2}{the area under the second ROC curve, calculated using
+Reimann sums.}}
+\arguments{\item{y1}{response variable for the first model}
+\item{y2}{response variable for the second model}
+\item{fitted1}{fitted values for the first model. These values may represent
+either the in-sample or out-of-sample fitted values}
+\item{fitted2}{fitted values for the second model}
+\item{cutoff}{A vector of cut-off values between 0 and 1, at which to
+evaluate the proportion of 0s and 1s correctly predicted by the first and
+second model.  By default, this is 100 increments between 0 and 1
+inclusive}
+\item{lty1}{the line type of the first model (defaults to 'line')}
+\item{lty2}{the line type of the second model (defaults to 'dashed')}
+\item{lwd1}{the line width of the first model (defaults to 1)}
+\item{lwd2}{the line width of the second model (defaults to 1)}
+\item{col1}{the color of the first model (defaults to 'black')}
+\item{col2}{the color of the second model (defaults to 'black')}
+\item{main}{a title for the plot (defaults to "ROC Curve")}
+\item{xlab}{a label for the X-axis}
+\item{ylab}{a lavel for the Y-axis}
+\item{plot}{whether to generate a plot to the selected device}
+\item{\dots}{additional parameters to be passed to the plot}}

@@ -1,9 +1,9 @@
-# @author: Matt Owen
-# @date:   5/24/2010
-# @file:   stats.zelig.R
-
-# @x:     a set of data
-# return: the statistical mode of the set
+#' Compute the Statistical Mode of a Vector
+#' @param x a vector of numeric, factor, or ordered values
+#' @return the statistical mode of the vector. If two modes exist, one is
+#'   randomly selected (by design)
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 mode.zelig <- function (x) {
   # build a table of values of x
   tab <- table(as.factor(x))
@@ -21,8 +21,11 @@ mode.zelig <- function (x) {
 }
 
 
-# @x:     
-# return: the median
+#' Compute the Statistical Median of a Vector
+#' @param x a vector of numeric or ordered values
+#' @return the median of the vector
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 median.zelig <- function (x) {
   v <- ifelse(is.numeric(x),
               median(v),
@@ -33,8 +36,11 @@ median.zelig <- function (x) {
   v
 }
 
-# @x:     
-# return: 
+#' Compute the Maximum Value of a Vector
+#' @param x a numeric or ordered vector
+#' @return the maximum value of the vector
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 max.zelig <- function (x) {
   if (is.numeric(x))
     return(max(x))
@@ -48,11 +54,14 @@ max.zelig <- function (x) {
            )
 
   else
-    stop("Error: max cannot be computed for this data-type.")
+    stop("Error: max cannot be computed for non-numeric and non-ordered values")
 }
 
-# @x: asdads
-# return:
+#' Compute the Minumum Value of a Vector
+#' @param x a vector of numeric or ordered values
+#' @return the minimum value of the vector
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 min.zelig <- function (x) {
   if (is.numeric(x))
     return(min(x))
@@ -66,5 +75,5 @@ min.zelig <- function (x) {
            )
 
   else
-    stop("Error: min cannot be computed for this data-type.")
+    stop("Error: min cannot be computed for non-numeric and non-ordered values")
 }

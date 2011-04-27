@@ -1,21 +1,21 @@
-#' Generic method for simulating quantities of interest from `zelig' objects
-#' @param obj a `zelig' object
-#' @param x a `setx' object
-#' @param x1 a secondary `setx' object used to perform
-#'           particular computations of quantities of interest
-#' @param y a parameter reserved for the computation of particular
-#'          quantities of interest (average treatment effects). Few
-#'          models currently support this parameter
+#' Method for Simulating Quantities of Interest wrom 'zelig' Objects
+#' @param obj a 'zelig' object
+#' @param x a 'setx' object
+#' @param x1 a secondary 'setx' object used to perform particular computations
+#'   of quantities of interest
+#' @param y a parameter reserved for the computation of particular quantities of
+#'   interest (average treatment effects). Few models currently support this
+#'   parameter
 #' @param num an integer specifying the number of simulations to compute
 #' @param prev ignored
 #' @param bootstrap ignored
 #' @param boot.fn ignored
 #' @param cond.data ignored
 #' @param ... special parameters which are reserved for future versions of Zelig
-#' @return a `sim' object storing the replicated quantities of interest
+#' @return a 'sim' object storing the replicated quantities of interest
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-sim.default <- function(z,
+sim.default <- function(obj,
                         x=NULL, x1=NULL, y=NULL,
                         num=1000, prev = NULL, bootstrap = FALSE,
                         boot.fn=NULL,
@@ -32,19 +32,20 @@ sim.default <- function(z,
     warning("conditions are not yet supported")
 
   # "parameters"
-  param <- as.parameters(param(z, num=num), num=num)
+  param <- as.parameters(param(obj, num=num), num=num)
 
   # compute quantities of interest
-  res.qi <- as.qi( qi(z, x=x, x1=x1, y=y, param=param, num=num) )
-  class(res.qi) <- c(z$name, class(res.qi))
+  res.qi <- as.qi( qi(obj, x=x, x1=x1, y=y, param=param, num=num) )
+  class(res.qi) <- c(obj$name, class(res.qi))
 
   # this is kludge (for now)
-  if (inherits(z, "MI"))
+  # This can be removed as of 4-27-2011
+  if (inherits(obj, "MI"))
     class(res.qi) <- c("MI", class(res.qi))
 
 
   # build object
-  s <- list(name     = z$name,
+  s <- list(name     = obj$name,
             x        = x,
             x1       = x1,
             stats    = summarize(res.qi),
@@ -52,21 +53,21 @@ sim.default <- function(z,
             titles   = names(res.qi),
             boot.fn  = boot.fn,
             cond.data= cond.data,
-            zelig.obj= z,
+            zelig.obj= obj,
             call     = match.call(),
-            zcall    = z$call,
-            result   = z$result,
+            zcall    = obj$call,
+            result   = obj$result,
             iterations = num,
             special.parameters = list(...)
             )
 
   # cast class
-  sim.class <- if (inherits(z, "MI"))
+  sim.class <- if (inherits(obj, "MI"))
     sim.class <- "MI.sim"
 
   class(s) <- c(sim.class,
-                z$name,
-                paste("sim", z$name, sep="."),
+                obj$name,
+                paste("sim", obj$name, sep="."),
                 "sim"
                 )
 

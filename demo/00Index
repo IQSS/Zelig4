@@ -1,6 +1,7 @@
 gamma              Gamma regression and simulation
 logit              Logit regression and simulation 
 ls                 Least Squares regression and simulation 
+mi                 Multiply imputed regressions and simulations
 negbinom           Negative Binomial regression and simulation
 normal             Normal (Gaussian) regression and simulation
 poisson            Poisson regression and simulation

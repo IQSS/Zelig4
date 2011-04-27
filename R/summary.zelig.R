@@ -35,18 +35,3 @@ summary.zelig <- function (object, ...) {
     # S3 objects have no problem figuring out which method to use
     summary(obj)
 }
-
-#' Multiply-Imputed Zelig Object Summaries
-#' Compute summary data for a set of fitted model
-#' @S3method summary zelig.MI
-#' @param object a zelig.MI object
-#' @param ... parameters forwarded to the fitted model
-#' @return a list of summaries of the fitted models
-#' @export
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-summary.zelig.MI <- function (obj, ...) {
-  # Apply  summary.zelig to an entire list
-  #Map(summary.zelig, obj$result, ...)
-
-  warning(sprintf("Cannot produce summaries for 'zelig.MI' objects"))
-}

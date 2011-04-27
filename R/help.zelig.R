@@ -1,6 +1,5 @@
 #' Help system for Zelig models
-#'
-#' @param ... 
+#' @param ... the help files to look-up
 #' @return results of calling the specific help function
 #' @export
 #' @author Matt Owen \emph{mowen@@iq.harvard.edu}

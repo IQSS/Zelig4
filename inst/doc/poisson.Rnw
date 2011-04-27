@@ -17,6 +17,10 @@
 \usepackage{Zelig}
 \usepackage{Sweave}
 
+%\VignetteIndexEntry{Poisson Regression for Event Count Dependent Variables}
+%\VignetteDepends{Zelig, stats}
+%\VignetteKeyWords{model,poisson,count,regression}
+%\VignettePackage{Zelig}
 
 \begin{document}
 \nobibliography*

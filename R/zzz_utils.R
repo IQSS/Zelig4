@@ -53,8 +53,15 @@
 }
 
 
-# @dataf: a data.frame
-# return: a data.frame with an overloaded operator
+#' Construct a Subsetted Data-Frame
+#' This mysteriously named function is used internally by Zelig to process
+#' subsetted data-frames with the 'mi' function. In particular, it is primarily
+#' used by mi's 'nextElem' method.
+#' @note This function is exclusively used internally by Zelig.
+#' @param dataf a data.frame
+#' @param labels a vector of character-strings (currently ignored)
+#' @return a data.frame with an overloaded operator
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zframe <- function(dataf, labels=NULL) {
   # build list
   z <- list(data=dataf)
@@ -109,10 +116,13 @@ zframe <- function(dataf, labels=NULL) {
 #' @note This method is only intended for internal use by Zelig; its
 #'   functionality lacks enough polish for interactive use by users or use by
 #'   other software packages (without reading this warning).
-#' @param zef a 'zframe' object
-#' @return a data.frame
+#' @param x a 'zframe' object
+#' @param row.names ignored
+#' @param optional ignored
+#' @param ... ignored
+#' @return the corresponding subsetted data-frame
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-as.data.frame.zframe <- function(zef)
+as.data.frame.zframe <- function(x, row.names=NULL, optional = FALSE, ...)
   zef$data
 
 
@@ -297,13 +307,13 @@ split.up <- function(args) {
   }
 }
 
-
-
-# @a: a vector
-# @b: a vector
-# @unique: a boolean determining whether a intersect b
-#          will contain only unique elements
-# return: the intersection of a and b
+#' Compute the Intersection of Two Sets
+#' @note This function is used internally by Zelig
+#' @param a a vector
+#' @param b a vector
+#' @param unique a boolean determining whether a intersect b will contain only
+#'   unique elements
+#' @return the intersection of a and b
 .intersection <- function(a, b, unique=TRUE) {
   intersection <- a[a %in% b]
 
@@ -316,7 +326,12 @@ split.up <- function(args) {
     intersection
 }
 
-
+#' Hook to Update the Zelig Call with the Appropriate Call Object
+#' @note This function is used internally by Zelig, and currently deprecated.
+#' @param zobj a 'zelig' object
+#' @param call1 the original call to Zelig
+#' @param call2 the manuafactured call to the model fitting function
+#' @return the 'zelig' object with a modified 'call' slot
 replace.call <- function(zobj, call1, call2) {
   # what if it doesn't exist?
   if (!is.null(zobj$result$call) && is.call(zobj$result$call2))
@@ -325,13 +340,23 @@ replace.call <- function(zobj, call1, call2) {
   zobj
 }
 
-
-# @package: a character-string naming a package
+#' Wether an Installed R-Pack Depends on Zelig
+#' @note This package was used internally to determine whether an R-package is
+#'   Zelig compliant, but is now likely deprecated. This test is useless if not
+#'   paired with 
+#' @param package a character-string naming a package
+#' @return whether this package depends on Zelig
 is.zelig.package <- function(package="") {
   "Zelig" %in% tools:::pkgDepends(package)$Depends
 }
 
-
+#' Whether a R-Package Contains a 'Yes' in its DESCRIPTION File's 'Zelig' Field
+#' @note This package was used internally to determine whether an R-package is
+#'   Zelig compliant, but is now likely deprecated.
+#' @param package a character-string specifying an installed R-package
+#' @return whether the package's DESCRIPTION file specifies Zelig-compliancy
+#' @seealso is.zelig.package
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 is.zelig.compliant <- function(package="") {
   #
   zcomp <- packageDescription(package, fields="Zelig-Compliant")

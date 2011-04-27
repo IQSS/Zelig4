@@ -1,5 +1,10 @@
-#' @author Kosuke Imai and Olivia Lau
+#' Parse Formulas for Zelig Models
+#' @note This is used typically in multinomial and multivariate Zelig models
+#' @param formula a formula
+#' @param model a Zelid model
+#' @param data a data-frame
 #' @export
+#' @author Kosuke Imai and Olivia Lau
 parse.formula<-function( formula, model,data=NULL){
         if(class(formula)[[1]]=="multiple")
           return(formula)

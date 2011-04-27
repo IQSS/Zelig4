@@ -5,15 +5,6 @@
 #' the explanatory variables to the selected values.  Use \code{setx}
 #' after \code{zelig} and before \code{sim} to simulate quantities of
 #' interest.
-#' @usage
-#'
-#' x.out <- setx(object,
-#'               fn = list(numeric = mean, ordered = median, others = mode), 
-#'               data = NULL,
-#'               cond = FALSE,
-#'               \dots
-#'               )
-#'
 #' @param obj the saved output from zelig
 #' @param fn a list of functions to apply to the data frame
 #' @param data a new data frame used to set the values of
@@ -25,12 +16,12 @@
 #'   will coerce \code{fn = NULL} and ignore the additional arguments in 
 #'   \code{\dots}.  If \code{cond = TRUE} and \code{data = NULL},
 #'   \code{setx} will prompt you for a data frame.
-#' @param ... user-defined values of specific variables
-#'   overwriting the default values set by the function \code{fn}.  For
-#'   example, adding \code{var1 = mean(data\$var1)} or \code{x1 = 12}
-#'   explicitly sets the value of \code{x1} to 12.  In addition, you may
-#'   specify one explanatory variable as a range of values, creating one
-#'   observation for every unique value in the range of values
+#' @param ... user-defined values of specific variables for overwriting the
+#'   default values set by the function \code{fn}.  For example, adding
+#'   \code{var1 = mean(data\$var1)} or \code{x1 = 12} explicitly sets the value
+#'   of \code{x1} to 12.  In addition, you may specify one explanatory variable
+#'   as a range of values, creating one observation for every unique value in
+#'   the range of values
 #' @return For unconditional prediction, \code{x.out} is a model matrix based
 #'   on the specified values for the explanatory variables.  For multiple
 #'   analyses (i.e., when choosing the \code{by} option in \code{\link{zelig}},

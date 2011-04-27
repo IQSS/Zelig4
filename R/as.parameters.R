@@ -16,7 +16,7 @@
 #'   by Zelig.
 #' 
 #' @param params the object to be casted
-#' @param ... 
+#' @param ... parameters reserved for future revisions
 #' @return an object of type `parameters'
 #' @seealso as.parameters.list as.parameters.parameters, as.parameters.default
 #' @author Matt Owen \email{mowen@@ig.harvard.edu}
@@ -70,8 +70,7 @@ as.parameters.list <- function(params, num=NULL, ...) {
 #' parameters -> parameters
 #' This is merely an identity function when casting 'parameters' objects into
 #' 'parameters'.
-#'
-#' @param paramss a parameters object
+#' @param params a parameters object
 #' @param ... ignored parameters
 #' @return the same parameter object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
@@ -79,8 +78,10 @@ as.parameters.parameters <- function(params, ...)
   params
 
 #' ??? -> parameters
-#' @note This, in future revisions, should throw warnings about deprecation.
+#' @note This function should be deprecated.
 #' @param params any non-supported data-type
+#' @param num an integer specifying the number of simulations to compute
+#' @param ... ignored
 #' @return the object passed in
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.default <- function(params, num=NULL, ...) {

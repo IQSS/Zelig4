@@ -1,5 +1,6 @@
 #' Generic Method for Simulating Ancillary/Auxillary Parameters of Zelig Models
-#'
+#' @note The 'param' function is a method meant to be overloaded by Zelig
+#'   Developers
 #' @param obj a `zelig' object
 #' @param num an integer specifying the number of simulations to sample
 #' @param ... optional parameters which will likely be ignored

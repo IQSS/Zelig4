@@ -1,8 +1,8 @@
 #' Summarize Simualted Quantities of Interest
+#' @usage \method{summarize}{default}(q)
 #' @S3method summarize default
-#' @param q a `qi' object, storing simulations of quantities of interest
-#' @return a `summarized.qi' object
-#' @export
+#' @param q a 'qi' object, storing simulations of quantities of interest
+#' @return a 'summarized.qi' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summarize.default <- function(q) {
   i <- iter(q)
@@ -141,21 +141,32 @@ table.levels <- function (x, levels, ...) {
 }
 
 
+#' Construct an Iterator from a List of Summarized Quantities of Interest
+#' @note This function is used internally by Zelig.
+#' @usage \method{iter}{summarized.qi}(obj, ...)
 #' @S3method iter summarized.qi
+#' @param obj a 'summarized.qi' object
+#' @param ... ignored
+#' @return an iterator
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-iter.summarized.qi <- function(s) {
-  iter(Map(function (x, y) list(key=x, value=y), names(s), s))
+iter.summarized.qi <- function(obj, ...) {
+  iter(Map(function (x, y) list(key=x, value=y), names(obj), obj))
 }
 
 
+#' Construct an Iterator from a List of Quantities of Interest
+#' @note This function is used internally by Zelig
+#' @param obj a 'qi' object created by the 'qi' function
+#' @param ... ignored parameters
+#' @return an iterator
 #' @S3method iter qi
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-iter.qi <- function(s) {
+iter.qi <- function(obj, ...) {
   lis <- list()
-  indices <- names(attr(s, '.index'))
+  indices <- names(attr(obj, '.index'))
 
   for (index in indices)
-    lis[[index]] <- list(key = index, value = s[[index]])
+    lis[[index]] <- list(key = index, value = obj[[index]])
 
   iter(lis)
 }

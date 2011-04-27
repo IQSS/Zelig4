@@ -1,18 +1,13 @@
-#' Default method for replicating data
-#' @param obj a `zelig' object
+#' Default Method for Replicating Statistics
+#' @param object an object to replicate
 #' @param data a data.frame
 #' @param ... ignored parameters
-#' @return a `sim' object storing the replicated quantities of interest
+#' @return a replicated object
 #' @export
 #' @author Kosuke Imai and Olivia Lau \email{mowen@@iq.harvard.edu}
-repl.default <- function(obj, data=NULL, ...) {
-
-  #
+repl.default <- function(object, data=NULL, ...) {
   if (!is.null(data))
-    obj$call$data <- data
+    obectj$call$data <- data
 
-
-  #
-  eval(obj$call$data, sys.parent())
-
+  eval(object$call$data, sys.parent())
 }

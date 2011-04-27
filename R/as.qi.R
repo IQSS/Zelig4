@@ -96,9 +96,10 @@ as.qi.list <- function(s) {
 }
 
 
-#' Print a `qi' object in human-readable form
+#' Print a Quantity of Interest in Human-Readable Form
 #' @param x a qi object
-#' @return the object that was printed
+#' @param ... ignored parameters
+#' @return the object that was printed (invisibly)
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.qi <- function(x, ...) {
@@ -134,7 +135,7 @@ print.qi <- function(x, ...) {
 #' extraction. For technical details, please see the source code.
 #' @note No method exists to set the names of a 'qi' object, once it is 
 #'   constructed. This will be a feature added later.
-#' @param q a 'qi' object
+#' @param x a 'qi' object
 #' @return a character-vector containing the names of the Quantities of
 #'   Interest
 #' @export

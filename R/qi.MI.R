@@ -1,28 +1,26 @@
-#' Compute quantities of interest for multiply-imputed Zelig models
-#'
-#' @param obj a `zelig' object
-#' @param x a `setx' object or NULL
-#' @param x1 an optional `setx' object
+#' Compute Quantities of Interest for Multiply-Imputed Zelig Models
+#' @param obj a 'zelig' object
+#' @param x a 'setx' object or NULL
+#' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
-#'          though this feature is currentlysupported by only a
-#'          handful of models
+#'   though this feature is currentlysupported by only a handful of models
 #' @param num an integer specifying the number of simulations to compute
 #' @param param a parameters object
 #' @return a list of key-value pairs specifying pairing titles of
 #'         quantities of interest with their simulations
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.MI <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.MI <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   # split number of simulations between each model
   # this might not be intuitive for the user
-  num <- round(num/length(z$result))
+  num <- round(num/length(obj$result))
 
 
   # init list for qi's
   qi.list <- list()
 
   # initialize iterators
-  zelig.iter <- iter(z$result)
+  zelig.iter <- iter(obj$result)
 
   # define the null function
   null.function <- function(x) NULL
@@ -69,7 +67,7 @@ qi.MI <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
       break
 
     # create a kin object
-    kin <- zelig.kin(z, zelig.item, data=data)
+    kin <- zelig.kin(obj, zelig.item, data=data)
 
     label <- paste(names.data.key, data.key, sep=" = ", collapse=", ")
 
