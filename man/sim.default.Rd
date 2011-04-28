@@ -1,7 +1,7 @@
 \name{sim.default}
 \alias{sim.default}
 \title{Method for Simulating Quantities of Interest wrom 'zelig' Objects...}
-\usage{sim.default(obj, x, x1, y, num=1000, prev, bootstrap=FALSE, boot.fn,
+\usage{sim.default(obj, x, x1, y, num=1000, bootstrap=FALSE, boot.fn,
     cond.data, ...)}
 \description{Method for Simulating Quantities of Interest wrom 'zelig' Objects}
 \value{a 'sim' object storing the replicated quantities of interest}
@@ -14,7 +14,6 @@ of quantities of interest}
 interest (average treatment effects). Few models currently support this
 parameter}
 \item{num}{an integer specifying the number of simulations to compute}
-\item{prev}{ignored}
 \item{bootstrap}{ignored}
 \item{boot.fn}{ignored}
 \item{cond.data}{ignored}

@@ -1,5 +1,4 @@
 #' Store Named Values in an Newly Created Environment
-#' @ZZZ
 #' @note This function is exclusively used internally by Zelig
 #' @param params a list of parameters to create a Zelig Call
 #' @return a list containing:
@@ -142,7 +141,6 @@ eval.in <- .call <- function (...) {
 
 
 #' Apply Function Call to Zelig Objects Result Slot
-#' @asdasd
 #' @param expr an expression to lazily-evaluate
 #' @param envir ignored until later versions
 #' @return the result of applying the expression to the 

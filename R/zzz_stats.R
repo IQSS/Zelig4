@@ -4,7 +4,7 @@
 #'   randomly selected (by design)
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-mode.zelig <- function (x) {
+Mode <- function (x) {
   # build a table of values of x
   tab <- table(as.factor(x))
 
@@ -23,10 +23,11 @@ mode.zelig <- function (x) {
 
 #' Compute the Statistical Median of a Vector
 #' @param x a vector of numeric or ordered values
+#' @param na.rm ignored
 #' @return the median of the vector
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-median.zelig <- function (x) {
+Median <- function (x, na.rm=NULL) {
   v <- ifelse(is.numeric(x),
               median(v),
               levels(x)[ceiling(median(as.numeric(x)))]
@@ -38,10 +39,11 @@ median.zelig <- function (x) {
 
 #' Compute the Maximum Value of a Vector
 #' @param x a numeric or ordered vector
+#' @param na.rm ignored
 #' @return the maximum value of the vector
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-max.zelig <- function (x) {
+Max <- function (x, na.rm=NULL) {
   if (is.numeric(x))
     return(max(x))
   
@@ -59,10 +61,11 @@ max.zelig <- function (x) {
 
 #' Compute the Minumum Value of a Vector
 #' @param x a vector of numeric or ordered values
+#' @param na.rm ignored
 #' @return the minimum value of the vector
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-min.zelig <- function (x) {
+Min <- function (x, na.rm=NULL) {
   if (is.numeric(x))
     return(min(x))
   

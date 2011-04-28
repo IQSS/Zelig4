@@ -42,5 +42,5 @@
 #' @seealso The full Zelig manual may be accessed online at
 #'   \url{http://gking.harvard.edu/zelig}
 #' @keywords file
-setx <- function(obj, fn=NULL, data=NULL, cond=false, ...)
+setx <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...)
   UseMethod("setx")

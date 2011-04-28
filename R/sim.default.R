@@ -7,7 +7,6 @@
 #'   interest (average treatment effects). Few models currently support this
 #'   parameter
 #' @param num an integer specifying the number of simulations to compute
-#' @param prev ignored
 #' @param bootstrap ignored
 #' @param boot.fn ignored
 #' @param cond.data ignored
@@ -17,14 +16,11 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 sim.default <- function(obj,
                         x=NULL, x1=NULL, y=NULL,
-                        num=1000, prev = NULL, bootstrap = FALSE,
+                        num=1000, bootstrap = FALSE,
                         boot.fn=NULL,
                         cond.data = NULL,
                         ...) {
   # error-catching
-  if (!is.null(prev))
-    warning("previous parameters are not yet supported")
-
   if (!is.null(boot.fn) || is.logical(bootstrap) && bootstrap)
     warning("bootstrapping is not yet implemented")
 

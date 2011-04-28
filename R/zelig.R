@@ -95,7 +95,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # repeat
   repeat {
     # get the next data.frame
-    d.f <- try(nextElem.mi(m), silent=TRUe)
+    d.f <- try(nextElem.mi(m), silent=TRUE)
 
     # catch end-of-list error
     if (inherits(d.f, "try-error")) {

@@ -1,11 +1,11 @@
 #' Summarize Simualted Quantities of Interest
-#' @usage \method{summarize}{default}(q)
+#' @usage \method{summarize}{default}(qi)
 #' @S3method summarize default
-#' @param q a 'qi' object, storing simulations of quantities of interest
+#' @param qi a 'qi' object, storing simulations of quantities of interest
 #' @return a 'summarized.qi' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-summarize.default <- function(q) {
-  i <- iter(q)
+summarize.default <- function(qi) {
+  i <- iter(qi)
   res <- list()
 
 

@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'logit' Zelig models
-#' @usage \method{qi}{logit}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{logit}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi logit
-#' @param z a 'zelig' object
+#' @param obj a 'zelig' object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
@@ -11,7 +11,7 @@
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.logit <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   #
   ev1 <- .compute.ev(obj, x, num, param)
   pr1 <- matrix(nrow=nrow(ev1), ncol=ncol(ev1))

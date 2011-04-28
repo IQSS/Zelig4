@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'poisson' Zelig models
-#' @usage \method{qi}{poisson}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{poisson}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi poisson
-#' @param z a 'zelig' object
+#' @param obj a 'zelig' object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
@@ -11,7 +11,7 @@
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.poisson <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.poisson <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   # 
   coef <- coef(param)
 
@@ -36,7 +36,7 @@ qi.poisson <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   if (!is.null(x1)) {
 
     # quantities of interest
-    results <- qi(z, x1, num=num, param=param)
+    results <- qi(obj, x1, num=num, param=param)
 
     # pass values over
     ev1 <- results[["Expected Values: E(Y|X)"]]

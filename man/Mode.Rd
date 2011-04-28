@@ -1,7 +1,7 @@
-\name{mode.zelig}
-\alias{mode.zelig}
+\name{Mode}
+\alias{Mode}
 \title{Compute the Statistical Mode of a Vector...}
-\usage{mode.zelig(x)}
+\usage{Mode(x)}
 \description{Compute the Statistical Mode of a Vector}
 \value{the statistical mode of the vector. If two modes exist, one is
 randomly selected (by design)}

@@ -1,12 +1,12 @@
 \name{qi.probit}
 \alias{qi.probit}
 \title{Compute quantities of interest for 'probit' Zelig models...}
-\usage{\method{qi}{probit}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)}
+\usage{\method{qi}{probit}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)}
 \description{Compute quantities of interest for 'probit' Zelig models}
 \value{a list of key-value pairs specifying pairing titles of quantities of
 interest with their simulations}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
-\arguments{\item{z}{a 'zelig' object}
+\arguments{\item{obj}{a 'zelig' object}
 \item{x}{a 'setx' object or NULL}
 \item{x1}{an optional 'setx' object}
 \item{y}{this parameter is reserved for simulating average treatment effects,

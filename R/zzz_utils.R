@@ -71,6 +71,14 @@ zframe <- function(dataf, labels=NULL) {
   z
 }
 
+#' Extract Subsetted Data-Frames from \code{zframe} Objects
+#' \code{zframe} objects are exclusively used internally within Zelig; they 
+#' facilitate the process of subsetting data-frames for the \code{mi} function.
+#' @note The replacement operator is undefined for \code{zframe} objects.
+#' @param z a 'zframe' object used to describe multiple subsetted data-sets
+#' @param ... parameters to be passed to the default extraction operator
+#' @return a subsetted data-frame
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 "[.zframe" <- function(z, ...) {
   # expand dots
   dots <- list(...)
@@ -123,7 +131,7 @@ zframe <- function(dataf, labels=NULL) {
 #' @return the corresponding subsetted data-frame
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.data.frame.zframe <- function(x, row.names=NULL, optional = FALSE, ...)
-  zef$data
+  x$data
 
 
 #' Split a Parameter List into Two Lists

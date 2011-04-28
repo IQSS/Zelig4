@@ -60,7 +60,7 @@ print.qi.summarized <- function (x, ...) {
 
 #' Method for Printing Summarized QI's in a Matrix Form
 #' @name special_print_MATRIX
-#' @aliases special_print_MATRIX
+#' @aliases special_print_MATRIX .print.qi.summarized.MATRIX
 #' @note This function is used internall by Zelig
 #' @param x a 'summarized.qi' object
 #' @param ... additional parameters
@@ -83,7 +83,7 @@ print.qi.summarized <- function (x, ...) {
 
 #' Method for Printing Summarized QI's in a List Form
 #' @name special_print_LIST
-#' @aliases special_print_LIST
+#' @aliases special_print_LIST .print.qi.summarized.LIST
 #' @note This function is used internall by Zelig
 #' @param x a 'summarized.qi' object
 #' @param ... additional parameters to be used by the 'print.matrix' method

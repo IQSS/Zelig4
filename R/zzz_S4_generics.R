@@ -107,10 +107,10 @@
 # @object: a zelig object
 .GetGenericsS4 <- function(object, envir=parent.frame()) {
   if (inherits(object$result, "list")) {
-    .ListS4Generics(classes=class(object$result[[1]]), env=env)
+    .ListS4Generics(classes=class(object$result[[1]]), env=envir)
   }
   else
-    .ListS4Generics(classes=class(object$result), env=env)
+    .ListS4Generics(classes=class(object$result), env=envir)
 }
 
 

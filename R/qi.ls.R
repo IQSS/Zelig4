@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'ls' Zelig models
-#' @usage \method{qi}{ls}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{ls}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi ls
-#' @param z a 'zelig' object
+#' @param obj a \code{zelig} object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
@@ -11,7 +11,7 @@
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.ls <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.ls <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # error-catching
   if (missing(x))
     stop("x cannot be missing while computing the `ls' model")

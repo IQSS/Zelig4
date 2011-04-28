@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'gamma' Zelig models
-#' @usage \method{qi}{gamma}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{gamma}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi gamma
-#' @param z a 'zelig' object
+#' @param obj a \code{zelig} object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
@@ -11,9 +11,9 @@
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.gamma <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.gamma <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # get parameters
-  shape <- gamma.shape(z)
+  shape <- gamma.shape(obj)
   alpha <- rnorm(num, mean = shape$alpha, sd = shape$SE)
   coef <- coef(param)
 
@@ -21,7 +21,7 @@ qi.gamma <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   eta <- coef %*% t(x)
 
   # or do this: get the inverse function
-  #inverse <- z[["family", "linkinv"]]
+  #inverse <- obj[["family", "linkinv"]]
   # theta <- matrix(inverse(eta), nrow = nrow(coef))
 
   # compute theta (apply inverse)
@@ -47,7 +47,7 @@ qi.gamma <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   if (!is.null(x1)) {
 
     # quantities of interest
-    results <- qi(z, x1, num=num, param=param)
+    results <- qi(obj, x1, num=num, param=param)
 
     # pass values over
     ev1 <- results[["Expected Values: E(Y|X)"]]

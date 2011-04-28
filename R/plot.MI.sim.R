@@ -8,5 +8,5 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 plot.MI.sim <- function(...) {
   warning("Zelig currently does not support plots of mutiply imputed data")
-  invisble(NULL)
+  invisible(NULL)
 }

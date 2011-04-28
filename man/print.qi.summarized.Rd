@@ -5,7 +5,7 @@
 \description{Print Method for Summarized Quantities of Interest}
 \value{x (invisibly)}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
-\seealso{\link{special_prints_MATRIX} and
-\link{special_prints_LIST}}
+\seealso{\link{special_print_MATRIX} and
+\link{special_print_LIST}}
 \arguments{\item{x}{a 'summarized.qi' object}
 \item{...}{parameters to be passed to the specific print functions}}

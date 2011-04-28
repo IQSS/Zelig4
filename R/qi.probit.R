@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'probit' Zelig models
-#' @usage \method{qi}{probit}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{probit}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi probit
-#' @param z a 'zelig' object
+#' @param obj a 'zelig' object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,

@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'negbinom' Zelig models
-#' @usage \method{qi}{negbinom}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{negbinom}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi negbinom
-#' @param z a 'zelig' object
+#' @param obj a 'zelig' object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
@@ -11,13 +11,13 @@
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.negbinom <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.negbinom <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   #
   coef <- coef(param)
   alpha <- alpha(param)
 
   # get inverse function
-  inverse <- z[["family", "linkinv"]]
+  inverse <- obj[["family", "linkinv"]]
 
   #
   eta <- coef %*% t(x)
@@ -38,7 +38,7 @@ qi.negbinom <- function(z, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   if (!is.null(x1)) {
 
     # quantities of interest
-    results <- qi(z, x1, num=num)
+    results <- qi(obj, x1, num=num)
 
     # pass values over
     ev1 <- results[["Expected Values: E(Y|X)"]]

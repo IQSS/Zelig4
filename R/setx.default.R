@@ -33,8 +33,8 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   if (missing(fn) || !is.list(fn))
     # set fn to appropriate values, if NULL
     fn <- list(numeric = mean,
-               ordered = median.zelig,
-               other   = mode.zelig
+               ordered = Median,
+               other   = Mode
                )
 
   # get data-frame

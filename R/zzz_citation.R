@@ -147,7 +147,7 @@ ZeligListTitles <- function() {
 #' @note This function is used primarily internally to determine whether a
 #'   a package is contributing a function to the Zelig software suite
 #' @param pkg a character-string representing a package name
-#' @return: whether the package contains any zelig2-functions
+#' @return whether the package contains any zelig2-functions
 #' @export
 has.zelig2 <- function(pkg) {
   env <- asNamespace(pkg)

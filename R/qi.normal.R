@@ -1,7 +1,7 @@
 #' Compute quantities of interest for 'normal' Zelig models
-#' @usage \method{qi}{normal}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @usage \method{qi}{normal}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi normal
-#' @param z a 'zelig' object
+#' @param obj a 'zelig' object
 #' @param x a 'setx' object or NULL
 #' @param x1 an optional 'setx' object
 #' @param y this parameter is reserved for simulating average treatment effects,
@@ -11,7 +11,7 @@
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-qi.normal <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
+qi.normal <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # get `num` samples from the underlying distribution
   coef <- coef(param)
   alpha <- alpha(param)
@@ -38,7 +38,7 @@ qi.normal <- function(z, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   if (!is.null(x1)) {
 
     # quantities of interest
-    lis1 <- qi(z, x1, num=num, param=param)
+    lis1 <- qi(obj, x1, num=num, param=param)
 
     # pass values over
     ev1 <- lis1[[1]]

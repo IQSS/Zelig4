@@ -3,7 +3,7 @@
 #' The mi constructor bundles several data-frames with identical 
 #' columns into a single object. This allows for several analyses
 #' to be executed sequentially.
-#'
+#' @param obj an object
 #' @param ... an object or set objects to cast as an 'mi' object
 #' @param by a character-string specifying a column name
 #'           in a data-frame to subset
@@ -16,25 +16,28 @@
 #' @example
 #' data(immi1, immi2, immi3, immi4, immi5)
 #' mi(immi1, immi2, immi3, immi4, immi5)
-mi <- function(..., by=NULL) {
+mi <- function(obj, ..., by=NULL) {
   UseMethod("mi")
 }
 
 
 #' Construct an 'mi' object from a set of data-frames
 #' 
-#' @param ... a set of data.frame's
+#' @param obj the first data-frame
+#' @param ... additional data-frames
 #' @param by a character-string specifying a column of a data.frame
 #'           to use for multiple imputation
 #' @return an object of type `mi'
 #' @S3method mi default
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-mi.default <- function(..., by = NULL) {
+mi.default <- function(obj, ..., by = NULL) {
   data.labels <- match.call(expand.dots=F)[["..."]]
   data.labels <- as.character(data.labels)
 
-  mi(list(...), by = by)
+  lis <- append(list(obj), list(...))
+
+  mi(lis, by = by)
 }
 
 
@@ -44,17 +47,17 @@ mi.default <- function(..., by = NULL) {
 #'
 #' @S3method mi mi
 #' @export
-#' @param m an object of type 'mi'
+#' @param obj an object of type 'mi'
 #' @param ... ignored parameters
 #' @param by a character-string specifying a calumn of the data.frames
 #'           used in the 'mi' object.
 #' @return an object of type 'mi'
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-mi.mi <- function(m, ..., by=NULL) {
+mi.mi <- function(obj, ..., by=NULL) {
   if (missing(by))
-    by <- m$by
+    by <- obj$by
 
-  mi(m$data, by=by, data.labels=m$labels)
+  mi(obj$data, by=by, data.labels=obj$labels)
 }
 
 
@@ -67,7 +70,8 @@ mi.mi <- function(m, ..., by=NULL) {
 #'
 #' @S3method mi list
 #' @export
-#' @param lis a list of data.frames
+#' @param obj a list of data.frames
+#' @param ... additional parameters
 #' @param by a character-string specifying a calumn of the data.frames
 #'           used in the `mi' object.
 #' @param data.labels a vector of character-strings that specify the
@@ -76,9 +80,9 @@ mi.mi <- function(m, ..., by=NULL) {
 #'                    Zelig releases
 #' @return an object of type `mi'
 #' @author Matt Owen \email{mowen@@iq.harvard.}
-mi.list <- function(lis, by=NULL, data.labels=NULL) {
+mi.list <- function(obj, ..., by=NULL, data.labels=NULL) {
   # error-catching
-  if (!all(sapply(lis, is.data.frame)))
+  if (!all(sapply(obj, is.data.frame)))
     stop("all elements passed to `mi' must be data.frame's")
 
   # initialize list of factors
@@ -86,7 +90,7 @@ mi.list <- function(lis, by=NULL, data.labels=NULL) {
 
   # build the list
   for (key in by) {
-    for (dataf in lis)
+    for (dataf in obj)
       factors[[key]] <- c(factors[[key]], levels(dataf[,key]))
 
     # unique, bitte
@@ -94,19 +98,19 @@ mi.list <- function(lis, by=NULL, data.labels=NULL) {
   }
   
   #if (is.null(data.labels))
-  data.labels <- list(1:length(lis))
+  data.labels <- list(1:length(obj))
 
   #else if(!is.list(data.labels))
   #  data.labels <- list(dataset=data.labels)
 
   #p <- c(data.labels, factors)
-  p <- c(list(1:length(lis)), factors)
+  p <- c(list(1:length(obj)), factors)
 
   # get all combinations of factors
   combined <- do.call(".combine", p)
 
   # build object
-  s <- list(data = lis,
+  s <- list(data = obj,
             iter = iter(combined, by="row"),
             by = by,
             labels = data.labels
@@ -205,13 +209,14 @@ nextElem.mi <- function(obj, ..., keys.only=F, as.pair=F) {
 }
 
 
-#' Reset method for 'mi' objects
-#' @usage \method{reset}{mi}(obj)
+#' Reset method for \code{mi} objects
+#' @usage \method{reset}{mi}(obj, ...)
 #' @S3method reset mi
-#' @param obj an 'mi' object 
+#' @param obj an \code{mi} object 
+#' @param ... ignored parameters
 #' @return the same object with the iterator reset
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-reset.mi <- function(obj) {
+reset.mi <- function(obj, ...) {
   assign('i', 0, env=obj$iter$state)
   invisible(obj)
 }

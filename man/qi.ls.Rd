@@ -1,12 +1,12 @@
 \name{qi.ls}
 \alias{qi.ls}
 \title{Compute quantities of interest for 'ls' Zelig models...}
-\usage{\method{qi}{ls}(z, x, x1=NULL, y=NULL, num=1000, param=NULL)}
+\usage{\method{qi}{ls}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)}
 \description{Compute quantities of interest for 'ls' Zelig models}
 \value{a list of key-value pairs specifying pairing titles of quantities of
 interest with their simulations}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
-\arguments{\item{z}{a 'zelig' object}
+\arguments{\item{obj}{a \code{zelig} object}
 \item{x}{a 'setx' object or NULL}
 \item{x1}{an optional 'setx' object}
 \item{y}{this parameter is reserved for simulating average treatment effects,
