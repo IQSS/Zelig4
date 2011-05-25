@@ -18,8 +18,18 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
   form <- .call(formula(obj), obj$envir)
 
-  vars.obj <- as.character(all.vars(form[[3]]))
-  not.vars <- as.character(all.vars(form[[2]]))
+  if (length(form) == 3) {
+    vars.obj <- as.character(all.vars(form[[3]]))
+    not.vars <- as.character(all.vars(form[[2]]))
+  }
+  else if (length(form) == 2) {
+    vars.obj <- as.character(all.vars(form[[2]]))
+    not.vars <- as.character(all.vars(form[[1]]))
+  }
+  else {
+    stop("Formula of zelig object must have a length of 2 or 3")
+  }
+
   env.obj <- NULL
 
   # explanatory variables

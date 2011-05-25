@@ -11,3 +11,5 @@ specified values.}
 wordful) and the unkeyed entried (titled wordless)}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
 \arguments{\item{args}{a list}}
+\examples{chop.up(list(x=1, 2, "red", y=2))
+#list(wordful = list(x=1, y=2), wordless=list(2, "red"))}

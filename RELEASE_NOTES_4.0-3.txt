@@ -1,0 +1,86 @@
+Zelig v4.0-3 Release Notes (May 16, 2011)
+
+
+Introduction
+================================================================================
+This document is a brief overview of the current state of the Zelig project as
+of the 4.0-3 release. This release hopes to maintain the canonical Zelig syntax
+and interface for end-users, while supplying developers with tools to aid in
+the development of effective statistical modeling techniques. Emphasis has been
+placed on readability and modularity.
+
+As a result of this gargantuan change, a plethora of features, API
+functionality, and documentation has been added to the Zelig R-package. Several
+previously existing models, however, have been removed temporarily or moved
+from the Zelig core package to more-specific Zelig extensions.
+
+
+Project Information
+================================================================================
+The Zelig software suite is an easy-to-use R-package geared towards making
+complex statistical techniques available to end users, particularly those
+researching the quantitative social sciences. In particular, it offers unifying
+syntax and programming-style between seemingly disparate and unrelated 
+statistical mdoels.
+
+To facilitate this purpose, Zelig (as of May 16th, 2011) includes an array of
+programming tools, geared towards allowing the rapid development, debugging, 
+and inclusion of new statistical models. That is, Zelig now facilitates and
+encourages collaboration between novel and pre-existing statistical packages.
+
+
+Author Information
+================================================================================
+Zelig is a collaborative effort by Harvard's Institute for Quantitive Social
+Sciences (Harvard IQSS). Publications, software releases, and additional
+information can be found at:
+  http://gking.harvard.edu/
+  http://iq.harvard.edu/
+
+
+Licensing
+================================================================================
+Zelig is licensed under the GNU General Public License version 2, and as such
+can be freely used and edited given proper attribution to Harvard's IQSS
+Department.
+
+
+What's New in this Release?
+================================================================================
+This release offers a large variety of coding style changes, as well as core
+functionality. Please carefully read the following:
+
+Major Changes
+--------------------------------------------------------------------------------
+- Models are now added to Zelig as separate extensions. The method
+  'zelig.skeleton' has been added to the R-package to facilitate this change.
+- The main Zelig package now contains a mere 8 models. 22 additional models are
+  available via extensions, geared towards adding specific functionality to the
+  Zelig software suite.
+- zelig.skeleton: a method used to create blank zelig packages. This follows
+  the style and format of the R-core method 'package.skeleton'
+- Simplified zelig2-function API. See "?zelig2" within an R-session for help
+- Enhanced API for 'param' and 'qi' functions. See develoepr documentation for
+  more information
+
+Minor Changes
+--------------------------------------------------------------------------------
+- Slight changes to the plotting of simulated quantities of interest. Most
+  changes are stylistic
+- Quantities of interest using two different sets of explanatory variables now
+  output information containing concerning the simulations of the second 'setx'
+  object's Predicted Values and Expected Values. This was previuosly not the
+  case
+- ZeligListModels: a method used to list available models, installed on the
+  current operating system.
+
+Missing Features
+--------------------------------------------------------------------------------
+- The 'setx' method currently doesn not support setting multiple
+  counterfactuals in a single call to 'setx'. This feature is under current
+  development, and should soon be admitted into the main branch.
+- "ternaryplot" plotting style is ommitted from the core package, and will be 
+  instead moved to the 'bivariate' and 'multinomial' Zelig modules.
+- "Average Treatment Effect" quantities of interest are not being included in 
+  zelig models temporarily. Simulation of these qi's will return pending a 
+  minor update to the 'setx' function.

@@ -1,9 +1,10 @@
-#' Describe the `negbinom' model to Zelig
-#' `negbinom' stands for 'negative binomial'
+#' Describe the \code{negbinom} model to Zelig
+#' @note \code{negbinom} stands for "negative binomial"
+#' @S3method describe negbinom
 #' @param ... ignored parameters
-#' @return a list to be processed by `as.description'
-#' @export
+#' @return a list to be processed by \code{as.description}
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 describe.negbinom <- function(...) {
   # parameters object
   parameters <- list(pi = list(

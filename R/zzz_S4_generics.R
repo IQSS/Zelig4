@@ -28,7 +28,7 @@
                        where = .GlobalEnv,
                        definition=.NewZeligMIGenericS4(name)
                        ),
-             silent=FALSE
+             silent=TRUE
              )
 
   if (inherits(res, "try-error")) {
@@ -109,7 +109,7 @@
   if (inherits(object$result, "list")) {
     .ListS4Generics(classes=class(object$result[[1]]), env=envir)
   }
-  else
+  else 
     .ListS4Generics(classes=class(object$result), env=envir)
 }
 
@@ -138,7 +138,10 @@
     fdef <- getGeneric(f)
     env <- environment(fdef)
 
-    table <- get(".AllMTable", envir=env)
+    table <- tryCatch(get(".AllMTable", envir=env), error=function(e) NULL)
+
+    if (is.null(table))
+      next
 
     if (any(classes %in% ls(table)))
       matches <- append(matches, f)

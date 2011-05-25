@@ -1,9 +1,9 @@
 #' Describe the `poisson' model to Zelig
-#'
+#' @S3method describe poisson
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 describe.poisson <- function(...) {
   # parameters object
   parameters <- list(lambda = list(

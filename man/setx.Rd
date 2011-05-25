@@ -36,3 +36,8 @@ default values set by the function \code{fn}.  For example, adding
 of \code{x1} to 12.  In addition, you may specify one explanatory variable
 as a range of values, creating one observation for every unique value in
 the range of values}}
+\examples{# Unconditional prediction:
+data(turnout)
+z.out <- zelig(vote ~ race + educate, model = "logit", data = turnout)
+x.out <- setx(z.out)
+s.out <- sim(z.out, x = x.out)}

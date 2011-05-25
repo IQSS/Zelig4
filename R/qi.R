@@ -1,8 +1,11 @@
-#' Generic Method for Computing Quantities of Interest
+#' The \code{qi} function is used by developers to simulated quantities of
+#' interest. This method, as a result, is the most significant method of any
+#' Zelig statistical model.
 #'
-#' @param obj a `zelig' object
-#' @param x a `setx' object or NULL
-#' @param x1 an optional `setx' object
+#' @title Generic Method for Computing Quantities of Interest
+#' @param obj a \code{zelig} object
+#' @param x a \code{setx} object or NULL
+#' @param x1 an optional \code{setx} object
 #' @param y this parameter is reserved for simulating average treatment effects,
 #'          though this feature is currentlysupported by only a
 #'          handful of models
@@ -12,16 +15,23 @@
 #'         quantities of interest with their simulations
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @note Run \code{example(qi)} to see a trivial version of 
+#' @examples
+#' qi.some.model <- function(obj, x=NULL, x1=NULL, y=NULL, param=NULL) {
+#'   list(
+#'        "Expected Values: E(Y|X)" = NA,
+#'        "Predicted Values: Y|X"   = NA
+#'        )
+#' }
 qi <- function(obj, x=NULL, x1=NULL, y=NULL, num, param=NULL) {
-  # error-catching
   if (!inherits(obj, "zelig"))
-    stop("z must be of type \"zelig\"")
+    stop('"obj" must be of a "zelig" object')
 
   if (!(is.null(x) || inherits(x, "setx")))
-    stop("x must be of type \"setx\"")
+    stop('"x" must be a "setx" object"')
 
   if (!(is.null(x1) || inherits(x1, "setx")))
-    stop("x1 must be of type \"setx\"")
+    stop('"x1" must be a "setx" object')
 
   # then use the method
   UseMethod("qi")

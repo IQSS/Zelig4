@@ -1,10 +1,10 @@
-#' Describe a `ls' model to Zelig
-#' `ls' stands for `least squares fit'
-#'
+#' Describe a \code{ls} model to Zelig
+#' @note \code{ls} stands for "least squares fit"
+#' @S3method describe ls
 #' @param ... ignored parameters
-#' @return a list to be processed by `as.description'
-#' @export
+#' @return a list to be processed by \code{as.description}
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 describe.ls <- function(...){
   parameters <-list(mu = list(
                       equations = c(1,1),

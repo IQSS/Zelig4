@@ -1,9 +1,9 @@
-#' Describe the `normal' model to Zelig
-#'
+#' Describe the \code{normal} model to Zelig
+#' @S3method describe normal
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 describe.normal <- function(...) {
   # parameters object
   parameters <- list(pi = list(

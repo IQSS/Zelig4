@@ -1,9 +1,9 @@
 #' Describe a `logit' model to Zelig
-#'
+#' @S3method describe logit
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 describe.logit <- function(...) {
   # parameters object
   parameters <- list(pi = list(

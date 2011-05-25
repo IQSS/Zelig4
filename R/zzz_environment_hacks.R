@@ -146,7 +146,7 @@ eval.in <- .call <- function (...) {
 #' @return the result of applying the expression to the 
 #'         `result' slot of the first parameter
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @example 
+#' @examples
 #' data(vote)
 #' z.out <- zelig(vote ~ race + educate, model='logit', data=vote)
 #' result(vcov(z.out))

@@ -6,3 +6,4 @@ negbinom           Negative Binomial regression and simulation
 normal             Normal (Gaussian) regression and simulation
 poisson            Poisson regression and simulation
 probit             Probit regression and simulation
+Zelig.HelloWorld   Step-by-step demo on creating Zelig packages

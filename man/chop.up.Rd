@@ -11,3 +11,5 @@ wordful) and the unkeyed entried (titled wordless)}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
 \seealso{split.up}
 \arguments{\item{...}{a mix of parameters of any time}}
+\examples{chop.up(x=1, 2, "red", y=2)
+#list(wordful = list(x=1, y=2), wordless=list(2, "red"))}

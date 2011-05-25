@@ -142,7 +142,8 @@ as.data.frame.zframe <- function(x, row.names=NULL, optional = FALSE, ...)
 #' @return a list containing two entries: the key-value paired entires (titled
 #'   wordful) and the unkeyed entried (titled wordless)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @example
+#' @export
+#' @examples
 #' chop.up(x=1, 2, "red", y=2)
 #' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
 #' @seealso split.up
@@ -158,7 +159,8 @@ chop.up <- function(...)
 #' @return a list containing two entries: the key-value paired entires (titled
 #'   wordful) and the unkeyed entried (titled wordless)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @example
+#' @export
+#' @examples
 #' chop.up(list(x=1, 2, "red", y=2))
 #' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
 split.up <- function(args) {

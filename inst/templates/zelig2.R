@@ -1,7 +1,7 @@
 #' Interface between the Zelig Model \\model\\ and 
 #' the Pre-existing Model-fitting Method
 #' @param formula a formula
-#' @param ... 
+#' @param ... additonal parameters
 #' @param data a data.frame 
 #' @return a list specifying '.function'
 #' @export

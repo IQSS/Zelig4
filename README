@@ -1,3 +1,25 @@
+4.0-2 (May 16, 2011): Stable release for R 2.12,1. Major version update, and
+  and addition of numerous API features. Core package now contains a mere 7
+  models. Dependencies having correspondingly been reduced to:
+    MASS
+    iterators
+    survival
+    methods
+
+  For the missing models, please see the software packages:
+    bivariate.zelig: bivaraite generalized linear regressions
+    mixed.zelig: multilevel (mixed) generalized linear regressions
+    multinomial.zelig: multinomial logit and probit regressions
+    ordinal.zelig: ordinal logit and probit regressions
+    survey.zelig: survey-weighted generalized linear models
+
+  These models can be found on the Harvard IQSS website at:
+    http://gking.harvard.edu/zelig/
+  
+  Or via installations with:
+    source('http://people.iq.harvard.edu/~mowen/install.R')
+
+
 2.8-3 (May 29, 2007):  Stable release for R 2.4.0-2.5.0.  Fixed bugs in 
   help.zelig(), and summary for multinomial logit, bivariate probit, 
   and bivariate logit with multiple imputation.  First version 

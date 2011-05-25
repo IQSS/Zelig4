@@ -25,6 +25,9 @@ summarize.default <- function(qi) {
     if (!is.qi(val))
       next
 
+    if (!is.matrix(val))
+      val <- matrix(val, ncol=1, nrow=length(val))
+
     
     # make a matrix that is data-friendly
     m <- if (is.numeric(val)) {

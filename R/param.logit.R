@@ -1,5 +1,5 @@
-#' Param Method for the 'logit' Zelig Model
-#' @note This method is used by the 'logit' Zelid model
+#' Param Method for the \code{logit} Zelig Model
+#' @note This method is used by the \code{logit} Zelig model
 #' @S3method param logit
 #' @param obj a 'zelig' object
 #' @param num an integer specifying the number of simulations to sample

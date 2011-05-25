@@ -30,7 +30,7 @@
 #'   the data frame, the 5th subset for example, you may use:  
 #'   \code{x.out <- setx(z.out[[5]])}
 #' @export
-#' @example
+#' @examples
 #'
 #' # Unconditional prediction:
 #' data(turnout)
