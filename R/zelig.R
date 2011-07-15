@@ -47,6 +47,8 @@
 #'         Maintainer: Matt Owen \email{monwe@@iq.harvard.edu}
 #' @keywords package
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
+  Call <- match.call()
+
   if (!missing(by)) {
     if (any(by %in% all.vars(formula))) {
       warning("by cannot list contain a variable from the model's formula")
@@ -95,7 +97,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # repeat
   repeat {
     # get the next data.frame
-    d.f <- try(nextElem.mi(m), silent=TRUE)
+    d.f <- try(nextElem(m), silent=TRUE)
 
     # catch end-of-list error
     if (inherits(d.f, "try-error")) {
@@ -109,24 +111,30 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # call zelig2* function
     zclist <- zelig2(formula, ..., data=d.f)
 
-    # interpret the return as function, hooks, and parameters
-    zclist <- .zelig2ify(zclist)
+    # list of parameters to be ignored by external models
+    remove <- c("model", "by", "cite", "...")
 
+    # construct the call object
+    res.call <- zelig.call(Call, zclist, remove)
+    new.call <- res.call$call
 
-    # create zelig.call
-    zc <- zelig.call(model  = zclist$.function,
-                     params = zclist$parameters,
-                     from.call = match.call()
-                     )
+    env <- res.call$envir
+    
+    attach(env)
+    new.call$weights <- NULL
 
-    # compute statistical model
-    new.res <- .run(zc, d.f)
-    new.env <- zc$envir
+    if (exists(".debug") && .debug) {
+      message("External Call = ")
+      print(new.call)
+    }
+
+    new.res <- eval(new.call)
+    detach('env')
 
     # apply first hook if it exists
     if (!is.null(zclist$.hook)) {
       zclist$.hook <- get(zclist$.hook, mode='function')
-      new.res <- zclist$.hook(new.res, zc, match.call())
+      new.res <- zclist$.hook(new.res, new.call, match.call(), ...)
     }
 
     # test
@@ -134,7 +142,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
     # append to list
     res[[k]] <- new.res
-    res.env[[k]] <- new.env
+    res.env[[k]] <- env
     frames[[k]] <- d.f
 
     k <- k+1

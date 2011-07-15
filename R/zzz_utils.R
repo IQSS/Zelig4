@@ -135,7 +135,7 @@ as.data.frame.zframe <- function(x, row.names=NULL, optional = FALSE, ...)
 
 
 #' Split a Parameter List into Two Lists
-#' @note This is essentially a wrapper function for \link{split.up}. This
+#' @note This is essentially a wrapper function for \link{splitUp}. This
 #'   was used internally by Zelig, but now is primarily syntactical sugar for
 #'   less important features.
 #' @param ... a mix of parameters of any time
@@ -146,9 +146,9 @@ as.data.frame.zframe <- function(x, row.names=NULL, optional = FALSE, ...)
 #' @examples
 #' chop.up(x=1, 2, "red", y=2)
 #' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
-#' @seealso split.up
+#' @seealso splitUp
 chop.up <- function(...)
-  split.up(list(...))
+  splitUp(list(...))
 
 #' Split a List into Two Lists
 #' This functions takes any list, and splits into two lists - one containing
@@ -163,7 +163,7 @@ chop.up <- function(...)
 #' @examples
 #' chop.up(list(x=1, 2, "red", y=2))
 #' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
-split.up <- function(args) {
+splitUp <- function(args) {
   wordless <- list()
   wordful <- list()
 
@@ -210,7 +210,7 @@ split.up <- function(args) {
   }
 
   #
-  args <- split.up(args)$wordful
+  args <- splitUp(args)$wordful
 
   #
   if (is.null(args$.function)) {

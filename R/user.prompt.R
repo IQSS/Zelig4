@@ -1,6 +1,6 @@
 #' Prompts user to hit enter
 #' @title Prompt User
-#' @param message a message to be displayed
+#' @param msg a character-string, specifying a message to be displayed
 #' @return This function is used for its side effects
 #' @export
 #' @note This function is primarily used by Zelig demo scripts

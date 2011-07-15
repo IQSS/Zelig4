@@ -1,13 +1,10 @@
 Package: Zelig
-Version: 4.0-3
-Date: 2011-04-27
+Maintainer: Matt Owen, <mowen@iq.harvard.edu>
+License: GPL (>=2)
 Title: Everyone's Statistical Software
 Author: Matt Owen <mowen@iq.harvard.edu>, Kosuke Imai
     <kimai@Princeton.Edu>, Gary King <king@harvard.edu>, Olivia Lau
     <olau@fas.harvard.edu>
-Maintainer: Matt Owen, <mowen@iq.harvard.edu>
-Depends: R (>= 2.8.1), MASS, iterators, survival, methods
-Suggests: mvtnorm, MCMCpack
 Description: Zelig is an easy-to-use program that can estimate, and
     help interpret the results of, an enormous range of statistical
     models. It literally is ``everyone's statistical software'' because
@@ -20,34 +17,36 @@ Description: Zelig is an easy-to-use program that can estimate, and
     any model, and mimicking the program Clarify (for Stata) that takes
     the raw output of existing statistical procedures and translates
     them into quantities of direct interest.
-License: GPL (>=2)
-URL: http://gking.harvard.edu/zelig
+Version: 4.0-3
 Packaged: Tue Sept 28 12:06:15 2010; mowen
-Collate: 'as.matrix.setx.R' 'as.parameters.R' 'as.qi.R'
-    'as.summarized.list.R' 'as.summarized.R' 'cmvglm.R'
+URL: http://gking.harvard.edu/zelig
+Date: 2011-04-27
+Depends: R (>= 2.8.1), MASS, iterators, survival, methods
+Suggests: mvtnorm, MCMCpack
+Collate: 'as.dataframe.setx.R' 'as.matrix.setx.R' 'as.parameters.R'
+    'as.qi.R' 'as.summarized.list.R' 'as.summarized.R' 'cmvglm.R'
     'describe.default.R' 'describe.gamma.R' 'describe.logit.R'
     'describe.ls.R' 'describe.negbinom.R' 'describe.normal.R'
     'describe.poisson.R' 'describe.probit.R' 'describe.R'
     'describe.zelig.R' 'description.R' 'GetObject.R' 'GetSlot.R'
     'GetSlot.zelig.R' 'HelloWorld.R' 'help.zelig.R' 'ignore.R'
     'make.parameters.R' 'mi.R' 'MLutils.R' 'package.zelig.R'
-    'param.gamma.R' 'param.logit.R' 'param.ls.R' 'param.negbinom.R'
-    'param.normal.R' 'param.poisson.R' 'param.probit.R' 'param.R'
-    'parameters.R' 'parse.formula.R' 'plot.MI.sim.R' 'plot.sim.R'
-    'print.setx.MI.R' 'print.setx.R' 'print.sim.R'
-    'print.summary.sim.R' 'print.summarySim.MI.R' 'print.zelig.R'
+    'parameters.R' 'param.gamma.R' 'param.logit.R' 'param.ls.R'
+    'param.negbinom.R' 'param.normal.R' 'param.poisson.R'
+    'param.probit.R' 'param.R' 'parse.formula.R' 'plot.MI.sim.R'
+    'plot.sim.R' 'print.setx.MI.R' 'print.setx.R' 'print.sim.R'
+    'print.summarySim.MI.R' 'print.summary.sim.R' 'print.zelig.R'
     'qi.gamma.R' 'qi.logit.R' 'qi.ls.R' 'qi.negbinom.R' 'qi.normal.R'
     'qi.poisson.R' 'qi.probit.R' 'qi.R' 'qi.summarized.R'
     'register.default.R' 'register.R' 'repl.default.R' 'repl.R'
     'repl.sim.R' 'setx.default.R' 'setx.MI.R' 'setx.R' 'sim.default.R'
     'sim.MI.R' 'sim.R' 'summarize.default.R' 'summarize.R'
     'summary.MI.R' 'summary.MI.sim.R' 'summary.sim.R' 'summary.zelig.R'
-    't.setx.R' 'terms.multiple.R' 'terms.vglm.R' 'user.prompt.R'
-    'Zelig-package.R' 'zelig.call.R' 'zelig.R' 'zelig.skeleton.R'
-    'zelig2.R' 'zelig2gamma.R' 'zelig2logit.R' 'zelig2ls.R'
-    'zelig2negbinom.R' 'zelig2normal.R' 'zelig2poisson.R'
-    'zelig2probit.R' 'zzz_citation.R' 'zzz_environment_hacks.R'
-    'zzz_generics.R' 'zzz_helper_classes.R' 'zzz_numerical.R'
-    'zzz_operators.R' 'zzz_plots.R' 'zzz_S4_generics.R'
-    'zzz_skeleton.R' 'zzz_stats.R' 'zzz_utils.R' 'zzz_zelig2classes.R'
-    'zzz.R'
+    'terms.multiple.R' 'terms.vglm.R' 't.setx.R' 'user.prompt.R'
+    'zelig2gamma.R' 'zelig2logit.R' 'zelig2ls.R' 'zelig2negbinom.R'
+    'zelig2normal.R' 'zelig2poisson.R' 'zelig2probit.R' 'zelig2.R'
+    'Zelig-package.R' 'zelig.R' 'zelig.skeleton.R' 'zzz_citation.R'
+    'zzz_environment_hacks.R' 'zzz_generics.R' 'zzz_helper_classes.R'
+    'zzz_numerical.R' 'zzz_operators.R' 'zzz_plots.R' 'zzz.R'
+    'zzz_run.R' 'zzz_S4_generics.R' 'zzz_skeleton.R' 'zzz_stats.R'
+    'zzz_utils.R' 'zzz_zelig2classes.R'

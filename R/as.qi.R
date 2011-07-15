@@ -52,7 +52,7 @@ as.qi.list <- function(s) {
   stats <- list()
 
   # divide the list into ones with/without keys
-  keys <- split.up(s)
+  keys <- splitUp(s)
 
   fail.names <- paste("qi", 1:length(s), sep="")
   success.names <- unlist(Map(.acronym, names(s), fail=''))

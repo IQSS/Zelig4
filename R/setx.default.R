@@ -16,7 +16,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
   # init important objects  
 
-  form <- .call(formula(obj), obj$envir)
+  form <- formula(obj)
 
   if (length(form) == 3) {
     vars.obj <- as.character(all.vars(form[[3]]))

@@ -59,8 +59,10 @@
     # get the result object from the zelig object
     params[[1]] <- ..1$result
 
+    #attach(..1$envir)
     # call function on the fitted model
-    do.call(stored.name, params)
+    eval.in(do.call(stored.name, params), ..1$envir)
+    #detach(..1$envir)
   }
 }
 

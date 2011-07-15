@@ -1,7 +1,7 @@
-\name{split.up}
-\alias{split.up}
+\name{splitUp}
+\alias{splitUp}
 \title{Split a List into Two Lists...}
-\usage{split.up(args)}
+\usage{splitUp(args)}
 \description{Split a List into Two Lists
 This functions takes any list, and splits into two lists - one containing
 the values of arguments with specifically specified values and those without

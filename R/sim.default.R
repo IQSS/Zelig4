@@ -17,18 +17,44 @@
 sim.default <- function(obj,
                         x=NULL, x1=NULL, y=NULL,
                         num=1000, bootstrap = FALSE,
-                        boot.fn=NULL,
+                        bootfn=NULL,
                         cond.data = NULL,
                         ...) {
   # error-catching
-  if (!is.null(boot.fn) || is.logical(bootstrap) && bootstrap)
+  if (!is.null(bootfn) || is.logical(bootstrap) && bootstrap)
     warning("bootstrapping is not yet implemented")
 
   if (!is.null(cond.data))
     warning("conditions are not yet supported")
 
-  # "parameters"
+  # parameters
   param <- as.parameters(param(obj, num=num), num=num)
+
+  # define the pre-sim hook name
+  post.hook <- obj$zc$.post
+
+  # apply the hook if it exists
+  if (!is.null(post.hook)) {
+    zelig2 <- get(paste("zelig2", obj$name, sep=""))
+    envir <- environment(zelig2)
+
+    if (!exists(post.hook, mode="function", envir=envir))
+      warning("the hook '", post.hook, "' cannot be found")
+    
+    else {
+      hook <- get(post.hook, envir=envir)
+
+      param <- if (bootstrap) {
+        warning("bootstrap does not currently support hook functions")
+        param
+      }
+      else {
+        hook(obj, x, x1, bootstrap, bootfn, param=param)
+      }
+    }
+
+  }
+  
 
   # compute quantities of interest
   res.qi <- as.qi( qi(obj, x=x, x1=x1, y=y, param=param, num=num) )
@@ -47,7 +73,7 @@ sim.default <- function(obj,
             stats    = summarize(res.qi),
             qi       = res.qi,
             titles   = names(res.qi),
-            boot.fn  = boot.fn,
+            bootfn   = bootfn,
             cond.data= cond.data,
             zelig.obj= obj,
             call     = match.call(),
