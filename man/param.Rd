@@ -5,7 +5,7 @@ Models}
 \usage{param(obj, num, ...)}
 \description{The \code{param} method is used by developers to specify simulated and fixed
 ancillary parameters of the Zelig statistical model. That is, this method
-is used between the \link{\code{zelig2}} function and the \link{\code{qi}}
+is used between the \link{zelig2} function and the \link{qi}
 as a helper function that specifies all the necessary details needed to 
 simulate quantities of interest, given the fitted statistical model produced
 by the \code{zelig2} function.}

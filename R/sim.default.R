@@ -8,7 +8,7 @@
 #'   parameter
 #' @param num an integer specifying the number of simulations to compute
 #' @param bootstrap ignored
-#' @param boot.fn ignored
+#' @param bootfn ignored
 #' @param cond.data ignored
 #' @param ... special parameters which are reserved for future versions of Zelig
 #' @return a 'sim' object storing the replicated quantities of interest

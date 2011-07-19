@@ -1,14 +1,12 @@
 \name{zelig.call}
 \alias{zelig.call}
-\title{Construct a Call to a Model Fitting Function...}
-\usage{zelig.call(model, params, from.call)}
-\description{Construct a Call to a Model Fitting Function
-This function parses the parameters submitted by the 'zelig2' function and
-constructs an object, useable by Zelig, to fit the model.}
-\note{This function is exclusively used internally by Zelig.}
-\value{a zelig.call object which is later used to call the model fitting
-function}
+\title{Create Function Call...}
+\usage{zelig.call(Call, zelig2, remove)}
+\description{Create Function Call}
+\value{a function call used to fit the statistical model}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
-\arguments{\item{model}{character-string or function for the model to call}
-\item{params}{list containing values that the user input}
-\item{from.call}{the original Zelig call}}
+\arguments{\item{Call}{a \code{call} object, typically specifying the original function
+call to \code{zelig}}
+\item{zelig2}{the return-value of the \code{zelig2} method}
+\item{remove}{a list of character vectors specifying which parameters to
+ignore from the original call to \code{zelig}}}

@@ -123,11 +123,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     attach(env)
     new.call$weights <- NULL
 
-    if (exists(".debug") && .debug) {
-      message("External Call = ")
-      print(new.call)
-    }
-
     new.res <- eval(new.call)
     detach('env')
 

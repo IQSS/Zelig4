@@ -40,20 +40,34 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
 
   # A static list of objects that do not printout well or should be stored
   # within a separate environment
-  messy.objects <- c("data.frame", "function")
+  messy.objects <- c("data.frame", "function", 'matrix', "family", "function")
+  neat.objects <- c("formula")
 
   # Store values within 'messy.objects' within another environment, and give a 
   # pseudonym
   for (key in names(zelig2)) {
     obj <- zelig2[[key]]
     Class <- class(obj)
+    first.class <- Class[1]
 
-    if (any(Class %in% messy.objects) || is.object(obj)) {
-      Name <- store.object(obj, envir, toupper(Class)[1])
+    if (is.object(obj)) {
+      if (Class %in% neat.objects)
+        Call[[key]] <- obj
+      else {
+        Name <- store.object(obj, envir, ucfirst(first.class))
+        Call[[key]] <- as.name(Name)
+      }
+    }
+    else if (is.function(obj)) {
+      Name <- store.object(obj, envir, "Function")
       Call[[key]] <- as.name(Name)
     }
     else if (is.atomic(obj) && length(obj) > 5) {
-      Name <- store.object(obj, envir, paste(toupper(Class)[1], length(obj), sep=""))
+      Name <- store.object(obj, envir, paste(toupper(Class[1]), length(obj), sep=""))
+      Call[[key]] <- as.name(Name)
+    }
+    else if (is.list(obj) && length(obj) > 5) {
+      Name <- store.object(obj, envir, paste("List", length(obj), sep=""))
       Call[[key]] <- as.name(Name)
     }
     else {
@@ -79,16 +93,48 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
 }
 
 #' Store Object in Environment with a Fake Name
+#'
+#' This function takes the value of an object and stores it within a specified 
+#' environment. This is similar to simply using the \code{assign} function, but
+#' will not overwrite existing values in the specified environment. It
+#' accomplishes this by appending a prefix to the name of the variable until
+#' the name becomes unique.
+#' @note This method does not correct invalid names. That is, there is no test
+#'   to determine whether the submitted name is valid.
+#' @param obj any object
+#' @param envir an environment object, which will contain the object with the
+#'   assigned name
+#' @param name a character-string specifying the name that the object will be
+#'   stored as in the specified environment
+#' @param prefix a character string specifying the prefixes to append to names
+#'   that already have matches in the destination environment
+#' @return a character-string specifying the name of the object in the
+#'   destination environment
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 store.object <- function (obj, envir, name=NULL, prefix=".") {
 
   variables <- ls(envir=envir)
   
   # ensure name is unique
-  while (name %in% variables) {
+  while (name %in% variables)
     name <- paste(prefix, name, sep="")
-  }
 
   assign(name, obj, envir)
 
   name
+}
+
+#' Uppercase First Letter of a String
+#' 
+#' This method sets the first character of a string to its uppercase,
+#' sets all other characters to lowercase.
+#' @param str a vector of charaqcter-strings
+#' @return a vector of character strings
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+ucfirst <- function (str) {
+  paste(
+        toupper(substring(str, 1, 1)),
+        tolower(substring(str, 2)),
+        sep = ""
+        )
 }

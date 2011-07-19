@@ -20,7 +20,7 @@
 #'          models currently support this parameter
 #' @param num an integer specifying the number of simulations to compute
 #' @param bootstrap currently unsupported
-#' @param boot.fn currently unsupported
+#' @param bootfn currently unsupported
 #' @param cond.data currently unsupported
 #' @param ... arguments reserved future versions of Zelig
 #' @return The output stored in \code{s.out} varies by model.  Use the
@@ -85,7 +85,7 @@
 sim <- function(
                 obj,
                 x=NULL, x1=NULL, y=NULL, num=1000,
-                bootstrap=F, boot.fn=NULL, cond.data=NULL,
+                bootstrap=F, bootfn=NULL, cond.data=NULL,
                 ...
                 ) {
   UseMethod("sim")

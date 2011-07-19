@@ -1,7 +1,7 @@
 \name{sim}
 \alias{sim}
 \title{Generic Method for Computing and Organizing Simulated Quantities of Interest...}
-\usage{sim(obj, x, x1, y, num=1000, bootstrap=F, boot.fn, cond.data, ...)}
+\usage{sim(obj, x, x1, y, num=1000, bootstrap=F, bootfn, cond.data, ...)}
 \description{Generic Method for Computing and Organizing Simulated Quantities of Interest
 Simulate quantities of interest from the estimated model
 output from \code{zelig()} given specified values of explanatory
@@ -82,6 +82,6 @@ quantities of interest (average treatment effects). Few
 models currently support this parameter}
 \item{num}{an integer specifying the number of simulations to compute}
 \item{bootstrap}{currently unsupported}
-\item{boot.fn}{currently unsupported}
+\item{bootfn}{currently unsupported}
 \item{cond.data}{currently unsupported}
 \item{...}{arguments reserved future versions of Zelig}}
