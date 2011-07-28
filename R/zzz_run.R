@@ -51,7 +51,7 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
     first.class <- Class[1]
 
     if (is.object(obj)) {
-      if (Class %in% neat.objects)
+      if (all(Class %in% neat.objects))
         Call[[key]] <- obj
       else {
         Name <- store.object(obj, envir, ucfirst(first.class))

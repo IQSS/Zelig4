@@ -115,12 +115,18 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
   mod <- model.matrix(form, data = d)
   mod <- as.data.frame(mod)
-  rownames(mod) <- "coef"
-  
+  rownames(mod) <- NULL
+
+
+  ModelFrame <- model.matrix(terms(obj), d)
+  DataFrame <- as.data.frame(ModelFrame)
+  rownames(DataFrame) <- NULL
+
   # build the setx object
   sx <- list(name   = obj$name,
              formula= form,
              matrix = mod,
+             data.frame = DataFrame,
              values = res,
              fn     = fn,
              cond   = cond,
