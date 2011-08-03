@@ -72,7 +72,9 @@ plot.sim <- function(x, xlab = "", ...) {
     val <- item$value
     color <- nextElem(colors)
     #
-    if (is.numeric(val)) {
+    if (all(is.na(val)))
+      next
+    else if (is.numeric(val)) {
       val <- as.numeric(val)
       plot(density(val), main = key, col=color)
     }
