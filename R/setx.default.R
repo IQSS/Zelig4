@@ -113,14 +113,24 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # of the data.frame casting that's done
   # in the original setx
 
+  # we should always be able to guarantee that there is a foruma, so this
+  # model.matrix is always available, but it is not always relevant
   mod <- model.matrix(form, data = d)
   mod <- as.data.frame(mod)
   rownames(mod) <- NULL
 
 
-  ModelFrame <- model.matrix(terms(obj), d)
-  DataFrame <- as.data.frame(ModelFrame)
-  rownames(DataFrame) <- NULL
+  # there is no guarantee that there is a terms object. If there isn't, then
+  # we should just ignore it and make that style data.frame unavaiable
+  terms <- tryCatch(terms(obj), error = function (e) NULL)
+
+  if (is.null(terms))
+    DataFrame <- NULL
+
+  else {
+    ModelFrame <- model.matrix(terms(obj), d)
+    DataFrame <- as.data.frame(ModelFrame, row.names = NULL)
+  }
 
   # build the setx object
   sx <- list(name   = obj$name,

@@ -14,7 +14,7 @@
 #' 
 #' \tabular{ll}{
 #' Package: \tab Zelig\cr
-#' Version: \tab 4.0\cr
+#' Version: \tab 4.0-4\cr
 #' Date: \tab 2011-04-25\cr
 #' Depends: \tab R (>= 2.8.1), MASS, iterators, survival, methods
 #' Suggests: mvtnorm, MCMCpack\cr

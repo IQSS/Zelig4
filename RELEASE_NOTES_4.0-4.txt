@@ -1,4 +1,4 @@
-Zelig v4.0-3 Release Notes (May 16, 2011)
+Zelig v4.0-4 Release Notes (May 16, 2011)
 
 
 Introduction
@@ -73,6 +73,8 @@ Minor Changes
   case
 - ZeligListModels: a method used to list available models, installed on the
   current operating system.
+- More robust support for various ways of describing 'terms' of a statistical
+  model. This is essentially light error-detection
 
 Missing Features
 --------------------------------------------------------------------------------

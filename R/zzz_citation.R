@@ -169,7 +169,15 @@ depends.on.zelig <- function(package="") {
 
   zcomp <- unlist(strsplit(zcomp, " *, *"))
 
-  "Zelig" %in% zcomp
+  # "Zelig" %in% zcomp
+
+  # pattern to match things leading with Zelig, some spaces, and a parenthesis ending
+  # ex:
+  #     Zelig
+  #     Zelig (>= 3)
+  #     Zelig      (blah blah)
+  pattern <- "^Zelig *(?:\\(.*?\\))$"
+  length(grep(pattern, zcomp)) != 0
 }
 
 #' Get a List of Packages Installed on the Current Machine that Depend on Zelig

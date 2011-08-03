@@ -44,6 +44,7 @@
 #'   }
 #' 
 #'   x <- list(formula = formula)
+#'   attr(x, 'terms') <- terms(formula)
 #'   class(x) <- "HelloWorld"
 #'   x
 #' }

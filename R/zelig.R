@@ -117,14 +117,15 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # construct the call object
     res.call <- zelig.call(Call, zclist, remove)
     new.call <- res.call$call
-
     env <- res.call$envir
     
     attach(env)
-    new.call$weights <- NULL
+    attach(d.f)
 
-    new.res <- eval(new.call)
+    new.res <- eval.parent(new.call)
+
     detach('env')
+    detach('d.f')
 
     # apply first hook if it exists
     if (!is.null(zclist$.hook)) {
