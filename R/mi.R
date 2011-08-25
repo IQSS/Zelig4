@@ -16,10 +16,96 @@
 #' @examples
 #' data(immi1, immi2, immi3, immi4, immi5)
 #' mi(immi1, immi2, immi3, immi4, immi5)
-mi <- function(obj, ..., by=NULL) {
-  UseMethod("mi")
+mi <- function(..., by=NULL) {
+
+  if (inherits(..1, 'mi') && is.null(by))
+    return(..1)
+
+  else if (inherits(..1, 'mi') && !is.null(by)) {
+    warning('the by parameter is being ignored')
+    return(..1)
+  }
+
+  #
+  frames <- list(...)
+
+  # Substitute all objects in "..."
+  call.object <- substitute(list(...))
+  Names <- as.character((call.object[-1]))
+
+  # ensure that all frames are named
+  names(frames) <- name.frames(frames, Names)
+
+
+  # retrieve factors
+  to.combine <- append(
+                       list(names(frames)),
+                       retrieve.factors(frames, by)
+                       )
+
+
+  # this object gives us all the necessary information to appropriately subset
+  # a data.frame
+  datasets <- do.call('.combine', to.combine)
+
+  message("Ended expectedly")
+  q()
+
+
+  # return mi object
+  self <- list(
+               by = by,
+               iter = 0,
+               frames = frames,
+               list = datasets
+               )
+  class(self) <- "mi"
+  self
 }
 
+
+# 
+#
+name.frames <- function (frames, frame.names) {
+  # Determine titles of data.frames
+  frame.labels <- if (is.null(names(frames)))
+    rep('', length(frames))
+  else
+    names(frames)
+
+  unnamed.frames <- which(frame.labels == '')
+
+  frame.labels[unnamed.frames] <- frame.names[unnamed.frames]
+  frame.labels
+}
+
+#' Retrieve a list of all the factors in the specified column
+retrieve.factors <- function (frames, by=NULL) {
+  factor.list <- list()
+
+  for (col in by) {
+    message(" >> ", col)
+    for (frame in frames) {
+      # ignore data.frame if this column does not exist
+      if (! col %in% colnames(frame)) {
+        message("col = ", col)
+        next
+      }
+
+      vals <- factor.list[[col]]
+
+      new.vals <- if (is.factor(frame[, col]))
+        levels(frame[, col])
+      else
+        unique(frame[, col])
+
+      vals <- unique(c(vals, new.vals))
+      factor.list[[col]] <- vals
+    }
+  }
+
+  factor.list
+}
 
 #' Construct an 'mi' object from a set of data-frames
 #' 
@@ -111,7 +197,7 @@ mi.list <- function(obj, ..., by=NULL, data.labels=NULL) {
 
   # build object
   s <- list(data = obj,
-            iter = iter(combined, by="row"),
+            iter = combined,
             by = by,
             labels = data.labels
             )
