@@ -85,7 +85,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   old.style.oop <- TRUE
 
   # create a data.frame iterator
-  m <- eval(call("mi", substitute(data), by=substitute(by)))
+  # substitute must be used to ensure that al the correct names are forwarded
+  m <- eval(call("mi", substitute(data), by=by))
 
   # initialize variables for loop
   k <- 1
@@ -96,12 +97,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # repeat
   repeat {
     # get the next data.frame
-    d.f <- try(nextElem(m), silent=TRUE)
+    d.f <- NextFrame(m)
 
     # catch end-of-list error
-    if (inherits(d.f, "try-error")) {
+    if (is.null(d.f))
       break
-    }
 
     # create zelig2* function
     zelig2 <- paste("zelig2", as.character(model), sep="")
@@ -143,7 +143,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     k <- k+1
   }
 
-  #key.labels <- get.mi.labels(m)
+  key.labels <- labels(m)
 
   #names(res) <- key.labels
   #names(res.env) <- key.labels
@@ -199,7 +199,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
             data    = data,
             call    = match.call(),
             by      = by,
-            mi      = reset(m),
+            mi      = Reset(m),
             func    = zclist[[1]],
             levels  = m$levels,
             S4      = !old.style.oop,
@@ -217,6 +217,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     .RegisterMethodsS3(c("terms", register(z)))
   else
     .RegisterMethodsS4(c("terms", register(z)))
+
+  print(length(m))
 
   # prepend "MI" class to sets of results
   if (is.list(z$result) && length(m) > 1)

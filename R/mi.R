@@ -46,19 +46,58 @@ mi <- function(..., by=NULL) {
   # a data.frame
   datasets <- do.call('.combine', to.combine)
 
-  print(datasets)
-  q()
+  #
+  state <- new.env()
+  assign('iter', 1, envir=state)
 
   # return mi object
   self <- list(
                by     = by,
                frames = frames,
+               state  = state,
                list   = datasets
                )
   class(self) <- "mi"
   self
 }
 
+
+#' Get Details of Next \code{data.frame} from an \code{mi} Object
+#'
+#' ...
+#' @note 
+NextLabel <- function (obj) {
+  i <- get('iter', envir=obj$state)
+  assign('iter', i+1, envir=obj$state)
+  tryCatch(obj$list[i, ], error=function (e) NULL)
+}
+
+#' Get Next \code{data.frame} from an \code{mi} Object
+NextFrame <- function (obj) {
+  key <- NextLabel(obj)
+
+  if (is.null(key))
+    return(NULL)
+
+  Name <- key[1]
+  Constraints <- key[-1]
+  Data <- obj$frames[[Name]]
+
+  for (col in names(Constraints)) {
+    hits <- which(Data[, col] == Constraints[col])
+    Data <- Data[hits, ]
+  }
+
+  Data
+}
+
+#' Reset Counter for \code{mi} Object
+#'
+#' ...
+#' @note
+Reset <- function (obj) {
+  assign('iter', 1, obj$state)
+}
 
 #' Replace Unnamed Indices with a Default Value
 #'
@@ -225,5 +264,6 @@ label.from.key <- function(key) {
 #' @return an integer specifying the number of subsetted data-frame's that are
 #'   contained within within the 'mi' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-length.mi <- function(x)
-  nrow(x$iter$state$obj)
+length.mi <- function(x) {
+  nrow(x$list)
+}
