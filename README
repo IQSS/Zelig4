@@ -1,3 +1,10 @@
+4.0-5 (August 25th, 2011): Stable release for R.13.1. Removed dependency on 
+  the 'iterators' package. This is part of a general move towards shrinking the
+  size of Zelig's dependency list. To facilitate this change, the 'mi' object
+  has been made more robust, and  the 'zframe' helper object has been removed.
+
+  For specifics, please refer to the CHANGES file
+
 4.0-2 (May 16, 2011): Stable release for R 2.12,1. Major version update, and
   and addition of numerous API features. Core package now contains a mere 7
   models. Dependencies having correspondingly been reduced to:

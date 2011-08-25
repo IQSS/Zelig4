@@ -61,11 +61,17 @@ mi <- function(..., by=NULL) {
   self
 }
 
-
 #' Get Details of Next \code{data.frame} from an \code{mi} Object
 #'
-#' ...
-#' @note 
+#' Produce the label to be used for the next \code{data.frame} stored within 
+#' the \code{mi} object. This function replaces the necessity for Zelig to 
+#' depend on the \code{iterators} package.
+#' @note This method is intended for internal use by Zelig.
+#' @param obj an \code{mi} object
+#' @return a character-vector specifying the next representation of a label or
+#'   NULL (if all labels have been produced)
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 NextLabel <- function (obj) {
   i <- get('iter', envir=obj$state)
   assign('iter', i+1, envir=obj$state)
@@ -73,6 +79,15 @@ NextLabel <- function (obj) {
 }
 
 #' Get Next \code{data.frame} from an \code{mi} Object
+#'
+#' Generate the next \code{data.frame}. This function removes the necessity for
+#' Zelig to depend on the \code{iterators} package.
+#' @note This method is intended for internal use by Zelig.
+#' @param obj an \code{mi} object
+#' @return the next \code{data.frame} or NULL (if all \code{data.frames} have
+#' generated
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 NextFrame <- function (obj) {
   key <- NextLabel(obj)
 
@@ -94,7 +109,9 @@ NextFrame <- function (obj) {
 #' Reset Counter for \code{mi} Object
 #'
 #' ...
+
 #' @note
+#' @export
 Reset <- function (obj) {
   assign('iter', 1, obj$state)
 }

@@ -145,9 +145,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
   key.labels <- labels(m)
 
-  #names(res) <- key.labels
-  #names(res.env) <- key.labels
-  #names(frames) <- key.labels
+  names(res) <- key.labels
+  names(res.env) <- key.labels
+  names(frames) <- key.labels
 
   big.list <- list()
 
