@@ -85,8 +85,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   old.style.oop <- TRUE
 
   # create a data.frame iterator
-  m <- mi(data, by=by)
-  m <- reset(m)
+  m <- eval(call("mi", substitute(data), by=substitute(by)))
 
   # initialize variables for loop
   k <- 1
@@ -144,11 +143,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     k <- k+1
   }
 
-  key.labels <- get.mi.labels(m)
+  #key.labels <- get.mi.labels(m)
 
-  names(res) <- key.labels
-  names(res.env) <- key.labels
-  names(frames) <- key.labels
+  #names(res) <- key.labels
+  #names(res.env) <- key.labels
+  #names(frames) <- key.labels
 
   big.list <- list()
 

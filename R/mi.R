@@ -36,45 +36,51 @@ mi <- function(..., by=NULL) {
   # ensure that all frames are named
   names(frames) <- name.frames(frames, Names)
 
-
   # retrieve factors
   to.combine <- append(
                        list(names(frames)),
                        retrieve.factors(frames, by)
                        )
 
-
   # this object gives us all the necessary information to appropriately subset
   # a data.frame
   datasets <- do.call('.combine', to.combine)
 
-  message("Ended expectedly")
+  print(datasets)
   q()
-
 
   # return mi object
   self <- list(
-               by = by,
-               iter = 0,
+               by     = by,
                frames = frames,
-               list = datasets
+               list   = datasets
                )
   class(self) <- "mi"
   self
 }
 
 
-# 
-#
+#' Replace Unnamed Indices with a Default Value
+#'
+#' ...
+#' @note This method is used by Zelig to organize collections of data.frame's
+#'   for use with multiple imputation. That is, this function correctly labels
+#'   lists of data.frame's submitted to the code{zelig} function.
+#' @param frames
+#' @param frame.names
+#' @return 
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 name.frames <- function (frames, frame.names) {
-  # Determine titles of data.frames
+  # Specify the names of each index as "" if doesn't exist
   frame.labels <- if (is.null(names(frames)))
     rep('', length(frames))
   else
     names(frames)
 
+  # Get the index of unnamed indices
   unnamed.frames <- which(frame.labels == '')
 
+  # Name all the unnamed frames their call-name
   frame.labels[unnamed.frames] <- frame.names[unnamed.frames]
   frame.labels
 }
@@ -84,7 +90,6 @@ retrieve.factors <- function (frames, by=NULL) {
   factor.list <- list()
 
   for (col in by) {
-    message(" >> ", col)
     for (frame in frames) {
       # ignore data.frame if this column does not exist
       if (! col %in% colnames(frame)) {
@@ -106,122 +111,6 @@ retrieve.factors <- function (frames, by=NULL) {
 
   factor.list
 }
-
-#' Construct an 'mi' object from a set of data-frames
-#' 
-#' @param obj the first data-frame
-#' @param ... additional data-frames
-#' @param by a character-string specifying a column of a data.frame
-#'           to use for multiple imputation
-#' @return an object of type `mi'
-#' @S3method mi default
-#' @export
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-mi.default <- function(obj, ..., by = NULL) {
-  data.labels <- match.call(expand.dots=F)[["..."]]
-  data.labels <- as.character(data.labels)
-
-  lis <- append(list(obj), list(...))
-
-  mi(lis, by = by)
-}
-
-
-#' Construct an 'mi' object from another 'mi' object
-#' This cosntructor differs from an identity operation
-#' by applying the 'by' parameter.
-#'
-#' @S3method mi mi
-#' @export
-#' @param obj an object of type 'mi'
-#' @param ... ignored parameters
-#' @param by a character-string specifying a calumn of the data.frames
-#'           used in the 'mi' object.
-#' @return an object of type 'mi'
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-mi.mi <- function(obj, ..., by=NULL) {
-  if (missing(by))
-    by <- obj$by
-
-  mi(obj$data, by=by, data.labels=obj$labels)
-}
-
-
-#' Construct an 'mi' object from a list of data.frame's
-#'
-#' This is the main constructor; all other constructors - in one fashion
-#' or another - call this method to construct the final list of data-frames.
-#' Care should be taken when developing code for this method, as it can
-#' cause a myriad of additional problems.
-#'
-#' @S3method mi list
-#' @export
-#' @param obj a list of data.frames
-#' @param ... additional parameters
-#' @param by a character-string specifying a calumn of the data.frames
-#'           used in the `mi' object.
-#' @param data.labels a vector of character-strings that specify the
-#'                    name of each data.frame. This parameter is currently
-#'                    ignored, and is included exclusively for future
-#'                    Zelig releases
-#' @return an object of type `mi'
-#' @author Matt Owen \email{mowen@@iq.harvard.}
-mi.list <- function(obj, ..., by=NULL, data.labels=NULL) {
-  # error-catching
-  if (!all(sapply(obj, is.data.frame)))
-    stop("all elements passed to `mi' must be data.frame's")
-
-  # initialize list of factors
-  factors <- list()
-
-  # build the list
-  for (key in by) {
-    for (dataf in obj)
-      factors[[key]] <- c(factors[[key]], levels(dataf[,key]))
-
-    # unique, bitte
-    factors[[key]] <- unique(factors[[key]])
-  }
-  
-  #if (is.null(data.labels))
-  data.labels <- list(1:length(obj))
-
-  #else if(!is.list(data.labels))
-  #  data.labels <- list(dataset=data.labels)
-
-  #p <- c(data.labels, factors)
-  p <- c(list(1:length(obj)), factors)
-
-  # get all combinations of factors
-  combined <- do.call(".combine", p)
-
-  # build object
-  s <- list(data = obj,
-            iter = combined,
-            by = by,
-            labels = data.labels
-            )
-
- 
-  # assign class, and return
-  class(s) <- "mi"
-  s
-}
-
-
-#' Generic method for resetting an iterator
-#' Resets the incrementor of an iterator
-#' @note This method is not exported; it is used internally by Zelig, but is not
-#'   registered for use in the Global namespace or search path. It is unclear
-#'   whether the  'reset' method is a desirable feature for other packages
-#' @param obj the iterator-like object to be reset
-#' @param ... a list of parameters of other parameters
-#' @return the original object, except with its internatl
-#'   iterator pointing to the first element of its list
-#' @export
-reset <- function(obj, ...)
-  UseMethod("reset")
-
 
 #' Extract the Next Data-frame from an 'mi' Object
 #' Produces the next data-frame from the iterator list. If
@@ -293,54 +182,6 @@ nextElem.mi <- function(obj, ..., keys.only=F, as.pair=F) {
   else
     zef[list.item]
 }
-
-
-#' Reset method for \code{mi} objects
-#' @usage \method{reset}{mi}(obj, ...)
-#' @S3method reset mi
-#' @param obj an \code{mi} object 
-#' @param ... ignored parameters
-#' @return the same object with the iterator reset
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-reset.mi <- function(obj, ...) {
-  assign('i', 0, env=obj$iter$state)
-  invisible(obj)
-}
-
-
-#' Get List of Labels from MI object
-#' @param obj an mi object
-#' @param ... ignored (for now) parameters
-#' @return a vector of character-strings detailing - in human readable format -
-#'   the titles of each 
-get.mi.labels <- function(obj, ...) {
-  # get old position of iterator
-  old.pos <- get('i', env=obj$iter$state)
-
-  # reset iterater
-  reset(obj)
-
-  # NULL 
-  mi.labels <- c()
-
-  repeat {
-    item <- try(nextElem(obj, keys.only=TRUE))
-
-    if (inherits(item, 'try-error'))
-      break
-
-    smoosh <- label.from.key(item)
-
-    mi.labels <- c(mi.labels, smoosh)
-  }
-
-  # restore old iterator position
-  assign('i', old.pos, env=obj$iter$state)
-
-  # return the list of labels
-  mi.labels
-}
-
 
 #' Get Labels from MI Key
 #'
