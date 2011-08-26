@@ -3,3 +3,10 @@
  * Updated NAMESPACE and DESCRIPTION files correspondingly
  * Restructured internals of 'zelig' function
  * Added CHANGES file to summarize detail-oriented code changes
+ * Print methods for multiply-imputed data-sets have been improved
+ * Print methods for setx objects have been improved
+ * zelig now returns a specially constructed list when handling multiply-
+   imputed data-sets
+ * The 'state' variable has been added to the the zelig and MI objects.
+   This variable stores shared information between an "MI" (zelig-list) object
+   and all its children.
