@@ -4,23 +4,12 @@
 #' @param qi a 'qi' object, storing simulations of quantities of interest
 #' @return a 'summarized.qi' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-summarize.default <- function(qi) {
-  i <- iter(qi)
+summarize.default <- function(obj) {
   res <- list()
+  titles <- names(attr(obj, ".index"))
 
-
-  repeat {
-    item <- try(nextElem(i), silent=T)
-
-    # conditions end repeat loop
-    if (inherits(item, "try-error"))
-      break
-
- 
-    # for code clarity
-    key <- item$key
-    val <- item$value
-
+  for (key in titles) {
+    val <- obj[[key]]
 
     if (!is.qi(val))
       next
@@ -141,35 +130,4 @@ table.levels <- function (x, levels, ...) {
   else {
     table(factor(x, levels=levels), ...)
   }
-}
-
-
-#' Construct an Iterator from a List of Summarized Quantities of Interest
-#' @note This function is used internally by Zelig.
-#' @usage \method{iter}{summarized.qi}(obj, ...)
-#' @S3method iter summarized.qi
-#' @param obj a 'summarized.qi' object
-#' @param ... ignored
-#' @return an iterator
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-iter.summarized.qi <- function(obj, ...) {
-  iter(Map(function (x, y) list(key=x, value=y), names(obj), obj))
-}
-
-
-#' Construct an Iterator from a List of Quantities of Interest
-#' @note This function is used internally by Zelig
-#' @param obj a 'qi' object created by the 'qi' function
-#' @param ... ignored parameters
-#' @return an iterator
-#' @S3method iter qi
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-iter.qi <- function(obj, ...) {
-  lis <- list()
-  indices <- names(attr(obj, '.index'))
-
-  for (index in indices)
-    lis[[index]] <- list(key = index, value = obj[[index]])
-
-  iter(lis)
 }

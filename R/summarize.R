@@ -6,4 +6,5 @@
 #' @return a `summarized.qi' object
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-summarize <- function(qi) UseMethod("summarize")
+summarize <- function(obj)
+  UseMethod("summarize")

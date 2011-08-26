@@ -8,18 +8,21 @@ data(turnout)
 z.out1 <- zelig(
                 vote ~ age,
                 model = "logit",
-                data = mi(turnout[1:500,], turnout[501:1000,]),
-                by = "race",
+                data = mi(turnout[1:10, ], turnout[100:110, ]),
                 cite = FALSE
                 )
 
 #  Using setx to generate baseline and alternative velus for the
 #  explanatory variables.  
 
-x.out1 <- setx(z.out1, age = 36, race = "white")
+summary(z.out1)
+
+x.out1 <- setx(z.out1, age = 90)
+
+print(x.out1)
 
 # Simulate quantities of interest
 
-s.out1 <- sim(z.out1, x=x.out1)
+s.out1 <- sim(z.out1, x=x.out1, num=500)
 
-summary(z.out1)
+summary(s.out1)

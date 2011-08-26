@@ -6,7 +6,18 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.summary.sim <- function(x, ...) {
-  obj <- x
+  # Let's do it this way:
+  obj <- x$zelig
+  model <- x$name
+
+  x <- x$x
+  x1 <- x$x1
+
+  stats <- x$stats
+
+
+  message("Quit Expectedly")
+  q()
 
   # prints typically have qi, and qi.names defined as part of the summary object
   if (is.null(x$stats))

@@ -133,7 +133,9 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   }
 
   # build the setx object
-  sx <- list(name   = obj$name,
+  sx <- list(
+             name   = obj$name,
+             call   = match.call(),
              formula= form,
              matrix = mod,
              data.frame = DataFrame,

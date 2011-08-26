@@ -67,7 +67,8 @@ sim.default <- function(obj,
 
 
   # build object
-  s <- list(name     = obj$name,
+  s <- list(
+            model     = obj$name,
             x        = x,
             x1       = x1,
             stats    = summarize(res.qi),
@@ -75,7 +76,7 @@ sim.default <- function(obj,
             titles   = names(res.qi),
             bootfn   = bootfn,
             cond.data= cond.data,
-            zelig.obj= obj,
+            zelig    = obj,
             call     = match.call(),
             zcall    = obj$call,
             result   = obj$result,

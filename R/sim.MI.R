@@ -18,8 +18,8 @@ sim.MI <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, ...) {
 
   sim.results <- list()
 
-  for (key in names(obj$list)) {
-    object <- obj$list[[key]]
+  for (key in names(obj)) {
+    object <- obj[[key]]
     new.x <- x[[key]]
     new.x1 <- x1[[key]]
     new.y <- y[[key]]

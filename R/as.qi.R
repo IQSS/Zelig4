@@ -172,11 +172,12 @@ names.qi <- function(x) {
   # remove trailing whitespace
   # remove leading whitespace
   # remove paranthetical statements
+  # remove non-alphanumerics
   reduced <- sub(':.*$', '', str)
   reduced <- sub('\\s+$', '', reduced, perl=TRUE)
   reduced <- sub('^\\s+', '', reduced, perl=TRUE)
   reduced <- gsub('\\(.*?\\)', '', reduced, perl=TRUE)
-
+  # reduced <- gsub('[^a-zA-Z0-9]', reduced, perl=TRUE)
   
   # if we get an empty string, return whatever the fail value is
   if (nchar(reduced) < 1)
