@@ -80,18 +80,27 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   res <- NULL
   old.style.oop <- TRUE
 
+  # Call make.mi symbolically so that the function can implicitly label
+  # data.frame's from context. For example, the expression:
+  #   mi(turnout[1:1000, ], )
+  # will contain a data.frame labeled:
+  #   turnout[1:1000, ]
   m <- eval(call("make.mi", substitute(data), by=by))
 
-  # initialize variables for loop
-  k <- 1
-  res <- list()
-  res.env <- list()
-  frames <- list()
+  # Ensure certain values remain consistent between any object on this list
+  # by giving them all a pointer to the same environment object which contains
+  # a few pieces of information
+  state <- new.env()
+
+  # Begin constructing zelig object
+  object <- list()
 
   # repeat
   repeat {
     # get the next data.frame
-    d.f <- NextFrame(m)
+    x <- NextFrame(m, as.pair = TRUE)
+    d.f <- x$data
+    label <- x$label
 
     # catch end-of-list error
     if (is.null(d.f))
@@ -111,7 +120,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     res.call <- zelig.call(Call, zclist, remove)
     new.call <- res.call$call
     env <- res.call$envir
-    
+
     attach(env)
     attach(d.f)
 
@@ -120,103 +129,61 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     detach('env')
     detach('d.f')
 
-    # apply first hook if it exists
+    # Apply first hook if it exists
     if (!is.null(zclist$.hook)) {
       zclist$.hook <- get(zclist$.hook, mode='function')
       new.res <- zclist$.hook(new.res, new.call, match.call(), ...)
     }
 
-    # test
+    # Determine whether this is an S4 object
     old.style.oop <- ! isS4(new.res)
 
-    # append to list
-    res[[k]] <- new.res
-    res.env[[k]] <- env
-    frames[[k]] <- d.f
+    # Create an appropriate object
+    obj <- list(
+                name  = model,
+                label = label,
+                result  = new.res,
+                env  = env,
+                data = d.f,
+                call = new.call,
+                S4   = ! old.style.oop
+                )
+    class(obj) <- c(model, 'zelig')
 
-    k <- k+1
+    # Attach shared environment as an attribtute
+    attr(obj, 'shared') <- state
+
+    # Add to list of results
+    object[[label]] <- obj
   }
 
-  key.labels <- labels(m)
-
-  names(res) <- key.labels
-  names(res.env) <- key.labels
-  names(frames) <- key.labels
-
-  big.list <- list()
-
-  # appropriately name each entry
-  # (because both should be in order)
-  
-  # this is kludge.  can we (I) clean this up?
-  if (inherits(m, 'mi')) {
-    for (key in key.labels) {
-      big.list[[key]] <- list(
-                              name = as.character(model),
-                              formula = formula,
-                              result = res[[key]],
-                              envir = res.env[[key]],
-                              args = list(...),
-                              data = frames[[key]],
-                              call = match.call(),
-                              by = by,
-                              mi = NULL,
-                              func = zclist[[1]],
-                              levels = NULL,
-                              S4 = !old.style.oop,
-                              parent = parent.frame(),
-                              zc = zclist,
-                              list = NULL
-                              )
-      class(big.list[[key]]) <- c('zelig', model)
-    }
+  if (missing(by) && is.data.frame(data)) {
+    object <- object[[1]]
+  }
+  else {
+    attr(object, 'shared') <- state
+    class(object) <- c(model, paste(model, 'mi', sep='-'), "MI")
   }
 
-  # run clean-up hooks on every result
-  # ...
-
-
-  # build zelig object
-  z <- list(name    = as.character(model),
-            formula = formula,
-            result  = res,
-            envir   = res.env,
-            args    = list(...),
-            data    = data,
-            call    = match.call(),
-            by      = by,
-            mi      = Reset(m),
-            func    = zclist[[1]],
-            levels  = m$levels,
-            S4      = !old.style.oop,
-            parent  = parent.frame(),
-            zc = zclist,
-            list = big.list
-            )
-
-  # always attach the model name,
-  # so that developers can overload
-  class(z) <- c("zelig", model)
-
-  # ...
-  z$function.space <- if(old.style.oop)
-    .RegisterMethodsS3(c("terms", register(z)))
+  #
+  #
+  methods.env <- if(old.style.oop)
+    .RegisterMethodsS3(c("terms", register(obj)))
   else
-    .RegisterMethodsS4(c("terms", register(z)))
+    .RegisterMethodsS4(c("terms", register(obj)))
 
-  # prepend "MI" class to sets of results
-  if (is.list(z$result) && length(m) > 1)
-    class(z) <- c("MI", class(z))
-  else if (inherits(data, "almost.mi"))
-    class(z) <- c("MI", class(z))
+  # Update the shared environment
+  assign('args', list(...), state)
+  assign('parent', parent.frame(), state)
+  assign('call', match.call(), state)
+  assign('by', by, state)
+  assign('methods', methods.env, state)
+  # The below line should probably remain commented out
+  # assign('mi', m, state)
 
-  
-  # citation
+  # Display citation information
   if (cite) {
-    #
-    described <- describe(z)
-
-    #
+    described <- describe(object)
     descr <- description(
                          authors = described$authors,
                          year  = described$description,
@@ -224,10 +191,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
                          url   = described$url,
                          model = model
                          )
-
-    cat("\n\n")
-    cat(cite(descr), "\n")
+    cat("\n\n", cite(descr), "\n")
   }
 
-  z
+  object
 }

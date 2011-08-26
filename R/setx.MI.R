@@ -15,8 +15,8 @@ setx.MI <- function(obj, ..., data = NULL) {
 
   results.list <- list()
 
-  for (key in names(obj$list)) {
-    object <- obj$list[[key]]
+  for (key in names(obj)) {
+    object <- obj[[key]]
     results.list[[key]] <- setx(object, ..., data = data)
   }
 

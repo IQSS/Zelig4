@@ -6,17 +6,6 @@
 #' @export 
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.zelig <- function(x, ...) {
-  message()
-  cat("name = ")
-  message(x$name)
-
-  cat("arguments = ")
-  message(paste(x$args, collapse=", "))
-
-  cat("data columns = ")
-  message(paste(colnames(x$data), collapse=", "))
-
-  message("result object")
-  print(summary(x$result))
-  invisible(x)
+  class(x) <- "list"
+  print(x)
 }

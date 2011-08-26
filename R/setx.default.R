@@ -143,7 +143,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
              new.data = data,
              updated  = d,
              special.parameters = list(...),
-             label = "",
+             label = obj$label,
              explan = vars.obj,
              pred   = not.vars
              )

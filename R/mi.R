@@ -73,11 +73,11 @@ make.mi <- function(obj, by=NULL) {
   state <- new.env()
   assign('iter', 1, state)
   assign('keys', datasets, state)
+  assign('frames', obj, state)
 
   # Return mi object
   self <- list(
                by     = by,
-               frames = obj,
                state  = state,
                list   = datasets
                )
@@ -112,7 +112,7 @@ NextLabel <- function (obj) {
 #' generated
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export
-NextFrame <- function (obj) {
+NextFrame <- function (obj, as.pair = FALSE) {
   key <- NextLabel(obj)
 
   if (is.null(key))
@@ -120,14 +120,17 @@ NextFrame <- function (obj) {
 
   Name <- key[1]
   Constraints <- key[-1]
-  Data <- obj$frames[[Name]]
+  Data <- get('frames', obj$state)[[Name]]
 
   for (col in names(Constraints)) {
     hits <- which(Data[, col] == Constraints[col])
     Data <- Data[hits, ]
   }
 
-  Data
+  if (as.pair)
+    list(label = key, data = Data)
+  else
+    Data
 }
 
 #' Reset Counter for \code{mi} Object

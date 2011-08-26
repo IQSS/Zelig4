@@ -6,7 +6,8 @@
 #' @return a list of summaries
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summary.MI <- function(object, ...) {
-
-  Map(summary, object$result, ...)
-
+  results <- list()
+  for (key in names(object))
+    results[[key]] <- summary(object[[key]]$result)
+  results
 }

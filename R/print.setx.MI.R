@@ -1,18 +1,22 @@
-#' Print values of multiply-imputed `setx' objects
+#' Print a Bundle of Data-sets
 #'
 #' @S3method print setx.mi
-#' 
-#' @param x a `setx.mi' object
+#' @param x a \code{setx} object to print
 #' @param ... ignored parameters
-#' @return NULL
-#' @export
+#' @return the \code{setx} object (invisibly)
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.setx.mi <- function(x, ...) {
-   blah <- x
+  # Store size for readability
+  size <- length(x)
 
-   class(blah) <- "list"
-   cat("[setx]\n")
-   print(blah)
-  #
+  for (k in 1:size) {
+    # Print object
+    print(x[[k]])
 
+    # If this is not the last element, print a new-line
+    if (k < size)
+      cat("\n")
+  }
+
+  invisible(x)
 }
