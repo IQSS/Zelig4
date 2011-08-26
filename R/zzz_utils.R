@@ -1,10 +1,22 @@
+#' Combine 
+#'
+#' Using the elements of the specified list, 
+#' @param lis
+#' @return
+combine <- function (lis) {
+  do.call(".combine", lis)
+}
+
+
 #' Produce All Combinations of a Set of Lists
 #' @note This function is used internall by the 'mi' constructors in order to
 #'   produce the complete set of combinations of data-frames and factors by
 #'   to subset the data-frames.
 #' @param ... a set of lists to mix together
 #' @return all the combinations of the lists with repetition
-.combine <- function(...) {
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
+combine <- function(...) {
   # expand dot arguments
   dots <- list(...)
 
@@ -52,104 +64,6 @@
   m
 }
 
-
-#' Construct a Subsetted Data-Frame
-#' This mysteriously named function is used internally by Zelig to process
-#' subsetted data-frames with the 'mi' function. In particular, it is primarily
-#' used by mi's 'nextElem' method.
-#' @note This function is exclusively used internally by Zelig.
-#' @param dataf a data.frame
-#' @param labels a vector of character-strings (currently ignored)
-#' @return a data.frame with an overloaded operator
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-zframe <- function(dataf, labels=NULL) {
-  # build list
-  z <- list(data=dataf)
-
-  # set class, and return
-  class(z) <- c("zframe", "data.frame")
-  z
-}
-
-#' Extract Subsetted Data-Frames from \code{zframe} Objects
-#' \code{zframe} objects are exclusively used internally within Zelig; they 
-#' facilitate the process of subsetting data-frames for the \code{mi} function.
-#' @note The replacement operator is undefined for \code{zframe} objects.
-#' @param z a 'zframe' object used to describe multiple subsetted data-sets
-#' @param ... parameters to be passed to the default extraction operator
-#' @return a subsetted data-frame
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-"[.zframe" <- function(z, ...) {
-  # expand dots
-  dots <- list(...)
-
-  # get keys
-  keys <- Filter(nchar, names(dots))
-
-  # but what if there's a list passed in?
-  if (is.list(..1)) {
-    dots <- ..1
-    keys <- Filter(nchar, names(..1))
-  }
-
-  # get the data.frame
-  zef <- z$data
-
-  # if no keywords are specified, then 
-  # we want to use the standard data.frame method
-  if (length(keys) < 1)
-    NextMethod(generic="[", object=zef)
-
-  # filter each key-value pair
-  for (key in keys) {
-    # warn if a specified key doesn't exist
-    # then skip
-    if (! key %in% names(zef)) {
-      warning(key, "does not exist")
-      next
-    }
-
-    # get value to filter for
-    val <- dots[[key]]
-
-    # filter
-     zef <- zef[zef[,key] == val,]
-  }
-
-  # return
-  zef
-}
-
-#' Extract the Data-Frame
-#' @note This method is only intended for internal use by Zelig; its
-#'   functionality lacks enough polish for interactive use by users or use by
-#'   other software packages (without reading this warning).
-#' @param x a 'zframe' object
-#' @param row.names ignored
-#' @param optional ignored
-#' @param ... ignored
-#' @return the corresponding subsetted data-frame
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-as.data.frame.zframe <- function(x, row.names=NULL, optional = FALSE, ...)
-  x$data
-
-
-#' Split a Parameter List into Two Lists
-#' @note This is essentially a wrapper function for \link{splitUp}. This
-#'   was used internally by Zelig, but now is primarily syntactical sugar for
-#'   less important features.
-#' @param ... a mix of parameters of any time
-#' @return a list containing two entries: the key-value paired entires (titled
-#'   wordful) and the unkeyed entried (titled wordless)
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @export
-#' @examples
-#' chop.up(x=1, 2, "red", y=2)
-#' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
-#' @seealso splitUp
-chop.up <- function(...)
-  splitUp(list(...))
-
 #' Split a List into Two Lists
 #' This functions takes any list, and splits into two lists - one containing
 #' the values of arguments with specifically specified values and those without
@@ -185,66 +99,6 @@ splitUp <- function(args) {
 }
 
 
-#' Convert a Return-value from a 'zelig2' Function into Meaningful Parameters
-#' 
-#'
-# @param args a list of arguments with values that
-#        are ALREADY evaluated
-# return: a list organized that divides zelig-
-#         parameters from model parameters
-#
-# NOTE: zelig-parameters are prefixed with a
-#       dot, so as to avoid conflicts with
-#       standard variable naming conventions
-#
-# PS: this function primarily is an error-catcher,
-#     and thought organizer
-.zelig2ify <- function(args) {
-  #
-  if (!is.list(args))
-    stop("zelig2 function did not return a list")
-
-  #
-  if (0 %in% nchar(names(args))) {
-    warning("zelig2 function contains an entry without a key-value pair")
-  }
-
-  #
-  args <- splitUp(args)$wordful
-
-  #
-  if (is.null(args$.function)) {
-    stop("no `.function' specified in zelig2function")
-  }
-
-  # move to variables
-  model.func <- args$.function
-  hook.func  <- args$.hook
-  final.func <- args$.final
-  mi.func <- args$.mi
-
-  # remove zelig-parameters from args
-  args$.function <- NULL
-  args$.hook <- NULL
-  args$.final <- NULL
-  args$.mi <- NULL
-
-  # return array
-  # NOTE: arguably, this should be an object,
-  #       but that seems like a lot of effort
-  #       for something that is only used once
-  list(# necessary functions
-       .function = (substitute(model.func)),
-
-       # optional functions
-       .hook     = hook.func,
-       .final    = final.func,
-       .mi = mi.func,
-
-       # parameter list
-       parameters = args
-       )
-}
 
 
 # @topic: character-string representing help-topic

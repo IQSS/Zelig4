@@ -16,9 +16,13 @@ labels.mi <- function (object, ...) {
   LABELS <- NULL
 
   while ({key <- NextLabel(object); !is.null(key)}) {
-
     Name <- key[[1]]
     Constraints <- key[-1]
+
+    if (length(Constraints) == 0) {
+      LABELS <- c(LABELS, Name)
+      next
+    }
 
     label <- paste(names(Constraints), Constraints, sep='=', collapse=", ")
     label <- sprintf("%s (%s)", Name, label)

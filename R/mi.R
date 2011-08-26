@@ -1,3 +1,41 @@
+#' Bundle Data-sets for Multiple Imputation
+#' 
+#' This object prepares data-sets for processing with multiple imputation.
+#' @note This function is largely identical to simply creating a list object,
+#'   with the exception that any unnamed data-sets are automatically labeled
+#'   via the \code{substitute} function
+#' @param ... a set of \code{data.frame}'s
+#' @return an \code{almost.mi} object, which contains the important internals
+#'   of a valid, useful \code{mi} object
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
+mi <- function (...) {
+  frames <- list(...)
+
+  # Substitute all objects in "..."
+  call.object <- substitute(list(...))
+  
+  # Remove 'list' from the head of the call object,
+  # and convert to character-strings
+  Names <- as.character(call.object[-1])
+
+  # Ensure that all frames are named
+  names(frames) <- name.frames(frames, Names)
+
+  # Check for invalid entries
+  for (title in names(frames)) {
+    val <- frames[[title]]
+
+    if (!is.data.frame(val))
+      stop("the entry ", title, " is not a valid data.frame object")
+  }
+
+  class(frames) <- "almost.mi"
+  frames
+}
+
+
+
 #' Bundle Multiply Imputed Data Sets as a List
 #' 
 #' The mi constructor bundles several data-frames with identical 
@@ -16,44 +54,30 @@
 #' @examples
 #' data(immi1, immi2, immi3, immi4, immi5)
 #' mi(immi1, immi2, immi3, immi4, immi5)
-mi <- function(..., by=NULL) {
+make.mi <- function(obj, by=NULL) {
 
-  if (inherits(..1, 'mi') && is.null(by))
-    return(..1)
+  if (is.data.frame(obj))
+    obj <- eval(call("mi", substitute(obj)))
 
-  else if (inherits(..1, 'mi') && !is.null(by)) {
-    warning('the by parameter is being ignored')
-    return(..1)
-  }
-
-  #
-  frames <- list(...)
-
-  # Substitute all objects in "..."
-  call.object <- substitute(list(...))
-  Names <- as.character((call.object[-1]))
-
-  # ensure that all frames are named
-  names(frames) <- name.frames(frames, Names)
-
-  # retrieve factors
+  # Retrieve factors
   to.combine <- append(
-                       list(names(frames)),
-                       retrieve.factors(frames, by)
+                       list(names(obj)),
+                       retrieve.factors(obj, by)
                        )
 
-  # this object gives us all the necessary information to appropriately subset
+  # This object gives us all the necessary information to appropriately subset
   # a data.frame
-  datasets <- do.call('.combine', to.combine)
+  datasets <- do.call('combine', to.combine)
 
-  #
+  # Create an iterator-like object
   state <- new.env()
-  assign('iter', 1, envir=state)
+  assign('iter', 1, state)
+  assign('keys', datasets, state)
 
-  # return mi object
+  # Return mi object
   self <- list(
                by     = by,
-               frames = frames,
+               frames = obj,
                state  = state,
                list   = datasets
                )
@@ -166,107 +190,6 @@ retrieve.factors <- function (frames, by=NULL) {
   }
 
   factor.list
-}
-
-#' Extract the Next Data-frame from an 'mi' Object
-#' Produces the next data-frame from the iterator list. If
-#' the 'keys.only' parameter  is set to TRUE (defaults FALSE), then
-#' exclusively the human-readable label is listed. If the 'as.pair'
-#' parametet is set to TRUE (defaults FALSE), then a list containing
-#' two entries ("key" and "value") are displayed. "key" contains the
-#' label of the data-frame as a character string, and "value" contains
-#' the actual subsetted data-frame.
-#' @usage \method{nextElem}{mi}(obj, \dots, keys.only=F, as.pair=F)
-#' @S3method nextElem mi
-#' @param obj an object of type 'mi'
-#' @param ... ignored parameters
-#' @param keys.only a boolean specifying whether the return value
-#'   should exclusively be the title of the next data.frame or
-#'   the key-value pair of the title and the actual data.frame
-#' @param as.pair a boolean specifying whether the next element should
-#'                be return as a key-value pair
-#' @return the next data.frame, title of the data.frame, or key-value
-#'         pair of title and data.frame
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-nextElem.mi <- function(obj, ..., keys.only=F, as.pair=F) {
-  # assign value with error-checking
-  item <- try(nextElem(obj$iter), silent=TRUE)
-
-  # catch 'stopIteration' error
-  if (inherits(item, "try-error")) {
-    reset(obj)
-    return(item)
-  }
-
-
-  # the following is kludge that is useful for formatting
-  # mi objects that have multiple data-frames
-  # ...
-  # that is, it specifies the leading column as being 
-  # title "data #", so that we have an explicit title
-  # for an otherwise untitled label
-  pretty.item <- item[1, ]
-  names <- names(pretty.item)
-  
-  if (names[1] == '')
-    names[1] <- 'data'
-
-  names(pretty.item) <- names
-
-  # if we don't want a data.frame
-  if (keys.only)
-    return(pretty.item)
-
-  # build parameter list
-  list.item <- as.list(item)
-  names(list.item) <- colnames(item)
-  list.item <- list.item[-1]
-
-  # get data.frame index
-  i <- as.numeric(item[[1]])
-
-  # if no "by" arguments were passed
-  if (length(obj$by) < 1)
-    return(obj$data[[i]])
-
-  # cast as zframe, so we can filter
-  zef <- zframe(obj$data[[i]])
-
-  # return filtered data.frame
-  if (as.pair)
-    list(key=pretty.item, value=zef[list.item])
-  else
-    zef[list.item]
-}
-
-#' Get Labels from MI Key
-#'
-#' This produced a human-readable label from a named character vector. This is
-#' primarily used by the zelig function to give reasonable names to simulated
-#' quantities of interest. That is, we can differentiate several imputed
-#' data-frames from one another by which key we read.
-#'
-#' @note This method is not exported, and is exclusively used internetally by
-#'   Zelig
-#' @param key a vectory of character-strings
-#' @return a character-string
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-label.from.key <- function(key) {
-  item <- key
-
-  if (names(item)[1] == 'data') {
-    head.sep <- ' '
-    join.sep <- ': '
-  }
-  else {
-    head.sep <- '='
-    join.sep <- ', '
-  }
-
-  head <- paste(names(item)[1], item[1], sep=head.sep)
-  tail <- paste(names(item)[-1], item[-1], sep='=', collapse=', ')
-
-  paste(c(head, tail), collapse=join.sep)
 }
 
 

@@ -147,24 +147,6 @@ names.qi <- function(x) {
 }
 
 
-#' Construct an Iterator from a 'qi' Object
-#' @param obj a 'qi' object
-#' @param ... ignored parameters
-#' @return an Iterator of lists containing two keys: key and value. This is 
-#'   so that every simulated Quantity of Interest comes paired with its title.
-#' @export
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-iter.qi <- function(obj, ...) {
-  q <- obj
-  iter(
-       Map(
-           function(x) list(key=x, value=q[[x]]),
-           names(attr(q, ".index"))
-           )
-       )
-}
-
-
 #' Convert a Vector of Character Strings into Acronyms
 #' This function will convert a vector of character strings into their
 #' appropriately titled acronym forms. That is, the two Quantity of Interest

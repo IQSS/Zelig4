@@ -76,17 +76,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # build parameter list (including optional parameters)
   params <- c(dots, notdots)
 
-
-  # construct model object
-  class(model) <- model
-
   # set up list
   res <- NULL
   old.style.oop <- TRUE
 
-  # create a data.frame iterator
-  # substitute must be used to ensure that al the correct names are forwarded
-  m <- eval(call("mi", substitute(data), by=by))
+  m <- eval(call("make.mi", substitute(data), by=by))
 
   # initialize variables for loop
   k <- 1
@@ -155,15 +149,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # (because both should be in order)
   
   # this is kludge.  can we (I) clean this up?
-  if (!inherits(data, "mi") && is.null(by)) {
-    res <- res[[1]]
-    res.env <- res.env[[1]]
-    frames <- frames[[1]]
-  }
-
-  else {
+  if (inherits(m, 'mi')) {
     for (key in key.labels) {
-      
       big.list[[key]] <- list(
                               name = as.character(model),
                               formula = formula,
@@ -183,7 +170,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
                               )
       class(big.list[[key]]) <- c('zelig', model)
     }
-
   }
 
   # run clean-up hooks on every result
@@ -218,12 +204,10 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   else
     .RegisterMethodsS4(c("terms", register(z)))
 
-  print(length(m))
-
   # prepend "MI" class to sets of results
   if (is.list(z$result) && length(m) > 1)
     class(z) <- c("MI", class(z))
-  else if (inherits(data, "mi"))
+  else if (inherits(data, "almost.mi"))
     class(z) <- c("MI", class(z))
 
   

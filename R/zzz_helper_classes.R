@@ -17,7 +17,6 @@ zelig.kin <- function(parent, fitted, data=NULL) {
             call = parent$call,
             is.MI = F,
             by = NULL,
-            mi = iter(list()),
             model.obj = parent$model.obj
             )
 
