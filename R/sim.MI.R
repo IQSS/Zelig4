@@ -27,9 +27,12 @@ sim.MI <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, ...) {
     sim.results[[key]] <- sim(object, x=new.x, x1=new.x1, y=new.y, num=num)
   }
 
+  model <- get('model', attr(obj, 'state'))
+
   class(sim.results) <- c(
-                          paste(obj$name, 'MI.sim', sep = '.'),
-                          'MI.sim'
+                          'MI.sim',
+                          paste(model, "mi-sim", sep="-"),
+                          paste(model, "mi.sim", sep=".")
                           )
 
   sim.results

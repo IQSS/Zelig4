@@ -11,18 +11,16 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 plot.sim <- function(x, xlab = "", ...) {
-  sim.object <- x
-
   # save old state
   old.par <- par(no.readonly=T)
 
 
-  if (is.null(x$x))
+  if (is.null(x$x)) {
     return(par(old.par))
+  }
 
   else if (is.null(x$x1) || is.na(x$x1)) {
-
-    panels <- matrix(1:2, nrow=2)
+    panels <- matrix(1:2, nrow=2, ncol=2)
     palette <- c('black', 'black')
 
     # the plotting device:
@@ -35,8 +33,8 @@ plot.sim <- function(x, xlab = "", ...) {
 
   else {
 
-    panels <- matrix(c(1, 3, 5, 2, 4, 5), ncol=2)
-    palette <- c('red', 'navy', 'red', 'navy', 'black', 'black')
+    panels <- matrix(c(1:5, 5), ncol=2, byrow = TRUE)
+    palette <- c('red', 'navy', 'red', 'navy', 'black')
 
     # the plotting device:
     #
@@ -49,35 +47,38 @@ plot.sim <- function(x, xlab = "", ...) {
     # +-----------+
   }
 
+  # Set layout
   layout(panels)
 
 
-  # get iterator object
-  i <- iter(sim.object$qi)
+  # Get unsummarized qi data
+  qi <- x$qi
+  labels <- names(attr(qi, '.index'))
+  k <- 0
+  size <- length(labels)
 
-  # all the beautiful colors
-  colors <- iter(palette, recycle=T)
+  # Loop through qi's
+  for (key in labels) {
+    # Change names for code clarity
+    val <- qi[[key]]
 
-  # loop through all the qi simulations
-  repeat {
-    # get key-value pair
-    item <- try(nextElem(i), silent=T)
+    if (all(is.na(val))) 
+      next
 
-    # catch end of iterator
-    if (inherits(item, "try-error"))
-      break
+    if (k >= length(palette))
+      k <- 0
 
-    # for code-clarity
-    key <- item$key
-    val <- item$value
-    color <- nextElem(colors)
+    color <- palette[k <- k + 1]
+
     #
     if (all(is.na(val)))
       next
+
     else if (is.numeric(val)) {
       val <- as.numeric(val)
       plot(density(val), main = key, col=color)
     }
+
     else if (is.character(val) || is.factor(val)) {
       barplot(table(val), xlab=xlab, main=key, col=color)
     }

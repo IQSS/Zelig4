@@ -151,7 +151,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     class(obj) <- c(model, 'zelig')
 
     # Attach shared environment as an attribtute
-    attr(obj, 'shared') <- state
+    attr(obj, 'state') <- state
 
     # Add to list of results
     object[[label]] <- obj
@@ -161,7 +161,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     object <- object[[1]]
   }
   else {
-    attr(object, 'shared') <- state
+    attr(object, 'state') <- state
     class(object) <- c(model, paste(model, 'mi', sep='-'), "MI")
   }
 
@@ -178,6 +178,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   assign('call', match.call(), state)
   assign('by', by, state)
   assign('methods', methods.env, state)
+  assign('model', model, state)
+
   # The below line should probably remain commented out
   # assign('mi', m, state)
 

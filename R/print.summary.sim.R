@@ -6,94 +6,83 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.summary.sim <- function(x, ...) {
-  # Let's do it this way:
-  obj <- x$zelig
-  model <- x$name
+  # Rename 'x' 'summary'
+  summary <- x
 
-  x <- x$x
-  x1 <- x$x1
+  obj <- summary$zelig
+  model <- summary$model
+  x <- summary$x
+  x1 <- summary$x1
+  stats <- summary$stats
+  num <- summary$num
 
-  stats <- x$stats
-
-
-  message("Quit Expectedly")
-  q()
-
-  # prints typically have qi, and qi.names defined as part of the summary object
-  if (is.null(x$stats))
+  # Error if there are no statistics to display
+  if (is.null(stats))
     stop("stats object cannot be NULL")
 
   # new-line
   cat("\n")
 
-  # print model name
-  cat("Model: ", x$model, "\n")
+  # Print model name
+  cat("Model: ", model, "\n")
 
-  # print number of simulations
-  cat("Number of simulations: ", x$iterations, "\n")
+  # Print number of simulations
+  cat("Number of simulations: ", num, "\n")
 
   # new-line
   cat("\n")
 
-  # important value of x
-  if (!is.null(x$x$matrix)) {
+  # Display information about the X setx object
+  # This should probably be reconsidered in the future
+  if (!is.null(x$matrix)) {
     cat("Values of X\n")
-    print(as.matrix(x$x$updated[, x$x$explan]))
+    print(as.matrix(x$updated[, x$explan]))
 
     # new-line
     cat("\n")
   }
-  else if (is.list(x$x$s.x)) {
+  else if (is.list(x$s.x)) {
     # add special hooks here?
   }
 
-  # important value of x1
-  if (!is.null(x$x1$matrix)) {
+  # Display information about the X1 setx object
+  # This should probably be reconsidered in the future
+  if (!is.null(x1$matrix)) {
     cat("Values of X1\n")
-
-    print(as.matrix(x$x1$updated[, x$x1$explan]))
+    print(as.matrix(x1$updated[, x1$explan]))
 
     # new-line
     cat("\n")
   }
 
-  # new-line
-  cat("\n")
+  # Decrementing the size of the list will give us an easy way to print
+  size <- length(stats)
 
-  #
-  i <- iter(x$stats)
-  first.iter <- T
-
-  repeat {
-    item <- try(nextElem(i), silent=T)
-
-    #
-    if (inherits(item, "try-error"))
-      break
-
-    # for code clarity
-    key <- item$key
-    val <- item$value
+  # Loop across all qi's
+  for (key in names(stats)) {
+    # Create variable for code clarity
+    val <- stats[[key]]
 
     if (!is.qi(val))
       next
 
-    # for proper whitespace formatting
-    if (first.iter)
-      first.iter <- F
-    else
-      cat("\n")
-
-    # display the title, then the value
+    # Display Title
     cat(key, "\n")
-    #print(as.name(key))
 
+    # Round value if numeric
     if (is.numeric(val))
       print(round(val*(1000))/1000)
+
+    # Simply print if anything else
     else
       print(val)
+
+    # Print a new-line between qi's
+    if (size <- size - 1) {
+      cat("\n")
+    }
   }
 
-  # return invisibly
+  # Return invisibly
   invisible(x)
 }

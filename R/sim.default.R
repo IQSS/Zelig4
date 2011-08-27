@@ -80,7 +80,7 @@ sim.default <- function(obj,
             call     = match.call(),
             zcall    = obj$call,
             result   = obj$result,
-            iterations = num,
+            num      = num,
             special.parameters = list(...)
             )
 

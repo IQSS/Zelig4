@@ -7,7 +7,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summary.sim <- function(object, ...) {
   s <- object
-  res <- list(model    = s$name,
+  res <- list(model    = object$model,
               stats    = s$stats,
               titles   = s$titles,
               original = s$result,
@@ -15,7 +15,7 @@ summary.sim <- function(object, ...) {
               zeligcall= s$zcall,
               x        = s$x,
               x1       = s$x1,
-              iterations = s$iterations
+              num      = object$num
               )
   class(res) <- c(s$name, "summary.sim")
   res
