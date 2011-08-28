@@ -244,7 +244,7 @@ errors are implemented via the sandwich package by \citet{Zeileis04}.
 Sample data are from \cite{Martin92}.
 
 \bibliographystyle{plain}
-\bibliography{gk,gkpubs,core}
+\bibliography{gk,gkpubs,Zelig}
 <<afterpkgs, echo=FALSE>>=
  after<-search()
  torm<-setdiff(after,before)
