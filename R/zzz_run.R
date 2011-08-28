@@ -10,7 +10,6 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig.call <- function(Call, zelig2, remove = NULL) {
-
   #
   envir <- new.env()
 

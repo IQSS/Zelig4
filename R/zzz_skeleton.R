@@ -90,48 +90,6 @@
 }
 
 
-#' generate zelig2, qi., and param. functions for model
-#' in a particular environment
-#' param model a character-string specifying the name of a non-existent Zelig model
-#' param env an environment 
-#' return invisible environment variable (with stored functions)
-.generate.functions <- function(model, env) {
-  # define zelig2 function
-  zelig2 <- function (formula, ..., data) {
-    list(
-        .function = ""
-        )
-  }
-
-  # define param function
-  param <- function (obj, num) {
-    list(
-        coef  = NULL
-        )
-  }
-
-
-  # define qi function
-  qi <- function (obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
-    list(
-        "Expected Value: E(Y|X)" = NA
-        )
-  }
-
-  # ...
-  zelig2model <- paste('zelig2', model, sep="")
-  param.model <- paste('param', model, sep=".")
-  qi.model <- paste('qi', model, sep=".")
-
-
-  assign(zelig2model, zelig2, envir=env)
-  assign(param.model, param, envir=env)
-  assign(qi.model, qi, envir=env)
-
-  invisible(env)
-}
-
-#' Substitute mode, package, etc.
 #' @note This function fails if passed non-alphanumeric variable names. In
 #'   particular, the parameters cannot contain periods, etc.
 #' @param .file the name of the file to replace

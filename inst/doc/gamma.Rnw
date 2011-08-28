@@ -19,7 +19,7 @@
 
 
 %\VignetteIndexEntry{Gamma Regression for Continuous, Positive Dependent Variables}
-%\VignetteDepends{Zelig, MCMCpack}
+%\VignetteDepends{Zelig}
 %\VignetteKeyWords{model,regression,gamma distribution}
 %\VignettePackage{Zelig, stats}
 

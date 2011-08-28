@@ -41,10 +41,10 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 "[[.qi" <- function(self, key) {
 
-  # produce the index of titles of qi's
+  # Produce the index of titles of qi's
   index <- attr(self, ".index")
 
-  # find the 'short-name' matching
+  # Find the 'short-name' matching
   qi.short.name <- index[[key]]
 
   if (is.null(qi.short.name))
@@ -58,17 +58,3 @@
     #   qi$ev
     do.call("$", list(self, qi.short.name))
 }
-
-
-## "$.qi" <- function(self, key) {
-##   key <- as.character(key)
-
-##   self
-## }
-
-# @left: a list or vector
-# @right: a list or vector
-# return: left without any elements from right
-# note: this is not commutative
-#"%w/o%" <- function(left, right)
-#  left[ ! left %in% right ]

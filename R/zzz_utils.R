@@ -1,13 +1,3 @@
-#' Combine 
-#'
-#' Using the elements of the specified list, 
-#' @param lis
-#' @return
-combine <- function (lis) {
-  do.call(".combine", lis)
-}
-
-
 #' Produce All Combinations of a Set of Lists
 #' @note This function is used internall by the 'mi' constructors in order to
 #'   produce the complete set of combinations of data-frames and factors by
@@ -75,7 +65,6 @@ combine <- function(...) {
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export
 #' @examples
-#' chop.up(list(x=1, 2, "red", y=2))
 #' #list(wordful = list(x=1, y=2), wordless=list(2, "red"))
 splitUp <- function(args) {
   wordless <- list()

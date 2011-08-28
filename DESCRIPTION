@@ -22,7 +22,7 @@ Packaged: Tue Sept 28 12:06:15 2010; mowen
 URL: http://gking.harvard.edu/zelig
 Date: 2011-04-27
 Depends: R (>= 2.8.1), MASS, survival, methods
-Suggests: mvtnorm, MCMCpack
+Suggests: mvtnorm
 Collate: 'as.dataframe.setx.R' 'as.matrix.setx.R' 'as.parameters.R'
     'as.qi.R' 'as.summarized.list.R' 'as.summarized.R' 'cmvglm.R'
     'describe.default.R' 'describe.gamma.R' 'describe.logit.R'
@@ -49,4 +49,4 @@ Collate: 'as.dataframe.setx.R' 'as.matrix.setx.R' 'as.parameters.R'
     'zzz_environment_hacks.R' 'zzz_generics.R' 'zzz_helper_classes.R'
     'zzz_numerical.R' 'zzz_operators.R' 'zzz_plots.R' 'zzz.R'
     'zzz_run.R' 'zzz_S4_generics.R' 'zzz_skeleton.R' 'zzz_stats.R'
-    'zzz_utils.R' 'zzz_zelig2classes.R' 'labels.mi.R' 'summary.MI.sim.R'
+    'zzz_utils.R'  'labels.mi.R' 'summary.MI.sim.R'
