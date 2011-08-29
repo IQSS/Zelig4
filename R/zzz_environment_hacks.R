@@ -100,32 +100,6 @@
 }
 
 
-#' Run Model Fitting Function in Encapsulated Environment
-#' @note This function is exclusively used internally Zelig
-#' @param ..1 a zelig.call object
-#' @param ..2 an environment object
-#' @return the object ran in an insulated environment
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-.run <- function(...) {
-  # attach to ensure all the variables are known
-  attach(..1$envir)
-  attach(..2)
-
-  # run function call
-  .result <- do.call(as.character(..1$call[[1L]]),
-                     as.list(..1$call)[-1],
-                     envir=..1$envir
-                     )
-
-  # detach relevant stuff
-  detach(..1$envir)
-  detach(..2)
-
-  # return object
-  .result
-}
-
-
 #' Attach Environment and Evaluate Expression
 #' @param ..1 an expression to evaluate
 #' @param ..2 the environment to evaluate the expression in
@@ -137,23 +111,4 @@ eval.in <- .call <- function (...) {
   res <- suppressMessages((..1))
   detach(..2)
   res
-}
-
-
-#' Apply Function Call to Zelig Objects Result Slot
-#' @param expr an expression to lazily-evaluate
-#' @param envir ignored until later versions
-#' @return the result of applying the expression to the 
-#'         `result' slot of the first parameter
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @examples
-#' data(vote)
-#' z.out <- zelig(vote ~ race + educate, model='logit', data=vote)
-#' result(vcov(z.out))
-#' # or:
-#' ...(vcov(z.out))
-. <- ... <- result <- function(expr, envir) {
-  expr <- substitute(expr)
-  expr[[2L]] <- eval(expr[[2L]])$result
-  eval(expr, envir)
 }
