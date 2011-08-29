@@ -9,8 +9,5 @@ x.out1 <- setx(z.out1, age = 36, race = "white")
 
 s.out1 <- sim(z.out1, x = x.out1)
 
-summary(z.out1)
-vcov(z.out1)
-coef(z.out1)
-x.out1
+summary(s.out1)
 plot(s.out1)

@@ -72,23 +72,31 @@ zelig.skeleton <- function (
   e <- new.env()
 
   for (m in models) {
-    # place proper functions in
+    # Place proper functions in
     # correct environment (out of global)
     # this technically doesn't work
     # (bug in package.skeleton)
-    .generate.functions(m, e)
+    describe <- function (...) list()
+    zelig2 <- function (formula, ..., data) list(.function = "")
+    param <- function (obj, num, ...) list(coef=NULL)
+    qi <- function (obj, x, x1, y, param, num) list()
+
+    assign(paste("describe", m, sep="."), describe, e)
+    assign(paste("zelig2", m, sep=""), describe, e)
+    assign(paste("param", m, sep="."), describe, e)
+    assign(paste("qi", m, sep="."), describe, e)
   }
 
-  # invoke package.skeleton
+  # Invoke package.skeleton
   package.skeleton(
-      name = pkg,
-      environment = e,
-      path = path,
-      force = force,
-      namespace = TRUE
-      )
+                   name = pkg,
+                   environment = e,
+                   path = path,
+                   force = force,
+                   namespace = TRUE
+                   )
 
-  # copy files over - as of 3/11 these files are blank
+  # Copy files over - as of 3/11 these files are blank
   for (m in models) {
     .copy.templates(m, pkg, path)
   }

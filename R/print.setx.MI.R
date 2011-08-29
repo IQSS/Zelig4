@@ -1,6 +1,7 @@
 #' Print a Bundle of Data-sets
 #'
 #' @S3method print setx.mi
+#' @usage \method{print}{setx.mi}(x, ...)
 #' @param x a \code{setx} object to print
 #' @param ... ignored parameters
 #' @return the \code{setx} object (invisibly)

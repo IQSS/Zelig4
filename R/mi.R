@@ -34,8 +34,6 @@ mi <- function (...) {
   frames
 }
 
-
-
 #' Bundle Multiply Imputed Data Sets as a List
 #' 
 #' The mi constructor bundles several data-frames with identical 
@@ -108,8 +106,12 @@ NextLabel <- function (obj) {
 #' Zelig to depend on the \code{iterators} package.
 #' @note This method is intended for internal use by Zelig.
 #' @param obj an \code{mi} object
+#' @param as.pair a boolean specifying whether to return the \code{data.frame}
+#'   as a list pairing the label and the data object
 #' @return the next \code{data.frame} or NULL (if all \code{data.frames} have
-#' generated
+#'   been generated). If \code{as.pair} is set to TRUE, then a list will be 
+#'   returned, specifying the \code{data.frame}'s label as ``label'' and the
+#'   \code{data.frame} as ``data''
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export
 NextFrame <- function (obj, as.pair = FALSE) {
@@ -135,9 +137,11 @@ NextFrame <- function (obj, as.pair = FALSE) {
 
 #' Reset Counter for \code{mi} Object
 #'
-#' ...
-
-#' @note
+#' This function sets the next frame of the iterator to be its first value.
+#' @note This method is used for its side-effect. Its return-value is of almost
+#'   no significance.
+#' @param obj an \code{mi} object
+#' @return the value 1 (invisibly)
 #' @export
 Reset <- function (obj) {
   assign('iter', 1, obj$state)
@@ -145,13 +149,16 @@ Reset <- function (obj) {
 
 #' Replace Unnamed Indices with a Default Value
 #'
-#' ...
 #' @note This method is used by Zelig to organize collections of data.frame's
 #'   for use with multiple imputation. That is, this function correctly labels
 #'   lists of data.frame's submitted to the code{zelig} function.
-#' @param frames
-#' @param frame.names
-#' @return 
+#' @param frames q list of \code{data.frame}'s
+#' @param frame.names a character vecotory specifying the appropriate names to
+#'   label each index of \code{frames} if no label is already set. If every
+#'   \code{data.frame} already has a label, then the \code{frame.names}
+#'   parameter is essentially ignored
+#' @return a character-string specifying the appropriate names for the 
+#'   \code{data.frame}'s
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 name.frames <- function (frames, frame.names) {
   # Specify the names of each index as "" if doesn't exist
@@ -169,14 +176,20 @@ name.frames <- function (frames, frame.names) {
 }
 
 #' Retrieve a list of all the factors in the specified column
+#' 
+#' @param frames a list of \code{data.frame} objects
+#' @param by a character-vector specifying columns to search for factors within
+#' @return a list with entries corresponding to the value of the \code{by}
+#'   parameter. The value of each index is unique values of the
+#'   \code{data.frame}'s columns.
+#' @export
 retrieve.factors <- function (frames, by=NULL) {
   factor.list <- list()
 
   for (col in by) {
     for (frame in frames) {
-      # ignore data.frame if this column does not exist
+      # Ignore data.frame if this column does not exist
       if (! col %in% colnames(frame)) {
-        message("col = ", col)
         next
       }
 

@@ -11,3 +11,4 @@ specified values.}
 wordful) and the unkeyed entried (titled wordless)}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
 \arguments{\item{args}{a list}}
+\examples{#list(wordful = list(x=1, y=2), wordless=list(2, "red"))}

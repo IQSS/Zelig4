@@ -4,9 +4,11 @@
 #' @note This function is primarily used internally by Zelig to keep track of
 #'   the \code{data.frame}'s produced by \code{mi} objects.
 #' @S3method labels mi
-#' @param object
-#' @param ...
+#' @usage \method{labels}{mi}(object, ...)
+#' @param object an \code{mi} object
+#' @param ... ignored parameters
 #' @return a character-string specifying all the labels
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 labels.mi <- function (object, ...) {
   env <- object$state
   iter <- get('iter', envir=env)
@@ -28,6 +30,9 @@ labels.mi <- function (object, ...) {
     label <- sprintf("%s (%s)", Name, label)
     LABELS <- c(LABELS, label)
   }
+
+  # Restore iterator to previous position
+  assign('iter', iter, env)
 
   LABELS
 }
