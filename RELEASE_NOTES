@@ -50,7 +50,7 @@ What's New in this Release?
 This release offers a large variety of coding style changes, as well as core
 functionality. Please carefully read the following:
 
-Major Changes
+Major Changes (from version 3.5)
 --------------------------------------------------------------------------------
 - Models are now added to Zelig as separate extensions. The method
   'zelig.skeleton' has been added to the R-package to facilitate this change.
@@ -63,7 +63,7 @@ Major Changes
 - Enhanced API for 'param' and 'qi' functions. See develoepr documentation for
   more information
 
-Minor Changes
+Minor Changes (from version 3.5)
 --------------------------------------------------------------------------------
 - Slight changes to the plotting of simulated quantities of interest. Most
   changes are stylistic

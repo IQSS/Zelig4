@@ -141,14 +141,15 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # Create an appropriate object
     obj <- list(
                 name  = model,
+                formula = formula(new.res),
                 label = label,
                 result  = new.res,
                 env  = env,
-                data = d.f,
                 call = new.call,
+                data = d.f,
                 S4   = ! old.style.oop
                 )
-    class(obj) <- c(model, 'zelig')
+    class(obj) <- c('zelig', model)
 
     # Attach shared environment as an attribtute
     attr(obj, 'state') <- state
@@ -173,6 +174,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     .RegisterMethodsS4(c("terms", register(obj)))
 
   # Update the shared environment
+  assign('old-formula', formula, state)
   assign('args', list(...), state)
   assign('parent', parent.frame(), state)
   assign('call', match.call(), state)
