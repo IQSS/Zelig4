@@ -14,8 +14,8 @@
  * Added terms.zelig as a method with documentation
  * Added a 'formula' index to the 'zelig' class. This contains a formula
    formula identical that contained in the result index (within the zelig 
-   object).
+   object)
  * Added "old-formula" variable to the "state" attribute (this attribute is an
    environment. That is, the attribute "state", which is an environment, now
    contains a variable titled "old-formula". This specifies the original
-   formula submitted to the 'zelig' function.
+   formula submitted to the 'zelig' function
