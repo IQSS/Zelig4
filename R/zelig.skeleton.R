@@ -46,8 +46,10 @@ zelig.skeleton <- function (
     pkg <- as.character(pkg)
   }
 
-  if (length(pkg) > 1)
+  if (length(pkg) > 1) {
     warning("invalid 'pkg' parameter; length cannot be greater than one")
+    pkg <- pkg[1]
+  }
 
   if (!is.character(models)) {
     warning("invalid 'models' parameter; should be a character vector")
@@ -120,10 +122,11 @@ zelig.skeleton <- function (
     dest <- file.path(path, pkg, '.Rbuildignore')
     file.copy(src, dest)
 
-    dest <- file.path(path, pkg, 'inst', 'doc', '.Rbuildignore', package='Zelig')
+    dest <- file.path(path, pkg, 'inst', 'doc', '.Rbuildignore')
     dir.create(file.path(path, pkg, 'inst', 'doc'), recursive=TRUE)
     file.copy(src, dest)
   }
+
 
   # Why zero? Eh, maybe a return code thing. This function is really just used
   # for side-effects

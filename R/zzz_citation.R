@@ -1,6 +1,3 @@
-# This function contains methods used for citing statistical models, and shares
-# many similarities with the old 'vdc.R' file
-
 #' Describe a Zelig Model
 #'
 #' @param model.name 
