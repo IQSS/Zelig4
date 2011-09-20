@@ -19,7 +19,6 @@ describe.negbinom <- function(...) {
   list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
        year     = 2008,
        category = "count",
-       package  = package.zelig("CORE", 1.0),
        parameters = parameters,
        text = "Negative Binomial Regression for Event Count Dependent Variables"
        )

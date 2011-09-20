@@ -18,7 +18,6 @@ describe.gamma <- function(...) {
   list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
        year     = 2007,
        category = "bounded",
-       package  = package.zelig("CORE", 1.0),
        parameters = parameters,
        text = "Gamma Regression for Continuous, Positive Dependent Variables"
        )

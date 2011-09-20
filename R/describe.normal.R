@@ -18,7 +18,6 @@ describe.normal <- function(...) {
   list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
        year     = 2008,
        category = "continuous",
-       package  = package.zelig("CORE", 1.0),
        parameters = parameters,
        text = "Normal Regression for Continuous Dependent Variables"
        )

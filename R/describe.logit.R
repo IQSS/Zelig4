@@ -18,7 +18,6 @@ describe.logit <- function(...) {
   list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
        year     = 2008,
        category = "dichotomous",
-       package  = package.zelig("CORE", 1.0),
        parameters = parameters,
        text = "Logistic Regression for Dichotomous Dependent Variables"
        )
