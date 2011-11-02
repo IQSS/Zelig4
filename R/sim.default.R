@@ -57,13 +57,19 @@ sim.default <- function(obj,
   
 
   # compute quantities of interest
-  res.qi <- as.qi( qi(obj, x=x, x1=x1, y=y, param=param, num=num) )
+  res.qi <- qi(obj, x=x, x1=x1, y=y, param=param, num=num)
+  
+  # Cast as a "qi" object if it is not one
+  res.qi <- as.qi(res.qi)
+
+  # Assign class
   class(res.qi) <- c(obj$name, class(res.qi))
 
   # this is kludge (for now)
   # This can be removed as of 4-27-2011
   if (inherits(obj, "MI"))
     class(res.qi) <- c("MI", class(res.qi))
+
 
 
   # build object
