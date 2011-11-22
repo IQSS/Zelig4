@@ -11,25 +11,19 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, and Olivia Lau 
 setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
-  # expand the dots
+  # Expand the dots
   dots <- list(...)
 
   # init important objects  
-
   form <- formula(obj)
 
-  if (length(form) == 3) {
-    vars.obj <- as.character(all.vars(form[[3]]))
-    not.vars <- as.character(all.vars(form[[2]]))
-  }
-  else if (length(form) == 2) {
-    vars.obj <- as.character(all.vars(form[[2]]))
-    not.vars <- as.character(all.vars(form[[1]]))
-  }
-  else {
-    stop("Formula of zelig object must have a length of 2 or 3")
-  }
+  # Extract information about terms
+  # Note: the functions 'getPredictorTerms' and 'getOutcomeTerms' are in need
+  # of a rewrite. At the moment, they are pretty kludgey (written by Matt O.).
+  vars.obj <- getPredictorTerms(form)
+  not.vars <- getResponseTerms(form)
 
+  # Default the environment to NULL (Global)
   env.obj <- NULL
 
   # explanatory variables
@@ -154,3 +148,98 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   class(sx) <- c(obj$name, "setx")
   sx
 }
+
+
+# Get
+getResponseTerms <- function (x, ...) {
+  # The following functions are unsafe for general input, so they are being
+  # kept as nested functions.
+
+  # Extract "outcome" terms from a formula
+  # @param x a formula
+  # @param ... ignored parameters
+  # @return a character-vector specifying the predictor terms
+  # @author Matt Owen
+  extractFromFormula <- function (form, ...) {
+    if (length(form) == 3)
+      as.character(all.vars(form[[2]]))
+
+    else if (length(form) == 2)
+      ""
+
+    else {
+      warning("Formula of zelig object must have a length of 2 or 3")
+      NA
+    }
+  }
+
+  # Extract "outcome" terms from a list of formulae
+  # @param x a list
+  # @param ... ignored parameters
+  # @return a character-vector specifying the 
+  # @author Matt Owen
+  extractFromList <- function (x, ...) {
+    unlist(Map(extractFromFormula, x))
+  }
+
+  # Beginning of work for function
+  if (is.list(x))
+    extractFromList(x)
+
+  else if ("formula" %in% class(x))
+    extractFromFormula(x)
+
+  else {
+    warning("The model formula must either ",
+            "be a list of formula to work properly")
+    NA
+  }
+}
+
+
+#
+getPredictorTerms <- function (x, ...) {
+  # The following functions are unsafe for general input, so they are being
+  # kept as nested functions.
+
+  # Extract "predictor" terms from a formula
+  # @param x a formula
+  # @param ... ignored parameters
+  # @return a character-vector specifying the 
+  # @author Matt Owen
+  extractFromFormula <- function (form, ...) {
+    if (length(form) == 3)
+      as.character(all.vars(form[[2]]))
+ 
+    else if (length(form) == 2)
+      as.character(all.vars(form[[1]]))
+
+    else {
+      warning("Formula of zelig object must have a length of 2 or 3")
+      NA
+    }
+  }
+
+  # Extract "predictor" terms from a list of formulae
+  # @param x a list
+  # @param ... ignored parameters
+  # @return a character-vector specifying the 
+  # @author Matt Owen
+  extractFromList <- function (x, ...) {
+    unlist(Map(extractFromFormula, x))
+  }
+
+  # Beginning of work for function
+  if (is.list(x))
+    extractFromList(x)
+
+  else if ("formula" %in% class(x))
+    extractFromFormula(x)
+
+  else {
+    warning("The model formula must either ",
+            "be a list of formula to work properly")
+    NA
+  }
+}
+
