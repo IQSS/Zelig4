@@ -6,11 +6,14 @@
 #  * .NumInverse
 
 
-# @f: function (differentiable)
-# @stencil: number of points in stencil
-# @h: size of mesh
-# return: anonymous function with the approximation
-# **note: single variable numerical derivative
+# Numerical Derivative
+#
+# This method computes the numerical derivative at a point
+# @param f function (differentiable)
+# @param stencil number of points in stencil. This is currently ignored.
+# @param h size of mesh
+# @return anonymous function with the approximation
+# @note single variable numerical derivative
 .nderiv <- function(f, stencil=5, h=sqrt(.Machine$double.eps)) {
   # return approximated derivative function
   function (x) {

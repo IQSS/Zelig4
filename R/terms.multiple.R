@@ -1,23 +1,13 @@
+###
 ## terms
 ## -accept single and multiple equations:
 ## -in case of single equations, the equation is named "mu". is this right?
 ## -if mu=y~x:z then the attr(tt,"variable") gives list(y,x:z). Should it be list(y,x,z) ??
 ## -
 
-#' Extract Terms from Multiple-component Formulas
-#' @usage \method{terms}{multiple}(x, data=NULL, ...)
+
 #' @S3method terms multiple
-#' @param x a formula or list of formulas object
-#' @param data a data.frame or NULL
-#' @param ... ignored parameters
-#' @return the terms attribute
-#' @author Kosuke Imai and Olivia Lau
-## terms
-## -accept single and multiple equations:
-## -in case of single equations, the equation is named "mu". is this right?
-## -if mu=y~x:z then the attr(tt,"variable") gives list(y,x:z). Should it be list(y,x,z) ??
-## -
-terms.multiple<-function(x, data=NULL, ...){
+terms.multiple<-function(x, data=NULL,...){
         object <- x
         termsexist<-attr(object,"terms")
         if(!(is.null(termsexist)))
