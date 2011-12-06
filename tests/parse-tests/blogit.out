@@ -1,0 +1,84 @@
+## 
+##  Zelig (Version 3.5.3, built: 2010-01-20)
+##  Please refer to http://gking.harvard.edu/zelig for full
+##  documentation or help.zelig() for help with commands and
+##  models supported by Zelig.
+##
+
+##  Zelig project citations:
+##    Kosuke Imai, Gary King, and Olivia Lau. (2009).
+##    ``Zelig: Everyone's Statistical Software,''
+##    http://gking.harvard.edu/zelig.
+##  and
+##    Kosuke Imai, Gary King, and Olivia Lau. (2008).
+##    ``Toward A Common Framework for Statistical Analysis
+##    and Development,'' Journal of Computational and
+##    Graphical Statistics, Vol. 17, No. 4 (December)
+##    pp. 892-913. 
+
+##  To cite individual Zelig models, please use the citation format printed with
+##  each model run and in the documentation.
+##
+$mu1
+import ~ coop + cost + target
+<environment: 0x1008e5498>
+
+$mu2
+export ~ coop + cost + target
+<environment: 0x1008e5498>
+
+$phi
+~1
+<environment: 0x100c8c070>
+
+attr(,"systEqns")
+[1] "mu1" "mu2"
+attr(,"ancilEqns")
+[1] "phi"
+attr(,"variables")
+attr(,"variables")$mu1
+list(import, coop, cost, target)
+
+attr(,"variables")$mu2
+list(export, coop, cost, target)
+
+attr(,"variables")$phi
+list()
+
+attr(,"term.labels")
+attr(,"term.labels")$mu1
+[1] "coop"   "cost"   "target"
+
+attr(,"term.labels")$mu2
+[1] "coop"   "cost"   "target"
+
+attr(,"term.labels")$phi
+character(0)
+
+attr(,"indVars")
+[1] "coop"   "cost"   "target"
+attr(,"depVars")
+attr(,"depVars")$mu1
+[1] "import"
+
+attr(,"depVars")$mu2
+[1] "export"
+
+attr(,"depFactors")
+[1] FALSE
+attr(,"constraints")
+[1] FALSE
+attr(,"subs")
+[1] FALSE
+attr(,"response")
+[1] 1
+attr(,"intercept")
+attr(,"intercept")$mu1
+[1] 1
+
+attr(,"intercept")$mu2
+[1] 1
+
+attr(,"intercept")$phi
+[1] 1
+

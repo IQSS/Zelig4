@@ -27,12 +27,13 @@ parseFormula.formula <- function (obj, data=NULL) {
   1
 
   # Extract terms
-  TERMS <- terms(formula)
+  TERMS <- terms(obj)
 
   # Build the object
   res <- list(
+              formula = obj,
               terms = TERMS,
-              rawr = 1
+              response = getResponseTerms(obj)
               )
 
   # Return
@@ -47,18 +48,16 @@ parseFormula.formula <- function (obj, data=NULL) {
 # @param data a data frame
 # @return an object of type "parseFormula"
 # @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @S3method parseFormula formula
+#' @S3method parseFormula list
 parseFormula.list <- function (obj, data=NULL) {
 
   # Build the object
   res <- list(
-              terms = TERMS,
-              rawr = 1
+              formula = obj,
+              terms = 1
               )
 
   # Return
   class(res) <- "parseFormula"
   res
 }
-
-
