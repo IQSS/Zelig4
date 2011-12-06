@@ -1,0 +1,25 @@
+RUNIT TEST PROTOCOL -- Thu May 31 20:13:08 2007 
+*********************************************** 
+Number of test functions: 2 
+Number of deactivated test functions: 1 
+Number of errors: 0 
+Number of failures: 0 
+
+ 
+1 Test Suite : 
+Zelig unit testing - 2 test functions, 0 errors, 0 failures
+
+
+
+Details 
+*************************** 
+Test Suite: Zelig unit testing 
+Test function regexp: ^test.+ 
+Test file regexp: ^runit.+\.[rR]$ 
+Involved directory: 
+/nfs/fs1/home/F/falimadh/work/zelig85/zelig/Zelig/tests/../inst/unitTests 
+--------------------------- 
+Test file: /nfs/fs1/home/F/falimadh/work/zelig85/zelig/Zelig/tests/../inst/unitTests/runit.multiple.R 
+test.parse.formula: ... OK (0.09 seconds)
+test.process.as.factor : DEACTIVATED, later...when new version of parse.formula...
+test.terms.multiple: ... OK (0.63 seconds)

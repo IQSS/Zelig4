@@ -1,3 +1,8 @@
+4.0-6:
+ * Improving parse.formula function
+ * Renamed 'parse.formula' to 'parseFormula', to avoid name confusion and
+   adhere to common naming standards in Zelig.
+
 4.0-5 (August 25th, 2011):
  * Removed dependency on 'iterators' package
  * Updated NAMESPACE and DESCRIPTION files correspondingly

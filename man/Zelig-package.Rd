@@ -15,7 +15,7 @@ quantities of direct interest.
 
 \tabular{ll}{
 Package: \tab Zelig\cr
-Version: \tab 4.0-5\cr
+Version: \tab 4.0-6\cr
 Date: \tab 2011-04-25\cr
 Depends: \tab R (>= 2.8.1), MASS, survival, methods
 Suggests: mvtnorm, MCMCpack\cr
