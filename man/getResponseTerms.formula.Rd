@@ -1,7 +1,7 @@
 \name{getResponseTerms.formula}
 \alias{getResponseTerms.formula}
 \title{Get Response Terms from a Standard Formula...}
-\usage{getResponseTerms.formula(x, ..., single.only=FALSE, duplicates=TRUE)}
+\usage{\method{getResponseTerms}{formula}(x, ..., single.only=FALSE, duplicates=TRUE)}
 \description{Get Response Terms from a Standard Formula}
 \details{This method gets the response terms from a standard formula}
 \value{a character-vector specifying the response terms of the formula}

@@ -4,10 +4,8 @@
 #' determines how many layers or levels exist within the object.
 #' @note This function is used internally by Zelig.
 #' @param obj a vector or list object
-#' @param list.only a logical specifying whether non-list objects that have a 
-#' list structure will be treated as valid recursable object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-list.depth <- function (obj, list.only=TRUE) {
+list.depth <- function (obj) {
 
   # Stop-recursing conditions
 
@@ -18,13 +16,13 @@ list.depth <- function (obj, list.only=TRUE) {
     # Atomic vectors can only have one level
     return(1)
 
-  else if (!is.list(obj) && list.only)
+  else if (!is.list(obj))
     # If the object is not a list, then we have the option whether to compute
     # the depth of its elements.
     return(1)
 
   # Produce a list of integers, specifying the depth of each element
-  results <- Map(list.depth, list.only = list.only)
+  results <- Map(list.depth, obj)
 
   # Ensure that the result is a non-list
   results <- unlist(results)

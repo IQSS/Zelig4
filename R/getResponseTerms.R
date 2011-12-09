@@ -4,6 +4,7 @@
 #' @param x a formula or list of formulae
 #' @param ... ignored parameters
 #' @return a character-vector specifying a the of response terms in this formula
+#' @export
 getResponseTerms <- function (x, ...) {
   UseMethod("getResponseTerms")
 }

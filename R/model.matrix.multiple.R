@@ -1,3 +1,16 @@
+#' Create Design Matrix of a \code{multiple} Object
+#'
+#' This method is used to generate a \code{model.matrix} adhering to the
+#' specifications in the help document "model.matrix".
+#' @usage
+#' \method{model.matrix}{multiple}(object,data,shape="compact",eqn=NULL,...)
+#' @note This method is scheduled to be deprecated.
+#' @param object an object of type \code{multiple}. This represents a Zelig 3.5
+#' formula
+#' @param data a \code{data.frame}
+#' @param shape a character-string specifying the shape of the matrix
+#' @param eqn an integer specifying the number of equations
+#' @param ... ignored parameters
 #' @S3method model.matrix multiple
 model.matrix.multiple <- function (object,data,shape="compact",eqn=NULL,...){
   

@@ -36,7 +36,7 @@ print.summary.sim <- function(x, ...) {
   # This should probably be reconsidered in the future
   if (!is.null(x$matrix)) {
     cat("Values of X\n")
-    print(as.matrix(x$updated[, x$explan]))
+    print(as.matrix(x$updated))
 
     # new-line
     cat("\n")

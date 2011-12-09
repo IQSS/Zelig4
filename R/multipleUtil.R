@@ -1,6 +1,13 @@
-  toBuildFormula<-function(Xnames,sepp="+"){
-    lng<-length(Xnames)
-    rhs<-NULL
+#' Build Formula ???
+#' 
+#' This function builds a formula
+#' @param Xnames a character-vector
+#' @param sepp a seperator (???)
+#' @return a character-string
+#' @author ???
+toBuildFormula<-function(Xnames,sepp="+"){
+  lng<-length(Xnames)
+  rhs<-NULL
     if (lng!=0){
       if(lng==1){
         rhs=Xnames
@@ -15,8 +22,18 @@
     return (rhs)
   }
 
-#mode=1 model.matrix
-#mode=2 model.frame
+
+#' Multilevel
+#' 
+#' This function currently has no documentation, but is essential in Zelig 3.5's
+#' implementation of formulae.
+#' @param tt a terms object
+#' @param data a \code{data.frame}
+#' @param mode ???
+#' @param eqn an integer specifying the number of equations in a model
+#' @param ... ignored parameters
+#' @return a list with the "terms" attribute specified
+#' @author Kosuke Imai, Olivia Lau, Gary King and Ferdinand Alimadhi
 multilevel<-function(tt,data,mode,eqn,...){
   if(!(mode %in% c(1,2)))
     stop("Wrong mode argument")

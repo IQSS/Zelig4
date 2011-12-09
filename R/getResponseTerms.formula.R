@@ -1,6 +1,8 @@
 #' Get Response Terms from a Standard Formula
 #'
 #' This method gets the response terms from a standard formula
+#' @usage
+#' \method{getResponseTerms}{formula}(x, ..., single.only=FALSE, duplicates=TRUE)
 #' @param x a formula
 #' @param ... ignored parameters
 #' @param single.only a logical specifying whether 'cbind' or 'list' keywords
@@ -26,11 +28,11 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
   # Reponse terms are always specified in the lefthand-side of the equation
   lhs <- x[[2]]
 
-
-  if (is.name(lhs))
+  if (is.name(lhs)) {
     # If the lhs is a name, this implies it's a single variable with no function
     # applied to it. Thus, it's a term.
     return(toString(lhs))
+  }
 
 
   # Otherwise, it is either a function being applied or the keywords "cbind" or
@@ -57,7 +59,6 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
 
     # Remove all emptry strings and return
     Filter(nchar, lis)
-
   }
 
   else {

@@ -17,6 +17,11 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # init important objects  
   form <- formula(obj)
 
+  # Parsed formula. This is an intermediate for used for processing
+  # design matrices, etc.
+  parsed.formula <- parseFormula(form)
+
+
   # Extract information about terms
   # Note: the functions 'getPredictorTerms' and 'getOutcomeTerms' are in need
   # of a rewrite. At the moment, they are pretty kludgey (written by Matt O.).
@@ -51,7 +56,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # compute values
   # if fn[[mode(data(, key))]] exists,
   # then use that function to compute result
-  for (key in vars.obj) {
+  for (key in colnames(data)) {
     # skip values that are explicitly set
     if (key %in% names(dots) || key %in% not.vars)
       next
@@ -69,14 +74,17 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     else if (is.ordered(data[,key]))
       res[[key]] <- fn$ordered(data[,key])
 
-    else
+    else {
       res[[key]] <- fn$other(data[,key])
+    }
   }
+
 
   # add explicitly set values
   for (key in names(dots)) {
     if (! key %in% colnames(data)) {
-      warning(key, "is not an column in the data-set, and will be ignored")
+      warning("`", key,
+              "` is not an column in the data-set, and will be ignored")
       next
     }
 
@@ -102,29 +110,15 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     d[,key] <- val
   }
 
-  # build the model matrix
-  # this is a cleaner but still hackneyed
-  # of the data.frame casting that's done
-  # in the original setx
-
-  # we should always be able to guarantee that there is a foruma, so this
-  # model.matrix is always available, but it is not always relevant
-  mod <- model.matrix(form, data = d)
+  # Note that model.matrix.parsedFormula is called here.
+  mod <- model.matrix(parsed.formula, d)
   mod <- as.data.frame(mod)
   rownames(mod) <- NULL
 
-
-  # there is no guarantee that there is a terms object. If there isn't, then
-  # we should just ignore it and make that style data.frame unavaiable
-  terms <- tryCatch(terms(obj), error = function (e) NULL)
-
-  if (is.null(terms))
-    DataFrame <- NULL
-
-  else {
-    ModelFrame <- model.matrix(terms(obj), d)
-    DataFrame <- as.data.frame(ModelFrame, row.names = NULL)
-  }
+  # This space here should be reserved for manipulating interaction variables
+  #
+  #
+  #
 
   # build the setx object
   sx <- list(
@@ -132,7 +126,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
              call   = match.call(),
              formula= form,
              matrix = mod,
-             data.frame = DataFrame,
+             updated = d,
              values = res,
              fn     = fn,
              cond   = cond,
@@ -148,98 +142,3 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   class(sx) <- c(obj$name, "setx")
   sx
 }
-
-
-# Get
-getResponseTerms <- function (x, ...) {
-  # The following functions are unsafe for general input, so they are being
-  # kept as nested functions.
-
-  # Extract "outcome" terms from a formula
-  # @param x a formula
-  # @param ... ignored parameters
-  # @return a character-vector specifying the predictor terms
-  # @author Matt Owen
-  extractFromFormula <- function (form, ...) {
-    if (length(form) == 3)
-      as.character(all.vars(form[[2]]))
-
-    else if (length(form) == 2)
-      ""
-
-    else {
-      warning("Formula of zelig object must have a length of 2 or 3")
-      NA
-    }
-  }
-
-  # Extract "outcome" terms from a list of formulae
-  # @param x a list
-  # @param ... ignored parameters
-  # @return a character-vector specifying the 
-  # @author Matt Owen
-  extractFromList <- function (x, ...) {
-    unlist(Map(extractFromFormula, x))
-  }
-
-  # Beginning of work for function
-  if (is.list(x))
-    extractFromList(x)
-
-  else if ("formula" %in% class(x))
-    extractFromFormula(x)
-
-  else {
-    warning("The model formula must either ",
-            "be a list of formula to work properly")
-    NA
-  }
-}
-
-
-#
-getPredictorTerms <- function (x, ...) {
-  # The following functions are unsafe for general input, so they are being
-  # kept as nested functions.
-
-  # Extract "predictor" terms from a formula
-  # @param x a formula
-  # @param ... ignored parameters
-  # @return a character-vector specifying the 
-  # @author Matt Owen
-  extractFromFormula <- function (form, ...) {
-    if (length(form) == 3)
-      as.character(all.vars(form[[2]]))
- 
-    else if (length(form) == 2)
-      as.character(all.vars(form[[1]]))
-
-    else {
-      warning("Formula of zelig object must have a length of 2 or 3")
-      NA
-    }
-  }
-
-  # Extract "predictor" terms from a list of formulae
-  # @param x a list
-  # @param ... ignored parameters
-  # @return a character-vector specifying the 
-  # @author Matt Owen
-  extractFromList <- function (x, ...) {
-    unlist(Map(extractFromFormula, x))
-  }
-
-  # Beginning of work for function
-  if (is.list(x))
-    extractFromList(x)
-
-  else if ("formula" %in% class(x))
-    extractFromFormula(x)
-
-  else {
-    warning("The model formula must either ",
-            "be a list of formula to work properly")
-    NA
-  }
-}
-

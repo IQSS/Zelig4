@@ -1,6 +1,7 @@
 #' Get Response Terms from a List-style Formula
 #'
 #' This method gets the response terms from a standard formula
+#' @usage \method{getResponseTerms}{list}(x, ...)
 #' @param x a list of formulae
 #' @param ... ignored parameters
 #' @return a character-vector specifying the response terms of the formula

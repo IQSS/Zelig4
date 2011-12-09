@@ -2,7 +2,7 @@
 #'
 #' This method is a sugary function to extract terms from any type of 
 #' Zelig-style formula.
-#' @param obj
+#' @param obj a Zelig-style formula
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 termsFromFormula <- function (obj) {

@@ -6,4 +6,4 @@
 \details{This method is a sugary function to extract terms from any type of 
 Zelig-style formula.}
 \author{Matt Owen \email{mowen@iq.harvard.edu}}
-\arguments{\item{obj}{}}
+\arguments{\item{obj}{a Zelig-style formula}}

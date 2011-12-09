@@ -6,6 +6,15 @@
 ## -
 
 
+#' Extract Terms from a \code{multiple} Object
+#'
+#' Extracts terms from Zelig-3.5-style formulae. This function is scheduled for
+#' removal.
+#' @usage \method{terms}{multiple}(x, data=NULL,...)
+#' @param x a Zelig v3.5 formula
+#' @param data a \code{data.frame}
+#' @param ... ignored parameters
+#' @author Kosuke Imai, Olivia Lau, Gary King and Ferdinand Alimadhi
 #' @S3method terms multiple
 terms.multiple<-function(x, data=NULL,...){
         object <- x

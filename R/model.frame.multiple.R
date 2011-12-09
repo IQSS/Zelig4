@@ -1,4 +1,15 @@
+#' Create Model Frame from \code{multiple} Object
+#'
+#' This method creates a \code{model.frame} from a \code{multiple} object. This
+#' method will be deprecated as the development of Zelig 4 progresses.
+#' @usage \method{model.frame}{multiple}(formula,data,eqn=NULL,...)
 #' @S3method model.frame multiple
+#' @param formula an object of both type \code{formula} and \code{multiple}
+#' @param data a \code{data.frame}
+#' @param eqn the number of equations in the formula
+#' @param ... ignored parameters
+#' @return a \code{model.frame} object
+#' @author Kosuke Imai, Olivia Lau, Gary King and Ferdinand Alimadhi
 model.frame.multiple <- function (formula,data,eqn=NULL,...){
   if(class(formula)[[1]]=="terms"){
     terms <-formula

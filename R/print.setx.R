@@ -12,6 +12,9 @@ print.setx <- function(x, ...) {
   formula <- x$formula
   label <- x$label
 
+  cat("Call:\n")
+  print(x$call)
+
   cat("Label      =", label, "\n")
   cat("Model name =", model, "\n")
   cat("Formula    = ")
@@ -20,6 +23,4 @@ print.setx <- function(x, ...) {
   cat("\nComplete data.frame:\n")
   print(x$updated)
 
-  cat("\nReduced data.frame:\n")
-  print(x$data.frame)
 }

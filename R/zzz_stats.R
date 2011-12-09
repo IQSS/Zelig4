@@ -9,7 +9,7 @@ Mode <- function (x) {
   tab <- table(as.factor(x))
 
   # find the mode, then if there's more than one, select one randomly
-  v <- sample(names(which(tab == max(tab))))
+  v <- sample(names(which(tab == max(tab))), size=1)
 
   # if it came in as a factor, we need to re-cast it
   # as a factor, with the same exact levels

@@ -5,9 +5,6 @@
 #' @param obj a list or formula
 #' @param data the data set associated with the formula object
 #' @return an object of type "parseFormula". This object has slots specifying:
-#' \item{terms}
-#' \item{depVars}
-#' \item{...}
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export
 parseFormula <- function (obj, data=NULL) {
@@ -16,24 +13,30 @@ parseFormula <- function (obj, data=NULL) {
 
 
 
-# Parse Standard Formulae
-# @param obj a formula
-# @param data a data frame
-# @return an object of type "parseFormula"
-# @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' Parse Standard Formulae
+#'
+#' This method parses a formula-style Zelig formula
+#' @usage \method{parseFormula}{formula}(obj, data=NULL)
+#' @param obj a formula
+#' @param data a data frame
+#' @return an object of type "parseFormula"
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @S3method parseFormula formula
 parseFormula.formula <- function (obj, data=NULL) {
 
-  1
-
   # Extract terms
   TERMS <- terms(obj)
+
+  #
+  MODEL.MATRIX <- tryCatch(model.matrix(obj, data), error = function (e) NULL)
 
   # Build the object
   res <- list(
               formula = obj,
               terms = TERMS,
-              response = getResponseTerms(obj)
+              response = getResponseTerms(obj),
+              predictor = getPredictorTerms(obj),
+              model.matrix = MODEL.MATRIX
               )
 
   # Return
@@ -43,18 +46,30 @@ parseFormula.formula <- function (obj, data=NULL) {
 
 
 
-# Parse List-Style Zelig Formulae
-# @param obj a list of formulae
-# @param data a data frame
-# @return an object of type "parseFormula"
-# @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' Parse List-Style Zelig Formulae
+#'
+#' This method parses a list-style Zelig formula.
+#' @usage \method{parseFormula}{list}(obj, data=NULL)
+#' @param obj a list of formulae
+#' @param data a data frame
+#' @return an object of type "parseFormula"
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @S3method parseFormula list
 parseFormula.list <- function (obj, data=NULL) {
+
+  # Extract terms (and place in a list)
+  TERMS <- Map(terms, obj)
+
+  # 
+  MODEL.MATRIX <- makeModelMatrix(obj, data)
 
   # Build the object
   res <- list(
               formula = obj,
-              terms = 1
+              terms = TERMS,
+              response = getResponseTerms(obj),
+              predictor = getPredictorTerms(obj),
+              model.matrix = MODEL.MATRIX
               )
 
   # Return
