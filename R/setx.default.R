@@ -61,7 +61,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     if (key %in% names(dots) || key %in% not.vars)
       next
 
-    m <- class(data[,key])
+    m <- class(data[,key])[[1]]
 
     # match the class-type with the correct
     # function to call
