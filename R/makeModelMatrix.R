@@ -11,18 +11,18 @@ makeModelMatrix <- function (formula, data) {
   if (missing(data) || is.null(data))
     return(NULL)
 
-  fromList <- function (x, data) {
+
+  if (is.list(formula)) {
     m <- NULL
 
-    for (formula in x)
-      m <- cbind(m, model.matrix(formula, data))
+    for (form in formula) {
+      m <- cbind(m, model.matrix(form, data))
+    }
 
-    m[, unique(colnames(m))]
+    t(as.matrix(m[, unique(colnames(m))]))
   }
 
-  if (is.list(formula))
-    fromList(formula, data)
-
-  else
-    model.matrix(formula, data)
+  else {
+    return(model.matrix(formula, data))
+  }
 }

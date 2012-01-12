@@ -16,7 +16,7 @@ qi.ls <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   if (missing(x))
     stop("x cannot be missing while computing the `ls' model")
 
-  # get `parameters'... whatever that means
+  # Get coefficients of the linear model
   coefs <- coef(param)
 
   # compute expected value

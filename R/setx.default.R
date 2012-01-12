@@ -56,7 +56,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # compute values
   # if fn[[mode(data(, key))]] exists,
   # then use that function to compute result
-  for (key in colnames(data)) {
+  for (key in all.vars(form[[3]])) {
     # skip values that are explicitly set
     if (key %in% names(dots) || key %in% not.vars)
       next
@@ -95,7 +95,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       dots[[key]]
   }
 
-
   # make a tiny data-frame with
   # all the necessary columns
   d <- data[1,]
@@ -112,7 +111,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
   # Note that model.matrix.parsedFormula is called here.
   mod <- model.matrix(parsed.formula, d)
-  mod <- as.data.frame(mod)
+  dat <- as.data.frame(mod)
   rownames(mod) <- NULL
 
   # This space here should be reserved for manipulating interaction variables
@@ -127,11 +126,11 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
              formula= form,
              matrix = mod,
              updated = d,
+             data   = dat,
              values = res,
              fn     = fn,
              cond   = cond,
              new.data = data,
-             updated  = d,
              special.parameters = list(...),
              label = obj$label,
              explan = vars.obj,

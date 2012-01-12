@@ -14,16 +14,19 @@
 #' @S3method model.matrix parseFormula
 model.matrix.parseFormula <- function (object, data = NULL, ...) {
 
-  if (is.null(object$model.matrix))
-    # Note that if data is NULL, then "makeModelMatrix" will return NULL
-    makeModelMatrix(formula(object), data)
+#   if (is.null(object$model.matrix))
+#     # Note that if data is NULL, then "makeModelMatrix" will return NULL
+#     makeModelMatrix(formula(object), data)
+# 
+#   else if (!missing(data))
+#     # If data is supplied, recompute the model matrix
+#     makeModelMatrix(formula(object), data)
+# 
+#   else
+#     # Otherwise use the previous stored value (which still might be NULL)
+#     object$model.matrix
 
-  else if (!missing(data))
-    # If data is supplied, recompute the model matrix
-    makeModelMatrix(formula(object), data)
 
-  else
-    # Otherwise use the previous stored value (which still might be NULL)
-    object$model.matrix
+  makeModelMatrix(formula(object), data)
 
 }
