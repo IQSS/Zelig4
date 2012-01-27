@@ -1,0 +1,58 @@
+The Zelig core team is pleased to announce the alpha release of Zelig 4.
+
+Designated as the "Developer Update", Zelig 4 offers a wide-range of improvements to ease the process of adding new statistical models to the already extensive Zelig software suite. Significantly, this release is packaged with a brand-new API, geared towards reducing the complexity and length of Zelig's development functions - the zelig2, param and qi methods. In addition to this, Zelig now brandishes a package-creator (zelig.skeleton) that operates in the same vein as R's core function "package.skeleton".
+
+In addition to changes in the development toolkit, Zelig has now been split across 7 distinct packages. This change has been made to refine the scope of Zelig and its add-ons. In particular, this restructuring of Zelig into a full software suite allows developers to contribute, develop and repair add-on packages without tinkering with the Zelig API and core functionality. 
+
+While this release's prime focus has been improving the developer toolkit and restructuring the software suite, Zelig 4 offers an end-user experience completely identical to previous versions. That is, zelig's basic functions - zelig, setx and sim - ostensibly remain unchanged in functionality for available statistical models.
+
+For full details concerning changes between Zelig 3.5 and Zelig 4, please refer to:
+ http://zeligdev.github.com/
+
+
+New Features
+------------
+
+Some of the new available features are:
+
+A revised developer API. The primary developer methods - zelig2, param and sim - have been reimplemented to use a sleeker, simpler API. For information, please read the Zelig developer's manual found here:
+  http://zeligdev.github.com/files/booklet.pdf
+
+The core package has been restructured and minimized. In particular, Zelig core now contains only code essential to its operation, while all non-essential tasks have been made into specific R-packages. For a complete list of official Zelig packages, please refer to:
+  https://github.com/zeligdev
+
+Development tools for contributors have been added to the core package. In particular, the "zelig.skeleton" function is packaged within Zelig-core in order to facilitate the rapid development of new Zelig packages.
+
+The Zelig software suite has grown to include a total of 7 R-packages. This change offers a simple and easy method for ensuring that development and bug-fixing within any particular Zelig add-on will leave the remainder of the Zelig software suite unchanged.
+
+A hook API has been integrated into the core package, in order to reduce the necessity to directly alter the zelig, setx and sim methods.
+
+Roxygen-compliant documentation has become standard in all Zelig packages. This offers an easy way to manage Rd documentation, dependencies and exports from within the R code itself. That is, documentation is more tightly paired with the actual R code. For more information about Roxygen, please refer to:
+  http://roxygen.org/
+
+
+GitHub
+------
+
+Zelig is now on GitHub! Fork an add-on package or contribute bug-finds today!
+
+For a full listing of official packages and their repositories, please see:
+ https://github.com/zeligdev
+
+
+Links
+-----
+
+The following comprises a list of relevant information for Zelig 4:
+ * Website: http://zeligdev.github.com/
+ * Package Repositories: https://github.com/zeligdev/
+ * Installation Guide: http://zeligdev.github.com/files/zelig.pdf
+ * Zelig Manual: http://zeligdev.github.com/#install
+ * Available and Missing Add-on Packages: http://zeligdev.github.com/#models
+
+
+Questions
+---------
+
+For any particular questions on developing new Zelig models, please send all mail to:
+  zelig@lists.gking.harvard.edu
