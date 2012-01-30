@@ -1,6 +1,11 @@
 \usepackage{hyperref}
 \usepackage{verbatim}
 
+\DefineVerbatimEnvironment{Code}{Verbatim}{
+  samepage=TRUE,
+  fontsize=\small
+}
+
 \newcommand{\CiteZelig}[0]{
   
   To cite Zelig as a whole, please reference these two sources:
@@ -15,10 +20,7 @@
   \end{verse}
 
 }
-\DefineVerbatimEnvironment{Code}{Verbatim}{
-  samepage=TRUE,
-  fontsize=\small
-}
+
 
 
 \newcommand{\Sref}[1]{Section~\ref{#1}}
