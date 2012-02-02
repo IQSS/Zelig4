@@ -1,5 +1,4 @@
 #' Param Method for the 'ls' Zelig Model
-#' @note This method is used by the 'ls' Zelid model
 #' @note This method currently returns via a deprectated style
 #' @usage \method{param}{ls}(obj, num, \dots)
 #' @S3method param ls

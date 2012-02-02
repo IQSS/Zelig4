@@ -1,9 +1,8 @@
 \name{summary.zelig}
 \alias{summary.zelig}
-\title{Zelig Object Summaries
-Compute summary data for zelig objects}
+\title{Zelig Object Summaries}
 \usage{
-  summary.zelig(object, ...)
+  \method{summary}{zelig}(object, ...)
 }
 \arguments{
   \item{object}{a zelig object}
@@ -15,8 +14,7 @@ Compute summary data for zelig objects}
   the summary of the fitted model
 }
 \description{
-  Zelig Object Summaries Compute summary data for zelig
-  objects
+  Compute summary data for zelig objects
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

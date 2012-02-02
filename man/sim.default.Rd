@@ -2,9 +2,9 @@
 \alias{sim.default}
 \title{Method for Simulating Quantities of Interest wrom 'zelig' Objects}
 \usage{
-  sim.default(obj, x = NULL, x1 = NULL, y = NULL,
-    num = 1000, bootstrap = FALSE, bootfn = NULL,
-    cond.data = NULL, ...)
+  \method{sim}{default}(obj, x=NULL, x1=NULL, y=NULL,
+    num=1000, bootstrap = FALSE, bootfn=NULL, cond.data =
+    NULL, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}
@@ -35,8 +35,7 @@
   interest
 }
 \description{
-  Method for Simulating Quantities of Interest wrom 'zelig'
-  Objects
+  Simulate quantities of interest
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

@@ -2,7 +2,7 @@
 \alias{param.poisson}
 \title{Param Method for the 'poisson' Zelig Model}
 \usage{
-  param.poisson(obj, num = 1000, ...)
+  \method{param}{poisson}(obj, num=1000, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}

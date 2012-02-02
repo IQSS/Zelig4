@@ -19,8 +19,6 @@
   Param Method for the 'ls' Zelig Model
 }
 \note{
-  This method is used by the 'ls' Zelid model
-
   This method currently returns via a deprectated style
 }
 \author{

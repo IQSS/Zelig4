@@ -1,4 +1,12 @@
 #' Method for Replicating Simulated Quantities of Interest
+#'
+#' Replicate simulated quantities of interest
+#' @usage \method{repl}{sim}(object, x=NULL, x1=NULL, y=NULL,
+#'                     num=1000,
+#'                     prev = NULL, bootstrap = FALSE,
+#'                     boot.fn=NULL,
+#'                     cond.data = NULL, ...)
+#' @S3method repl sim
 #' @param object a 'zelig' object
 #' @param x a 'setx' object
 #' @param x1 a secondary 'setx' object used to perform particular computations
@@ -13,7 +21,6 @@
 #' @param cond.data ignored
 #' @param ... special parameters which are reserved for future versions of Zelig
 #' @return a 'sim' object storing the replicated quantities of interest
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 repl.sim <- function(object, x=NULL, x1=NULL, y=NULL,
                      num=1000,

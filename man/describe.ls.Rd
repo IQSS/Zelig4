@@ -2,7 +2,7 @@
 \alias{describe.ls}
 \title{Describe a \code{ls} model to Zelig}
 \usage{
-  describe.ls(...)
+  \method{describe}{ls}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

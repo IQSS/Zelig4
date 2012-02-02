@@ -1,8 +1,8 @@
 \name{param.default}
 \alias{param.default}
-\title{Default method for param}
+\title{Default Method for ``param''}
 \usage{
-  param.default(obj, num, ...)
+  \method{param}{default}(obj, num, ...)
 }
 \arguments{
   \item{obj}{ignored parameter}

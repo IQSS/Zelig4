@@ -1,10 +1,6 @@
 \name{as.summarized}
 \alias{as.summarized}
-\title{Generic Method for Casting Objectst as 'summarized' Objects
-This function is particularly for use by the 'summarize' method, which
-summarizes the simulations taken from the 'qi' method.
-The generic function 'summary' when applied to a Zelig Simulation implicitly
-uses this function.}
+\title{Generic Method for Casting Objectst as 'summarized' Objects}
 \usage{
   as.summarized(x, ...)
 }
@@ -17,12 +13,10 @@ uses this function.}
   a 'summarized.qi' object
 }
 \description{
-  Generic Method for Casting Objectst as 'summarized'
-  Objects This function is particularly for use by the
-  'summarize' method, which summarizes the simulations
-  taken from the 'qi' method. The generic function
-  'summary' when applied to a Zelig Simulation implicitly
-  uses this function.
+  This function is particularly for use by the 'summarize'
+  method, which summarizes the simulations taken from the
+  'qi' method. The generic function 'summary' when applied
+  to a Zelig Simulation implicitly uses this function.
 }
 \note{
   This is made available on the Global namespace as a

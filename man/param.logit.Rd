@@ -2,7 +2,7 @@
 \alias{param.logit}
 \title{Param Method for the \code{logit} Zelig Model}
 \usage{
-  param.logit(obj, num, ...)
+  \method{param}{logit}(obj, num, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}

@@ -1,4 +1,7 @@
-#' Extract a Value from a \code{zelig} Fitted Model
+#' Return a Value from a \code{zelig} Fitted Model
+#'
+#' Returns a value from the result of a model fitting function
+#' @usage \method{GetSlot}{zelig}(obj, key, ...)
 #' @note This function is primarily used by Zelig developers within \code{qi}
 #'   functions
 #' @param obj a \code{zelig} object

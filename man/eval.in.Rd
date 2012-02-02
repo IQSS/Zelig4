@@ -5,15 +5,15 @@
   eval.in(...)
 }
 \arguments{
-  \item{..1}{an expression to evaluate}
-
-  \item{..2}{the environment to evaluate the expression in}
+  \item{...}{Two parameters: The first is an expression to
+  evaluate, and the second the environment to evaluate the
+  expression in}
 }
 \value{
-  evaluation of ..1
+  evaluation of ``..1'' within the environment ``..2''
 }
 \description{
-  Attach Environment and Evaluate Expression
+  Run in an insulated environment
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

@@ -1,12 +1,12 @@
 #' param method for the `gamma' Zelig model
 #'
+#' @usage \method{param}{gamma}(obj, num, ...)
 #' @S3method param gamma
 #'
 #' @param obj a `zelig' object
 #' @param num an integer specifying the number of simulations to sample
 #' @param ... ignored parameters
 #' @return a list to be cast as a `parameters' object
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.gamma <- function(obj, num, ...) {
   # shape

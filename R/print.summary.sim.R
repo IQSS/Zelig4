@@ -1,9 +1,12 @@
-#' Print Values of a Summarized 'sim' Object
+#' Print Values of a Summarized ``sim'' Object
+#'
+#' Print values of simulated quantities of interest (stored in a ``summary.sim''
+#' object.
+#' @usage \method{print}{summary.sim}(x, ...)
 #' @S3method print summary.sim
 #' @param x a 'summary.sim' object
 #' @param ... ignored parameters
 #' @return the value of the `summary.sim' object (invisibly)
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.summary.sim <- function(x, ...) {
   # Rename 'x' 'summary'

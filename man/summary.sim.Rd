@@ -2,7 +2,7 @@
 \alias{summary.sim}
 \title{Method for summarizing simulations of quantities of interest}
 \usage{
-  summary.sim(object, ...)
+  \method{summary}{sim}(object, ...)
 }
 \arguments{
   \item{object}{a 'MI.sim' object}
@@ -13,8 +13,7 @@
   a 'summarized.MI.sim' object
 }
 \description{
-  Method for summarizing simulations of quantities of
-  interest
+  Return a ``summary.sim'' object (typically for display)
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

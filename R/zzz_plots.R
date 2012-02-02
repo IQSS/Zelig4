@@ -5,14 +5,16 @@
 #' regressions.
 #'
 #' @usage
-#' rocplot(
-#'         y1, y2, fitted1, fitted2,
-#'         cutoff=seq(from = 0, to = 1, length =100),
-#'         lty1="solid", lty2="dashed", lwd1=par("lwd"),
-#'         lwd2=par("lwd"), col1=par("col"), col2=par("col"),
-#'         main="ROC Curve", xlab="Proportion of 1's Correctly Predicted",
-#'         ylab="Proportion of 0's Correctly Predicted", plot=TRUE,
-#'         ...)
+#' rocplot(y1, y2, fitted1, fitted2,
+#' cutoff = seq(from=0, to=1, length=100), lty1="solid",
+#' lty2="dashed", lwd1=par("lwd"), lwd2=par("lwd"),
+#' col1=par("col"), col2=par("col"),
+#' main="ROC Curve",
+#' xlab = "Proportion of 1's Correctly Predicted",
+#' ylab="Proportion of 0's Correctly Predicted",
+#' plot = TRUE, 
+#' ...
+#' )
 #'
 #' @param y1 response variable for the first model
 #' @param y2 response variable for the second model
@@ -54,7 +56,9 @@ rocplot <- function(y1, y2, fitted1, fitted2,
                     col1=par("col"), col2=par("col"),
                     main="ROC Curve",
                     xlab = "Proportion of 1's Correctly Predicted",
-                    ylab="Proportion of 0's Correctly Predicted", plot = TRUE, ...) {
+                    ylab="Proportion of 0's Correctly Predicted",
+                    plot = TRUE, 
+                    ...) {
   roc1 <- roc2 <- matrix(NA, nrow = length(cutoff), ncol = 2)
   colnames(roc1) <- colnames(roc2) <- c("ones", "zeros")
   for (i in 1:length(cutoff)) {

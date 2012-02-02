@@ -100,9 +100,10 @@ cite <- function(descr) {
 
 
 #' Generic Method for Casting 'description' Objects
-#' This method converts the result of a call to the 'describe' method into an 
-#' object parseble by Zelig. Currently conversions only exist for lists and
-#' 'description' objects.
+#' 
+#' Convert the result of a call to the 'describe' method into an object 
+#' parseble by Zelig. Currently conversions only exist for lists and 
+#' description objects.
 #' @param descr an object to cast an object of type 'description'
 #' @param ... parameters which are reserved for future Zelig revisions
 #' @return an object of type 'description'
@@ -114,20 +115,26 @@ as.description <- function(descr, ...)
 
 
 #' description -> description
+#'
+#' Identity operation on a description object.
+#' @S3method as.description description
+#' @usage \method{as.description}{description}(descr, ...)
 #' @param descr an object of type 'description'
 #' @param ... ignored
 #' @return the same object
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.description.description <- function(descr, ...)
   descr
 
 
 #' list -> description
+#'
+#' Convert list into a description object.
+#' @usage \method{as.description}{list}(descr, ...)
+#' @S3method as.description list
 #' @param descr a list
 #' @param ... ignored
 #' @return an object of type 'description'
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.description.list <- function(descr, ...) {
 

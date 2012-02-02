@@ -2,7 +2,7 @@
 \alias{repl.default}
 \title{Default Method for Replicating Statistics}
 \usage{
-  repl.default(object, data = NULL, ...)
+  \method{repl}{default}(object, data=NULL, ...)
 }
 \arguments{
   \item{object}{an object to replicate}
@@ -15,7 +15,7 @@
   a replicated object
 }
 \description{
-  Default Method for Replicating Statistics
+  Replicate a simulation
 }
 \author{
   Kosuke Imai and Olivia Lau \email{mowen@iq.harvard.edu}

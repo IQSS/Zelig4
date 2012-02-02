@@ -2,8 +2,8 @@
 \alias{setx.default}
 \title{Set explanatory variables}
 \usage{
-  setx.default(obj, fn = NULL, data = NULL, cond = FALSE,
-    ...)
+  \method{setx}{default}(obj, fn=NULL, data=NULL,
+    cond=FALSE, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}

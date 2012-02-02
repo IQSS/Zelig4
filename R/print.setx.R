@@ -1,7 +1,8 @@
 #' Print values of `setx' objects
 #'
+#' Print a ``setx'' object in human-readable form.
+#' @usage \method{print}{setx}(x, ...)
 #' @S3method print setx
-#'
 #' @param x a `setx' object
 #' @param ... ignored parameters
 #' @return the value of x (invisibly)
@@ -23,4 +24,5 @@ print.setx <- function(x, ...) {
   cat("\nComplete data.frame:\n")
   print(x$updated)
 
+  invisible()
 }

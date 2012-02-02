@@ -2,7 +2,7 @@
 \alias{describe.zelig}
 \title{Get Description Object Used to Cite this Zelig Model}
 \usage{
-  describe.zelig(object, ...)
+  \method{describe}{zelig}(object, ...)
 }
 \arguments{
   \item{object}{a 'zelig' object}

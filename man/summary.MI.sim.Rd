@@ -2,7 +2,7 @@
 \alias{summary.MI.sim}
 \title{Method for summarizing simulations of multiply imputed quantities of interest}
 \usage{
-  summary.MI.sim(object, ...)
+  \method{summary}{MI.sim}(object, ...)
 }
 \arguments{
   \item{object}{a `MI.sim' object}

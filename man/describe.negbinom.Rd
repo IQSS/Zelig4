@@ -2,7 +2,7 @@
 \alias{describe.negbinom}
 \title{Describe the \code{negbinom} model to Zelig}
 \usage{
-  describe.negbinom(...)
+  \method{describe}{negbinom}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

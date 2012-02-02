@@ -1,8 +1,8 @@
 \name{GetSlot.zelig}
 \alias{GetSlot.zelig}
-\title{Extract a Value from a \code{zelig} Fitted Model}
+\title{Return a Value from a \code{zelig} Fitted Model}
 \usage{
-  GetSlot.zelig(obj, key, ...)
+  \method{GetSlot}{zelig}(obj, key, ...)
 }
 \arguments{
   \item{obj}{a \code{zelig} object}
@@ -17,7 +17,8 @@
   values of the specified keys
 }
 \description{
-  Extract a Value from a \code{zelig} Fitted Model
+  Returns a value from the result of a model fitting
+  function
 }
 \note{
   This function is primarily used by Zelig developers

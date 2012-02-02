@@ -2,7 +2,7 @@
 \alias{describe.poisson}
 \title{Describe the `poisson' model to Zelig}
 \usage{
-  describe.poisson(...)
+  \method{describe}{poisson}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

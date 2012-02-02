@@ -1,8 +1,8 @@
 \name{print.zelig}
 \alias{print.zelig}
-\title{Print values of `zelig' objects}
+\title{Print values of ``zelig'' objects}
 \usage{
-  print.zelig(x, ...)
+  \method{print}{zelig}(x, ...)
 }
 \arguments{
   \item{x}{a `zelig' object}
@@ -13,7 +13,7 @@
   the `zelig' object (invisibly)
 }
 \description{
-  Print values of `zelig' objects
+  Print the zelig object as a list
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

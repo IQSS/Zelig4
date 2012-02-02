@@ -1,9 +1,6 @@
 \name{as.description}
 \alias{as.description}
-\title{Generic Method for Casting 'description' Objects
-This method converts the result of a call to the 'describe' method into an
-object parseble by Zelig. Currently conversions only exist for lists and
-'description' objects.}
+\title{Generic Method for Casting 'description' Objects}
 \usage{
   as.description(descr, ...)
 }
@@ -18,11 +15,9 @@ object parseble by Zelig. Currently conversions only exist for lists and
   an object of type 'description'
 }
 \description{
-  Generic Method for Casting 'description' Objects This
-  method converts the result of a call to the 'describe'
-  method into an object parseble by Zelig. Currently
-  conversions only exist for lists and 'description'
-  objects.
+  Convert the result of a call to the 'describe' method
+  into an object parseble by Zelig. Currently conversions
+  only exist for lists and description objects.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

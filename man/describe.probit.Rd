@@ -2,7 +2,7 @@
 \alias{describe.probit}
 \title{Describe the `probit' model to Zelig}
 \usage{
-  describe.probit(...)
+  \method{describe}{probit}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

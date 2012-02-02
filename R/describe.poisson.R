@@ -1,4 +1,5 @@
 #' Describe the `poisson' model to Zelig
+#' @usage \method{describe}{poisson}(...)
 #' @S3method describe poisson
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'

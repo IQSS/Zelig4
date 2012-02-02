@@ -101,10 +101,12 @@
 
 
 #' Attach Environment and Evaluate Expression
-#' @param ..1 an expression to evaluate
-#' @param ..2 the environment to evaluate the expression in
-#' @return evaluation of ..1
-#' @export
+#'
+#' Run in an insulated environment
+#' @usage eval.in(...)
+#' @param ... Two parameters: The first is an expression to evaluate, and the 
+#' second the environment to evaluate the expression in
+#' @return evaluation of ``..1'' within the environment ``..2''
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 eval.in <- .call <- function (...) {
   attach(..2)

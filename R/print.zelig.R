@@ -1,4 +1,7 @@
-#' Print values of `zelig' objects
+#' Print values of ``zelig'' objects
+#'
+#' Print the zelig object as a list
+#' @usage \method{print}{zelig}(x, ...)
 #' @S3method print zelig
 #' @param x a `zelig' object
 #' @param ... ignored parameters

@@ -1,8 +1,8 @@
 \name{simulations.parameters}
 \alias{simulations.parameters}
-\title{Extract Simulations from 'parmaeters' Objects}
+\title{Return Simulations of Parameter Coefficients}
 \usage{
-  simulations.parameters(object, ...)
+  \method{simulations}{parameters}(object, ...)
 }
 \arguments{
   \item{object}{a 'parameters' object}
@@ -14,10 +14,13 @@
   ancillary parameters
 }
 \description{
-  Extract Simulations from 'parmaeters' Objects
+  Returns simulated parameters of coefficients for use in
+  statistical simulation. The values are set by the
+  model-fitting function and the developer of the qi.<model
+  name> method.
 }
 \note{
-  This function may not differ at all from coef.default
+  This function does not differ at all from coef.default
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

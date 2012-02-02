@@ -2,7 +2,7 @@
 \alias{as.description.list}
 \title{list -> description}
 \usage{
-  as.description.list(descr, ...)
+  \method{as.description}{list}(descr, ...)
 }
 \arguments{
   \item{descr}{a list}
@@ -13,7 +13,7 @@
   an object of type 'description'
 }
 \description{
-  list -> description
+  Convert list into a description object.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

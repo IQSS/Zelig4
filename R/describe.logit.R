@@ -1,4 +1,5 @@
 #' Describe a `logit' model to Zelig
+#' @usage \method{describe}{logit}(...)
 #' @S3method describe logit
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'

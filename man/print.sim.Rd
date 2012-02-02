@@ -1,10 +1,8 @@
 \name{print.sim}
 \alias{print.sim}
-\title{Print values of `sim' objects
-This function is currently unimplemented, and
-included for future development}
+\title{Print values of `sim' objects}
 \usage{
-  print.sim(x, ...)
+  \method{print}{sim}(x, ...)
 }
 \arguments{
   \item{x}{a `sim' object (ignored)}
@@ -15,8 +13,8 @@ included for future development}
   NULL (invisibly)
 }
 \description{
-  Print values of `sim' objects This function is currently
-  unimplemented, and included for future development
+  This function is currently unimplemented, and included
+  for future development
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

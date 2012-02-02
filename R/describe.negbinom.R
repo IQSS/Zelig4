@@ -1,5 +1,6 @@
 #' Describe the \code{negbinom} model to Zelig
 #' @note \code{negbinom} stands for "negative binomial"
+#' @usage \method{describe}{negbinom}(...)
 #' @S3method describe negbinom
 #' @param ... ignored parameters
 #' @return a list to be processed by \code{as.description}

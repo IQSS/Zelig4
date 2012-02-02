@@ -45,12 +45,12 @@ param <- function (obj, num, ...)
   UseMethod("param")
 
 
-#' If no \code{param} function is set for a Zelig model, then
-#' this function will return NULL.
+#' Default Method for ``param''
 #'
-#' @title Default method for param
+#' If no \code{param} function is set for a Zelig model, then this function will
+#' return NULL.
+#' @usage \method{param}{default}(obj, num, ...)
 #' @S3method param default
-#'
 #' @param obj ignored parameter
 #' @param num ignored parameter
 #' @param ... ignored parameters

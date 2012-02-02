@@ -4,7 +4,7 @@
 This method exists solely as a backup when an author does not contribute a
 'describe' function for their model}
 \usage{
-  describe.default(...)
+  \method{describe}{default}(...)
 }
 \arguments{
   \item{...}{dummy parameters purely to cast the correct

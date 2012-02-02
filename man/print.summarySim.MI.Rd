@@ -1,9 +1,8 @@
 \name{print.summarySim.MI}
 \alias{print.summarySim.MI}
-\title{Print Multiply Imputed Simulations Summary
-Prints summary information about Multiply Imputed Fits}
+\title{Print Multiply Imputed Simulations Summary}
 \usage{
-  print.summarySim.MI(x, digits = 3, ...)
+  \method{print}{summarySim.MI}(x, digits=3, ...)
 }
 \arguments{
   \item{x}{a 'summarySim.MI' object}
@@ -14,8 +13,7 @@ Prints summary information about Multiply Imputed Fits}
   \item{...}{ignored parameters}
 }
 \description{
-  Print Multiply Imputed Simulations Summary Prints summary
-  information about Multiply Imputed Fits
+  Prints summary information about Multiply Imputed Fits
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

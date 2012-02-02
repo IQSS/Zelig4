@@ -1,9 +1,8 @@
 \name{as.summarized.summarized.qi}
 \alias{as.summarized.summarized.qi}
-\title{summarized.qi -> summarized.qi
-This is an identity operation}
+\title{summarized.qi -> summarized.qi}
 \usage{
-  as.summarized.summarized.qi(x, ...)
+  \method{as.summarized}{summarized.qi}(x, ...)
 }
 \arguments{
   \item{x}{an object of type 'summarized.qi'}
@@ -14,8 +13,7 @@ This is an identity operation}
   the same 'summarized.qi' object
 }
 \description{
-  summarized.qi -> summarized.qi This is an identity
-  operation
+  Identity operation on ``summarized.qi'' objects
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

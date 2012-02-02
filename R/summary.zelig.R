@@ -1,6 +1,8 @@
 #' Zelig Object Summaries
+#'
 #' Compute summary data for zelig objects
 #' @S3method summary zelig
+#' @usage \method{summary}{zelig}(object, ...)
 #' @param object a zelig object
 #' @param ... parameters forwarded to the generic summary object
 #' @return the summary of the fitted model

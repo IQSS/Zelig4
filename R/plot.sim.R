@@ -1,14 +1,14 @@
 #' Method for plotting simulations
 #'
+#' Plot simulated quantities of interest.
+#' @usage \method{plot}{sim}(x, xlab = "", ...)
 #' @S3method plot sim
-#'
 #' @param x a `sim' object
 #' @param xlab labels for the x-axis
-#' @param ... parameters to be passed to the `truehist' function
-#'            which is implicitly called for numeric simulations
-#' @return the current graphical parameters. This is subject to change in
-#'         future implementations of Zelig
-#' @export
+#' @param ... parameters to be passed to the `truehist' function which is 
+#' implicitly called for numeric simulations
+#' @return the current graphical parameters. This is subject to change in future
+#' implementations of Zelig
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 plot.sim <- function(x, xlab = "", ...) {
   # save old state

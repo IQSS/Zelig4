@@ -1,7 +1,7 @@
 #' Method for summarizing simulations of multiply imputed quantities of interest
 #'
 #' @S3method summary MI.sim
-#'
+#' @usage \method{summary}{MI.sim}(object, ...)
 #' @param object a `MI.sim' object
 #' @param ... ignored parameters
 #' @return a `summarized.MI.sim' object

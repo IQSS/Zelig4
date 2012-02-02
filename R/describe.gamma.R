@@ -1,4 +1,5 @@
 #' Describe the \code{gamma} model to Zelig
+#' @usage \method{describe}{gamma}(...)
 #' @S3method describe default
 #' @param ... ignored parameters
 #' @return a list of important information

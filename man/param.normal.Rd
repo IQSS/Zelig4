@@ -2,7 +2,7 @@
 \alias{param.normal}
 \title{Param Method for the 'normal' Zelig Model}
 \usage{
-  param.normal(obj, num = 1000, ...)
+  \method{param}{normal}(obj, num=1000, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}

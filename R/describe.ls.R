@@ -1,5 +1,6 @@
 #' Describe a \code{ls} model to Zelig
 #' @note \code{ls} stands for "least squares fit"
+#' @usage \method{describe}{ls}(...)
 #' @S3method describe ls
 #' @param ... ignored parameters
 #' @return a list to be processed by \code{as.description}

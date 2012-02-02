@@ -2,7 +2,7 @@
 \alias{describe.gamma}
 \title{Describe the \code{gamma} model to Zelig}
 \usage{
-  describe.gamma(...)
+  \method{describe}{gamma}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

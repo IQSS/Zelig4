@@ -63,8 +63,14 @@ alpha <- function(param)
   param$alpha
 
 
-#' Extract Simulations from 'parmaeters' Objects
+#' Return Simulations of Parameter Coefficients
+#'
+#' Returns simulated parameters of coefficients for use in statistical 
+#' simulation. The values are set by the model-fitting function and the 
+#' developer of the qi.<model name> method.
+#'
 #' @note This function may not differ at all from coef.default
+#' @usage \method{coef}{parameters}(object, ...)
 #' @S3method coef parameters
 #' @param object a 'parameters' object
 #' @param \dots ignored
@@ -76,8 +82,14 @@ coef.parameters <- function(object, ...) {
   object$coef
 }
   
-#' Extract Simulations from 'parmaeters' Objects
-#' @note This function may not differ at all from coef.default
+#' Return Simulations of Parameter Coefficients
+#'
+#' Returns simulated parameters of coefficients for use in statistical 
+#' simulation. The values are set by the model-fitting function and the 
+#' developer of the qi.<model name> method.
+#'
+#' @note This function does not differ at all from coef.default
+#' @usage \method{simulations}{parameters}(object, ...)
 #' @S3method coef parameters
 #' @param object a 'parameters' object
 #' @param \dots ignored
@@ -91,8 +103,8 @@ simulations.parameters <- function(object, ...)
 
 #' Method for extracting the link function from 'parameters' objects
 #' @param param a 'parameters' object
-#' @return the link function specified by the `param' function for the
-#'         given Zelig model
+#' @return the link function specified by the `param' function for the given 
+#' Zelig model
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 link <- function(param)
@@ -101,14 +113,18 @@ link <- function(param)
 
 #' Method for extracting the inverse link function from 'parameters' objects
 #'
+#' Returns the inverse link function of a ``parameters'' object. If the
+#' model's developer did not specify one (but did specify a link function) this
+#' function returns a numerical approximation of the link function.
 #' @param param a 'parameters' object
 #' @return the inverse link function specified by the 'param' function for the
-#'         given Zelig model
+#' given Zelig model
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 linkinv <- function(param) {
   if (is.null(param$linkinv))
     .NumInverse(param$link)
+
   else
     param$linkinv
 }

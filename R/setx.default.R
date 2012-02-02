@@ -1,4 +1,7 @@
 #' Set explanatory variables
+#'
+#' Set explanatory variables
+#' @usage \method{setx}{default}(obj, fn=NULL, data=NULL, cond=FALSE, ...)
 #' @S3method setx default
 #' @param obj a 'zelig' object
 #' @param fn a list of key-value pairs specifying which function apply to
@@ -8,7 +11,6 @@
 #' @param ... parameters specifying what to explicitly set each column as. This
 #'            is used to produce counterfactuals
 #' @return a 'setx' object
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, and Olivia Lau 
 setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # Expand the dots

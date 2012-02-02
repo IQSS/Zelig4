@@ -2,7 +2,7 @@
 \alias{as.matrix.setx}
 \title{Convert a 'setx' Object to a Matrix}
 \usage{
-  as.matrix.setx(x, ...)
+  \method{as.matrix}{setx}(x, ...)
 }
 \arguments{
   \item{x}{a setx object}

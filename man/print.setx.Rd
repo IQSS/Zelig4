@@ -2,7 +2,7 @@
 \alias{print.setx}
 \title{Print values of `setx' objects}
 \usage{
-  print.setx(x, ...)
+  \method{print}{setx}(x, ...)
 }
 \arguments{
   \item{x}{a `setx' object}
@@ -13,7 +13,7 @@
   the value of x (invisibly)
 }
 \description{
-  Print values of `setx' objects
+  Print a ``setx'' object in human-readable form.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

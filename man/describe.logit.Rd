@@ -2,7 +2,7 @@
 \alias{describe.logit}
 \title{Describe a `logit' model to Zelig}
 \usage{
-  describe.logit(...)
+  \method{describe}{logit}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

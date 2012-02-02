@@ -1,11 +1,12 @@
 #' Print Multiply Imputed Simulations Summary
+#'
 #' Prints summary information about Multiply Imputed Fits
+#' @usage \method{print}{summarySim.MI}(x, digits=3, ...)
 #' @S3method print summarySim.MI
 #' @param x a 'summarySim.MI' object
 #' @param digits an integer specifying the number of digits of precision to
 #'   print
 #' @param ... ignored parameters
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 print.summarySim.MI <- function(x, digits=3, ...) {
   for (qi.name in names(x)) {

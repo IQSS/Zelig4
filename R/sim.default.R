@@ -1,4 +1,13 @@
 #' Method for Simulating Quantities of Interest wrom 'zelig' Objects
+#'
+#' Simulate quantities of interest
+#' @usage \method{sim}{default}(obj,
+#'                     x=NULL, x1=NULL, y=NULL,
+#'                     num=1000, bootstrap = FALSE,
+#'                     bootfn=NULL,
+#'                     cond.data = NULL,
+#'                     ...)
+#' @S3method sim default
 #' @param obj a 'zelig' object
 #' @param x a 'setx' object
 #' @param x1 a secondary 'setx' object used to perform particular computations
@@ -12,7 +21,6 @@
 #' @param cond.data ignored
 #' @param ... special parameters which are reserved for future versions of Zelig
 #' @return a 'sim' object storing the replicated quantities of interest
-#' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 sim.default <- function(obj,
                         x=NULL, x1=NULL, y=NULL,

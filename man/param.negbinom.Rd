@@ -2,7 +2,7 @@
 \alias{param.negbinom}
 \title{Param Method for the 'negbinom' Zelig Model}
 \usage{
-  param.negbinom(obj, num = 1000, ...)
+  \method{param}{negbinom}(obj, num=1000, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}

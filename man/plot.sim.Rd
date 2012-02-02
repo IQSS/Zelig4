@@ -2,7 +2,7 @@
 \alias{plot.sim}
 \title{Method for plotting simulations}
 \usage{
-  plot.sim(x, xlab = "", ...)
+  \method{plot}{sim}(x, xlab = "", ...)
 }
 \arguments{
   \item{x}{a `sim' object}
@@ -18,7 +18,7 @@
   change in future implementations of Zelig
 }
 \description{
-  Method for plotting simulations
+  Plot simulated quantities of interest.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

@@ -2,7 +2,7 @@
 \alias{param.probit}
 \title{Param Method for the 'probit' Zelig Model}
 \usage{
-  param.probit(obj, num = 1000, ...)
+  \method{param}{probit}(obj, num=1000, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}

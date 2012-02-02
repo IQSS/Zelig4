@@ -2,7 +2,7 @@
 \alias{plot.MI.sim}
 \title{Plot graphs of simulated multiply-imputed data}
 \usage{
-  plot.MI.sim(...)
+  \method{plot}{MI.sim}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

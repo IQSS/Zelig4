@@ -1,6 +1,8 @@
 #' Summarry of Multiply Imputed Statistical Models
+#'
+#' ...
 #' @S3method summary MI
-#' @export
+#' @usage \method{summary}{MI}(object, ...)
 #' @param object a set of fitted statistical models
 #' @param ... parameters to forward
 #' @return a list of summaries

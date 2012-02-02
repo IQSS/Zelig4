@@ -12,12 +12,12 @@
 
 
   # build info
-  cat("\n   ZELIG (Versions ", ver, ", built: ", build.date, ")\n")
+  packageStartupMessage("ZELIG (Versions ", ver, ", built: ", build.date, ")")
 
   # cat, for readability of the message text
 
   # Zelig info - do not exceed 80char/line
-  cat("
+  packageStartupMessage("
 +----------------------------------------------------------------+
 |  Please refer to http://gking.harvard.edu/zelig for full       |
 |  documentation or help.zelig() for help with commands and      |

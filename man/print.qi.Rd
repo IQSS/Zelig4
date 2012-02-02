@@ -2,7 +2,7 @@
 \alias{print.qi}
 \title{Print a Quantity of Interest in Human-Readable Form}
 \usage{
-  print.qi(x, ...)
+  \method{print}{qi}(x, ...)
 }
 \arguments{
   \item{x}{a qi object}
@@ -13,7 +13,8 @@
   the object that was printed (invisibly)
 }
 \description{
-  Print a Quantity of Interest in Human-Readable Form
+  Print simulated quantities of interest in a
+  human-readable form
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

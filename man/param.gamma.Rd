@@ -2,7 +2,7 @@
 \alias{param.gamma}
 \title{param method for the `gamma' Zelig model}
 \usage{
-  param.gamma(obj, num, ...)
+  \method{param}{gamma}(obj, num, ...)
 }
 \arguments{
   \item{obj}{a `zelig' object}

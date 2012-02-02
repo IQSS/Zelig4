@@ -2,7 +2,7 @@
 \alias{describe.normal}
 \title{Describe the \code{normal} model to Zelig}
 \usage{
-  describe.normal(...)
+  \method{describe}{normal}(...)
 }
 \arguments{
   \item{...}{ignored parameters}

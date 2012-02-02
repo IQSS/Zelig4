@@ -1,4 +1,5 @@
 #' Describe the \code{normal} model to Zelig
+#' @usage \method{describe}{normal}(...)
 #' @S3method describe normal
 #' @param ... ignored parameters
 #' @return a list to be processed by `as.description'

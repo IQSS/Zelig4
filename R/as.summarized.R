@@ -1,10 +1,11 @@
 #' Generic Method for Casting Objectst as 'summarized' Objects
+#' 
 #' This function is particularly for use by the 'summarize' method, which
-#' summarizes the simulations taken from the 'qi' method.
-#' The generic function 'summary' when applied to a Zelig Simulation implicitly
-#' uses this function.
-#' @note This is made available on the Global namespace as a matter of
-#'   potential future compliancy.
+#' summarizes the simulations taken from the 'qi' method. The generic function
+#' 'summary' when applied to a Zelig Simulation implicitly uses this function.
+#' 
+#' @note This is made available on the Global namespace as a matter of potential
+#' future compliancy.
 #' @param x an object
 #' @param ... unspecified parameters
 #' @return a 'summarized.qi' object
@@ -15,7 +16,9 @@ as.summarized <- function(x, ...) {
 }
 
 #' summarized.qi -> summarized.qi
-#' This is an identity operation
+#' 
+#' Identity operation on ``summarized.qi'' objects
+#' @usage \method{as.summarized}{summarized.qi}(x, ...)
 #' @param x an object of type 'summarized.qi'
 #' @param ... ignored parameters
 #' @return the same 'summarized.qi' object

@@ -2,9 +2,9 @@
 \alias{repl.sim}
 \title{Method for Replicating Simulated Quantities of Interest}
 \usage{
-  repl.sim(object, x = NULL, x1 = NULL, y = NULL,
-    num = 1000, prev = NULL, bootstrap = FALSE,
-    boot.fn = NULL, cond.data = NULL, ...)
+  \method{repl}{sim}(object, x=NULL, x1=NULL, y=NULL,
+    num=1000, prev = NULL, bootstrap = FALSE, boot.fn=NULL,
+    cond.data = NULL, ...)
 }
 \arguments{
   \item{object}{a 'zelig' object}
@@ -37,7 +37,7 @@
   interest
 }
 \description{
-  Method for Replicating Simulated Quantities of Interest
+  Replicate simulated quantities of interest
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

@@ -1,12 +1,8 @@
 \name{names.qi}
 \alias{names.qi}
-\title{The Names of a 'qi' Object
-Function to get the names of a 'qi' object. This function does not entirely
-parallel the functionality of traditional 'names' methods; this is because
-the \code{$} operator has been overloaded to support a unique style of value
-extraction. For technical details, please see the source code.}
+\title{The Names of a 'qi' Object}
 \usage{
-  names.qi(x)
+  \method{names}{qi}(x)
 }
 \arguments{
   \item{x}{a 'qi' object}
@@ -16,12 +12,12 @@ extraction. For technical details, please see the source code.}
   of Interest
 }
 \description{
-  The Names of a 'qi' Object Function to get the names of a
-  'qi' object. This function does not entirely parallel the
-  functionality of traditional 'names' methods; this is
-  because the \code{$} operator has been overloaded to
-  support a unique style of value extraction. For technical
-  details, please see the source code.
+  Function to get the names of a 'qi' object. This function
+  does not entirely parallel the functionality of
+  traditional 'names' methods; this is because the \code{$}
+  operator has been overloaded to support a unique style of
+  value extraction. For technical details, please see the
+  source code.
 }
 \note{
   No method exists to set the names of a 'qi' object, once

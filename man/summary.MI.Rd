@@ -2,7 +2,7 @@
 \alias{summary.MI}
 \title{Summarry of Multiply Imputed Statistical Models}
 \usage{
-  summary.MI(object, ...)
+  \method{summary}{MI}(object, ...)
 }
 \arguments{
   \item{object}{a set of fitted statistical models}
@@ -13,7 +13,7 @@
   a list of summaries
 }
 \description{
-  Summarry of Multiply Imputed Statistical Models
+  ...
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}
