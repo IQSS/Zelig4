@@ -126,8 +126,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
     new.res <- eval.parent(new.call)
 
-    detach('env')
-    detach('d.f')
+    detach(env)
+    detach(d.f)
 
     # Apply first hook if it exists
     if (!is.null(zclist$.hook)) {
