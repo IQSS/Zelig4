@@ -43,10 +43,48 @@
 #'
 #' @name zelig
 #' @export
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, Olivia Lau, and Gary King 
-#'         Maintainer: Matt Owen \email{monwe@@iq.harvard.edu}
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, Olivia Lau, and
+#' Gary King 
+#' Maintainer: Matt Owen \email{mowen@@iq.harvard.edu}
 #' @keywords package
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
+
+
+  pkg <- get.package(model)
+
+  if (is.na(pkg)) {
+    message("\n\n")
+    cat(sprintf('The model %s is not available in this package.'))
+    message("\n\n")
+  }
+
+  else if (! pkg %in% loadedNamespaces()) {
+    if (pkg %in% .packages(TRUE)) {
+      message("\n\n")
+      cat(sprintf('The model %s belongs to the package %s!\n\n', model, pkg))
+      cat(sprintf('In order to use this model, first load %s', pkg))
+      cat(' with the following command:\n')
+      message(sprintf('  library(%s)', pkg))
+      message("\n\n")
+    }
+
+    else {
+      message("\n\n")
+      cat(sprintf('The model %s belongs to the package %s!\n\n', model, pkg))
+      cat(sprintf('In order to use this model, first install %s', pkg))
+      cat(' with the following command:\n')
+
+      message(sprintf(
+                      '  install.packages("%s", repos=%s, type="source")', 
+                      pkg, "http://r.iq.harvard.edu/"
+                      ))
+
+      message("\n\n")
+    }
+  }
+
+
+
   Call <- match.call()
 
   if (!missing(by)) {
