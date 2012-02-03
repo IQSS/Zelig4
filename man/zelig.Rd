@@ -65,7 +65,7 @@
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}, Kosuke Imai,
   Olivia Lau, and Gary King Maintainer: Matt Owen
-  \email{monwe@iq.harvard.edu}
+  \email{mowen@iq.harvard.edu}
 }
 \keyword{package}
 

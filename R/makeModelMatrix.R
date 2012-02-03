@@ -23,6 +23,10 @@ makeModelMatrix <- function (formula, data) {
   }
 
   else {
+    print(formula)
+    print(class(data))
+    print(model.matrix(formula, data))
+    q()
     return(model.matrix(formula, data))
   }
 }

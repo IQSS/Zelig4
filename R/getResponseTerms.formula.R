@@ -14,30 +14,33 @@
 #' @author Matt Owen
 getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE)
 {
+  # Handle 
+  handle.formula.err <- function (e) {
+    message("\n\n")
+    message("The formula ", x, " seems to have no dependent variables")
+    stop("The formula for the ")
+  }
 
-  if (length(x) < 3)
-    # If the length is less than 3, there are no response terms
-    return(NA)
-
-  else if (length(x) > 3)
-    # If the length is greater than 3, something really weird is going on.
-    stop("Single formulae must be constructed like ",
-         "call objects (have length 3).")
-
+  rhs <- tryCatch(x[[3]], error = handle.formula.err)
+  lhs <- tryCatch(x[[2]], error = handle.formula.err)
 
   # Reponse terms are always specified in the lefthand-side of the equation
-  lhs <- x[[2]]
-
   if (is.name(lhs)) {
     # If the lhs is a name, this implies it's a single variable with no function
     # applied to it. Thus, it's a term.
-    return(toString(lhs))
+    return(tryCatch(
+                    toString(lhs),
+                    error = function (e) as.character(lhs)
+           ))
   }
 
+  message("XXXXXXXXXXXXXXXXXX")
 
   # Otherwise, it is either a function being applied or the keywords "cbind" or
   # "list"
   op <- toString(lhs[[1]])
+
+  message("XXXXXXXXXXXXXXXXXX")
 
   if (op %in% c("cbind", "list")) {
 
