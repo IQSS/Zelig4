@@ -11,6 +11,9 @@ makeModelMatrix <- function (formula, data) {
   if (missing(data) || is.null(data))
     return(NULL)
 
+  # This is kludge and should be generalized
+  if (inherits(formula, "Formula")) {
+  }
 
   if (is.list(formula)) {
     m <- NULL
@@ -25,4 +28,12 @@ makeModelMatrix <- function (formula, data) {
   else {
     return(model.matrix(formula, data))
   }
+}
+
+
+#
+#
+#
+makeModelMatrixFromFormula <- function (formula, data) {
+
 }
