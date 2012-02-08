@@ -49,11 +49,8 @@
 #' @keywords package
 zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
-
-  if (!model.exists(model)) {
-    warning("The model ", model, " does not exist!")
-  }
-
+  # Yea this forever
+  model.warnings(model)
 
 
   Call <- match.call()

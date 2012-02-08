@@ -16,3 +16,11 @@ models <- c("gamma", "logit", "ls", "negbinom", "normal", "poisson", "probit",
 
 for (m in models)
   cat(sprintf("%s in %s\n", m, Zelig:::get.package(m)))
+
+
+Zelig:::get.package("fake package")
+Zelig:::get.package(1)
+Zelig:::get.package(list(x=1))
+Zelig:::get.package(c("x", "logit"))
+Zelig:::get.package("probit.net")
+Zelig:::get.package(NULL)

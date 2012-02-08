@@ -9,6 +9,18 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 get.package <- function (model, quiet=TRUE, ...) {
 
+  # Bad variable-types return NULL
+  if (is.null(model))
+    return(NA)
+
+  else if (!is.character(model))
+    return(NA)
+
+  else if (length(model) != 1)
+    return (NA)
+
+  # Create list (auto-generated using another script.
+  # This is a copy-and-paster of that below
   descr <- c(
     gamma = "Zelig",
     logit = "Zelig",
@@ -73,30 +85,9 @@ get.package <- function (model, quiet=TRUE, ...) {
     probit.net = "ZeligNetwork"
   )
 
-
-
-  # The following returns the associated package or NA. Additionally, it prints
-  # an error if quiet == FALSE
-
   if (model %in% names(descr))
-    # If the model is found in 'descr' return the associated package
     descr[[model]]
 
-  else {
-    # Else return NA
-
-    if (!quiet)
-      # Issue a warning if quiet == FALSE
-      warning("The model \"", model, "\" could not be found in any package!")
-
-    # (Return)
+  else
     NA
-  }
 }
-
-
-
-
-
-
-

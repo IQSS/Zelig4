@@ -144,3 +144,4 @@ Collate:
     'zzz.R'
     'get.package.R'
     'model.exists.R'
+    'model.warnings.R'

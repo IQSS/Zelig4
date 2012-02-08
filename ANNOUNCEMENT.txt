@@ -2,7 +2,7 @@ The Zelig core team is pleased to announce the alpha release of Zelig 4.
 
 Designated as the "Developer Update", Zelig 4 offers a wide-range of improvements to ease the process of adding new statistical models to the already extensive Zelig software suite. Significantly, this release is packaged with a brand-new API, geared towards reducing the complexity and length of Zelig's development functions - the zelig2, param and qi methods. In addition to this, Zelig now brandishes a package-creator (zelig.skeleton) that operates in the same vein as R's core function "package.skeleton".
 
-In addition to changes in the development toolkit, Zelig has now been split across 7 distinct packages. This change has been made to refine the scope of Zelig and its add-ons. In particular, this restructuring of Zelig into a full software suite allows developers to contribute, develop and repair add-on packages without tinkering with the Zelig API and core functionality. 
+In addition to changes in the development toolkit, Zelig has now been split across 13 distinct packages. This change has been made to refine the scope of Zelig and its add-ons. In particular, this restructuring of Zelig into a full software suite allows developers to contribute, develop and repair add-on packages without tinkering with the Zelig API and core functionality. 
 
 While this release's prime focus has been improving the developer toolkit and restructuring the software suite, Zelig 4 offers an end-user experience completely identical to previous versions. That is, zelig's basic functions - zelig, setx and sim - ostensibly remain unchanged in functionality for available statistical models.
 
