@@ -13,10 +13,6 @@
 #' @return a 'setx' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, and Olivia Lau 
 setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
-  #print(summary(obj))
-  #print(formula(obj))
-
-  #q()
   # Expand the dots
   dots <- list(...)
 
@@ -36,7 +32,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
   # Default the environment to NULL (Global)
   env.obj <- NULL
-
 
   # explanatory variables
   explan.obj <- Filter(function (x) x %in% vars.obj, names(dots))
@@ -102,7 +97,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       dots[[key]]
   }
 
-
   # make a tiny data-frame with
   # all the necessary columns
   d <- data[1,]
@@ -118,18 +112,14 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   }
 
   # Note that model.matrix.parsedFormula is called here.
-  message("<<")
   mod <- model.matrix(parsed.formula, d)
   dat <- as.data.frame(mod)
   rownames(mod) <- NULL
-  message(">>")
 
   # This space here should be reserved for manipulating interaction variables
   #
   #
   #
-  message("!")
-  q()
 
   # build the setx object
   sx <- list(

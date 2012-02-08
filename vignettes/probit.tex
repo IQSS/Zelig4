@@ -1,0 +1,98 @@
+\documentclass{article}
+
+\title{
+  probit: Probit Regression for Dichotomous
+  Dependent Variables
+}
+\author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
+
+
+
+
+\usepackage{bibentry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{Zelig}
+\usepackage{Sweave}
+
+%\VignetteIndexEntry{Probit Regression for Dichotomous Dependent Variables}
+%\VignetteDepends{Zelig, stats}
+%\VignetteKeyWords{model,least squares,continuous, regression}
+%\VignettePackage{Zelig}
+
+\begin{document}
+
+\nobibliography*
+
+
+
+\section{{\tt probit}: Probit Regression for Dichotomous Dependent Variables}\label{probit}
+
+Use probit regression to model binary dependent variables
+specified as a function of a set of explanatory variables.  
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "probit", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out, x1 = NULL)
+\end{verbatim}
+
+\subsubsection{Additional Inputs} 
+
+In addition to the standard inputs, {\tt zelig()} takes the following
+additional options for probit regression:  
+\begin{itemize}
+\item {\tt robust}: defaults to {\tt FALSE}.  If {\tt TRUE} is
+selected, {\tt zelig()} computes robust standard errors via the {\tt
+sandwich} package (see \cite{Zeileis04}).  The default type of robust
+standard error is heteroskedastic and autocorrelation consistent (HAC),
+and assumes that observations are ordered by time index.
+
+In addition, {\tt robust} may be a list with the following options:  
+\begin{itemize}
+\item {\tt method}:  Choose from 
+\begin{itemize}
+\item {\tt "vcovHAC"}: (default if {\tt robust = TRUE}) HAC standard
+errors. 
+\item {\tt "kernHAC"}: HAC standard errors using the
+weights given in \cite{Andrews91}. 
+\item {\tt "weave"}: HAC standard errors using the
+weights given in \cite{LumHea99}.  
+\end{itemize}  
+\item {\tt order.by}: defaults to {\tt NULL} (the observations are
+chronologically ordered as in the original data).  Optionally, you may
+specify a vector of weights (either as {\tt order.by = z}, where {\tt
+z} exists outside the data frame; or as {\tt order.by = \~{}z}, where
+{\tt z} is a variable in the data frame).  The observations are
+chronologically ordered by the size of {\tt z}.
+\item {\tt \dots}:  additional options passed to the functions 
+specified in {\tt method}.   See the {\tt sandwich} library and
+\cite{Zeileis04} for more options.   
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Examples}
+Attach the sample turnout dataset:
+\begin{Schunk}
+\begin{Sinput}
+>  data(turnout)
+\end{Sinput}
+\end{Schunk}
+Estimate parameter values for the probit regression:
+\begin{Schunk}
+\begin{Sinput}
+>  z.out <- zelig(vote ~ race + educate,  model = "probit", data = turnout) 
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+>  summary(z.out)
+\end{Sinput}
+\end{Schunk}
+Set values for the explanatory variables to their default values.
+\begin{Schunk}
+\begin{Sinput}
+>  x.out <- setx(z.out)
