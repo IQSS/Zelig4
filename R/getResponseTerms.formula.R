@@ -34,13 +34,9 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
            ))
   }
 
-  message("XXXXXXXXXXXXXXXXXX")
-
   # Otherwise, it is either a function being applied or the keywords "cbind" or
   # "list"
   op <- toString(lhs[[1]])
-
-  message("XXXXXXXXXXXXXXXXXX")
 
   if (op %in% c("cbind", "list")) {
 

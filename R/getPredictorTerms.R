@@ -31,10 +31,10 @@ getPredictorTerms <- function (x, ...) {
 
   # Beginning of work for function
   if (is.list(x))
-    extractFromList(x)
+    unique(extractFromList(x))
 
   else if ("formula" %in% class(x))
-    extractFromFormula(x)
+    unique(extractFromFormula(x))
 
   else {
     warning("The model formula must either ",

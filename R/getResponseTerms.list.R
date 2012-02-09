@@ -25,5 +25,5 @@ getResponseTerms.list <- function (x, ...) {
     # Get response terms of each element of 'x',
     # then transform the list into a vector, which should always be flat, since
     # getResponseTerms should always return a character-string
-    unlist(Map(getResponseTerms, x, single.only=TRUE))
+    unique(unlist(Map(getResponseTerms, x, single.only=TRUE)))
 }
