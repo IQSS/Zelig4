@@ -73,6 +73,27 @@ Where "<PACKAGE NAME>" is the name of an available Zelig package. A complete lis
   * Contains: ```blogit```, ```bprobit```
 * ZeligGAM
   * Generalized Additive Models for Zelig
+  * [Source Code](https://github.com/zeligdev/ZeligGAM)
+  * [Issue Queue](https://github.com/zeligdev/ZeligGAM/issues)
+  * Contains: logit.gam, normal.gam, poisson.gam, probit.gam
+* ZeligGEE
+  * Generalized Estimating Equation Models for Zelig
+  * [Source Code](https://github.com/zeligdev/ZeligGAM)
+  * [Issue Queue](https://github.com/zeligdev/ZeligGAM/issues)
+  * Contains: gamma.gee, logit.gee, normal.gee, poisson.gee, probit.gee
+* ZeligMixed
+  * Multilevel (Mixed) Model Regressions for Zelig
+  * [Source Code](https://github.com/zeligdev/ZeligMixed)
+  * [Issue Queue](https://github.com/zeligdev/ZeligMixed/issues)
+  * Contains: gamma.mixed, logit.mixed, ls.mixed, poisson.mixed, probit.mixed
+* ZeligMultinomial
+  * Multinomial Logitic regressions for Zelig. This may be merged with
+    ZeligOrdinal eventually
+  * [Source Code](https://github.com/zeligdev/ZeligMultinomial)
+  * [Issue Queue](https://github.com/zeligdev/ZeligMultinomial/issues)
+  * Contains: mlogit, mprobit
+* Zelig
+  * 
   * [Source Code]()
   * [Issue Queue]()
   * Contains: 
