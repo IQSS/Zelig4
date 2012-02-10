@@ -5,7 +5,6 @@ maintain complete backwards compatability from the End-user experience, while
 prodividing developers a new, streamlined API to author new models in.
 
 
-
 ## How to Install
 
 There are several methods for installation.
@@ -21,6 +20,7 @@ There are several methods for installation.
 
 Zelig has an online install option! Using this method, users have the option to
 selectively install Zelig packages or install everything via one simple command.
+This install script can be found at: http://r.iq.harvard.edu/install_live.R
 
 To load the installer, simply follow these directions:
 
@@ -57,8 +57,30 @@ install.packages(
 
 Where "<PACKAGE NAME>" is the name of an available Zelig package. A complete list can be found below.
 
+
+
 ## Available Packages
 
+* Zelig
+  * The core package of Zelig.
+  * [Source Code](https://github.com/zeligdev/Zelig)
+  * [Issue Queue](https://github.com/zeligdev/Zelig/issues)
+  * Contains: gamma, logit, ls, negbinom, normal, poisson, probit
+* ZeligMultivariate
+  * A package containing Zelig's Multivariate Regression offerings.
+  * [Source Code](https://github.com/zeligdev/ZeligMultivariate)
+  * [Issue Queue](https://github.com/zeligdev/ZeligMultivariate/issues)
+  * Contains: ```blogit```, ```bprobit```
+* ZeligGAM
+  * Generalized Additive Models for Zelig
+  * [Source Code]()
+  * [Issue Queue]()
+  * Contains: 
+* Zelig
+  * 
+  * [Source Code]()
+  * [Issue Queue]()
+  * Contains: 
 
 
 
