@@ -93,6 +93,7 @@ parseFormula.list <- function (obj, data=NULL) {
 parseFormula.Formula <- function (obj, data=NULL) {
 
 
+  message("parseFormula.Formula")
   # Create the actual object
   res <- list(
               # Remember the source class
@@ -106,10 +107,10 @@ parseFormula.Formula <- function (obj, data=NULL) {
 
               # Use Zelig-style methods to get the responseTerms
               response  = getResponseTerms(obj),
-              predictor = getPredictorTerms(list.formula),
+              predictor = getPredictorTerms(obj),
 
               # Create the design matrix from the ``Formula'' package
-              model.matrix = model.matrix(obj, data, lhs=NULL, rhs=NULL)
+              model.matrix = NULL
               )
 
 

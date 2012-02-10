@@ -21,8 +21,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
   # Parsed formula. This is an intermediate for used for processing
   # design matrices, etc.
-  parsed.formula <- parseFormula(form)
-
+  parsed.formula <- parseFormula(form, data)
 
   # Extract information about terms
   # Note: the functions 'getPredictorTerms' and 'getOutcomeTerms' are in need
