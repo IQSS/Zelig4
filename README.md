@@ -1,6 +1,9 @@
-# Zelig: A Software Suite for Everyone
+# Zelig 4
 
-Zelig is an R-package geared towards.
+Zelig 4 is a complete rewrite of the Zelig software. Its intention is to
+maintain complete backwards compatability from the End-user experience, while
+prodividing developers a new, streamlined API to author new models in.
+
 
 
 ## How to Install
@@ -11,10 +14,10 @@ There are several methods for installation.
 ### Pre-install Checklist
 
 * A major operating system
-** Mac OS X 10.4+
-** Windows or
-** Linux/Unix-alike
-* [R v2.14.1+](http://cran.r-project.org/)
+  * Mac OS X 10.4+
+  * Windows or
+  * Linux/Unix-alike
+* [R (>= 2.14.1)](http://cran.r-project.org/)
 
 
 ### Setup-Wizard Install
@@ -45,7 +48,11 @@ install.packages(
                  )
 ```
 
-## F2P2
+On an individual basis,
+
+## Available Packages
+
+
 
 
 ## Latest Changes
