@@ -68,3 +68,61 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
     toString(lhs)
   }
 }
+
+
+
+#' Get Response Terms from a ``Formula'' Object
+#'
+#' This method gets the response terms from a ``Formula'' Object
+#' @usage
+#' \method{getResponseTerms}{formula}(x, ..., single.only=FALSE, duplicates=TRUE)
+#' @param x a formula
+#' @param ... ignored parameters
+#' @param single.only a logical specifying whether 'cbind' or 'list' keywords
+#' are allowed
+#' @param duplicates a logical specifying whether the returned character-vector
+#' will only return duplicates.
+#' @return a character-vector specifying the response terms of the formula
+#' @S3method getResponseTerms Formula
+#' @author Matt Owen
+getResponseTerms.Formula <- function (x, ..., single.only=FALSE, duplicates=TRUE)
+{
+  # Create and empty list
+  list.formula <- list()
+
+  # This loop goes through all the list response and predictor terms and 
+  # creates a "Zelig-style" list based on it. This is so we can extract response
+  # and predictor terms with "getResponstTerms" and "getPredictorTerms" in a
+  # manageable way!
+  for (resp in attr(x, "lhs")) {
+    # Iterate through all response variables
+
+    for (pred in attr(x, "rhs")) {
+      # Iterate through all predictor variables
+
+      # Append response variable and predictor terms
+      # "ccc" is probably going to be convention for a call object in Zelig
+      # models since "CALL", "call", "Call" all seem too similar to "call".
+      # And we need to break
+      ccc <- call("~", resp, pred)
+
+      # Cast from a "call" object to a "formula" object
+      ccc <- as.formula(ccc)
+
+      # Append to list
+      list.formula <- append(list.formula, ccc)
+
+    }
+  }
+  
+  # Important to send 'single.only'/'duplicates' into this function
+  resp <- getResponseTerms(list.formula, ..., single.only, duplicates)
+
+  # Apply unique only if 'duplicates' is FALSE
+  # This ensures the list has the expected properties
+  if (duplicates)
+    resp
+
+  else
+    unique(resp)
+}

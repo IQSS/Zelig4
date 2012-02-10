@@ -10,12 +10,12 @@
   \item{data}{a data frame}
 }
 \value{
-  an object of type "parseFormula"
+  an object of type ``parseFormula''
 }
 \description{
   This method parses a ``Formula''-style Zelig formula.
-  This is to support the ```Formula''' object. It seems
-  like it has the right idea when it comes to expressing
+  This is to support the ``Formula'' object. It seems like
+  it has the right idea when it comes to expressing
   multiple responses.
 }
 \author{
