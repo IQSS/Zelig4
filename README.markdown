@@ -13,10 +13,7 @@ There are several methods for installation.
 
 ### Pre-install Checklist
 
-* A major operating system
-  * Mac OS X 10.4+
-  * Windows or
-  * Linux/Unix-alike
+* A major operating system (Mac OS X 10.4+, Windows or Linux/Unix-alike)
 * [R (>= 2.14.1)](http://cran.r-project.org/)
 
 
@@ -48,7 +45,17 @@ install.packages(
                  )
 ```
 
-On an individual basis,
+Packages can be individually installed using a similar method to the one above:
+
+```R
+install.packages(
+                 "<PACKAGE NAME>",
+                 repos = "http://r.iq.harvard.edu/",
+                 type  = "source"
+                 )
+```
+
+Where "<PACKAGE NAME>" is the name of an available Zelig package. A complete list can be found below.
 
 ## Available Packages
 
