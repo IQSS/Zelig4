@@ -23,6 +23,7 @@ Zelig has an online install option! Using this method, users have the option to
 selectively install Zelig packages or install everything via one simple command.
 
 To load the installer, simply follow these directions:
+
 1. Install the latest version of R at http://cran.r-project.org/
 2. Open an R-session
 3. Enter the following into an R-session: 
