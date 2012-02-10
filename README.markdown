@@ -87,12 +87,33 @@ Where "<PACKAGE NAME>" is the name of an available Zelig package. A complete lis
   * [Issue Queue](https://github.com/zeligdev/ZeligMixed/issues)
   * Contains: gamma.mixed, logit.mixed, ls.mixed, poisson.mixed, probit.mixed
 * ZeligMultinomial
-  * Multinomial Logitic regressions for Zelig. This may be merged with
+  * Multinomial Logit/Probit regressions for Zelig. This may be merged with
     ZeligOrdinal eventually
   * [Source Code](https://github.com/zeligdev/ZeligMultinomial)
   * [Issue Queue](https://github.com/zeligdev/ZeligMultinomial/issues)
   * Contains: mlogit, mprobit
-* Zelig
+* ZeligOrdinal
+  * Ordinal Logit/Probit regressions for Zelig
+  * [Source Code](https://github.com/zeligdev/ZeligMultinomial)
+  * [Issue Queue](https://github.com/zeligdev/ZeligMultinomial/issues)
+  * Contains: ologit, oprobit
+* ZeligSurvey
+  * Survey-weight Regressions
+  * [Source Code](https://github.com/zeligdev/ZeligSurvey)
+  * [Issue Queue](https://github.com/zeligdev/ZeligSurvey/issues)
+  * Contains: gamma.survey, logit.survey, normal.survey, poisson.survey, probit.survey
+* ZeligBayesian
+  * Bayesian regressions in Zelig. This uses MCMCpack to compute a wide variety of the core models!
+  * [Source Code](https://github.com/zeligdev/ZeligBayesian)
+  * [Issue Queue](https://github.com/zeligdev/ZeligBayesian/issues)
+  * Contains: logit.bayes, mlogit.bayes, normal.bayes, oprobit,bayes,
+    poisson.bayes, probit.bayes, poisson.bayes
+* ZeligLeastSquares
+  * Four disparate packages based around least-squares methods
+  * [Source Code](https://github.com/zeligdev/ZeligLeastSquares)
+  * [Issue Queue](https://github.com/zeligdev/ZeligLeastSquares/issues)
+  * Contains: aov, sur, threesls, twosls
+* ZeligNetwork
   * 
   * [Source Code]()
   * [Issue Queue]()
