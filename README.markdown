@@ -114,21 +114,17 @@ Where "<PACKAGE NAME>" is the name of an available Zelig package. A complete lis
   * [Issue Queue](https://github.com/zeligdev/ZeligLeastSquares/issues)
   * Contains: aov, sur, threesls, twosls
 * ZeligNetwork
-  * 
-  * [Source Code]()
-  * [Issue Queue]()
-  * Contains: 
-* Zelig
-  * 
-  * [Source Code]()
-  * [Issue Queue]()
-  * Contains: 
-
-
-
-## Latest Changes
-
-
-## Future Goals
-
-
+  * Regressions for working with matrix-style social networking data.
+  * [Source Code](https://github.com/zeligdev/ZeligNetwork)
+  * [Issue Queue](https://github.com/zeligdev/ZeligNetwork/issues)
+  * Contains: cloglog.net, gamma.net, logit.net, ls.net, normal.net, poisson.net, probit.net
+* ZeligCommon
+  * Common Zelig packages that have yet to be placed in a specific package.
+  * [Source Code](https://github.com/zeligdev/ZeligCommon)
+  * [Issue Queue](https://github.com/zeligdev/ZeligCommon/issues)
+  * Contains: exp, lognorm, quantile, relogit, rq, tobit
+* ZeligMisc
+  * Miscellaneous Zelig packages. These should be sorted out.
+  * [Source Code](https://github.com/zeligdev/ZeligMisc)
+  * [Issue Queue](https://github.com/zeligdev/ZeligMisc)
+  * Contains: arima, coxph, ei.RxC
