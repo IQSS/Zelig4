@@ -74,7 +74,7 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
 #' Get Response Terms from a ``Formula'' Object
 #'
 #' This method gets the response terms from a ``Formula'' Object
-#' @rdname getResponse.Formula-alternate
+#' @rdname getResponseTerms.Formula-not-formula
 #' @aliases getResponse.Formula
 #' @usage
 #' \method{getResponseTerms}{Formula}(x, ..., single.only=FALSE, duplicates=TRUE)

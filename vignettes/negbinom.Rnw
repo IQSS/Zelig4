@@ -7,7 +7,7 @@
 \author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
 
 
-\SweaveOpts{results=hide, prefix.string=vigpics/negbin}
+\SweaveOpts{results=hide, prefix.string=negbin}
 
 \usepackage{bibentry}
 \usepackage{graphicx}

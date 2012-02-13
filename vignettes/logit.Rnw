@@ -7,7 +7,7 @@
 \author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
 
 
-\SweaveOpts{results=hide, prefix.string=vigpics/logit}
+\SweaveOpts{results=hide, prefix.string=logit}
 
 \usepackage{bibentry}
 \usepackage{graphicx}
