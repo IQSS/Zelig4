@@ -1,6 +1,6 @@
-\name{getResponseTerms.Formula}
-\alias{getResponseTerms.Formula}
-\title{Get Response Terms from a ``Formula'' Object}
+\name{getResponseTerms.formula}
+\alias{getResponseTerms.formula}
+\title{Get Response Terms from a Standard Formula}
 \usage{
   \method{getResponseTerms}{formula}(x, ...,
     single.only=FALSE, duplicates=TRUE)
@@ -21,8 +21,8 @@
   formula
 }
 \description{
-  This method gets the response terms from a ``Formula''
-  Object
+  This method gets the response terms from a standard
+  formula
 }
 \author{
   Matt Owen

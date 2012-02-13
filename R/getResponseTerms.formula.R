@@ -74,8 +74,10 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
 #' Get Response Terms from a ``Formula'' Object
 #'
 #' This method gets the response terms from a ``Formula'' Object
+#' @rdname getResponse.Formula-alternate
+#' @aliases getResponse.Formula
 #' @usage
-#' \method{getResponseTerms}{formula}(x, ..., single.only=FALSE, duplicates=TRUE)
+#' \method{getResponseTerms}{Formula}(x, ..., single.only=FALSE, duplicates=TRUE)
 #' @param x a formula
 #' @param ... ignored parameters
 #' @param single.only a logical specifying whether 'cbind' or 'list' keywords
