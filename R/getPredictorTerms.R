@@ -6,6 +6,7 @@
 #' @param ... ignored parameters
 #' @return a character-vector or NA
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
 getPredictorTerms <- function (x, ...) {
   # The following functions are unsafe for general input, so they are being
   # kept as nested functions.
