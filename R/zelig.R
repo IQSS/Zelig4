@@ -117,9 +117,12 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     zelig2 <- get(zelig2, mode="function")
 
     # call zelig2* function
+
+    # print(formals(zelig2))
     zclist <- zelig2(formula, ..., data=d.f)
 
-    # list of parameters to be ignored by external models
+    # list of parameters to be ignored by external models IF not in
+    # zelig2-return value
     remove <- c("model", "by", "cite", "...")
 
     # construct the call object
@@ -130,7 +133,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     attach(env)
     attach(d.f)
 
-    new.res <- eval.parent(new.call)
+    new.res <- eval(new.call)
 
     detach(env)
     detach(d.f)

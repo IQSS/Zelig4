@@ -12,7 +12,7 @@ print.summary.sim <- function(x, ...) {
   # Rename 'x' 'summary'
   summary <- x
 
-  obj <- summary$zelig
+  obj <- summary$zeligcall
   model <- summary$model
   x <- summary$x
   x1 <- summary$x1

@@ -111,9 +111,25 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   }
 
   # Note that model.matrix.parsedFormula is called here.
-  mod <- model.matrix(parsed.formula, d)
-  dat <- as.data.frame(mod)
-  rownames(mod) <- NULL
+  mod <- tryCatch(
+                  # Attempt to generate the design matrix of the formula
+                  model.matrix(parsed.formula, d), 
+
+                  # If there is a warning... probably do nothing
+                  # warning = function (w) w,
+
+                  # If there is an error, warn the user and specify the design
+                  # matrix as NA
+                  error = function (e) {
+                    NA
+                  }
+                  )
+
+  # ote
+  dat <- tryCatch(as.data.frame(mod), error = function (e) NA)
+
+  if (all(!is.na(mod)))
+    rownames(mod) <- NULL
 
   # This space here should be reserved for manipulating interaction variables
   #

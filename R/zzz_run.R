@@ -26,16 +26,18 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
   args <- names(formals(as.character(func)))
 
   # remove certain parameters
-  for (key in remove) {
-    if (key %in% names(Call))
-      Call[[key]] <- NULL
-  }
+   for (key in remove) {
+     if (key %in% names(Call))
+       Call[[key]] <- NULL
+   }
 
   # remove invalid params
   for (key in names(Call[-1])) {
     if (! key %in% args)
       Call[[key]] <- NULL
   }
+
+
 
   # A static list of objects that do not printout well or should be stored
   # within a separate environment
@@ -62,7 +64,8 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
       Call[[key]] <- as.name(Name)
     }
     else if (is.atomic(obj) && length(obj) > 5) {
-      Name <- store.object(obj, envir, paste(toupper(Class[1]), length(obj), sep=""))
+      Name <- store.object(obj, envir, paste(toupper(Class[1]), length(obj),
+                                             sep=""))
       Call[[key]] <- as.name(Name)
     }
     else if (is.list(obj) && length(obj) > 5) {
@@ -84,6 +87,28 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
     }
 
   }
+
+  # Guarantee all zelig2 names are included (including model, etc)
+  for (key in names(zelig2)) {
+    if (!is.null(zelig2[[key]]))
+      Call[[key]] <- zelig2[[key]]
+    else {
+      # Clear the entry. Don't worry. It's going to get re-added later in this
+      # Else-block.
+      Call[[key]] <- NULL
+
+      # Create the NULL paramater
+      dummylist <- list(NULL)
+      names(dummylist) <- key
+
+      # Cast as a list, so we can use append
+      Call <- as.list(Call)
+
+      # Append the entry
+      Call <- as.call(append(Call, dummylist))
+    }
+  }
+
 
   # Change function value
   Call[[1]] <- func

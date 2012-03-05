@@ -7,8 +7,8 @@
 
   package.name <- "Zelig"
   mylib <- dirname(system.file(package = package.name))
-  ver <- packageDescription(package.name, lib = mylib)$Version
-  build.date <- packageDescription(package.name, lib = mylib)$Date
+  ver <- packageDescription(package.name, lib.loc = mylib)$Version
+  build.date <- packageDescription(package.name, lib.loc = mylib)$Date
 
 
   # build info
