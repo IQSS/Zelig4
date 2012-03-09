@@ -27,8 +27,8 @@
 
   \item{cond.data}{ignored}
 
-  \item{...}{special parameters which are reserved for
-  future versions of Zelig}
+  \item{...}{parameters to be passed to the boot function,
+  if one is supplied}
 }
 \value{
   a 'sim' object storing the replicated quantities of

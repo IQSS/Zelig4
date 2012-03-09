@@ -19,19 +19,21 @@
 #' @param bootstrap ignored
 #' @param bootfn ignored
 #' @param cond.data ignored
-#' @param ... special parameters which are reserved for future versions of Zelig
+#' @param ... parameters to be passed to the boot function, if one is supplied
 #' @return a 'sim' object storing the replicated quantities of interest
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-sim.default <- function(obj,
-                        x=NULL, x1=NULL, y=NULL,
-                        num=1000, bootstrap = FALSE,
-                        bootfn=NULL,
+sim.default <- function(
+                        obj,
+                        x = NULL,
+                        x1 = NULL,
+                        y = NULL,
+                        num = 1000,
+                        bootstrap = FALSE,
+                        bootfn = NULL,
                         cond.data = NULL,
-                        ...) {
-  # error-catching
-  if (!is.null(bootfn) || is.logical(bootstrap) && bootstrap)
-    warning("bootstrapping is not yet implemented")
-
+                        ...
+                        ) {
+  # Stop on unimplemented features
   if (!is.null(cond.data))
     warning("conditions are not yet supported")
 
@@ -46,20 +48,46 @@ sim.default <- function(obj,
     zelig2 <- get(paste("zelig2", obj$name, sep=""))
     envir <- environment(zelig2)
 
+    # Produce a warning if the post-hook defined cannot be found
     if (!exists(post.hook, mode="function", envir=envir))
       warning("the hook '", post.hook, "' cannot be found")
     
+    # Otherwise, business as usual. Extract the hook and apply it to the zelig
+    # object. Note that a post-hook always has the arguments:
+    #   obj, x, x1, bootstrap, bootfn, param
     else {
+      # Retrieve the hook, since it exists
       hook <- get(post.hook, envir=envir)
 
-      param <- if (bootstrap) {
-        warning("bootstrap does not currently support hook functions")
+      # Assign the param object. In the case of bootstrapping, the param object
+      # might not have any meaning.
+      param <- if (bootstrap)
         param
-      }
-      else {
+
+      # Otherwise apply the hook and return it as the parameters
+      else
         hook(obj, x, x1, bootstrap, bootfn, param=param)
-      }
     }
+
+  }
+
+  # Get default boot-strapping function if boot is enabled and no boot-function
+  # is specified
+  if (bootstrap && missing(bootfn))
+    bootfn <- default.boot.function
+
+  # Boot-strapping!!
+  if (!missing(bootfn) && !is.null(bootfn)) {
+
+    # Construct a model.frame object
+    TERMS <- terms(obj)
+    DATA <- obj$data
+
+    # Create the actual object
+    MF <- model.frame(TERMS, DATA)
+
+    #
+    boot(DATA, bootfn, R = num, object = obj, ...)
 
   }
   
@@ -103,8 +131,8 @@ sim.default <- function(obj,
     sim.class <- "MI.sim"
 
   class(s) <- c(sim.class,
-                obj$name,
                 paste("sim", obj$name, sep="."),
+                obj$name,
                 "sim"
                 )
 
