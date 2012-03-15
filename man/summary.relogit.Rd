@@ -1,6 +1,6 @@
 \name{summary.Relogit}
 \alias{summary.Relogit}
-\title{Summary for ``relogit'' Fitted Model}
+\title{Summary for ``Relogit'' Fitted Model}
 \usage{
   summary.Relogit(object, ...)
 }

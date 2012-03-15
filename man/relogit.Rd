@@ -19,9 +19,9 @@
   \item{...}{???}
 }
 \value{
-  a ``Relogit'' ``glm'' object
+  a ``relogit'' ``glm'' object
 }
 \description{
-  Fits a rare-event (``Relogit'') model.
+  Fits a rare-event (``relogit'') model.
 }
 

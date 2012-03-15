@@ -128,8 +128,13 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # ote
   dat <- tryCatch(as.data.frame(mod), error = function (e) NA)
 
+  #
   if (all(!is.na(mod)))
     rownames(mod) <- NULL
+
+  #
+
+
 
   # This space here should be reserved for manipulating interaction variables
   #

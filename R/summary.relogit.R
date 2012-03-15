@@ -1,4 +1,4 @@
-#' Summary for ``relogit'' Fitted Model
+#' Summary for ``Relogit'' Fitted Model
 #'
 #' Summarize important components of the ``relogit'' model
 #' @S3method summary Relogit

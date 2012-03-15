@@ -1,13 +1,13 @@
 #' Fit a rare-event logistic model in Zelig
 #' 
-#' Fits a rare-event (``Relogit'') model.
+#' Fits a rare-event (``relogit'') model.
 #' @param formula a formula object
 #' @param data ...
 #' @param tau ...
 #' @param bias.correct ...
 #' @param case.control ...
 #' @param ... ???
-#' @return a ``Relogit'' ``glm'' object
+#' @return a ``relogit'' ``glm'' object
 #' @export
 relogit <- function(
                     formula,

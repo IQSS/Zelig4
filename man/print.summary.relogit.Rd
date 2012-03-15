@@ -6,7 +6,8 @@
     digits = max(3, getOption("digits") - 3), ...)
 }
 \arguments{
-  \item{x}{...}
+  \item{x}{an ``relogit.summary'' object produced by the
+  ``summary'' method.}
 
   \item{digits}{...}
 }
@@ -14,6 +15,6 @@
   x (invisibly)
 }
 \description{
-  ...
+  Prints the
 }
 
