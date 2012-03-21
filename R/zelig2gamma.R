@@ -9,6 +9,7 @@
 zelig2gamma <- function(formula, ..., data)
   list(
        .function = "glm",
+       .hook = "robust.glm.hook",
 
        formula = formula,
        family  = Gamma,

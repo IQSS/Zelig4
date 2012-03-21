@@ -10,6 +10,7 @@
 zelig2normal <- function(formula, weights=NULL, ..., data)
   list(
        .function = "glm",
+       .hook = "robust.glm.hook",
 
        formula = formula,
        weights = weights,

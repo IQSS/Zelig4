@@ -10,6 +10,8 @@
 zelig2negbinom <- function(formula, weights=NULL, ..., data)
   list(
        .function = "glm.nb",
+       .hook = "robust.glm.hook",
+
        weights = weights,
        formula = formula,
        data    = data

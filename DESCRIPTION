@@ -25,7 +25,8 @@ Depends:
     R (>= 2.14),
     MASS,
     survival,
-    methods
+    methods,
+    sandwich
 Suggests:
     mvtnorm
 Collate:
@@ -157,3 +158,7 @@ Collate:
     'summary.relogit.R'
     'print.summary.relogit.R'
     'print.summary.relogit2.R'
+    'print.summary.glm.robust.R'
+    'summary.glm.robust.R'
+    'vcov.glm.robust.R'
+    'robust.glm.hook.R'
