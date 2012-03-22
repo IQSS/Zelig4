@@ -149,7 +149,6 @@ Collate:
     'bootfn.default.R'
     'zelig2relogit.R'
     'relogit.R'
-    'param.relogit.r'
     'qi.relogit.R'
     'names.relogit.R'
     'plot.zelig.relogit.R'
@@ -162,3 +161,4 @@ Collate:
     'summary.glm.robust.R'
     'vcov.glm.robust.R'
     'robust.glm.hook.R'
+    'paramrelogit.R'
