@@ -37,10 +37,13 @@ sim.default <- function(
   if (!is.null(cond.data))
     warning("conditions are not yet supported")
 
-  # parameters
-  param <- as.parameters(param(obj, num=num), num=num)
+  # Simulate Parameters
+  param <- param(obj, num=num)
 
-  # define the pre-sim hook name
+  # Cast list into a "parameters" object
+  param <- as.parameters(param)
+
+  # Define the pre-sim hook name
   post.hook <- obj$zc$.post
 
   # apply the hook if it exists
@@ -92,7 +95,7 @@ sim.default <- function(
   }
   
 
-  # compute quantities of interest
+  # Compute quantities of interest
   res.qi <- qi(obj, x=x, x1=x1, y=y, param=param, num=num)
   
   # Cast as a "qi" object if it is not one
