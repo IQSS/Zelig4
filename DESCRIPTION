@@ -161,4 +161,4 @@ Collate:
     'summary.glm.robust.R'
     'vcov.glm.robust.R'
     'robust.glm.hook.R'
-    'paramrelogit.R'
+    'param.relogit.R'
