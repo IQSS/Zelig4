@@ -34,7 +34,7 @@ plot.sim <- function(x, xlab = "", ...) {
   else {
 
     panels <- matrix(c(1:5, 5), ncol=2, byrow = TRUE)
-    palette <- c('red', 'navy', 'red', 'navy', 'black')
+    palette <- c('red', 'red', 'navy', 'navy', 'black')
 
     # the plotting device:
     #

@@ -22,11 +22,24 @@ qi.relogit <- qi.logit
 #' @return a param
 qi.relogit2 <- function (object, simpar, x, x1 = NULL, y = NULL) {
   num <- nrow(simpar$par0)
-  tmp0 <- object$lower.estimate
-  tmp1 <- object$upper.estimate
+  tmp0 <- object$result$lower.estimate
+  tmp1 <- object$result$upper.estimate
   
+  message("VARIABLES [[[[")
+
+  #print(object)
+  print(simpar)
+  print(simpar$par0)
+  print(simpar$par1)
+
+  message("]]]]")
+  message("{{")
+
   low <- qi.relogit(tmp0, simpar$par0, x, x1)
+  message("--")
   up <- qi.relogit(tmp1, simpar$par1, x, x1)
+  message("}}")
+
   PP <- PR <- array(NA, dim = c(num, 2, nrow(x)),
                     dimnames = list(NULL, c("Lower Bound", "Upper Bound"),
                       rownames(x)))
@@ -43,8 +56,8 @@ qi.relogit2 <- function (object, simpar, x, x1 = NULL, y = NULL) {
 
     sim01 <- qi.glm(tmp0, simpar$par0, x = x1, x1 = NULL)
     sim11 <- qi.glm(tmp1, simpar$par1, x = x1, x1 = NULL)
-    tau0 <- object$lower.estimate$tau
-    tau1 <- object$upper.estimate$tau
+    tau0 <- object$result$lower.estimate$tau
+    tau1 <- object$result$upper.estimate$tau
     P01 <- as.matrix(sim01$qi$ev)
     P11 <- as.matrix(sim11$qi$ev)
     OR <- (P10/(1-P10)) / (P00/(1-P00))

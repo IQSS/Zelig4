@@ -6,12 +6,6 @@
 #' @param ... other parameters
 #' @return a ``summary.relogit'' object
 summary.Relogit <- function(object, ...) {
-
-  print(class(object))
-  message("!!!!!!!!!!~~~~~~")
-  message("!!!!!!!!!!~~~~~~")
-  message("!!!!!!!!!!~~~~~~")
-
   dta <- model.matrix(terms(object), data=model.frame(object))
   class(object) <- class(object)[2]
   res <- summary(object, ...)

@@ -22,35 +22,37 @@ param.relogit <- function (object, num, ...) {
 #' @param x ideally we should be able to remove this parameter
 #' @return ...
 param.relogit2 <- function (object, num, x, ...) {
-  message("RELOGIT 2!!!!!!!!!")
-  message("RELOGIT 2!!!!!!!!!")
-  message("RELOGIT 2!!!!!!!!!")
-  message("RELOGIT 2!!!!!!!!!")
-
-  print(class(object$result))
+  stop("Currently zelig does not support relogit models containing 2 ",
+       "tau parameters")
 
   pping <- function(tmp0, tmp1, num, bootstrap, x) {
 
-    message("{{{{")
     par0 <- param.relogit(tmp0, num=num, x=x, bootstrap=bootstrap)
     par1 <- param.relogit(tmp1, num=num, x=x, bootstrap=bootstrap)
-    message("}}}")
 
-    P00 <- as.matrix(qi.relogit2(tmp0, par0, x=x)$qi$ev)
-    P10 <- as.matrix(qi.relogit2(tmp1, par1, x=x)$qi$ev)
+    message("P00")
+    P00 <- qi.relogit(tmp0, par0, x=x)
+
+    q()
+    P00 <- as.matrix(qi.relogit(tmp0, param = par0, x=x)$qi$ev)
+    message("P01")
+    P10 <- as.matrix(qi.relogit(tmp1, param = par1, x=x)$qi$ev)
 
     test <- P00[,1] < P10[,1]
     par0 <- as.matrix(par0[test,])
     par1 <- as.matrix(par1[test,])
     list(par0 = par0, par1 = par1)
   }
-  tmp0 <- object$result$lower.estimate
-  tmp1 <- object$result$upper.estimate
+  tmp0 <- tmp1 <- object
+
+  tmp0$result <- object$result$lower.estimate
+  tmp1$result <- object$result$upper.estimate
+
   tmp <- pping(tmp0, tmp1, num = num, bootstrap=bootstrap, x=x)
+
   par0 <- tmp$par0
   par1 <- tmp$par1
 
-  message(">>>>>>>")
 
   while (nrow(par0) < num) {
     tmp <- pping(tmp0, tmp1, num=num, bootstrap=bootstrap, x=x)
