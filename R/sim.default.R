@@ -95,14 +95,9 @@ sim.default <- function(
     # bootstrapped values (so sick)
     param$coefficients <- res$t
 
-
-    print(names(obj))
-    q()
-
     # Name the parameters appropriately
     colnames(param$coefficients) <- names(res$t0)
   }
-
 
   # Compute quantities of interest
   res.qi <- qi(obj, x=x, x1=x1, y=y, param=param, num=num)
@@ -113,7 +108,7 @@ sim.default <- function(
   # Assign class
   class(res.qi) <- c(obj$name, class(res.qi))
 
-  # this is kludge (for now)
+  # This is kludge (for now)
   # This can be removed as of 4-27-2011
   if (inherits(obj, "MI"))
     class(res.qi) <- c("MI", class(res.qi))
