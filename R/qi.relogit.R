@@ -1,6 +1,6 @@
 #' simulate quantities of interest for the zelig ``relogit'' model
 #'
-#' @s3method qi relogit
+#' @S3method qi relogit
 #' @param obj a zelig object, containing the fitted ``relogit'' model
 #' @param x a ``setx'' object
 #' @param x1 a ``setx'' object

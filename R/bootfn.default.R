@@ -9,31 +9,21 @@
 #' @param object the fitted model object
 #' @return a list of paramters
 bootfn.default <- function(data, i, object) {
-
-  # Extract only the 
+  # Get a random sample of the data set
   d <- data[i,]
 
-  # Change the data.frame...
-  object$call$data <- d
+  # Extract the call object
+  .call <- object$call
 
-  # Get number of simulations? This seems circuitous
-  l <- length(coef(param(object, bootstrap = TRUE)))
-  l1 <- length(coef(param(fit, bootstrap = TRUE)))
+  # Replace the data frame with an appropriate one
+  .call$data <- d
 
-  # Re-fit the data after changing the data.frame. This could fail, since how
-  # can you fit data with so few points? It doesn't make sense mathematicaly
-  fit <- eval(object$call, sys.parent())
+  # Fit the model
+  fit <- eval(.call, sys.parent())
+
+  # Get the appropriate boot function
+
 
   #
-  while (l > l1) {
-    object$call$data <- data[sample(nrow(data), replace=TRUE),]
-    fit <- eval(object$call, sys.parent())
-
-    #
-    l1 <- length(coef(param(fit, bootstrap = TRUE)))
-  }
-
-  # Invoke the bootstrap method
-  boot(fit, bootstrap = TRUE)
+  coef(fit)
 }
-

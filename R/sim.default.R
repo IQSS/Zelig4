@@ -41,7 +41,7 @@ sim.default <- function(
   param <- param(obj, num=num)
 
   # Cast list into a "parameters" object
-  param <- as.parameters(param)
+  param <- as.parameters(param, num)
 
   # Define the pre-sim hook name
   post.hook <- obj$zc$.post
@@ -71,29 +71,38 @@ sim.default <- function(
       else
         hook(obj, x, x1, bootstrap, bootfn, param=param)
     }
-
   }
 
   # Get default boot-strapping function if boot is enabled and no boot-function
   # is specified
   if (bootstrap && missing(bootfn))
-    bootfn <- default.boot.function
+    bootfn <- bootfn.default
 
   # Boot-strapping!!
   if (!missing(bootfn) && !is.null(bootfn)) {
 
-    # Construct a model.frame object
-    TERMS <- terms(obj)
-    DATA <- obj$data
+    # Get the appropriate 
+    d <- obj$data
+    d <- d[complete.cases(d), ]
 
-    # Create the actual object
-    MF <- model.frame(TERMS, DATA)
+    # Bootstrap?
+    res <- boot(obj$data, bootfn, R = num, object = obj)
 
-    #
-    boot(DATA, bootfn, R = num, object = obj, ...)
+    # Copy the param object that was made earlier via ``param'' method
+    res.param <- param
 
+    # Overwrite the parameters were produced iby the ``param'' method with the
+    # bootstrapped values (so sick)
+    param$coefficients <- res$t
+
+
+    print(names(obj))
+    q()
+
+    # Name the parameters appropriately
+    colnames(param$coefficients) <- names(res$t0)
   }
-  
+
 
   # Compute quantities of interest
   res.qi <- qi(obj, x=x, x1=x1, y=y, param=param, num=num)

@@ -12,12 +12,13 @@
 #'   interest with their simulations
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 qi.gamma <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
-  # get parameters
+  # Get parameters
   shape <- gamma.shape(obj)
   alpha <- rnorm(num, mean = shape$alpha, sd = shape$SE)
   coef <- coef(param)
 
-  # compute eta
+
+  # Compute eta
   eta <- coef %*% t(x)
 
   # or do this: get the inverse function

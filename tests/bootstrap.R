@@ -2,19 +2,17 @@ library(Zelig)
 
 data(coalition)
 
-# Fit statistical model
 z.out <- zelig(duration ~ fract + numst2 + crisis,
                model = "gamma", 
-               data = coalition,
-               cite = FALSE
+               data = coalition
                )
 
-# Set explanatory variables
 x.low <- setx(z.out, fract=300, numst2 = 0, crisis=200)
 x.high <- setx(z.out, fract=300, numst2 = 1, crisis=200)
 
-# Simulate values
-s.out <- sim(z.out, x = x.low, x1 = x.high, num = 1000, bootstrap = T)
+## Simulating draws using bootstrap method.
+s.out <- sim(z.out, x = x.low, x1 = x.high, num = 10, bootstrap = TRUE)
 
-# Display the summary data
+##  Viewing the simulated quantities of interest, for every
+##  observation:
 summary(s.out)

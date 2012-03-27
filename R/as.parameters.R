@@ -37,7 +37,7 @@ as.parameters <- function(params, ...)
 #' @seealso as.parameters
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.parameters.list <- function(params, num=NULL, ...) {
-  #
+ #
   coefficients <- if ("simulations" %in% names(params))
     params$simulations
   else if (num < length(params))
@@ -45,12 +45,11 @@ as.parameters.list <- function(params, num=NULL, ...) {
   else
     params[[1]]
 
-  # 
+  # Extract alpha parameters from Zelig
   alpha <- if ("alpha" %in% names(params))
     params$alpha
   else if (num < length(params))
     tail(params, -num)
-
 
   # link function
   link <- if (!is.null(params$link))
@@ -61,9 +60,14 @@ as.parameters.list <- function(params, num=NULL, ...) {
     params$linkinv
 
   # family object, has both a link and link-inverse
-  fam <- params$fam
+  fam <- if (!is.null(params$fam))
+    params$fam
+  else if (!is.null(params$family))
+    params$family
+  else
+    NULL
 
-  # return
+  # Return
   parameters(coefficients, alpha, fam=fam, link=link, linkinv=linkinv)
 }
 

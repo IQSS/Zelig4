@@ -126,6 +126,12 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     remove <- c("model", "by", "cite", "...")
 
     # construct the call object
+    zelig.call <- call("zelig.call", as.name("zclist"), as.name("remove"))
+    zelig.env <- new.env()
+    assign("zclist", zclist, zelig.env)
+    assign("remove", remove, zelig.env)
+
+
     res.call <- zelig.call(Call, zclist, remove)
     new.call <- res.call$call
     env <- res.call$envir
@@ -147,18 +153,16 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # Determine whether this is an S4 object
     old.style.oop <- ! isS4(new.res)
 
-    # Create an appropriate object
-    obj <- list(
-                name  = model,
-                formula = formula(new.res),
-                label = label,
-                result  = new.res,
-                env  = env,
-                call = new.call,
-                data = d.f,
-                S4   = ! old.style.oop
-                )
-    class(obj) <- c('zelig', model)
+
+    # This is the only "obj" assignment that matters
+    obj <- makeZeligObject(new.res,
+                           model,
+                           new.call, match.call(),
+                           data, label,
+                           env
+                           )
+
+    # Specify the appropriate class
 
     # Attach shared environment as an attribtute
     attr(obj, 'state') <- state
@@ -191,6 +195,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   assign('methods', methods.env, state)
   assign('model', model, state)
 
+
+
+
   # The below line should probably remain commented out
   # assign('mi', m, state)
 
@@ -208,4 +215,66 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   }
 
   object
+}
+
+
+
+
+
+#' Make an Individual Zelig Object
+#'
+#' Returns a ``zelig'' object with the proper specifications
+#' @param object a fitted statistical model
+#' @param model a character-string specifying the name of the model
+#' @param call The call that produced the fitted model
+#' @param zelig_call The call made to the original zelig function
+#' @param data the data.frame used to fit the model
+#' @param label a character-string or symbol used as a human-readable label for
+#' the data-set
+#' @param env an environment variable that contains all variables to evaluate
+#' the call ``zelig_call''
+#' @return ....
+makeZeligObject <- function (object,
+                             model,
+                             call,
+                             zelig_call,
+                             data,
+                             label,
+                             env
+                             ) {
+  # This is a set of variables that will be visible to the following methods:
+  # param, bootstrap, qi
+  implied.variables <- new.env()
+
+  # The fitted model
+  assign(".fitted", object, implied.variables)
+
+  # The name of the model
+  assign(".model", model, implied.variables)
+
+  # The call to the model-fitting function
+  assign(".call", call, implied.variables)
+
+  # The environment used to evaluate the model-fitting functino
+  assign(".env", env, implied.variables)
+
+  # Create list-object
+  self <- list(
+               result = object,
+               formula = formula(object),
+               zelig_call = zelig_call,
+               name  = model,
+               label = label,
+               env  = env,
+               call = call,
+               data = data,
+               S4   = isS4(object),
+               enclosure = implied.variables
+               )
+
+  # Specify as a ``zelig'' object
+  class(self) <- c("zelig", model)
+
+  # Return 
+  self
 }

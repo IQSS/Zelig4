@@ -16,7 +16,8 @@
   a list to be cast as a `parameters' object
 }
 \description{
-  param method for the `gamma' Zelig model
+  Return parameter estimates for the ``gamma'' GLM in
+  Zelig.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

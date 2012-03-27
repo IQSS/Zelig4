@@ -12,10 +12,12 @@
 #' @return a `parameters' object
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-parameters <- function(simulations, alpha,
+parameters <- function(simulations,
+                       alpha,
                        fam=NULL,
                        link=NULL,
-                       linkinv=NULL)
+                       linkinv=NULL
+                       )
 {
   if (is.function(fam))
     fam <- fam()
@@ -38,7 +40,7 @@ parameters <- function(simulations, alpha,
     linkinv <- .NumInverse(link)
   }
 
-  # construct object
+  # Construct object
   p <- list(coefficients = simulations,
             alpha = alpha,
             link = link,

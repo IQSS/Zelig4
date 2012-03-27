@@ -1,9 +1,8 @@
-\name{qi.relogit}
-\alias{qi.relogit}
+\name{qi.relogit2}
+\alias{qi.relogit2}
 \title{simulate quantities of interest for the zelig ``relogit'' model}
 \usage{
-  qi.relogit(obj, x = NULL, x1 = NULL, y = NULL,
-    num = 1000, param = NULL)
+  qi.relogit2(object, simpar, x, x1 = NULL, y = NULL)
 }
 \arguments{
   \item{obj}{a zelig object, containing the fitted

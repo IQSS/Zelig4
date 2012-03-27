@@ -26,7 +26,8 @@ Depends:
     MASS,
     survival,
     methods,
-    sandwich
+    sandwich,
+    boot
 Suggests:
     mvtnorm
 Collate:
@@ -145,7 +146,6 @@ Collate:
     'zzz.R'
     'get.package.R'
     'model.warnings.R'
-    'boot.R'
     'bootfn.default.R'
     'zelig2relogit.R'
     'relogit.R'
@@ -163,3 +163,5 @@ Collate:
     'robust.glm.hook.R'
     'param.relogit.R'
     'sim.relogit.R'
+    'bootstrap.gamma.R'
+    'bootstrap.R'
