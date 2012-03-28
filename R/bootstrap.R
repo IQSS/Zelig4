@@ -10,26 +10,22 @@
 #' @return a list containing information concerning link, link-inverses, etc.
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export
-bootstrap <- function (obj, num, ...) {
+bootstrap <- function (obj, ...) {
   UseMethod("bootstrap")
 }
 
-# #' Produce Boot-strapped Parameters for a Statistical Model
-# #'
-# #' ...
-# #' @param obj 1
-# #' @param num an integer specifying the number of simulations to produce
-# #' @param ...
-# #' @return a list with the ``link'', ``linkinv'' and ``family'' slots set
-# #' @S3method boot default
-# #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-# boot.default <- function (obj, num, ...) {
-# 
-#   coef <- coef(obj)
-#   family <- obj$family
-#   alpha <- NULL
-# 
-# 
-#   list(
-#        )
-# }
+#' Produce Boot-strapped Parameters for a Statistical Model
+#'
+#' ...
+#' @param obj 1
+#' @param num an integer specifying the number of simulations to produce
+#' @param ...
+#' @return a list with the ``link'', ``linkinv'' and ``family'' slots set
+#' @S3method bootstrap default
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+bootstrap.default <- function (obj, num, ...) {
+
+  list(
+       beta = coef(obj)
+       )
+}

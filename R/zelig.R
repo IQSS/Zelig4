@@ -258,18 +258,19 @@ makeZeligObject <- function (object,
   # The environment used to evaluate the model-fitting functino
   assign(".env", env, implied.variables)
 
+
   # Create list-object
   self <- list(
                result = object,
                formula = formula(object),
-               zelig_call = zelig_call,
+               zelig.call = zelig_call,
                name  = model,
                label = label,
                env  = env,
                call = call,
                data = data,
                S4   = isS4(object),
-               enclosure = implied.variables
+               method.env = implied.variables
                )
 
   # Specify as a ``zelig'' object

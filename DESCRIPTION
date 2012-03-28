@@ -165,3 +165,4 @@ Collate:
     'sim.relogit.R'
     'bootstrap.gamma.R'
     'bootstrap.R'
+    'attach.env.R'

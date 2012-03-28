@@ -2,7 +2,7 @@
 \alias{bootfn.default}
 \title{Default Boot-strapping procedure}
 \usage{
-  bootfn.default(data, i, object)
+  bootfn.default(data, i, object, bootstrapfn = NULL, ...)
 }
 \arguments{
   \item{data}{a data.frame}
@@ -12,6 +12,9 @@
   procedure.}
 
   \item{object}{the fitted model object}
+
+  \item{bootstrapfn}{a function used to bootstrap the
+  object}
 }
 \value{
   a list of paramters

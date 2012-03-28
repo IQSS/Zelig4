@@ -6,7 +6,7 @@ data(coalition)
 z.out <- zelig(duration ~ fract + numst2 + crisis,
                model = "gamma", 
                data = coalition,
-               cite = FALSE
+              cite = FALSE
                )
 
 # Set explanatory variables

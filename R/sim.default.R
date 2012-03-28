@@ -85,18 +85,53 @@ sim.default <- function(
     d <- obj$data
     d <- d[complete.cases(d), ]
 
-    # Bootstrap?
-    res <- boot(obj$data, bootfn, R = num, object = obj)
+    # Add several private variables to bootfn:
+    #   .fitted : a fitted model object
+    #   .data : the data-set used to fit the original model
+    #   .call : the call used to fit the original model
+    #   .env : the environment in which the .call variable should/can be
+    #          evaluated
+    bootfn <- attach.env(bootfn, obj$method.env)
 
+    # Bootstrapfn
+    bootstrapfn <- getS3method("bootstrap", obj$name, TRUE)
+
+    # If is.null then we just get the default bootstrap fn, which is merely to
+    # simulate the systematic paramaters
+    if (is.null(bootstrapfn))
+      bootstrapfn <- Zelig:::bootstrap.default
+
+    # Attach the appropriate environment to the function
+    bootstrapfn <- attach.env(bootstrapfn)
+
+    # Get a sample, so we know how to re-size the result.
+    # Note: This "example" object will be used at the end of this if-clause to
+    # build an object similar in structure to that of "bootstrapfn(obj)"
+    example <- bootstrapfn(obj)
+    example <- as.bootvector(example)
+
+    # Bootstrap using a function with parameters: data, i, object
+    # Where data is a data.frame, i is an vector of integers used to sample the
+    # data.frame, and object is a fitted model object.
+    res <- boot(d, bootfn, num, object = obj$result, bootstrapfn = bootstrapfn)
+    
     # Copy the param object that was made earlier via ``param'' method
     res.param <- param
 
-    # Overwrite the parameters were produced iby the ``param'' method with the
-    # bootstrapped values (so sick)
-    param$coefficients <- res$t
+    # Reverse-construct a bootlist object from this
+    bl <- as.bootlist(res$t, example$lengths, example$names)
 
-    # Name the parameters appropriately
-    colnames(param$coefficients) <- names(res$t0)
+    # Replace slots corresponding to "alpha" and "beta" on the "param" object
+    # print(param$coefficient)
+    # print(apply(param$coefficient, 2, sd))
+    # print(apply(param$coefficient, 2, mean))
+
+    # param$coefficients <- bl$beta
+    # param$alpha <- bl$alpha
+
+    # print(param$coefficient)
+    # print(apply(param$coefficient, 2, sd))
+    # print(apply(param$coefficient, 2, mean))
   }
 
   # Compute quantities of interest

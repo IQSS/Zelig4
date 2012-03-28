@@ -9,6 +9,9 @@
 #' typically ignored, but is included for further expansion.
 #' @return a list containing information concerning link, link-inverses, etc.
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-bootstrap.gamma <- function (obj, num=200, ...) {
-  coef(obj)
+bootstrap.gamma <- function (obj, ...) {
+  list(
+       alpha = gamma.shape(obj)$alpha,
+       beta = coef(obj)
+       )
 }

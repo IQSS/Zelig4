@@ -2,7 +2,7 @@
 \alias{bootstrap}
 \title{Generic Method for ``bootstrap''}
 \usage{
-  bootstrap(obj, num, ...)
+  bootstrap(obj, ...)
 }
 \arguments{
   \item{obj}{a ``zelig'' object that will be used to
