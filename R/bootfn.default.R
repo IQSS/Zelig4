@@ -36,11 +36,8 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, ...) {
   # Return bootstrap results
   res <- bootstrapfn(fit)
 
-  # Return bootstrap result as vector
-  res <- as.bootvector(res)
-
   # Return vectorized bootstrap simulation to "boot" function
-  res$vector
+  as.bootvector(res)$vector
 }
 
 #' Convert Boot Object to a Vector
@@ -65,7 +62,7 @@ as.bootvector <- function (obj) {
 
   # Error-checking
   if (!(is.vector(a) || is.null(a)))
-    stop('The "alpha" slot of "obj" must be a vector.')
+    stop('The "alpha" slot of "obj" must be a vector or NULL.')
 
   if (!is.vector(b))
     stop('The "beta" slot of "obj" must be a vector.')
@@ -96,9 +93,11 @@ as.bootvector <- function (obj) {
 as.bootlist <- function (bootstraps, lengths, names) {
 
   # Error-checking. "bootstraps" and "lengths" must:
-  #  1. Both be vectors
-  #  2. Must be the same length
-  if (!is.matrix(bootstraps))
+  #  1. "bootstraps" must be a matrix && have at least 1 value
+  #  2. "lengths" must be a vector
+  #  3. The sum of all the lengths must perfectly add up to the number of
+  #     columns in bootstraps
+  if (!is.matrix(bootstraps) && ncol(bootstraps) > 0 && nrow(bootstraps) > 0)
     stop('The parameter "bootstraps" must be a matrix')
 
   if (!is.vector(lengths))
@@ -109,36 +108,128 @@ as.bootlist <- function (bootstraps, lengths, names) {
          'the same length.'
          )
 
-  # Actual work begins here. This could be made more general, but if there's
-  # more info besides "alpha" and "beta", it's not very much like a bootstrap...
 
-  # Note that to make sense of the below, it has to be understood that the
-  # canonical form of these bootstrapped values is:
-  # (beta, alpha)
-  # where beta is several columns of systematic parameters and
-  # alpha is several columns of ancillary parameters
-  a <- b <- NULL
-
+  # If beta is 0-sized, then we should ignore it
   if (lengths[["beta"]] > 0) {
-    # Subset the systematic parameter bootstraps according to their size
+    # Extract the "beta" portion of "bootstraps". These values should represent
+    # the systematic parameters
     b <- bootstraps[ , 1:lengths[["beta"]] ]
 
     # Change the column names of the system's parameter (beta) simulations
-    colnames(b) <- names$beta
+    b <- name.object(b, names$beta)
   }
 
   # Note that 1 + 1:2 is 2:3, so that this statement offsets subsetting by the
   # length of "a". 
   if (lengths[["alpha"]] > 0) {
-    # Subset the ancillary parameter bootsraps to their size (and offset)
+    # Extract several columns from "bootstraps". These values should represent
+    # the model's ancillary parameters
     a <- bootstraps[ , lengths[["beta"]] + 1:lengths[["alpha"]] ]
 
     # Change the column names of the ancillary parameter (alpha) simulations
-    colnames(a) <- names$alpha
+    a <- name.object(a, names$alpha)
   }
+
+  message("!!!!!")
+  print(a)
+  print(b)
+  q()
 
 
 
   # Return the appropriate
   list(alpha = a, beta = b)
+}
+
+#' Name Elements of an Object
+#'
+#' xxx
+#' @note ...
+#' @param object a vector or matrix
+#' @param names a character-vector specifying names
+#' @return the original object, with a "colnames" or "names" equal to the
+#' parameter "names". If "names" is larger than "obj", the "names" parameter
+#' is truncated appropriately. If it is smaller, then the latter part of "obj"
+#' is replaced with a numbered generic column name
+name.object <- function (obj, names) {
+
+  # Handle the special case, which shouldn't really happen...
+  if (is.null(names)) {
+    if (is.matrix(obj))
+      colnames(obj) <- NULL
+    else if (is.vector(obj))
+      names(obj) <- NULL
+    return(obj)
+  }
+
+  # Get the length of names
+  names.len <- length(names)
+
+  # Get the 'length' of the object, regardless of whether it is a vector or
+  # matrix. Note that in our case, length is equivalient to "ncol" if the
+  # object is a matrix
+  obj.len <- if (is.matrix(obj))
+    ncol(obj)
+  else if (is.vector(obj))
+    length(obj)
+  else {
+    # Warn the user. This might be necessary, but it helps debug for
+    # developers. Ideally this case never crops up in well-made Zelig models
+    warning('"name.object" ignores objects that are not matrices or vectors')
+
+    # Bail out of the function
+    return(obj)
+  }
+
+  # Ensure that names is the exact length of "obj" by
+  if (names.len < obj.len) {
+    # Create vector equal in size to the length of the object being named
+    temp <- paste(rep("col", obj.len), 1:obj.len, sep = "")
+
+    # Replace default values (col1, col2, ... colN) with the value that
+    # *should* there in a perfect world, where there is never any glitchy code
+    temp[1:names.len] <- names
+
+    # Replace "names" with the newly constructed, appropriately size, vector
+    # of names
+    names <- temp
+  }
+
+  # Truncate the "names" parameter if it is too largit is too large
+  else if (names.len > obj.len) {
+    # Warn the user. This is probably only useful/meaningful to developers. 
+    # This case should not crop up in well made Zelig models.
+    warning('"names.object" is truncating the names parameter, because it ',
+            'is larger than "obj" the object of the function.')
+
+    # Truncate "names"
+    names <- names[1:obj.len]
+  }
+
+# Actual work begins here. This could be made more general, but if there's
+# more info besides "alpha" and "beta", it's not very much like a bootstrap...
+# In the future, we might need to add support for "link", "inverse link" and
+# "family" slots, but there is overlap here with the "param" method.
+
+
+# Note that to make sense of the below, it has to be understood that the
+# canonical form of these bootstrapped values is:
+# (beta, alpha)
+# where "beta" is several columns of systematic parameters and
+# "alpha" is several columns of ancillary parameters
+a <- b <- NULL
+
+
+  # ...
+  if (is.matrix(obj))
+    colnames(obj) <- names
+
+  else if (is.vector(obj))
+    names(obj) <- names
+
+  else
+    warning('"obj" must be a matrix or a vector.')
+
+  # Return modified object
+  obj
 }

@@ -6,11 +6,10 @@ data(turnout)
 z.out1 <- zelig(vote ~ age + race, model = "logit", data = turnout)
 
 x.out1 <- setx(z.out1, age = 36, race = "white")
+x.out2 <- setx(z.out1, age = 20, educate = 4)
 
-s.out1 <- sim(z.out1, x = x.out1, num = 10, bootstrap = T)
-
-summary(s.out1)
-q()
+s.out1 <- sim(z.out1, x.out1, x.out2, num = 10, bootstrap = T)
+s.out2 <- sim(z.out1, x.out1, x.out2, num = 10, bootstrap = F)
 
 summary(z.out1)
 vcov(z.out1)

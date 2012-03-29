@@ -16,7 +16,8 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   ev1 <- .compute.ev(obj, x, num, param)
   pr1 <- matrix(nrow=nrow(ev1), ncol=ncol(ev1))
 
-  
+  C <- coef(param)
+
   # init
   ev2 <- .compute.ev(obj, x1, num, param)
   pr2 <- fd <- NA
@@ -49,6 +50,7 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
 #' compute expected values
 .compute.ev <- function(obj, x=NULL, num=1000, param=NULL) {
+
   if (is.null(x))
     return(NA)
 

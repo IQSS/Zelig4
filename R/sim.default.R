@@ -114,7 +114,7 @@ sim.default <- function(
     # Where data is a data.frame, i is an vector of integers used to sample the
     # data.frame, and object is a fitted model object.
     res <- boot(d, bootfn, num, object = obj$result, bootstrapfn = bootstrapfn)
-    
+
     # Copy the param object that was made earlier via ``param'' method
     res.param <- param
 
@@ -122,16 +122,8 @@ sim.default <- function(
     bl <- as.bootlist(res$t, example$lengths, example$names)
 
     # Replace slots corresponding to "alpha" and "beta" on the "param" object
-    # print(param$coefficient)
-    # print(apply(param$coefficient, 2, sd))
-    # print(apply(param$coefficient, 2, mean))
-
-    # param$coefficients <- bl$beta
-    # param$alpha <- bl$alpha
-
-    # print(param$coefficient)
-    # print(apply(param$coefficient, 2, sd))
-    # print(apply(param$coefficient, 2, mean))
+    param$coefficients <- bl$beta
+    param$alpha <- bl$alpha
   }
 
   # Compute quantities of interest
