@@ -108,6 +108,17 @@ as.bootlist <- function (bootstraps, lengths, names) {
          'the same length.'
          )
 
+  # Actual work begins here. This could be made more general, but if there's
+  # more info besides "alpha" and "beta", it's not very much like a bootstrap...
+  # In the future, we might need to add support for "link", "inverse link" and
+  # "family" slots, but there is overlap here with the "param" method.
+
+  # Note that to make sense of the below, it has to be understood that the
+  # canonical form of these bootstrapped values is:
+  # (beta, alpha)
+  # where "beta" is several columns of systematic parameters and
+  # "alpha" is several columns of ancillary parameters
+  a <- b <- NULL
 
   # If beta is 0-sized, then we should ignore it
   if (lengths[["beta"]] > 0) {
@@ -130,27 +141,22 @@ as.bootlist <- function (bootstraps, lengths, names) {
     a <- name.object(a, names$alpha)
   }
 
-  message("!!!!!")
-  print(a)
-  print(b)
-  q()
-
-
-
   # Return the appropriate
   list(alpha = a, beta = b)
 }
 
 #' Name Elements of an Object
 #'
-#' xxx
-#' @note ...
+#' Returns an object
+#' @note This method is used internally by Zelig to name the columns and
+#' elements of matrices and vectors for simulations and bootstrapped parameters.
 #' @param object a vector or matrix
 #' @param names a character-vector specifying names
 #' @return the original object, with a "colnames" or "names" equal to the
 #' parameter "names". If "names" is larger than "obj", the "names" parameter
 #' is truncated appropriately. If it is smaller, then the latter part of "obj"
 #' is replaced with a numbered generic column name
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 name.object <- function (obj, names) {
 
   # Handle the special case, which shouldn't really happen...
@@ -206,21 +212,7 @@ name.object <- function (obj, names) {
     names <- names[1:obj.len]
   }
 
-# Actual work begins here. This could be made more general, but if there's
-# more info besides "alpha" and "beta", it's not very much like a bootstrap...
-# In the future, we might need to add support for "link", "inverse link" and
-# "family" slots, but there is overlap here with the "param" method.
-
-
-# Note that to make sense of the below, it has to be understood that the
-# canonical form of these bootstrapped values is:
-# (beta, alpha)
-# where "beta" is several columns of systematic parameters and
-# "alpha" is several columns of ancillary parameters
-a <- b <- NULL
-
-
-  # ...
+  # After all the prep work, finally name the object
   if (is.matrix(obj))
     colnames(obj) <- names
 
@@ -228,7 +220,8 @@ a <- b <- NULL
     names(obj) <- names
 
   else
-    warning('"obj" must be a matrix or a vector.')
+    warning('"obj" must be a matrix or a vector. ',
+            'Returning the "obj" untouched.')
 
   # Return modified object
   obj

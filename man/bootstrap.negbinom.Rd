@@ -1,8 +1,8 @@
-\name{bootstrap.gamma}
-\alias{bootstrap.gamma}
-\title{Bootstrap Parameters for Zelig ``gamma'' GLM}
+\name{bootstrap.negbinom}
+\alias{bootstrap.negbinom}
+\title{Bootstrap Parameters for Zelig ``negbinom'' GLM}
 \usage{
-  bootstrap.gamma(obj, ...)
+  bootstrap.negbinom(obj, ...)
 }
 \arguments{
   \item{obj}{a ``zelig'' object that will be used to
@@ -17,8 +17,8 @@
   link-inverses, etc.
 }
 \description{
-  Returns bootstrapped parameter estimates for a ``gamma''
-  GLM.
+  Returns bootstrapped parameter estimates for a
+  negative-binomial GLM.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

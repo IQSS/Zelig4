@@ -2,27 +2,28 @@
 \alias{bootstrap}
 \title{Generic Method for ``bootstrap''}
 \usage{
-  bootstrap(obj, ...)
+  bootstrap(obj)
 }
 \arguments{
-  \item{obj}{a ``zelig'' object that will be used to
-  produce boot-strapped parameters}
-
-  \item{num}{an integer specifying the number of
-  simulations to produce}
-
-  \item{...}{extra parameters to be passed to the ``boot''
-  method. These are typically ignored, but is included for
-  further expansion.}
+  \item{obj}{a fitted model object that will be used to
+  produce boot-strapped parameters. This object usually
+  inherits the class ``glm'' or ``lm'' object}
 }
 \value{
-  a list containing information concerning link,
-  link-inverses, etc.
+  a list with the ``alpha'' and ``beta'' slots set. Note
+  that ``alpha'' corresponds to ancillary parameters and
+  ``beta'' corresponds to systematic components of the
+  model
 }
 \description{
-  This mehtod is intended to be overried by statistical
+  This method is intended to be overried by statistical
   models that would like to support statistical
   bootstrapping.
+}
+\note{
+  This method has private memory storage and can reference
+  the objects: ``.fitted'', ``.data'', ``.call'', ``.env'',
+  despite having no declaration in the argument list.
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}

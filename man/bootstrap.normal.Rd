@@ -1,12 +1,15 @@
-\name{bootstrap.gamma}
-\alias{bootstrap.gamma}
-\title{Bootstrap Parameters for Zelig ``gamma'' GLM}
+\name{bootstrap.normal}
+\alias{bootstrap.normal}
+\title{Bootstrap Parameters for Zelig ``normal'' GLM}
 \usage{
-  bootstrap.gamma(obj, ...)
+  bootstrap.normal(obj, ...)
 }
 \arguments{
   \item{obj}{a ``zelig'' object that will be used to
   produce boot-strapped parameters}
+
+  \item{num}{an integer specifying the number of
+  simulations to produce}
 
   \item{...}{extra parameters to be passed to the ``boot''
   method. These are typically ignored, but is included for
@@ -17,7 +20,7 @@
   link-inverses, etc.
 }
 \description{
-  Returns bootstrapped parameter estimates for a ``gamma''
+  Returns bootstrapped parameter estimates for a Gaussian
   GLM.
 }
 \author{

@@ -166,3 +166,5 @@ Collate:
     'bootstrap.gamma.R'
     'bootstrap.R'
     'attach.env.R'
+    'bootstrap.negbinom.R'
+    'bootstrap.normal.R'
