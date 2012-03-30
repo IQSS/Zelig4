@@ -9,7 +9,4 @@ x.out <- setx(z.out)
 
 s.boot <- sim(z.out, x = x.out, num = 20, bootstrap = TRUE)
 
-summary(z.out)
-vcov(z.out)
-coef(z.out)
-plot(s.out)
+summary(s.boot)

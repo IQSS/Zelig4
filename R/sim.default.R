@@ -91,6 +91,7 @@ sim.default <- function(
     #   .call : the call used to fit the original model
     #   .env : the environment in which the .call variable should/can be
     #          evaluated
+    boot.env <- obj$method.env
     bootfn <- attach.env(bootfn, obj$method.env)
 
     # Bootstrapfn
@@ -113,7 +114,11 @@ sim.default <- function(
     # Bootstrap using a function with parameters: data, i, object
     # Where data is a data.frame, i is an vector of integers used to sample the
     # data.frame, and object is a fitted model object.
-    res <- boot(d, bootfn, num, object = obj$result, bootstrapfn = bootstrapfn)
+    res <- boot(d, bootfn, num,
+                object = obj$result,
+                bootstrapfn = bootstrapfn,
+                num = num
+                )
 
     # Copy the param object that was made earlier via ``param'' method
     res.param <- param

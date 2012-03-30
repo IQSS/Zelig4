@@ -54,8 +54,8 @@ qi.relogit2 <- function (object, simpar, x, x1 = NULL, y = NULL) {
                                       rownames(x)
                       ))
 
-    sim01 <- qi.glm(tmp0, simpar$par0, x = x1, x1 = NULL)
-    sim11 <- qi.glm(tmp1, simpar$par1, x = x1, x1 = NULL)
+    sim01 <- qi.relogit(tmp0, simpar$par0, x = x1, x1 = NULL)
+    sim11 <- qi.relogit(tmp1, simpar$par1, x = x1, x1 = NULL)
     tau0 <- object$result$lower.estimate$tau
     tau1 <- object$result$upper.estimate$tau
     P01 <- as.matrix(sim01$qi$ev)

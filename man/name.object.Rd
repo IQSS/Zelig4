@@ -17,9 +17,14 @@
   replaced with a numbered generic column name
 }
 \description{
-  xxx
+  Returns an object
 }
 \note{
-  ...
+  This method is used internally by Zelig to name the
+  columns and elements of matrices and vectors for
+  simulations and bootstrapped parameters.
+}
+\author{
+  Matt Owen \email{mowen@iq.harvard.edu}
 }
 

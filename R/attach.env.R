@@ -23,12 +23,13 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 attach.env <- function (f, env = NULL, ...) {
 
+  # Ensure that a valid environment is passed in
+  if (is.null(env))
+    env <- new.env()
+
+
   # Expand dot parameters
   dots <- list(...)
-
-  # Right now the ... parameter is not supported
-  if (length(dots) > 0)
-    warning('Dot parameters are not currently supported by this function.')
 
   # Ensure that "env" is a valid environment
   if (is.null(env))
@@ -40,12 +41,9 @@ attach.env <- function (f, env = NULL, ...) {
     env <- new.env()
   }
 
-  # Create a new environment
-  e <- new.env()
-
   # Add variables to the newly created environment
   for (key in dots)
-    assign(key, dots[[key]], e)
+    assign(key, dots[[key]], env)
 
   # Modify the default environment of the function
   environment(f) <- env

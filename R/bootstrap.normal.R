@@ -10,9 +10,10 @@
 #' @return a list containing information concerning link, link-inverses, etc.
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 bootstrap.normal <- function (obj, ...) {
+
   degrees.freedom <- obj[["df.residual"]]
   sig2 <- summary(obj$result)$dispersion
-  alpha <- sqrt(degrees.freedom * sig2 / rchisq(num, degrees.freedom))
+  alpha <- sqrt(degrees.freedom * sig2 / rchisq(1111, degrees.freedom))
 
   list(
        alpha = alpha,

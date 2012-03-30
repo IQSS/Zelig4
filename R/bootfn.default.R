@@ -10,7 +10,7 @@
 #' @param object the fitted model object
 #' @param bootstrapfn a function used to bootstrap the object
 #' @return a list of paramters
-bootfn.default <- function(data, i, object, bootstrapfn=NULL, ...) {
+bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
 
   # Get a random sample of the data set
   d <- data[i,]
@@ -34,6 +34,8 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, ...) {
     bootstrapfn <- Zelig:::bootstrap.default
 
   # Return bootstrap results
+
+  bootstrapfn <- attach.env(bootstrapfn, NULL, .num = num)
   res <- bootstrapfn(fit)
 
   # Return vectorized bootstrap simulation to "boot" function

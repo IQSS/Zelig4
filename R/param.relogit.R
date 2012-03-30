@@ -2,26 +2,26 @@
 #'
 #' Returns estimates on parameters, as well as, specifying link and
 #' inverse-link functions.
+#' @note This method merely calls ``param.logit''.
 #' @S3method param relogit
-#' @param object a zelig object containing the fitted model
+#' @param obj a zelig object containing the fitted model
 #' @param num an integer specifying the number of simulations to compute
 #' @param x ideally we should be able to remove this parameter
-#' @return ...
-param.relogit <- function (object, num, ...) {
-  param.logit(object, num, ...)
-}
+#' @return a list specifying important parameters for the ``relogit'' model
+param.relogit <- function (obj, num, ...)
+  param.logit(obj, num, ...)
 
 
 #' Estimate Parameters for the ``relogit'' Zelig Mdoel
 #'
-#' Returns estimates on parameters, as well as, specifying link and
-#' inverse-link functions.
+#' Returns estimates on parameters, as well as, specifying link and inverse-link
+#' functions.
 #' @S3method param relogit2
-#' @param object a zelig object containing the fitted model
+#' @param obj a zelig object containing the fitted model
 #' @param num an integer specifying the number of simulations to compute
 #' @param x ideally we should be able to remove this parameter
-#' @return ...
-param.relogit2 <- function (object, num, x, ...) {
+#' @return a list specifying important parameters for the ``relogit'' model
+param.relogit2 <- function (obj, num, x, ...) {
   stop("Currently zelig does not support relogit models containing 2 ",
        "tau parameters")
 

@@ -158,7 +158,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     obj <- makeZeligObject(new.res,
                            model,
                            new.call, match.call(),
-                           data, label,
+                           d.f, label,
                            env
                            )
 
@@ -257,7 +257,6 @@ makeZeligObject <- function (object,
 
   # The environment used to evaluate the model-fitting functino
   assign(".env", env, implied.variables)
-
 
   # Create list-object
   self <- list(
