@@ -21,6 +21,7 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
   zelig2$.function <- NULL
   zelig2$.hook <- NULL
   zelig2$.post <- NULL
+  zelig2$.model.matrix <- NULL
 
   # make a list of the parameters to be passed to the external model
   args <- names(formals(as.character(func)))

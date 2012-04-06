@@ -13,15 +13,33 @@
 #' @return a 'setx' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, and Olivia Lau 
 setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
-  # Expand the dots
-  dots <- list(...)
 
-  # init important objects  
-  form <- formula(obj)
+  # Warnings and errors
+  if (!missing(cond))
+    warning('"cond" is not currently supported by this version of Zelig')
 
-  # Parsed formula. This is an intermediate for used for processing
-  # design matrices, etc.
+  # Parsed formula. This is an intermediate for used for processin design
+  # matrices, etc.
   parsed.formula <- parseFormula(form, data)
+
+  # If data.frame is not explicitly set, use the one from the Zelig call
+  if (is.null(data))
+    data <- obj$data
+
+  # Create a variable to hold the values of the dot parameters
+  dots <- list()
+
+  # Get the dots as a set of expressions
+  symbolic.dots <- match.call(expand.dots = FALSE)[["..."]]
+
+  # Assign values to the dot parameters
+  for (key in names(symbolic.dots)) {
+    result <- with(data, eval(symbolic.dots[[key]]))
+    dots[[key]] <- result
+  }
+
+  # Init important objects  
+  form <- formula(obj)
 
   # Extract information about terms
   # Note: the functions 'getPredictorTerms' and 'getOutcomeTerms' are in need
@@ -29,15 +47,11 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   vars.obj <- getPredictorTerms(form)
   not.vars <- getResponseTerms(form)
 
-  # Default the environment to NULL (Global)
-  env.obj <- NULL
+  # Default the environment to the parent
+  env.obj <- parent.frame()
 
   # explanatory variables
   explan.obj <- Filter(function (x) x %in% vars.obj, names(dots))
-
-  # fix objects, if some don't come through correctly
-  if (is.null(env.obj))
-    env.obj <- parent.frame()
 
   # defaults for fn
   if (missing(fn) || !is.list(fn))
@@ -46,10 +60,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
                ordered = Median,
                other   = Mode
                )
-
-  # get data-frame
-  if (is.null(data))
-    data <- obj$data
 
   # res
   res <- list()
@@ -64,25 +74,25 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 
     m <- class(data[,key])[[1]]
 
-    # match the class-type with the correct
-    # function to call
+    # Match the class-type with the correct function to call
     if (m %in% names(fn))
-      res[[key]] <- fn[[m]](data[,key])
+      res[[key]] <- fn[[m]](data[ ,key])
 
+    # If it is a numeric, then we just evaluate it like a numeric
     else if (is.numeric(data[,key]))
-      res[[key]] <- fn$numeric(data[,key])
+      res[[key]] <- fn$numeric(data[ ,key])
 
+    # If it's ordered, then we take the median, because that's the best we got
     else if (is.ordered(data[,key]))
-      res[[key]] <- fn$ordered(data[,key])
+      res[[key]] <- fn$ordered(data[ ,key])
 
-    else {
-      res[[key]] <- fn$other(data[,key])
-    }
+    # Otherwise we take the mode, because that always kinda makes sense.
+    else
+      res[[key]] <- fn$other(data[ ,key])
   }
 
-
   # add explicitly set values
-  for (key in names(dots)) {
+  for (key in names(symbolic.dots)) {
     if (! key %in% colnames(data)) {
       warning("`", key,
               "` is not an column in the data-set, and will be ignored")
@@ -96,11 +106,10 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       dots[[key]]
   }
 
-  # make a tiny data-frame with
-  # all the necessary columns
+  # Make a tiny data-frame with all the necessary columns
   d <- data[1,]
 
-  # give the computed values to those entries
+  # Give the computed values to those entries
   for (key in names(res)) {
     val <- res[[key]]
 
@@ -128,20 +137,18 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # ote
   dat <- tryCatch(as.data.frame(mod), error = function (e) NA)
 
-  #
+  # This might not be useful
   if (all(!is.na(mod)))
     rownames(mod) <- NULL
 
-  #
-
-
-
   # This space here should be reserved for manipulating interaction variables
-  #
-  #
-  #
+  # .........................................................................
 
-  # build the setx object
+
+  # RESERVER FOR model.matrix HOOK
+  # ..............................
+
+  # Build the setx object
   sx <- list(
              name   = obj$name,
              call   = match.call(),
@@ -153,13 +160,14 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
              fn     = fn,
              cond   = cond,
              new.data = data,
-             special.parameters = list(...),
+             special.parameters = dots,
+             symbolic.parameters = symbolic.dots,
              label = obj$label,
              explan = vars.obj,
              pred   = not.vars
              )
 
-  # set class and return
+  # Set class and return
   class(sx) <- c(obj$name, "setx")
   sx
 }

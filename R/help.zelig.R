@@ -23,7 +23,7 @@ help.zelig <- function (...)  {
         helpfile <- try(system.file("Meta", "vignette.rds", package="Zelig"))
         
         if(helpfile!=""){
-                helpMtrx <- .readRDS(helpfile)
+                helpMtrx <- readRDS(helpfile)
                 ix <- grep("[pP][dD][fF]", colnames(helpMtrx))
                 if(length(ix)) filesPDF <- helpMtrx[,ix]
                 
@@ -43,7 +43,7 @@ help.zelig <- function (...)  {
         fileshtml <- NULL
         if(helpfile != "")
           {
-                  helpMtrx  <- .readRDS(helpfile)
+                  helpMtrx  <- readRDS(helpfile)
                   fileshtml <- helpMtrx[[2]][,"Aliases"]
                   ix <- grep("url$", fileshtml)
                   if(length(ix))
