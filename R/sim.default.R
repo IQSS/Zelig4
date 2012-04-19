@@ -114,11 +114,15 @@ sim.default <- function(
     # Bootstrap using a function with parameters: data, i, object
     # Where data is a data.frame, i is an vector of integers used to sample the
     # data.frame, and object is a fitted model object.
+    message("!!!!!!!!!!!!!!!!")
+    print(names(obj$result))
+    print(obj$result$call)
     res <- boot(d, bootfn, num,
                 object = obj$result,
                 bootstrapfn = bootstrapfn,
                 num = num
                 )
+    message(">>>>>>>>>>>>>>>>>>>>>>>")
 
     # Copy the param object that was made earlier via ``param'' method
     res.param <- param

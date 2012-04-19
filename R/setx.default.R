@@ -18,6 +18,9 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   if (!missing(cond))
     warning('"cond" is not currently supported by this version of Zelig')
 
+  # Get formula used for the call to the model
+  form <- formula(obj)
+
   # Parsed formula. This is an intermediate for used for processin design
   # matrices, etc.
   parsed.formula <- parseFormula(form, data)
@@ -37,9 +40,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     result <- with(data, eval(symbolic.dots[[key]]))
     dots[[key]] <- result
   }
-
-  # Init important objects  
-  form <- formula(obj)
 
   # Extract information about terms
   # Note: the functions 'getPredictorTerms' and 'getOutcomeTerms' are in need

@@ -41,9 +41,14 @@ attach.env <- function (f, env = NULL, ...) {
     env <- new.env()
   }
 
-  # Add variables to the newly created environment
-  for (key in dots)
-    assign(key, dots[[key]], env)
+  print(length(dots))
+  print(names(dots))
+
+  if (length(dots)) {
+    # Add variables to the newly created environment
+    for (key in names(dots))
+      assign(key, dots[[key]], env)
+  }
 
   # Modify the default environment of the function
   environment(f) <- env
