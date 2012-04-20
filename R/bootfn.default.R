@@ -33,9 +33,10 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
   if (is.null(bootstrapfn))
     bootstrapfn <- Zelig:::bootstrap.default
 
-  # Return bootstrap results
-
+  # Attach the ".num" private variable
   bootstrapfn <- attach.env(bootstrapfn, NULL, .num = num)
+
+  # Get a result
   res <- bootstrapfn(fit)
 
   # Return vectorized bootstrap simulation to "boot" function

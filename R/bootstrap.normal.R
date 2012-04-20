@@ -12,8 +12,8 @@
 bootstrap.normal <- function (obj, ...) {
 
   degrees.freedom <- obj[["df.residual"]]
-  sig2 <- summary(obj$result)$dispersion
-  alpha <- sqrt(degrees.freedom * sig2 / rchisq(1111, degrees.freedom))
+  sig2 <- summary(obj)$dispersion
+  alpha <- sqrt(degrees.freedom * sig2 / rchisq(20, degrees.freedom))
 
   list(
        alpha = alpha,
