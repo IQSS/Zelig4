@@ -41,9 +41,6 @@ attach.env <- function (f, env = NULL, ...) {
     env <- new.env()
   }
 
-  print(length(dots))
-  print(names(dots))
-
   if (length(dots)) {
     # Add variables to the newly created environment
     for (key in names(dots))
