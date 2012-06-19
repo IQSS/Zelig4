@@ -6,7 +6,7 @@
 #' @S3method param relogit
 #' @param obj a zelig object containing the fitted model
 #' @param num an integer specifying the number of simulations to compute
-#' @param x ideally we should be able to remove this parameter
+#' @param ... unspecified parameters
 #' @return a list specifying important parameters for the ``relogit'' model
 param.relogit <- function (obj, num, ...)
   param.logit(obj, num, ...)
@@ -20,6 +20,7 @@ param.relogit <- function (obj, num, ...)
 #' @param obj a zelig object containing the fitted model
 #' @param num an integer specifying the number of simulations to compute
 #' @param x ideally we should be able to remove this parameter
+#' @param ... unspecified parameters
 #' @return a list specifying important parameters for the ``relogit'' model
 param.relogit2 <- function (obj, num, x, ...) {
   stop("Currently zelig does not support relogit models containing 2 ",
@@ -30,10 +31,8 @@ param.relogit2 <- function (obj, num, x, ...) {
     par0 <- param.relogit(tmp0, num=num, x=x, bootstrap=bootstrap)
     par1 <- param.relogit(tmp1, num=num, x=x, bootstrap=bootstrap)
 
-    message("P00")
     P00 <- qi.relogit(tmp0, par0, x=x)
 
-    q()
     P00 <- as.matrix(qi.relogit(tmp0, param = par0, x=x)$qi$ev)
     message("P01")
     P10 <- as.matrix(qi.relogit(tmp1, param = par1, x=x)$qi$ev)

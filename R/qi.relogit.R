@@ -4,6 +4,8 @@
 #' @param obj a zelig object, containing the fitted ``relogit'' model
 #' @param x a ``setx'' object
 #' @param x1 a ``setx'' object
+#' @param y this parameter is reserved for simulating average treatment effects,
+#' though this feature is currentlysupported by only a handful of models
 #' @param num an integer specifying the number of simulations to compute
 #' @param param a ``parameter'' obejct containing information about the link,
 #' inverse-link, and simulated parameters
@@ -16,11 +18,19 @@ qi.relogit <- qi.logit
 #' @param obj a zelig object, containing the fitted ``relogit'' model
 #' @param x a ``setx'' object
 #' @param x1 a ``setx'' object
+#' @param y this parameter is reserved for simulating average treatment effects,
+#' though this feature is currentlysupported by only a handful of models
 #' @param num an integer specifying the number of simulations to compute
-#' @param param a ``parameter'' obejct containing information about the link,
+#' @param simpar a ``parameter'' obejct containing information about the link,
 #' inverse-link, and simulated parameters
 #' @return a param
-qi.relogit2 <- function (object, simpar, x, x1 = NULL, y = NULL) {
+qi.relogit2 <- function (obj, x, x1 = NULL, y = NULL, num=1000, simpar) {
+  # Aliased, because
+  object <- obj
+
+  # This model needs work, so it will be discontinued for now
+  stop("Relogit 2 is not currently supported")
+
   num <- nrow(simpar$par0)
   tmp0 <- object$result$lower.estimate
   tmp1 <- object$result$upper.estimate

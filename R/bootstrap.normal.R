@@ -1,6 +1,7 @@
 #' Bootstrap Parameters for Zelig ``normal'' GLM
 #'
 #' Returns bootstrapped parameter estimates for a Gaussian GLM.
+#' @usage \method{bootstrap}{default}
 #' @S3method bootstrap normal
 #' @param obj a ``zelig'' object that will be used to produce boot-strapped
 #' parameters
@@ -9,7 +10,7 @@
 #' typically ignored, but is included for further expansion.
 #' @return a list containing information concerning link, link-inverses, etc.
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-bootstrap.normal <- function (obj, ...) {
+bootstrap.normal <- function (obj, num, ...) {
 
   degrees.freedom <- obj[["df.residual"]]
   sig2 <- summary(obj)$dispersion

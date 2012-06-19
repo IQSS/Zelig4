@@ -9,7 +9,10 @@
   \item{x}{an ``relogit.summary'' object produced by the
   ``summary'' method.}
 
-  \item{digits}{...}
+  \item{digits}{an integer specifying the number of digits
+  of precision to specify}
+
+  \item{...}{}
 }
 \value{
   x (invisibly)

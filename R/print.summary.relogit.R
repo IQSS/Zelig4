@@ -3,7 +3,9 @@
 #' Prints the 
 #' @S3method print summary.relogit
 #' @param x an ``relogit.summary'' object produced by the ``summary'' method.
-#' @param digits ...
+#' @param digits an integer specifying the number of digits of precision to
+#' specify
+#' @param ...
 #' @return x (invisibly)
 print.summary.relogit <- function(
                                   x,

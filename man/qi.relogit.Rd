@@ -13,6 +13,10 @@
 
   \item{x1}{a ``setx'' object}
 
+  \item{y}{this parameter is reserved for simulating
+  average treatment effects, though this feature is
+  currentlysupported by only a handful of models}
+
   \item{num}{an integer specifying the number of
   simulations to compute}
 

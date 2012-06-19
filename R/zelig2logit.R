@@ -3,6 +3,8 @@
 #' This function is exclusively for use by the `zelig' function
 #' @param formula a formula
 #' @param weights a numeric vector
+#' @param robust a boolean (logical) specifying whether robust error estimates
+#' should be used
 #' @param ... ignored parameters
 #' @param data a data.frame
 #' @return a list to be coerced into a zelig.call object

@@ -103,7 +103,7 @@ sim.default <- function(
       bootstrapfn <- Zelig:::bootstrap.default
 
     # Attach the appropriate environment to the function
-    bootstrapfn <- attach.env(bootstrapfn)
+    bootstrapfn <- attach.env(bootstrapfn, NULL)
 
     # Get a sample, so we know how to re-size the result.
     # Note: This "example" object will be used at the end of this if-clause to

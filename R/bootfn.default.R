@@ -9,6 +9,8 @@
 #' be used in the bootstrapping procedure.
 #' @param object the fitted model object
 #' @param bootstrapfn a function used to bootstrap the object
+#' @param num an integer specifying the number of samples to simulate
+#' @param ... unspecified parameters
 #' @return a list of paramters
 bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
 
@@ -91,6 +93,7 @@ as.bootvector <- function (obj) {
 #'
 #' @param bootstraps ...
 #' @param lengths ...
+#' @param names a character-vector specifying the names of the boot terms
 #' @return ...
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 as.bootlist <- function (bootstraps, lengths, names) {
@@ -153,7 +156,7 @@ as.bootlist <- function (bootstraps, lengths, names) {
 #' Returns an object
 #' @note This method is used internally by Zelig to name the columns and
 #' elements of matrices and vectors for simulations and bootstrapped parameters.
-#' @param object a vector or matrix
+#' @param obj a vector or matrix
 #' @param names a character-vector specifying names
 #' @return the original object, with a "colnames" or "names" equal to the
 #' parameter "names". If "names" is larger than "obj", the "names" parameter

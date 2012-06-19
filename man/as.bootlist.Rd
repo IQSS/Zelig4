@@ -8,6 +8,9 @@
   \item{bootstraps}{...}
 
   \item{lengths}{...}
+
+  \item{names}{a character-vector specifying the names of
+  the boot terms}
 }
 \value{
   ...

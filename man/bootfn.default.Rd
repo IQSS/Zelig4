@@ -2,7 +2,8 @@
 \alias{bootfn.default}
 \title{Default Boot-strapping procedure}
 \usage{
-  bootfn.default(data, i, object, bootstrapfn = NULL, ...)
+  bootfn.default(data, i, object, bootstrapfn = NULL, num,
+    ...)
 }
 \arguments{
   \item{data}{a data.frame}
@@ -15,6 +16,11 @@
 
   \item{bootstrapfn}{a function used to bootstrap the
   object}
+
+  \item{num}{an integer specifying the number of samples to
+  simulate}
+
+  \item{...}{unspecified parameters}
 }
 \value{
   a list of paramters
