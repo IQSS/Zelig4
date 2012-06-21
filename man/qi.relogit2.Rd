@@ -2,7 +2,8 @@
 \alias{qi.relogit2}
 \title{simulate quantities of interest for the zelig ``relogit'' model}
 \usage{
-  qi.relogit2(object, simpar, x, x1 = NULL, y = NULL)
+  qi.relogit2(obj, x, x1 = NULL, y = NULL, num = 1000,
+    param = NULL)
 }
 \arguments{
   \item{obj}{a zelig object, containing the fitted
@@ -11,6 +12,10 @@
   \item{x}{a ``setx'' object}
 
   \item{x1}{a ``setx'' object}
+
+  \item{y}{this parameter is reserved for simulating
+  average treatment effects, though this feature is
+  currentlysupported by only a handful of models}
 
   \item{num}{an integer specifying the number of
   simulations to compute}

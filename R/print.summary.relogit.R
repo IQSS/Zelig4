@@ -1,6 +1,8 @@
 #' Print Summary of a Rare-event Logistic Model
 #'
 #' Prints the 
+#' @usage
+#' \method{print}{summary.relogit}(x, digits = max(3, getOption("digits") - 3), ...)
 #' @S3method print summary.relogit
 #' @param x an ``relogit.summary'' object produced by the ``summary'' method.
 #' @param digits an integer specifying the number of digits of precision to

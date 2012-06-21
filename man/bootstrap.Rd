@@ -2,12 +2,14 @@
 \alias{bootstrap}
 \title{Generic Method for ``bootstrap''}
 \usage{
-  bootstrap(obj)
+  bootstrap(obj, ...)
 }
 \arguments{
   \item{obj}{a fitted model object that will be used to
   produce boot-strapped parameters. This object usually
   inherits the class ``glm'' or ``lm'' object}
+
+  \item{...}{unspecified parameters}
 }
 \value{
   a list with the ``alpha'' and ``beta'' slots set. Note

@@ -6,9 +6,12 @@
     digits = max(3, getOption("digits") - 3), ...)
 }
 \arguments{
-  \item{x}{...}
+  \item{x}{the object to print}
 
-  \item{digits}{...}
+  \item{digits}{an integer specifying the number of digits
+  of precision}
+
+  \item{...}{ignored parameters}
 }
 \value{
   x (invisibly)

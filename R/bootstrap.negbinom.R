@@ -1,7 +1,7 @@
 #' Bootstrap Parameters for Zelig ``negbinom'' GLM
 #'
 #' Returns bootstrapped parameter estimates for a negative-binomial GLM.
-#' @usage \method{bootstrap}{default}
+#' @usage \method{bootstrap}{default}(obj, ...)
 #' @S3method bootstrap negbinom
 #' @param obj a ``zelig'' object that will be used to produce boot-strapped
 #' parameters

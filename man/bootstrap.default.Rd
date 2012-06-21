@@ -2,11 +2,13 @@
 \alias{bootstrap.default}
 \title{Produce Boot-strapped Parameters for a Statistical Model}
 \usage{
-  bootstrap.default(obj)
+  \method{bootstrap}{default}
 }
 \arguments{
   \item{obj}{a fitted model object. This is typically of
   type ``glm'' or ``lm''}
+
+  \item{...}{unspecified parameters}
 }
 \value{
   a list with the ``alpha'' and ``beta'' slots set

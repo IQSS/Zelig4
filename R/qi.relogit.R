@@ -1,5 +1,7 @@
 #' simulate quantities of interest for the zelig ``relogit'' model
 #'
+#' @usage
+#' \method{qi}{relogit}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi relogit
 #' @param obj a zelig object, containing the fitted ``relogit'' model
 #' @param x a ``setx'' object
@@ -15,16 +17,20 @@ qi.relogit <- qi.logit
 
 #' simulate quantities of interest for the zelig ``relogit'' model
 #'
+#' @usage
+#' \method{qi}{relogit2}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @S3method qi relogit2
 #' @param obj a zelig object, containing the fitted ``relogit'' model
 #' @param x a ``setx'' object
 #' @param x1 a ``setx'' object
 #' @param y this parameter is reserved for simulating average treatment effects,
 #' though this feature is currentlysupported by only a handful of models
 #' @param num an integer specifying the number of simulations to compute
-#' @param simpar a ``parameter'' obejct containing information about the link,
+#' @param param a ``parameter'' obejct containing information about the link,
 #' inverse-link, and simulated parameters
 #' @return a param
-qi.relogit2 <- function (obj, x, x1 = NULL, y = NULL, num=1000, simpar) {
+qi.relogit2 <- function (obj, x, x1 = NULL, y = NULL, num=1000, param = NULL) {
+  simpar <- param
   # Aliased, because
   object <- obj
 

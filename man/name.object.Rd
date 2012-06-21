@@ -5,7 +5,7 @@
   name.object(obj, names)
 }
 \arguments{
-  \item{object}{a vector or matrix}
+  \item{obj}{a vector or matrix}
 
   \item{names}{a character-vector specifying names}
 }

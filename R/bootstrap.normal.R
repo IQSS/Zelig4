@@ -1,7 +1,7 @@
 #' Bootstrap Parameters for Zelig ``normal'' GLM
 #'
 #' Returns bootstrapped parameter estimates for a Gaussian GLM.
-#' @usage \method{bootstrap}{default}
+#' @usage \method{bootstrap}{default}(obj, num, ...)
 #' @S3method bootstrap normal
 #' @param obj a ``zelig'' object that will be used to produce boot-strapped
 #' parameters

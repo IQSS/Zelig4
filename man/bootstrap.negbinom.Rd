@@ -2,7 +2,7 @@
 \alias{bootstrap.negbinom}
 \title{Bootstrap Parameters for Zelig ``negbinom'' GLM}
 \usage{
-  bootstrap.negbinom(obj, ...)
+  \method{bootstrap}{default}
 }
 \arguments{
   \item{obj}{a ``zelig'' object that will be used to

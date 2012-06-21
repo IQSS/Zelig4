@@ -10,6 +10,9 @@
 
   \item{weights}{a numeric vector}
 
+  \item{robust}{a boolean (logical) specifying whether
+  robust error estimates should be used}
+
   \item{...}{ignored parameters}
 
   \item{data}{a data.frame}

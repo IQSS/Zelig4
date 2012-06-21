@@ -8,20 +8,24 @@
 \arguments{
   \item{formula}{a formula object}
 
-  \item{model}{a chacter}
+  \item{...}{ignored parameters}
 
-  \item{...}{}
+  \item{tau}{...}
 
   \item{bias.correct}{...}
 
   \item{case.control}{...}
 
-  \item{data}{a data.frame}
+  \item{data}{a data.frame that will be used to fit the
+  model}
 }
 \value{
-  ...
+  a list used internally by zelig
 }
 \description{
   ...
+}
+\note{
+  T
 }
 

@@ -22,7 +22,7 @@ bootstrap <- function (obj, ...)
 #' ``bootstrap'' method. For most models, this default is sufficient, so long as
 #' the model follows the usual convention that ``coef(obj)'' returns the
 #' systematic parameters of a fitted model.
-#' @usage \method{bootstrap}{default}
+#' @usage \method{bootstrap}{default}(obj, ...)
 #' @S3method bootstrap default
 #' @param obj a fitted model object. This is typically of type ``glm'' or ``lm''
 #' @param ... unspecified parameters
