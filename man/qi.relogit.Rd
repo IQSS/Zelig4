@@ -28,7 +28,6 @@
   a param
 }
 \description{
-  simulate quantities of interest for the zelig ``relogit''
-  model
+  ...
 }
 

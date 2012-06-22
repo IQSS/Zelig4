@@ -2,7 +2,7 @@
 \alias{summary.glm.robust}
 \title{Summary of Generalized Linear Model with Robust Error Estimates}
 \usage{
-  summary.glm.robust(object, ...)
+  \method{summary}{glm.robust}(object, ...)
 }
 \arguments{
   \item{object}{a ``glm.robust'' fitted model}

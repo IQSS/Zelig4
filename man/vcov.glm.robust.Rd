@@ -2,12 +2,13 @@
 \alias{vcov.glm.robust}
 \title{Return Variance-Covariance Matrix}
 \usage{
-  vcov.glm.robust(object, ...)
+  \method{vcov}{glm.robust}(object, ...)
 }
 \arguments{
-  \item{object}{}
+  \item{object}{an object of type ``glm.robust''}
 
-  \item{...}{}
+  \item{...}{parameters passed forward to
+  ``summary.glm.robust''}
 }
 \value{
   a NxN matrix, where N is the number of parameters in the

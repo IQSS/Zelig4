@@ -12,7 +12,8 @@
   \item{digits}{an integer specifying the number of digits
   of precision to specify}
 
-  \item{...}{}
+  \item{...}{parameters passed forward to the ``print.glm''
+  function}
 }
 \value{
   x (invisibly)

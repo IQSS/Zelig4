@@ -1,5 +1,5 @@
-
 library(Zelig)
+library(Formula)
 
 form1 <- cbind(import, export) ~ coop + cost + target
 form1.2 <- list(import ~ coop + cost + target, export ~ coop + cost + target)

@@ -1,5 +1,6 @@
 #' simulate quantities of interest for the zelig ``relogit'' model
 #'
+#' ...
 #' @usage
 #' \method{qi}{relogit}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi relogit
@@ -17,6 +18,7 @@ qi.relogit <- qi.logit
 
 #' simulate quantities of interest for the zelig ``relogit'' model
 #'
+#' ...
 #' @usage
 #' \method{qi}{relogit2}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi relogit2

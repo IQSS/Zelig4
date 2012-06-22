@@ -2,7 +2,7 @@
 \alias{summary.Relogit}
 \title{Summary for ``Relogit'' Fitted Model}
 \usage{
-  summary.Relogit(object, ...)
+  \method{summary}{Relogit}(object, ...)
 }
 \arguments{
   \item{object}{a ``Relogit'' object}

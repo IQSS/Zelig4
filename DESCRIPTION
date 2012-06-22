@@ -29,7 +29,7 @@ Depends:
     sandwich,
     boot
 Suggests:
-    mvtnorm
+    mvtnorm, Formula
 Collate:
     'as.dataframe.setx.R'
     'as.matrix.setx.R'
