@@ -2,8 +2,8 @@
 \alias{print.summary.relogit2}
 \title{Print Summary of a Rare-event Logistic Model}
 \usage{
-  print.summary.relogit2(x,
-    digits = max(3, getOption("digits") - 3), ...)
+  \method{print}{summary.relogit}(x, digits = max(3,
+    getOption("digits") - 3), ...)
 }
 \arguments{
   \item{x}{the object to print}

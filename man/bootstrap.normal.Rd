@@ -2,7 +2,7 @@
 \alias{bootstrap.normal}
 \title{Bootstrap Parameters for Zelig ``normal'' GLM}
 \usage{
-  \method{bootstrap}{default}
+  \method{bootstrap}{default}(obj, num, ...)
 }
 \arguments{
   \item{obj}{a ``zelig'' object that will be used to

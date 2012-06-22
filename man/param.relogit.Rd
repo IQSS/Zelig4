@@ -2,7 +2,7 @@
 \alias{param.relogit}
 \title{Estimate Parameters for the ``relogit'' Zelig Mdoel}
 \usage{
-  param.relogit(obj, num, ...)
+  \method{param}{relogit}(obj, num, ...)
 }
 \arguments{
   \item{obj}{a zelig object containing the fitted model}

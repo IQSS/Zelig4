@@ -2,6 +2,7 @@
 #'
 #' Returns summary of a glm model with robust error estimates. This only
 #' slightly differs from how the standard GLM's behave.
+#' @S3method \method{summary}{glm.robust}(object, ...)
 #' @S3method summary glm.robust
 #' @param object a ``glm.robust'' fitted model
 #' @param ... parameters to pass to the standard ``summary.glm'' method

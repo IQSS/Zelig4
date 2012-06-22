@@ -2,7 +2,7 @@
 \alias{bootstrap.default}
 \title{Produce Boot-strapped Parameters for a Statistical Model}
 \usage{
-  \method{bootstrap}{default}
+  \method{bootstrap}{default}(obj, ...)
 }
 \arguments{
   \item{obj}{a fitted model object. This is typically of

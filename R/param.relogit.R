@@ -17,7 +17,7 @@ param.relogit <- function (obj, num, ...)
 #'
 #' Returns estimates on parameters, as well as, specifying link and inverse-link
 #' functions.
-#' @usage \method{param}{relogit2}(obj, num, ...)
+#' @usage \method{param}{relogit2}(obj, num, x, ...)
 #' @S3method param relogit2
 #' @param obj a zelig object containing the fitted model
 #' @param num an integer specifying the number of simulations to compute

@@ -1,6 +1,7 @@
 #' Summary for ``Relogit'' Fitted Model
 #'
 #' Summarize important components of the ``relogit'' model
+#' @usage \method{summary}{Relogit}(object, ...)
 #' @S3method summary Relogit
 #' @param object a ``Relogit'' object
 #' @param ... other parameters

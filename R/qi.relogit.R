@@ -29,7 +29,7 @@ qi.relogit <- qi.logit
 #' @param param a ``parameter'' obejct containing information about the link,
 #' inverse-link, and simulated parameters
 #' @return a param
-qi.relogit2 <- function (obj, x, x1 = NULL, y = NULL, num=1000, param = NULL) {
+qi.relogit2 <- function (obj, x = NULL, x1 = NULL, y = NULL, num=1000, param = NULL) {
   simpar <- param
   # Aliased, because
   object <- obj

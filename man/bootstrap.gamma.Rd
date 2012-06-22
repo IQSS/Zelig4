@@ -2,7 +2,7 @@
 \alias{bootstrap.gamma}
 \title{Bootstrap Parameters for Zelig ``gamma'' GLM}
 \usage{
-  \method{bootstrap}{gamma}
+  \method{bootstrap}{gamma}(obj, ...)
 }
 \arguments{
   \item{obj}{a ``zelig'' object that will be used to

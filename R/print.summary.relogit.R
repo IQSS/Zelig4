@@ -7,7 +7,7 @@
 #' @param x an ``relogit.summary'' object produced by the ``summary'' method.
 #' @param digits an integer specifying the number of digits of precision to
 #' specify
-#' @param ...
+#' @param ... parameters passed forward to the ``print.glm'' function
 #' @return x (invisibly)
 print.summary.relogit <- function(
                                   x,
