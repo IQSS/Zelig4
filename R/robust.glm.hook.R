@@ -15,7 +15,7 @@ robust.glm.hook <- function (obj, zcall, call, robust = FALSE, ...) {
   if (is.list(robust)) {
 
     # if none of the entries of robust belong to the vector below
-    if (!any(rob$method %in% c("vcovHAC", "kernHAC", "weave")))
+    if (!any(robust$method %in% c("vcovHAC", "kernHAC", "weave")))
       stop("robust contains elements that are not supported.")
 
     # Acquire the value of the robust parameter

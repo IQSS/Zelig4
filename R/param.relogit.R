@@ -25,6 +25,7 @@ param.relogit <- function (obj, num, ...)
 #' @param ... unspecified parameters
 #' @return a list specifying important parameters for the ``relogit'' model
 param.relogit2 <- function (obj, num, x, ...) {
+  object <- obj
   stop("Currently zelig does not support relogit models containing 2 ",
        "tau parameters")
 

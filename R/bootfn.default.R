@@ -14,6 +14,14 @@
 #' @return a list of paramters
 bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
 
+  # This is mostly here to squelch R-check notes, however sloppy programming
+  # can potentially prevent the ".model" variable from being defined in the
+  # attached environment. To make sense of this line, see the "sim.default"
+  # function where an environment (containing the variable ".model"  is
+  # explicity attached to the boot function
+  if (!exists(".model"))
+    .model <- "default"
+
   # Get a random sample of the data set
   d <- data[i,]
 
