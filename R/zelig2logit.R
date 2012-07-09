@@ -13,14 +13,13 @@
 zelig2logit <- function(formula, weights=NULL, robust = F, ..., data) {
 
   # Simply return
-  list(
-       .function = "glm",
-       .hook = "robust.glm.hook",
-
-       formula = formula,
-       weights = weights,
-       family  = binomial(link="logit"),
-       model   = F,
-       data    = data
-       )
+  z(
+    glm,
+    # .hook = "robust.glm.hook",
+    formula = formula,
+    weights = weights,
+    family  = binomial(link="logit"),
+    model   = F,
+    data    = data
+    )
 }

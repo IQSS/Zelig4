@@ -121,25 +121,34 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # print(formals(zelig2))
     zclist <- zelig2(formula, ..., data=d.f)
 
-    # list of parameters to be ignored by external models IF not in
-    # zelig2-return value
-    remove <- c("model", "by", "cite", "...")
+    if (!inherits(zclist, "z")) {
+      # list of parameters to be ignored by external models IF not in
+      # zelig2-return value
+      remove <- c("model", "by", "cite", "...")
 
-    # construct the call object
-    zelig.call <- call("zelig.call", as.name("zclist"), as.name("remove"))
-    zelig.env <- new.env()
-    assign("zclist", zclist, zelig.env)
-    assign("remove", remove, zelig.env)
+      # construct the call object
+      zelig.call <- call("zelig.call", as.name("zclist"), as.name("remove"))
+      zelig.env <- new.env()
+      assign("zclist", zclist, zelig.env)
+      assign("remove", remove, zelig.env)
 
 
-    res.call <- zelig.call(Call, zclist, remove)
-    new.call <- res.call$call
-    env <- res.call$envir
+      res.call <- zelig.call(Call, zclist, remove)
+      new.call <- res.call$call
+      env <- res.call$envir
+    }
+    else if (inherits(zclist, "z")) {
+      new.call <- zclist$call
+      env <- zclist$env
+    }
+    else {
+      warning("zelig2 function is returning an invalid type of object")
+    }
 
     attach(env)
     attach(d.f)
 
-    new.res <- eval(new.call)
+    new.res <- eval(new.call, env)
 
     detach(env)
     detach(d.f)
@@ -194,8 +203,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   assign('by', by, state)
   assign('methods', methods.env, state)
   assign('model', model, state)
-
-
 
 
   # The below line should probably remain commented out

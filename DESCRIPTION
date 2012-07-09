@@ -29,7 +29,8 @@ Depends:
     sandwich,
     boot
 Suggests:
-    mvtnorm, Formula
+    mvtnorm,
+    Formula
 Collate:
     'as.dataframe.setx.R'
     'as.matrix.setx.R'
@@ -168,3 +169,5 @@ Collate:
     'attach.env.R'
     'bootstrap.negbinom.R'
     'bootstrap.normal.R'
+    'z.R'
+    'zelig2sample.R'

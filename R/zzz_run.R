@@ -43,7 +43,8 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
   # A static list of objects that do not printout well or should be stored
   # within a separate environment
   messy.objects <- c("data.frame", "function", 'matrix', "family", "function")
-  neat.objects <- c("formula")
+  neat.objects <- c("formula", "family")
+  skip <- c()
 
   # Store values within 'messy.objects' within another environment, and give a 
   # pseudonym
@@ -53,25 +54,31 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
     first.class <- Class[1]
 
     if (is.object(obj)) {
-      if (all(Class %in% neat.objects))
+      if (all(Class %in% neat.objects)) {
         Call[[key]] <- obj
+      }
       else {
         Name <- store.object(obj, envir, ucfirst(first.class))
         Call[[key]] <- as.name(Name)
+        skip <- c(skip, key)
       }
     }
+
     else if (is.function(obj)) {
       Name <- store.object(obj, envir, "Function")
       Call[[key]] <- as.name(Name)
+      skip <- c(skip, key)
     }
     else if (is.atomic(obj) && length(obj) > 5) {
       Name <- store.object(obj, envir, paste(toupper(Class[1]), length(obj),
                                              sep=""))
       Call[[key]] <- as.name(Name)
+      skip <- c(skip, key)
     }
     else if (is.list(obj) && length(obj) > 5) {
       Name <- store.object(obj, envir, paste("List", length(obj), sep=""))
       Call[[key]] <- as.name(Name)
+      skip <- c(skip, key)
     }
     else {
       # this is a hack to prevent removal of elements if the value is NULL
@@ -91,6 +98,9 @@ zelig.call <- function(Call, zelig2, remove = NULL) {
 
   # Guarantee all zelig2 names are included (including model, etc)
   for (key in names(zelig2)) {
+    if (key %in% skip)
+      next;
+
     if (!is.null(zelig2[[key]]))
       Call[[key]] <- zelig2[[key]]
     else {

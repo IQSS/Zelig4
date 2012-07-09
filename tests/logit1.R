@@ -9,6 +9,7 @@ z.out1 <- zelig(
                 data = turnout
                 )
 
+
 x.out1 <- setx(z.out1, age = 36, race = "white", educate=0)
 
 s.out1 <- sim(z.out1, x = x.out1)

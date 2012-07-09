@@ -27,7 +27,6 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   for (i in 1:ncol(ev1))
     pr1[,i] <- as.character(rbinom(length(ev1[,i]), 1, ev1[,i]))
 
-
   #
   if (!is.null(x1)) {
     pr2 <- matrix(nrow=nrow(ev2), ncol=ncol(ev2))
@@ -37,7 +36,6 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
     fd <- ev2-ev1
   }
-
 
   # return
   list("Expected Values: E(Y|X)" = ev1,
