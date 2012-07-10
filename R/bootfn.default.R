@@ -26,13 +26,17 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
   d <- data[i,]
 
   # Extract the call object
-  call <- .call
+  # Naming it "jeez" because it's really hard to find names for call objects
+  # that are meaningful and not reserved for other functions
+  jeez <- .call
 
   # Replace the data frame with an appropriate one
-  call$data <- d
+  jeez$data <- d
 
   # Fit the model
-  fit <- eval(call, sys.parent())
+  attach(.env)
+  fit <- eval(jeez)
+  detach(.env)
 
   # If "bootstrapfn" is unspecified, then we try to search its appropriate value
   # down

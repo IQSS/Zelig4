@@ -7,12 +7,12 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig2gamma <- function(formula, ..., data)
-  list(
-       .function = "glm",
-       .hook = "robust.glm.hook",
+  z(
+    glm,
+    # .hook = "robust.glm.hook",
 
-       formula = formula,
-       family  = Gamma,
-       model   = F,
-       data    = data
-       )
+    formula = formula,
+    family  = Gamma(),
+    model   = F,
+    data    = data
+    )

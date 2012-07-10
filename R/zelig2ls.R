@@ -8,11 +8,10 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig2ls <- function(formula, ..., data, weights=NULL)
-  list(
-       .function = "lm",
-
-       formula = formula,
-       weights = weights,
-       model   = F,
-       data    = data
-       )
+  z(
+    lm,
+    formula = formula,
+    weights = weights,
+    model   = F,
+    data    = data
+    )

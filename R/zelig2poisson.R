@@ -8,13 +8,12 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig2poisson <- function(formula, weights=NULL, ..., data)
-  list(
-       .function ="glm",
-       .hook = "robust.glm.hook",
-       
-       formula = formula,
-       weights = weights,
-       family  = poisson(),
-       model   = F,
-       data    = data
-       )
+  z(
+    glm,
+    # .hook = "robust.glm.hook",
+    formula = formula,
+    weights = weights,
+    family  = poisson(),
+    model   = F,
+    data    = data
+    )

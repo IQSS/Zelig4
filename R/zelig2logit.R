@@ -11,13 +11,12 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig2logit <- function(formula, weights=NULL, robust = F, ..., data) {
-
-  # Simply return
+  w <- weights
   z(
     glm,
     # .hook = "robust.glm.hook",
     formula = formula,
-    weights = weights,
+    weights = w,
     family  = binomial(link="logit"),
     model   = F,
     data    = data

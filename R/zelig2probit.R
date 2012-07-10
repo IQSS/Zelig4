@@ -8,13 +8,12 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig2probit <- function(formula, weights=NULL, ..., data)
-  list(
-       .function = "glm",
-       .hook = "robust.glm.hook",
-
-       formula = formula,
-       weights = weights,
-       family  = binomial(link="probit"),
-       model   = F,
-       data    = data
-       )
+  z(
+    glm,
+    # .hook = "robust.glm.hook",
+    formula = formula,
+    weights = weights,
+    family  = binomial(link="probit"),
+    model   = F,
+    data    = data
+    )
