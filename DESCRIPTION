@@ -170,4 +170,3 @@ Collate:
     'bootstrap.negbinom.R'
     'bootstrap.normal.R'
     'z.R'
-    'zelig2sample.R'
