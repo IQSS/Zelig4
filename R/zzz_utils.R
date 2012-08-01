@@ -1,5 +1,51 @@
 #' Produce All Combinations of a Set of Lists
 #' @note This function is used internall by the 'mi' constructors in order to
+#' produce the complete set of combinations of data-frames and factors by to
+#' subset the data-frames.
+#' @param ... a set of lists to mix together
+#' @return all the combinations of the lists with repetition
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+#' @export
+mix <- function(...) {
+  # expand dot arguments
+  dots <- list(...)
+
+  # error-catching
+  if (length(dots) < 1)
+    return(NULL)
+
+  # prepare lists for first iteration
+  res <- dots[[1]]
+  dots <- dots[-1]
+
+  # this entire algorithm could be optimized,
+  # however, it will always be exponential time
+  while(length(dots) > 0) {
+    # get list to store new combinations in
+    new.list <- list()
+
+    # divide list
+    first <- dots[[1]]
+
+    # add new combinations
+    for (f in first)
+      for (r in res) {
+        row <- append(as.list(r), f)
+        names(row) <- names(list(...))
+        new.list[['']] <- row
+      }
+
+    # Update list
+    res <- new.list
+
+    # Shift first entry off
+    dots <- dots[-1]
+  }
+
+  res
+}
+#' Produce All Combinations of a Set of Lists
+#' @note This function is used internall by the 'mi' constructors in order to
 #'   produce the complete set of combinations of data-frames and factors by
 #'   to subset the data-frames.
 #' @param ... a set of lists to mix together

@@ -33,6 +33,21 @@ sim.default <- function(
                         cond.data = NULL,
                         ...
                         ) {
+  if (length(attr(x, "pooled")) > 0 && attr(x, "pooled")) {
+
+    xes <- list()
+
+    for (key in names(x)) {
+      xes[[key]] <- sim(obj, x[[key]])
+      attr(xes[[key]], "pooled") <- FALSE
+    }
+
+    attr(xes, "pooled") <- TRUE
+
+    return(xes)
+  }
+
+
   # Stop on unimplemented features
   if (!is.null(cond.data))
     warning("conditions are not yet supported")
@@ -144,8 +159,6 @@ sim.default <- function(
   # This can be removed as of 4-27-2011
   if (inherits(obj, "MI"))
     class(res.qi) <- c("MI", class(res.qi))
-
-
 
   # build object
   s <- list(

@@ -91,7 +91,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       res[[key]] <- fn$other(data[ ,key])
   }
 
-  # add explicitly set values
+  # Add explicitly set values
   for (key in names(symbolic.dots)) {
     if (! key %in% colnames(data)) {
       warning("`", key,
@@ -106,12 +106,92 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       dots[[key]]
   }
 
+  # 
+  res <- do.call("mix", res)
+
+  # A list containing paired design matrices and their corresponding data.frame's
+  frames.and.designs <- list()
+
+  # Iterate through all the results
+  for (k in 1:length(res)) {
+    #
+    label <- paste(names(res[[k]]), "=", res[[k]], collapse=", ")
+
+    # Get specified explanatory variables
+    specified <- res[[k]]
+
+    # Construct data-frame
+    d <- constructDataFrame(data, specified)
+
+    # Construct model/design matrix
+    m <- constructDesignMatrix(d, parsed.formula)
+
+    # Model matrix, as a data.frame
+    dat <- tryCatch(as.data.frame(m), error = function (e) NA)
+
+    frames.and.designs[[label]] <- list(
+      label = label,
+      data.frame = d,
+      model.matrix = m,
+      as.data.frame = dat
+      )
+  }
+
+
+  # Phonetically... setx's
+  setexes <- list()
+
+  for (key in names(frames.and.designs)) {
+    mod <- frames.and.designs[[key]]$model.matrix
+    d <- frames.and.designs[[key]]$data.frame
+    dat <- frames.and.designs[[key]]$as.data.frame
+    specified <- res[[k]]
+
+    setexes[[key]] <- list(
+      name   = obj$name,
+      call   = match.call(),
+      formula= form,
+      matrix = mod,
+      updated = d,
+      data   = dat,
+      values = specified,
+      fn     = fn,
+      cond   = cond,
+      new.data = data,
+      special.parameters = dots,
+      symbolic.parameters = symbolic.dots,
+      label = obj$label,
+      explan = vars.obj,
+      pred   = not.vars
+    )
+    attr(setexes[[key]], "pooled") <- F
+    class(setexes[[key]]) <- c(obj$name, "setx")
+  }
+
+  if (length(setexes) == 1)
+    setexes <- setexes[[1]]
+
+  attr(setexes, "pooled") <- length(res) > 1
+  class(setexes) <- c(obj$name, "setx")
+
+  setexes
+}
+
+
+#' Construct Data Frame
+#' Construct and return a tiny (single-row) data-frame from a larger data-frame,
+#' a list of specified values, and a formula
+#' @param data ...
+#' @param specified ...
+#' @param formula ...
+#' @return ...
+constructDataFrame <- function (data, specified) {
   # Make a tiny data-frame with all the necessary columns
   d <- data[1,]
 
   # Give the computed values to those entries
-  for (key in names(res)) {
-    val <- res[[key]]
+  for (key in names(specified)) {
+    val <- specified[[key]]
 
     if (is.factor(val) || !(is.numeric(val) || is.ordered(val)))
       val <- factor(val, levels=levels(data[,key]))
@@ -119,55 +199,27 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     d[,key] <- val
   }
 
-  # Note that model.matrix.parsedFormula is called here.
-  mod <- tryCatch(
-                  # Attempt to generate the design matrix of the formula
-                  model.matrix(parsed.formula, d), 
+  # Return tiny data-frame
+  d
+}
 
-                  # If there is a warning... probably do nothing
-                  # warning = function (w) w,
+#' Construct Design Matrix from
+#' Construct and return a design matrix based on a tiny data-frame (single-row).
+#' @param data ...
+#' @param formula ...
+#' @return ...
+constructDesignMatrix <- function (data, formula) {
+  tryCatch(
+           # Attempt to generate the design matrix of the formula
+           model.matrix(formula, data), 
 
-                  # If there is an error, warn the user and specify the design
-                  # matrix as NA
-                  error = function (e) {
-                    NA
-                  }
-                  )
+           # If there is a warning... probably do nothing
+           # warning = function (w) w,
 
-  # ote
-  dat <- tryCatch(as.data.frame(mod), error = function (e) NA)
-
-  # This might not be useful
-  if (all(!is.na(mod)))
-    rownames(mod) <- NULL
-
-  # This space here should be reserved for manipulating interaction variables
-  # .........................................................................
-
-
-  # RESERVER FOR model.matrix HOOK
-  # ..............................
-
-  # Build the setx object
-  sx <- list(
-             name   = obj$name,
-             call   = match.call(),
-             formula= form,
-             matrix = mod,
-             updated = d,
-             data   = dat,
-             values = res,
-             fn     = fn,
-             cond   = cond,
-             new.data = data,
-             special.parameters = dots,
-             symbolic.parameters = symbolic.dots,
-             label = obj$label,
-             explan = vars.obj,
-             pred   = not.vars
-             )
-
-  # Set class and return
-  class(sx) <- c(obj$name, "setx")
-  sx
+           # If there is an error, warn the user and specify the design
+           # matrix as NA
+           error = function (e) {
+             NA
+           }
+           )
 }
