@@ -147,9 +147,7 @@ print.qi <- function(x, ...) {
 #' Interest
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 names.qi <- function(x) {
-  nameless <- unlist(x$titles)
-  names(nameless) <- NULL
-  nameless
+  names(attr(x, ".index"))
 }
 
 

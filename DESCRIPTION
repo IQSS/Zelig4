@@ -170,3 +170,5 @@ Collate:
     'bootstrap.negbinom.R'
     'bootstrap.normal.R'
     'z.R'
+    'summary.pooled.sim.R'
+    'print.summary.pooled.sim.R'

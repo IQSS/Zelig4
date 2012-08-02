@@ -24,7 +24,7 @@ z <- function (.function, ...) {
   attr(s, 'function') <- substitute(.function)
 
   # Set the class
-  class(s) <- "z"
+  class(s) <- 'z'
 
   # Return
   s

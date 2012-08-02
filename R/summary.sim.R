@@ -9,15 +9,15 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 summary.sim <- function(object, ...) {
-  s <- object
-  res <- list(model    = object$model,
-              stats    = s$stats,
-              titles   = s$titles,
-              original = s$result,
-              call     = s$call,
-              zeligcall= s$zcall,
-              x        = s$x,
-              x1       = s$x1,
+  res <- list(
+              model    = object$model,
+              stats    = object$stats,
+              titles   = object$titles,
+              original = object$result,
+              call     = object$call,
+              zeligcall= object$zcall,
+              x        = object$x,
+              x1       = object$x1,
               num      = object$num
               )
   class(res) <- c(s$name, "summary.sim")

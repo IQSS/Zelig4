@@ -4,7 +4,7 @@
 Construct and return a tiny (single-row) data-frame from a larger data-frame,
 a list of specified values, and a formula}
 \usage{
-  constructDataFrame(data, specified, formula)
+  constructDataFrame(data, specified)
 }
 \arguments{
   \item{data}{...}

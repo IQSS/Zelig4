@@ -81,7 +81,7 @@ alpha <- function(param)
 #' @export 
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 coef.parameters <- function(object, ...) {
-  object$coef
+  object$coefficients
 }
   
 #' Return Simulations of Parameter Coefficients
