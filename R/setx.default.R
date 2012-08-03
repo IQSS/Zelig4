@@ -107,7 +107,13 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   }
 
   # 
+  message("Fuuck")
+  print(res)
   res <- do.call("mix", res)
+  message(">>>")
+
+  
+
 
   # A list containing paired design matrices and their corresponding data.frame's
   frames.and.designs <- list()

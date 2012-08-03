@@ -28,10 +28,10 @@ mix <- function(...) {
     first <- dots[[1]]
 
     # add new combinations
+    print(paste(length(first), 'x', length(res)))
     for (f in first)
       for (r in res) {
         row <- append(as.list(r), f)
-        names(row) <- names(list(...))
         new.list[['']] <- row
       }
 
@@ -41,6 +41,13 @@ mix <- function(...) {
     # Shift first entry off
     dots <- dots[-1]
   }
+
+  for (combo in res) {
+    names(combo) <- names(list(...))
+  }
+
+  # Name all of the combinations
+  message(paste("\n\nLENGTH:", length(res)))
 
   res
 }
