@@ -181,10 +181,10 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
 #' Construct Data Frame
 #' Construct and return a tiny (single-row) data-frame from a larger data-frame,
 #' a list of specified values, and a formula
-#' @param data ...
-#' @param specified ...
-#' @param formula ...
-#' @return ...
+#' @param data a ``data.frame'' that will be used to create a small design matrix
+#' @param specified a list with key-value pairs that will be used to explicitly
+#' set several values
+#' @return a ``data.frame'' containing a single row
 constructDataFrame <- function (data, specified) {
   # Make a tiny data-frame with all the necessary columns
   d <- data[1,]
@@ -205,9 +205,11 @@ constructDataFrame <- function (data, specified) {
 
 #' Construct Design Matrix from
 #' Construct and return a design matrix based on a tiny data-frame (single-row).
-#' @param data ...
-#' @param formula ...
-#' @return ...
+#' @param data a ``data.frame'' (preferably single-rowed) that will be used to
+#' create a small design matrix
+#' @param formula a formula, whose predictor variables will be used to create a
+#' design matrix
+#' @return a design (model) matrix
 constructDesignMatrix <- function (data, formula) {
   tryCatch(
            # Attempt to generate the design matrix of the formula

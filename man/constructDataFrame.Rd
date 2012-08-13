@@ -7,14 +7,14 @@ a list of specified values, and a formula}
   constructDataFrame(data, specified)
 }
 \arguments{
-  \item{data}{...}
+  \item{data}{a ``data.frame'' that will be used to create
+  a small design matrix}
 
-  \item{specified}{...}
-
-  \item{formula}{...}
+  \item{specified}{a list with key-value pairs that will be
+  used to explicitly set several values}
 }
 \value{
-  ...
+  a ``data.frame'' containing a single row
 }
 \description{
   Construct Data Frame Construct and return a tiny
