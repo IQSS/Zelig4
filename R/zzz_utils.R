@@ -28,12 +28,12 @@ mix <- function(...) {
     first <- dots[[1]]
 
     # add new combinations
-    for (f in first)
+    for (f in first) {
       for (r in res) {
         row <- append(as.list(r), f)
-        names(row) <- names(list(...))
         new.list[['']] <- row
       }
+    }
 
     # Update list
     res <- new.list
@@ -41,6 +41,10 @@ mix <- function(...) {
     # Shift first entry off
     dots <- dots[-1]
   }
+
+  # Appropriately name each entry
+  for (k in 1:length(res))
+    names(res[[k]]) <- names(list(...))
 
   res
 }
