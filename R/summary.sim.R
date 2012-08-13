@@ -20,6 +20,6 @@ summary.sim <- function(object, ...) {
               x1       = object$x1,
               num      = object$num
               )
-  class(res) <- c(s$name, "summary.sim")
+  class(res) <- c(object$name, "summary.sim")
   res
 }
