@@ -33,6 +33,11 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
   # Replace the data frame with an appropriate one
   jeez$data <- d
 
+  .env <- if (exists('.env'))
+    .env
+  else
+    NULL
+
   # Fit the model
   attach(.env)
   fit <- eval(jeez)

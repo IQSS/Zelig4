@@ -38,10 +38,11 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   }
 
   # return
-  list("Expected Values: E(Y|X)" = ev1,
+  list(
+       "Expected Values: E(Y|X)" = ev1,
+       "Expected Values (for X1): E(Y|X1)" = ev2,
        "Predicted Values: Y|X" = pr1,
-       "Expected Values (for X1)" = ev2,
-       "Predicted Values (for X1)" = pr2,
+       "Predicted Values (for X1): Y|X1" = pr2,
        "First Differences: E(Y|X1) - E(Y|X)" = fd
        )
 }

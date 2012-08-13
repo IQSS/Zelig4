@@ -11,7 +11,7 @@
 #' implementations of Zelig
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 plot.sim <- function(x, xlab = "", ...) {
-  # save old state
+  # Save old state
   old.par <- par(no.readonly=T)
 
 
@@ -33,8 +33,12 @@ plot.sim <- function(x, xlab = "", ...) {
 
   else {
 
-    panels <- matrix(c(1:5, 5), ncol=2, byrow = TRUE)
-    palette <- c('red', 'red', 'navy', 'navy', 'black')
+    panels <- matrix(c(1:5, 5, 6, 6), ncol=2, byrow = TRUE)
+
+    red <- rgb(242, 122, 94, maxColorValue=255)
+    blue <- rgb(100, 149, 237, maxColorValue=255)
+
+    palette <- c(red, blue, red, blue, 'gray', 'gray')
 
     # the plotting device:
     #
@@ -44,6 +48,8 @@ plot.sim <- function(x, xlab = "", ...) {
     # |  3  |  4  |
     # +-----+-----+
     # |     5     |
+    # +-----------+
+    # |     6     |
     # +-----------+
   }
 
@@ -70,23 +76,25 @@ plot.sim <- function(x, xlab = "", ...) {
 
     color <- palette[k <- k + 1]
 
-    #
     if (all(is.na(val)))
       next
 
-    else if (is.numeric(val)) {
-      val <- as.numeric(val)
-      plot(density(val), main = key, col=color)
-    }
-
-    else if (is.character(val) || is.factor(val)) {
-      barplot(table(val), xlab=xlab, main=key, col=color)
-    }
-
-    else if (!is.na(val))
-      warning('The Quantity of Interest "', key, '" has no valid printing method.')
+    else
+      simulations.plot(val, main = key, col = color, line.col = "black")
   }
 
-  # restore old state
+  titles <- c("Expected Values: E(Y|X)", "Expected Values (for X1): E(Y|X1)")
+  
+  if (all(titles %in% names(qi))) {
+    # Display 2 plots in one pane
+    simulations.plot(
+      qi[[ titles[[1]] ]],
+      qi[[ titles[[2]] ]],
+      main = "Comparison between E(Y|X) and E(Y|X1)",
+      line.col = "black", col = c(red, blue)
+      )
+  }
+
+  # Restore old state
   par(old.par)
 }
