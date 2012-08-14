@@ -3,7 +3,7 @@
 \title{Plot Quantities of Interest in a Zelig-fashion}
 \usage{
   simulations.plot(y, y1=NULL, xlab="", ylab="", main="",
-    col=NULL, bg=NULL, axisnames=TRUE)
+    col=NULL, line.col=NULL, axisnames=TRUE)
 }
 \arguments{
   \item{y}{A matrix or vector of simulated results
@@ -21,14 +21,16 @@
   \item{main}{Main plot title.}
 
   \item{col}{A vector of colors.  Colors will be used in
-  turn as the graph is built for main plot objects.}
+  turn as the graph is built for main plot objects. For
+  nominal/categorical data, this colors renders as the bar
+  color, while for numeric data it renders as the
+  background color.}
 
-  \item{bg}{A vector of colors.  Colors will be used in
-  turn as the graph is built for backgrounds and shading of
-  plot objects.  These colors should generally be partially
-  transparent.}
+  \item{line.col}{A vector of colors.  Colors will be used
+  in turn as the graph is built for line color shading of
+  plot objects.}
 
-  \item{axisname}{a character-vector, specifying the names
+  \item{axisnames}{a character-vector, specifying the names
   of the axes}
 }
 \value{

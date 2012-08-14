@@ -115,7 +115,7 @@ GDP:
 summary(s.out1)
 @ 
 \begin{center}
-<<label=ExamplesPlot,fig=true,echo=true,width=5.5,height=4>>=  
+<<ExamplesPlot,fig=true,echo=true>>=
  plot(s.out1)
 @ 
 \end{center}
@@ -141,7 +141,7 @@ Simulate quantities of interest:
  s.out2 <- sim(z.out2, x = x.US, x1 = x.Japan)
 @ 
 \begin{center}
-<<label=DummyPlot,fig=true,echo=true, width=5.5, height=4>>=   
+<<label=DummyPlot,fig=true,echo=true>>=   
  plot(s.out2)
 @ 
 \end{center}

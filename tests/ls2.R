@@ -3,8 +3,10 @@ library(Zelig)
 
 data(macro)
 
+macro$country <- as.factor(macro$country)
+
 z.out2 <- zelig(
-                unem ~ gdp + trade + capmob + as.factor(country), 
+                unem ~ gdp + trade + capmob + country,
                 model = "ls",
                 data = macro
                 )
