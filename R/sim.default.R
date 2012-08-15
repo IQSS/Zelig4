@@ -45,6 +45,7 @@ sim.default <- function(
     }
 
     attr(xes, "pooled") <- TRUE
+    attr(xes, "pooled.setx") <- x
 
     class(xes) <- c("pooled.sim")
 
