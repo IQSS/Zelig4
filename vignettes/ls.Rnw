@@ -115,9 +115,9 @@ GDP:
 summary(s.out1)
 @ 
 \begin{center}
-<<ExamplesPlot,fig=true,echo=true>>=
- plot(s.out1)
-@ 
+%<<ExamplesPlot,fig=true,echo=true>>=
+% # plot(s.out1)
+%@ 
 \end{center}
 
 \item Using Dummy Variables
@@ -141,9 +141,9 @@ Simulate quantities of interest:
  s.out2 <- sim(z.out2, x = x.US, x1 = x.Japan)
 @ 
 \begin{center}
-<<label=DummyPlot,fig=true,echo=true>>=   
- plot(s.out2)
-@ 
+% <<label=DummyPlot,fig=true,echo=true>>=   
+%  # plot(s.out2)
+% @ 
 \end{center}
 
 %\item Multiple responses (least squares regression will be fitted

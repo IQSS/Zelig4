@@ -71,7 +71,7 @@ plot.sim <- function(x, xlab = "", ...) {
   }
 
   # Set layout
-  layout(panels)
+  tryCatch(layout(panels), error = function () q())
 
 
   # Get unsummarized qi data
