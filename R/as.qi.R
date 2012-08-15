@@ -159,7 +159,7 @@ names.qi <- function(x) {
 #'    \item "Expected Values (for X): E(Y|X)"
 #'    \item "Expected Values (for X1): E(Y|X1)"
 #' \end{itemize}
-#' The result will be: "ev" and "ev". That is, the acronym will not contain
+#' The result will be: "ev1" and "ev2". That is, the acronym will not contain
 #' information kept in paranetheses or after a colon. 
 #' @note This function currently includes preopositions as parts of acroynms
 #' @param str a vector of character strings to convert into acronymns
@@ -181,7 +181,6 @@ names.qi <- function(x) {
   reduced <- sub('\\s+$', '', reduced, perl=TRUE)
   reduced <- sub('^\\s+', '', reduced, perl=TRUE)
   reduced <- gsub('\\(.*?\\)', '', reduced, perl=TRUE)
-  # reduced <- gsub('[^a-zA-Z0-9]', reduced, perl=TRUE)
   
   # if we get an empty string, return whatever the fail value is
   if (nchar(reduced) < 1)

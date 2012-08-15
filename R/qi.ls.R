@@ -30,8 +30,8 @@ qi.ls <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   }
 
   # return
-  list("Expected Value: E(Y|X)" = ev,
-       "Expected Value (of X1): E(Y|X1)" = ev1,
+  list("Expected Values: E(Y|X)" = ev,
+       "Expected Values (of X1): E(Y|X1)" = ev1,
        "First Difference in Expected Values: E(Y|X1) - E(Y|X)" = fd
        )
 }

@@ -115,7 +115,7 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   # Iterate through all the results
   for (k in 1:length(res)) {
     #
-    label <- paste(names(res[[k]]), "=", res[[k]], collapse=", ")
+    label <- paste(names(res[[k]]), "=", res[[k]], sep="", collapse=", ")
 
     # Get specified explanatory variables
     specified <- res[[k]]
@@ -168,12 +168,17 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
     class(setexes[[key]]) <- c(obj$name, "setx")
   }
 
-  if (length(setexes) == 1)
+  if (length(setexes) == 1) {
+    attr(setexes, "pooled") <- FALSE
     setexes <- setexes[[1]]
+    class(setexes) <- c(obj$name, "setx")
+  }
+  else {
+    attr(setexes, "pooled") <- TRUE
+    class(setexes) <- c(obj$name, "pooled.setx", "setx")
+  }
 
-  attr(setexes, "pooled") <- length(res) > 1
-  class(setexes) <- c(obj$name, "setx")
-
+  # Return
   setexes
 }
 

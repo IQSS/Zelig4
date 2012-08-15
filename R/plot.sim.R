@@ -14,6 +14,12 @@ plot.sim <- function(x, xlab = "", ...) {
   # Save old state
   old.par <- par(no.readonly=T)
 
+  # Get quantities of interest
+  qi <- x$qi
+
+  # These qi's are considered special, since they can be plotted together
+  ev.titles <- c('Expected Values: E(Y|X)', 'Expected Values (for X1): E(Y|X1)')
+  pv.titles <- c('Predicted Values: Y|X', 'Predicted Values (for X1): Y|X1')
 
   if (is.null(x$x)) {
     return(par(old.par))
@@ -21,7 +27,7 @@ plot.sim <- function(x, xlab = "", ...) {
 
   else if (is.null(x$x1) || is.na(x$x1)) {
     panels <- matrix(1:2, nrow=2, ncol=2)
-    palette <- c('black', 'black')
+    palette <- c('gray', 'gray')
 
     # the plotting device:
     # +--------+
@@ -33,24 +39,35 @@ plot.sim <- function(x, xlab = "", ...) {
 
   else {
 
-    panels <- matrix(c(1:5, 5, 6, 6), ncol=2, byrow = TRUE)
+    panels <- matrix(c(1:5, 5), ncol=2, nrow=3, byrow = TRUE)
 
     red <- rgb(242, 122, 94, maxColorValue=255)
     blue <- rgb(100, 149, 237, maxColorValue=255)
 
     palette <- c(red, blue, red, blue, 'gray', 'gray')
 
+    # Determine whether two "Expected Values" qi's exist
+    ev.bool <- all(ev.titles %in% names(qi))
+    # Determine whether two "Predicted Values" qi's exist
+    pv.bool <- all(pv.titles %in% names(qi))
+
+    panels <- if (xor(ev.bool, pv.bool))
+      rbind(panels, c(6, 6))
+
+    else if (ev.bool && pv.bool)
+      rbind(panels, c(6, 7))
+
     # the plotting device:
     #
-    # +-----------+
-    # |  1  |  2  |
-    # +-----+-----+
-    # |  3  |  4  |
-    # +-----+-----+
-    # |     5     |
-    # +-----------+
-    # |     6     |
-    # +-----------+
+    # +-----------+     +-----------+
+    # |  1  |  2  |     |  1  |  2  |
+    # +-----+-----+     +-----+-----+
+    # |  3  |  4  |     |  3  |  4  |
+    # +-----+-----+ OR  +-----+-----+
+    # |     5     |     |     5     |
+    # +-----------+     +-----------+
+    # |  6  |  7  |     |     6     |
+    # +-----+-----+     +-----+-----+
   }
 
   # Set layout
@@ -58,7 +75,6 @@ plot.sim <- function(x, xlab = "", ...) {
 
 
   # Get unsummarized qi data
-  qi <- x$qi
   labels <- names(attr(qi, '.index'))
   k <- 0
   size <- length(labels)
@@ -83,14 +99,22 @@ plot.sim <- function(x, xlab = "", ...) {
       simulations.plot(val, main = key, col = color, line.col = "black")
   }
 
-  titles <- c("Expected Values: E(Y|X)", "Expected Values (for X1): E(Y|X1)")
-  
-  if (all(titles %in% names(qi))) {
+  if (all(ev.titles %in% names(qi))) {
     # Display 2 plots in one pane
     simulations.plot(
-      qi[[ titles[[1]] ]],
-      qi[[ titles[[2]] ]],
+      qi[[ ev.titles[[1]] ]],
+      qi[[ ev.titles[[2]] ]],
       main = "Comparison between E(Y|X) and E(Y|X1)",
+      line.col = "black", col = c(red, blue)
+      )
+  }
+
+  if (all(pv.titles %in% names(qi))) {
+    # Display 2 plots in one pane
+    simulations.plot(
+      qi[[ pv.titles[[1]] ]],
+      qi[[ pv.titles[[2]] ]],
+      main = "Comparison between Y|X and Y|X1",
       line.col = "black", col = c(red, blue)
       )
   }

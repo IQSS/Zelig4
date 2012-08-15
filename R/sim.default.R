@@ -36,10 +36,12 @@ sim.default <- function(
   if (length(attr(x, "pooled")) > 0 && attr(x, "pooled")) {
 
     xes <- list()
+    titles <- list()
 
     for (key in names(x)) {
-      xes[[key]] <- sim(obj, x[[key]])
+      xes[[key]] <- sim(obj, x[[key]], x1[[key]], y, num, bootstrap, bootfn, cond.data, ...)
       attr(xes[[key]], "pooled") <- FALSE
+      titles <- append(titles, xes$titles)
     }
 
     attr(xes, "pooled") <- TRUE

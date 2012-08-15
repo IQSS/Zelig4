@@ -16,6 +16,8 @@ x.Japan <- setx(z.out2, country = "Japan")
 
 s.out2 <- sim(z.out2, x = x.US, x1 = x.Japan)
 
+class(s.out2)
+
 summary(z.out2)
 vcov(z.out2)
 coef(z.out2)

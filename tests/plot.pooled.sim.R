@@ -9,5 +9,5 @@ s <- sim(z, x)
 class(s)
 
 summary(s)
-plot(s)
+
 

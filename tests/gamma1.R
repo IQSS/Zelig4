@@ -3,12 +3,11 @@ library(Zelig)
 
 data(turnout)
 
-z.out1 <- zelig(vote ~ age + race, model = "logit", data = turnout)
+z.out1 <- zelig(vote ~ age + race, model = "gamma", data = turnout)
 
 x.out1 <- setx(z.out1, age = 36, race = "white")
 x.out2 <- setx(z.out1, age = 20, educate = 4)
 
-s.out1 <- sim(z.out1, x.out1, x.out2, num = 10, bootstrap = T)
 s.out2 <- sim(z.out1, x.out1, x.out2, num = 10, bootstrap = F)
 
 summary(z.out1)

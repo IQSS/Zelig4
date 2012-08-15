@@ -1,11 +1,14 @@
 \name{plot.pooled.sim}
 \alias{plot.pooled.sim}
-\title{Method for plotting pooled simulations}
+\title{Method for plotting pooled simulations by confidence intervals}
 \usage{
   \method{plot}{pooled.sim}(x, xlab = "", ...)
 }
 \arguments{
   \item{x}{a `sim' object}
+
+  \item{CI}{a number, between 0 and 100, specifying the
+  confidence interal to construct}
 
   \item{xlab}{labels for the x-axis}
 
