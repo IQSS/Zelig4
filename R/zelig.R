@@ -101,6 +101,14 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # Begin constructing zelig object
   object <- list()
 
+  # Create zelig2* function
+  zelig2 <- paste("zelig2", as.character(model), sep="")
+  zelig2 <- get(zelig2, mode="function")
+
+  # Get package name. This is useful for writing methods that apply to all
+  # models within a particular software package
+  package.name <- getPackageName(environment(zelig2), FALSE)
+
   # repeat
   repeat {
     # get the next data.frame
@@ -111,10 +119,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # catch end-of-list error
     if (is.null(d.f))
       break
-
-    # create zelig2* function
-    zelig2 <- paste("zelig2", as.character(model), sep="")
-    zelig2 <- get(zelig2, mode="function")
 
     # call zelig2* function
 
@@ -168,7 +172,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
                            model,
                            new.call, match.call(),
                            d.f, label,
-                           env
+                           env,
+                           package.name = package.name
                            )
 
     # Specify the appropriate class
@@ -247,7 +252,8 @@ makeZeligObject <- function (object,
                              zelig_call,
                              data,
                              label,
-                             env
+                             env,
+                             package.name = NULL
                              ) {
   # This is a set of variables that will be visible to the following methods:
   # param, bootstrap, qi
@@ -276,7 +282,8 @@ makeZeligObject <- function (object,
                call = call,
                data = data,
                S4   = isS4(object),
-               method.env = implied.variables
+               method.env = implied.variables,
+               package.name = package.name
                )
 
   # Specify as a ``zelig'' object

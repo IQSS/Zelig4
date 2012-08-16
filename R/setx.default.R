@@ -162,7 +162,8 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       symbolic.parameters = symbolic.dots,
       label = obj$label,
       explan = vars.obj,
-      pred   = not.vars
+      pred   = not.vars,
+      package.name = obj$package.name
     )
     attr(setexes[[key]], "pooled") <- F
     class(setexes[[key]]) <- c(obj$name, "setx")

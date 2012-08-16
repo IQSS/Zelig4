@@ -180,7 +180,8 @@ sim.default <- function(
             zcall    = obj$call,
             result   = obj$result,
             num      = num,
-            special.parameters = list(...)
+            special.parameters = list(...),
+            package.name = obj$package.name
             )
 
   # cast class

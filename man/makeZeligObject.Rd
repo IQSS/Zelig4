@@ -3,7 +3,7 @@
 \title{Make an Individual Zelig Object}
 \usage{
   makeZeligObject(object, model, call, zelig_call, data,
-    label, env)
+    label, env, package.name = NULL)
 }
 \arguments{
   \item{object}{a fitted statistical model}

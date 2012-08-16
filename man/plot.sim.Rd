@@ -7,8 +7,6 @@
 \arguments{
   \item{x}{a `sim' object}
 
-  \item{xlab}{labels for the x-axis}
-
   \item{...}{parameters to be passed to the `truehist'
   function which is implicitly called for numeric
   simulations}
