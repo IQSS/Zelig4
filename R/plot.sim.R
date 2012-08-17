@@ -29,13 +29,43 @@ plot.sim <- function (x, ...) {
     res <- .plotter(x, ...)
 
     # Return object (whatever it is)
-    invisible(res)
+    return(invisible(res))
   }
 
   # Otherwise we just use this fall-back
+  old.par <- par(no.readonly = T)
+
+  # Some numbers we use to make things
+  total.qis <- length(names(x$qi))
+  palette <- rainbow(total.qis)
+  total.cols <- 2
+  total.rows <- ceiling(total.qis/total.cols)
+
+  vals <- ifelse(total.qis %% 2, c(1:total.qis, total.qis), 1:total.qis)
+
+  # Colors!
+  color.blue <- rgb(100, 149, 237, maxColorValue=255)
+
+  #
+  vals <- if (total.qis %% 2) {
+    c(1:total.qis, total.qis)
+  }
+  else {
+    1:total.qis
+  }
+
+  # Construct layout
+  layout(matrix(vals, total.rows, total.cols, byrow=TRUE))
+
+  k <- 1
+  for (title in names(x$qi)) {
+    simulations.plot(x$qi[[title]], main = title, col = palette[k], line.col = "black")
+    k <- k + 1
+  }
 
 
-  1
+  #
+  return(par(old.par))
 }
 
 
@@ -53,16 +83,26 @@ plot.simulations <- function (x, ...) {
   # Save old state
   old.par <- par(no.readonly=T)
 
-  #
+  # Quantities of Interest
+  qi <- x$qi
+
+  # Define Relevant quantity of interest titles that have special properties
   ev.titles <- c('Expected Values: E(Y|X)', 'Expected Values (for X1): E(Y|X1)')
   pv.titles <- c('Predicted Values: Y|X', 'Predicted Values (for X1): Y|X1')
+
+  # Determine whether two "Expected Values" qi's exist
+  both.ev.exist <- all(ev.titles %in% names(qi))
+  # Determine whether two "Predicted Values" qi's exist
+  both.pv.exist <- all(pv.titles %in% names(qi))
+
+  # Color of x should always be this pertty blue
+  color.x <- rgb(242, 122, 94, maxColorValue=255)
 
   if (is.null(x$x)) {
     return(par(old.par))
   }
   else if (is.null(x$x1) || is.na(x$x1)) {
     panels <- matrix(1:2, 2, 1)
-    color.x <- 'gray'
 
     # The plotting device:
     # +--------+
@@ -75,21 +115,19 @@ plot.simulations <- function (x, ...) {
 
     panels <- matrix(c(1:5, 5), ncol=2, nrow=3, byrow = TRUE)
 
-    color.x <- rgb(242, 122, 94, maxColorValue=255)
     color.x1 <- rgb(100, 149, 237, maxColorValue=255)
 
     # This mixes the above two colors, and converts the result into hexadecimal
-    color.mixed <- col2rgb(red=round((col2rgb(color.x) + col2rgb(color.x1))/2), maxColorValue=255)
-
-    # Determine whether two "Expected Values" qi's exist
-    both.ev.exist <- all(ev.titles %in% names(qi))
-    # Determine whether two "Predicted Values" qi's exist
-    both.pv.exist <- all(pv.titles %in% names(qi))
+    color.mixed <- rgb(t(round((col2rgb(color.x) + col2rgb(color.x1))/2)), maxColorValue=255)
+    print(color.mixed)
 
     panels <- if (xor(both.ev.exist, both.pv.exist))
       rbind(panels, c(6, 6))
     else if (both.ev.exist && both.pv.exist)
       rbind(panels, c(6, 7))
+    else
+      panels
+
 
     # the plotting device:
     #
@@ -111,8 +149,8 @@ plot.simulations <- function (x, ...) {
     pv = "Predicted Values: Y|X",
     pv1 = "Predicted Values (for X1): Y|X1",
     ev = "Expected Values: E(Y|X)",
-    ev1 = "Expected Values: E(Y|X1)",
-    fd - "First Differences: E(Y|X1) - E(Y|X)"
+    ev1 = "Expected Values (for X1): E(Y|X1)",
+    fd = "First Differences: E(Y|X1) - E(Y|X)"
     )
 
   simulations.plot(qi[[titles$pv]], main = titles$pv, col = color.x, line.col = "black")
@@ -121,21 +159,23 @@ plot.simulations <- function (x, ...) {
   simulations.plot(qi[[titles$ev1]], main = titles$ev1, col = color.x1, line.col = "black")
   simulations.plot(qi[[titles$fd]], main = titles$fd, col = color.mixed, line.col = "black")
 
-  simulations.plot(
-    qi[["Predicted Values: Y|X"]],
-    qi[["Predicted Values (for X1): Y|X1"]],
-    main = "Comparison of Y|X and Y|X1",
-    col = c(color.x, color.x1),
-    line.col = "black")
+  if (both.pv.exist) {
+    simulations.plot(
+      qi[["Predicted Values: Y|X"]],
+      qi[["Predicted Values (for X1): Y|X1"]],
+      main = "Comparison of Y|X and Y|X1",
+      col = c(color.x, color.x1),
+      line.col = "black")
+  }
 
-  simulations.plot(
-    qi[["Expected Values: E(Y|X)"]],
-    qi[["Expected Values (for X1): E(Y|X1)"]],
-    main = "Comparison of E(Y|X) and E(Y|X1)",
-    col = c(color.x, color.x1),
-    line.col = "black")
-
-
+  if (both.ev.exist) {
+    simulations.plot(
+      qi[["Expected Values: E(Y|X)"]],
+      qi[["Expected Values (for X1): E(Y|X1)"]],
+      main = "Comparison of E(Y|X) and E(Y|X1)",
+      col = c(color.x, color.x1),
+      line.col = "black")
+  }
 
   # Restore old state
   par(old.par)

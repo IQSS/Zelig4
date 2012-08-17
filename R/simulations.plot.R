@@ -80,7 +80,7 @@ simulations.plot <-function(
          }
        }
 
-       image(z=comp, axes=FALSE, col=colors, zlim=c(min(comp),max(comp)) )  
+       image(z=comp, axes=FALSE, col=colors, zlim=c(min(comp),max(comp)), main=main)
  
        locations.x<-seq(from=0,to=1,length=nrow(comp))
        locations.y<-locations.x
