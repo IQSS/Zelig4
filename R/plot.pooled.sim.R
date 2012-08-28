@@ -12,12 +12,10 @@
 #' @return the current graphical parameters. This is subject to change in future
 #' implementations of Zelig
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-plot.pooled.sim <- function (x, CI = 95, qi = "ev", xlab = "", ...) {
+plot.pooled.sim <- function (x, CI = 95, qi = "Exprected Values: E(Y|X)", xlab = "", ...) {
 
-  Y <- simulation.matrix(x, "Expected Values: E(Y|X)")
+  Y <- simulation.matrix(x, "Expected Values")
   X <- as.matrix(attr(x, "pooled.setx"))
 
-  print(dim(Y))
-  print(dim(X))
-
+  print(attributes(Y))
 }

@@ -36,16 +36,17 @@ sim.default <- function(
   if (length(attr(x, "pooled")) > 0 && attr(x, "pooled")) {
 
     xes <- list()
-    titles <- list()
+    titles <- NULL
 
     for (key in names(x)) {
       xes[[key]] <- sim(obj, x[[key]], x1[[key]], y, num, bootstrap, bootfn, cond.data, ...)
       attr(xes[[key]], "pooled") <- FALSE
-      titles <- append(titles, xes$titles)
+      titles <- append(titles, xes[[key]]$titles)
     }
 
     attr(xes, "pooled") <- TRUE
     attr(xes, "pooled.setx") <- x
+    attr(xes, "titles") <- unique(titles)
 
     class(xes) <- c("pooled.sim")
 
@@ -187,6 +188,8 @@ sim.default <- function(
   # cast class
   sim.class <- if (inherits(obj, "MI"))
     sim.class <- "MI.sim"
+
+  attr(s, "titles") <- unique(names(res.qi))
 
   class(s) <- c(sim.class,
                 paste("sim", obj$name, sep="."),

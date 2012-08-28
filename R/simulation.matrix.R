@@ -16,10 +16,8 @@ simulation.matrix <- function (obj, which = NULL, ...) {
 
 #' @S3method simulation.matrix sim
 simulation.matrix.sim <- function (obj, which, ...) {
-  if (missing(which))
-    stop('The "which" parameter is unspecified')
 
-  else if (!any(which %in% names(obj$qi))) {
+  if (is.na(which)) {
     warning(
       'The "which" parameter does not exist. Valid titles are:\n    ',
       paste('"', names(obj$qi), '"', sep="", collapse=", ")
@@ -29,12 +27,21 @@ simulation.matrix.sim <- function (obj, which, ...) {
     return(matrix(NA))
   }
 
-  # Return the result as a matrix (it should be either a matrix or vector...)
-  as.matrix(obj$qi[[which]])
+  # Store the little matrix (probably a column-vector)
+  lil.matrix <- as.matrix(obj$qi[[which]])
+
+  # Specify what quantities of interest this matrix represents
+  attr(lil.matrix, "qi") <- which
+
+  # Return the little, modified matrix
+  lil.matrix
 }
 
 #' @S3method simulation.matrix pooled.sim
 simulation.matrix.pooled.sim <- function (obj, which, ...) {
+
+  # Get the best match for the value "which"
+  which <- find.match(which, attr(obj, "titles"))
 
   # This will become the matrix that is returned
   big.matrix <- NULL
@@ -42,7 +49,7 @@ simulation.matrix.pooled.sim <- function (obj, which, ...) {
   # Iterate through all the results
   for (label in names(obj)) {
     # Get the matrix for the single quantity of interest
-    small.matrix <- simulation.matrix(obj[[label]], which = which)
+    small.matrix <- simulation.matrix(obj[[label]], which = which, exact.match = FALSE)
 
     # Column-bind this result with the total matrix.
     # This might want to be wrapped by a tryCatch in case weird things happen
@@ -54,6 +61,52 @@ simulation.matrix.pooled.sim <- function (obj, which, ...) {
   attr(big.matrix, "which") <- 1:ncol(big.matrix)
   names(attr(big.matrix, "which")) <- names(obj)
 
+  # Specify what quantities of interest this matrix represents
+  attr(big.matrix, "qi") <- which
+
   # Return the big matrix
   big.matrix
+}
+
+#' Find a Partial or Exact Match from a Vector of Strings
+#' Searches a vector of character-string, and returns the best match.
+#' @param needle a character-string to search for in the 
+#' @param haystack a vector of character-strings
+#' @return the best-matched string or NA
+#' @details ``find.match'' attempts to use several common matching functions in
+#' an order that sequentially prefers less strict matching, until a suitable
+#' match is found. If none is found, then return NA. The functions used for
+#' matching are: ``match'', ``charmatch'', and finally ``grep''.
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+find.match <- function (needle, haystack, fail = NA) {
+
+  # Having multiple approximate hits is bad form, since the string "x" can match
+  # "xe", "xen", "xs", etc. If it allows this possibility, we'll be constructing
+  # matrices out of potentially disparate quantities of interest. That is, it
+  # obviously would not be good to match the string "Average" with 
+  # "Averge Treatment Effect" and "Average Value".
+  # That is, we want our matrices to be constructed consistently
+  if (length(needle) != 1)
+    return(NA)
+
+  # Search the strings all at once for code clarity. We can write this smoother,
+  # but then it sacrifices readability for nested if clauses.
+  exact.match <- match(needle, haystack, nomatch = 0)
+  partial.match <- charmatch(needle, haystack, nomatch = 0)
+  grep.match <- grep(needle, haystack)[1]
+
+  # If we found an exact match, then we go with it.
+  if (exact.match != 0)
+    return(haystack[exact.match])
+
+  # If there is a unique partial match, then that will work too.
+  else if (partial.match != 0)
+    return(haystack[partial.match])
+
+  # If there are non-unique partial matches, then we take the first incidence
+  else if (!is.na(grep.match))
+    return(haystack[grep.match])
+
+  # If nothing else is good, then return whatever value a failure should be. NA by default
+  return(fail)
 }
