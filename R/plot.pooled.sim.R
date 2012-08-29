@@ -55,16 +55,23 @@ plot.pooled.sim <- function (x, CI = 95, col = NULL, qi = "Expected Values", xla
   ev <- NA
 
   for (k in 1:nrow(Y)) {
+
+    # Specify values for code-clarity
     vals <- Y[k, ]
+
+    # Generate basic data
     history[k, "Value"] <- vals
     history[k, "Median"] <- median(vals)
 
+    # 80% CI
     history[k, "Upper 80%"] <- ci.upper(vals, .8)
     history[k, "Lower 80%"] <- ci.lower(vals, .8)
 
+    # 95% CI
     history[k, "Upper 95%"] <- ci.upper(vals, .95)
     history[k, "Lower 95%"] <- ci.lower(vals, .95)
 
+    # 99.9% CI
     history[k, "Upper 99.9%"] <- ci.upper(vals, .999)
     history[k, "Lower 99.9%"] <- ci.lower(vals, .999)
   }
