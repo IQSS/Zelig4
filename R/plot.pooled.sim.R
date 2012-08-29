@@ -54,6 +54,9 @@ plot.pooled.sim <- function (x, CI = 95, col = NULL, qi = "Expected Values", xla
   # 
   ev <- NA
 
+  # START comparing with ciplot actual results
+  # !!!
+
   for (k in 1:nrow(Y)) {
 
     # Specify values for code-clarity
