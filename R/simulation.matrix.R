@@ -17,6 +17,8 @@ simulation.matrix <- function (obj, which = NULL, ...) {
 #' @S3method simulation.matrix sim
 simulation.matrix.sim <- function (obj, which, ...) {
 
+  which <- find.match(which, attr(obj, "titles"))
+
   if (is.na(which)) {
     warning(
       'The "which" parameter does not exist. Valid titles are:\n    ',
