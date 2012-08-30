@@ -48,6 +48,7 @@ ciplot<-function(x,ev,legcol="gray30",col=NULL,leg=1,legpos=NULL){
   for(i in 1:k){
     history[i,]<-c(x[i,"age"],median(ev[,i]),ci.upper(ev[,i],0.8),ci.lower(ev[,i],0.8),ci.upper(ev[,i],0.95),ci.lower(ev[,i],0.95),ci.upper(ev[,i],0.999),ci.lower(ev[,i],0.999))
   }
+  print(history)
   all.xlim<-c(min(history[,1]),max(history[,1]))
   all.ylim<-c(min(history[,-1]),max(history[,-1]))
 
