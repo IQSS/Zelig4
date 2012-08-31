@@ -97,6 +97,10 @@ plot.simulations <- function (x, ...) {
 
   # Color of x should always be this pertty blue
   color.x <- rgb(242, 122, 94, maxColorValue=255)
+  color.x1 <- rgb(100, 149, 237, maxColorValue=255)
+
+  # This mixes the above two colors, and converts the result into hexadecimal
+  color.mixed <- rgb(t(round((col2rgb(color.x) + col2rgb(color.x1))/2)), maxColorValue=255)
 
   if (is.null(x$x)) {
     return(par(old.par))
@@ -114,12 +118,6 @@ plot.simulations <- function (x, ...) {
   else {
 
     panels <- matrix(c(1:5, 5), ncol=2, nrow=3, byrow = TRUE)
-
-    color.x1 <- rgb(100, 149, 237, maxColorValue=255)
-
-    # This mixes the above two colors, and converts the result into hexadecimal
-    color.mixed <- rgb(t(round((col2rgb(color.x) + col2rgb(color.x1))/2)), maxColorValue=255)
-    print(color.mixed)
 
     panels <- if (xor(both.ev.exist, both.pv.exist))
       rbind(panels, c(6, 6))

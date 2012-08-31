@@ -6,6 +6,9 @@
 #' @param x A `sim' object
 #' @param CI A number, between 0 and 100, specifying the confidence interal to
 #' construct
+#' @param col a valid vector of colors of at least length 3 to use to color the
+#' confidence intervals
+#' @param qi a character-string specifying the quantity of interest to plot
 #' @param xlab Labels for the x-axis
 #' @param ... Parameters to be passed to the `truehist' function which is 
 #' implicitly called for numeric simulations

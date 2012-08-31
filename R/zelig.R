@@ -245,7 +245,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 #' the data-set
 #' @param env an environment variable that contains all variables to evaluate
 #' the call ``zelig_call''
-#' @return ....
+#' @param package.name a character-string specifyign the name of the package
+#' that is the source of the model used to fit this object
+#' @return A ``zelig'' object
 makeZeligObject <- function (object,
                              model,
                              call,
