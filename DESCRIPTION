@@ -18,9 +18,9 @@ Description: Zelig is an easy-to-use program that can estimate, and
     the raw output of existing statistical procedures and translates
     them into quantities of direct interest.
 Version: 4.0-11
-Packaged: Tue Sept 28 12:06:15 2010; mowen
+Packaged: Fri Aug 31 13:55:20 2012; mowen
 URL: http://gking.harvard.edu/zelig
-Date: 2012-08-15
+Date: 2012-08-31
 Depends:
     R (>= 2.14),
     MASS,

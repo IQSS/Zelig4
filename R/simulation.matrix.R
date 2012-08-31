@@ -74,7 +74,7 @@ simulation.matrix.pooled.sim <- function (obj, which, ...) {
 #' Searches a vector of character-string, and returns the best match.
 #' @param needle a character-string to search for in the 
 #' @param haystack a vector of character-strings
-#' @param
+#' @param fail the value to return in case no match is found. Defaults to NA
 #' @return the best-matched string or NA
 #' @details ``find.match'' attempts to use several common matching functions in
 #' an order that sequentially prefers less strict matching, until a suitable

@@ -23,9 +23,13 @@
 
   \item{env}{an environment variable that contains all
   variables to evaluate the call ``zelig_call''}
+
+  \item{package.name}{a character-string specifyign the
+  name of the package that is the source of the model used
+  to fit this object}
 }
 \value{
-  ....
+  A ``zelig'' object
 }
 \description{
   Returns a ``zelig'' object with the proper specifications

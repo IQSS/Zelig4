@@ -70,13 +70,14 @@ plot.sim <- function (x, ...) {
 
 
 #' Plot Any Simulation from the Zelig Core Package
+#'
 #' Plots any simulation from the core package. In general, this function can
 #' \emph{neatly} plot simulations containing five of the popular ``quantities
 #' of interest'' - ``Expected Values: E(Y|X)'', ``Predicted Values: Y|X'',
 #' ``Expected Values (for X1): E(Y|X1)'', ``Predicted Values (for X1): Y|X1''
 #' and ``First Differences: E(Y|X1) - E(Y|X)''.
 #' @param x an object
-#' @param .... parameters passed to the ``plot'' and ``barplot'' functions
+#' @param ... parameters passed to the ``plot'' and ``barplot'' functions
 #' @return the original graphical parameters
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 plot.simulations <- function (x, ...) {

@@ -15,9 +15,9 @@
 #' \tabular{ll}{
 #' Package: \tab Zelig\cr
 #' Version: \tab 4.0-11\cr
-#' Date: \tab 2011-08-15\cr
-#' Depends: \tab R (>= 2.8.1), MASS, survival, methods
-#' Suggests: mvtnorm, MCMCpack\cr
+#' Date: \tab 2011-08-31\cr
+#' Depends: \tab R (>= 2.14), MASS, survival, methods, sandwich, boot \cr
+#' Suggests: \tab mvtnorm, Formula \cr
 #' License: \tab GPL version 2 or newer\cr
 #' URL: \tab http://gking.harvard.edu/zelig\cr
 #' }

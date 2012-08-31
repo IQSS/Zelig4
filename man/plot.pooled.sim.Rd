@@ -12,6 +12,12 @@
   \item{CI}{A number, between 0 and 100, specifying the
   confidence interal to construct}
 
+  \item{col}{a valid vector of colors of at least length 3
+  to use to color the confidence intervals}
+
+  \item{qi}{a character-string specifying the quantity of
+  interest to plot}
+
   \item{xlab}{Labels for the x-axis}
 
   \item{...}{Parameters to be passed to the `truehist'
