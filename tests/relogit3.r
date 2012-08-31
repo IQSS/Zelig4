@@ -4,7 +4,6 @@ data(mid)
 
 z.out1 <- zelig(conflict ~ major + contig + power + maxdem + mindem + years,
                 data = mid, model = "relogit", tau = 1042/303772)
-user.prompt()
 
 summary(z.out1)
 

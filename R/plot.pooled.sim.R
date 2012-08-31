@@ -1,7 +1,7 @@
 #' Method for plotting pooled simulations by confidence intervals
 #'
 #' Plot pooled simulated quantities of interest.
-#' @usage \method{plot}{pooled.sim}(x, xlab = "", ...)
+#' @usage \method{plot}{pooled.sim}(x, CI = 95, col = NULL, qi = "Expected Values", xlab = "", ..., leg.pos = NULL, leg.type = 1, leg.col = "gray30")
 #' @S3method plot pooled.sim
 #' @param x A `sim' object
 #' @param CI A number, between 0 and 100, specifying the confidence interal to

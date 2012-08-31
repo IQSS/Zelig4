@@ -1,7 +1,7 @@
 #' Method for plotting simulations
 #'
 #' Plot simulated quantities of interest.
-#' @usage \method{plot}{sim}(x, xlab = "", ...)
+#' @usage \method{plot}{sim}(x, ...)
 #' @S3method plot sim
 #' @param x a `sim' object
 #' @param ... parameters to be passed to the `truehist' function which is 

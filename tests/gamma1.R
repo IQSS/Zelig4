@@ -1,17 +1,12 @@
-#
 library(Zelig)
 
-data(turnout)
+data(coalition)
 
-z.out1 <- zelig(vote ~ age + race, model = "gamma", data = turnout)
+z <- zelig(duration ~ fract + numst2, model = "gamma", data = coalition)
 
-x.out1 <- setx(z.out1, age = 36, race = "white")
-x.out2 <- setx(z.out1, age = 20, educate = 4)
+x.low <- setx(z, numst2 = 0)
+x.high <- setx(z, numst2 = 1)
 
-s.out2 <- sim(z.out1, x.out1, x.out2, num = 10, bootstrap = F)
+s <- sim(z, x = x.low, x1 = x.high)
 
-summary(z.out1)
-vcov(z.out1)
-coef(z.out1)
-x.out1
-plot(s.out1)
+plot(s)

@@ -2,7 +2,7 @@
 \alias{plot.sim}
 \title{Method for plotting simulations}
 \usage{
-  \method{plot}{sim}(x, xlab = "", ...)
+  \method{plot}{sim}(x, ...)
 }
 \arguments{
   \item{x}{a `sim' object}
@@ -12,8 +12,7 @@
   simulations}
 }
 \value{
-  the current graphical parameters. This is subject to
-  change in future implementations of Zelig
+  nothing
 }
 \description{
   Plot simulated quantities of interest.
