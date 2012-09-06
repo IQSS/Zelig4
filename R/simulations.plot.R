@@ -80,7 +80,13 @@ simulations.plot <-function(
          }
        }
 
-       image(z=comp, axes=FALSE, col=colors, zlim=c(min(comp),max(comp)), main=main)
+       old.pty<-par()$pty
+       old.mai<-par()$mai
+
+       par(pty="s")
+       par(mai=c(0.3,0.3,0.3,0.1))
+
+       image(z=comp, axes=FALSE, col=colors, zlim=c(min(comp),max(comp)),main=main )  
  
        locations.x<-seq(from=0,to=1,length=nrow(comp))
        locations.y<-locations.x
@@ -94,6 +100,8 @@ simulations.plot <-function(
        axis(side=1,labels=nameseq, at=seq(0,1,length=n.y), cex.axis=1, las=1)
        axis(side=2,labels=nameseq, at=seq(0,1,length=n.y), cex.axis=1, las=3)
        box()
+       par(pty=old.pty,mai=old.mai)
+
 
 ## Numeric - Plot two densities on top of each other
     }else if(is.numeric(y) & is.numeric(y1)){
