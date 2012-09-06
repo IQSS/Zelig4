@@ -54,7 +54,7 @@ simulations.plot <-function(
       #   newy is actually a collection of integers (not just numeric)
       # Then:
       #   we can tabulate (so sick)
-      if (FALSE && !is.null(newy) && all(as.integer(y) == y)) {
+      if (!is.null(newy) && all(as.integer(y) == y)) {
 
         # Create a sequence of names
         nameseq <- paste("Y=", min(newy):max(newy), sep="")
