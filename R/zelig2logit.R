@@ -14,7 +14,6 @@ zelig2logit <- function(formula, weights=NULL, robust = F, ..., data) {
   w <- weights
   z(
     glm,
-    # .hook = "robust.glm.hook",
     formula = formula,
     weights = w,
     family  = binomial(link="logit"),

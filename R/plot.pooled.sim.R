@@ -1,199 +1,158 @@
 #' Method for plotting pooled simulations by confidence intervals
 #'
-#' Plot pooled simulated quantities of interest.
-#' @usage \method{plot}{pooled.sim}(x, CI = 95, col = NULL, qi = "Expected Values", xlab = "", ..., leg.pos = NULL, leg.type = 1, leg.col = "gray30")
-#' @S3method plot pooled.sim
+#' Plot confidence intervals of pooled simulated values.
+#' 
 #' @param x A `sim' object
-#' @param CI A number, between 0 and 100, specifying the confidence interal to
-#' construct
-#' @param col a valid vector of colors of at least length 3 to use to color the
-#' confidence intervals
 #' @param qi a character-string specifying the quantity of interest to plot
-#' @param xlab Labels for the x-axis
+#' @param var The variable to be used on the x-axis. Default is the variable
+#' across all the chosen values with smallest nonzero variance
 #' @param ... Parameters to be passed to the `truehist' function which is 
 #' implicitly called for numeric simulations
-#' @param leg.pos ``legend type'', exact coordinates and sizes for legend.
-#' Overrides argment ``leg.type''
-#' @param leg.type ``legend position'', an integer from 1 to 4, specifying the
+#' @param legcol ``legend color'', an valid color used for plotting the line
+#' colors in the legend
+#' @param col a valid vector of colors of at least length 3 to use to color the
+#' confidence intervals
+#' @param leg ``legend position'', an integer from 1 to 4, specifying the
 #' position of the legend. 1 to 4 correspond to ``SE'', ``SW'', ``NW'', and
 #' ``NE'' respectively
-#' @param leg.col ``legend color'', an valid color used for plotting the line
-#' colors in the legend
+#' @param legpos ``legend type'', exact coordinates and sizes for legend.
+#' Overrides argment ``leg.type''
 #' @return the current graphical parameters. This is subject to change in future
 #' implementations of Zelig
 #' @author James Honaker, adapted by Matt Owen \email{mowen@@iq.harvard.edu}
-plot.pooled.sim <- function (x, CI = 95, col = NULL, qi = "Expected Values", xlab = "", ..., leg.pos = NULL, leg.type = 1, leg.col = "gray30") {
+plot.ci<-function(x,qi="ev",var=NULL, ..., legcol="gray20",col=NULL,leg=1,legpos=NULL){
 
-  # Specify graphical parameters
-  par(bty = "n")
-
-  # Get the closest fit to an exact match for a quantity of interest
-  qi <- find.match(qi, attr(x, "titles"))
-
-  # If there is no match at all, return an error
-  if (is.na(qi)) {
-    warning(
-      "Warning the specified quantity of interest does not exist\n  Legal values are: ",
-      paste(attr(x, "titles"), sep=", ")
-      )
-
-    invisible(NULL)
-  }
-    
-  # Specify the colors, if none are given
-  if (is.null(col))
-    col <- c(
-      rgb(100, 149, 237, alpha=50, maxColorValue=255),
-      rgb(152, 245, 255, alpha=50, maxColorValue=255),
-      rgb(191, 239, 255, alpha=70, maxColorValue=255)
-    )
-
-
-  # Get the Upper Boundary of the Confidence Interval Defined by Alpha
-  # @param x a vector of values
-  # @param alpha a numeric, specifying the size of the confidence interval.
-  # @return the value at the upper boundary
-  ci.lower <- function(x, alpha)
-    return(sort(x)[round((1-alpha)*length(x))])
-
-  # Get the Lower Boundary of the Confidence Interval Defined by Alpha
-  # @param x a vector of values
-  # @param alpha a numeric, specifying the size of the confidence interval.
-  # @return the value at the upper boundary
-  ci.upper <- function(x, alpha)
-    return(sort(x)[max(1,round(alpha*length(x)))])
-
-  # Extract the forms as matrices
-  Y <- simulation.matrix(x, qi)
-  X <- as.matrix(attr(x, "pooled.setx"))
-
-  # Specify the dimensions of the matrix containing the observed simulations
-  history <- matrix(NA, nrow(X), 8)
-
-  # Name the columns of our matrix
-  colnames(history) <- c(
-    "Value", "Median", "Upper 80%", "Lower 80%",
-    "Upper 95%", "Lower 95%", "Upper 99.9%", "Lower 99.9%"
-    )
-
-  # Matrix of quantities of interest
-  qi.matrix <- simulation.matrix(x, qi)
-
-  # Get columns that don't vary
-  qi.unique <- list()
-
-  # Find out which column varies
-  for (column in colnames(X))
-    qi.unique[column] <- length( unique(X[, column]) ) > 1
-
-  unique.column <- names(Filter(function (x) x == TRUE, qi.unique))
-
-  if (length(unique.column) > 1) {
-    warning("Too many columns vary")
-    invisible(NA)
+  xmatrix<-matrix(NA,nrow=length(x),ncol=length(x[[1]]$x$data))
+  for(i in 1:length(x)){
+    xmatrix[i,]<-as.matrix(x[[i]]$x$data)
   }
 
-  # Yes, this is equivalent to !length(unique.columns), but I like readability
-  else if (length(unique.column) == 0) {
-    warning("No columns vary")
-    invisible(NA)
+  if(is.null(var)){
+    each.var<-apply(xmatrix,2,sd) 
+    flag<-each.var>0
+    min.var<-min(each.var[flag])
+    var.seq<-1:ncol(xmatrix)
+    position<-var.seq[each.var==min.var]  
+    position<-min(position)
+    xseq<-xmatrix[,position]
+    xname<-names(x[[1]]$x$data[position])
+  }else{
+
+    if(is.numeric(var)){
+      position<-var
+    }else if(is.character(var)){
+      position<-grep(var,names(x[[1]]$x$data))
+    }
+    xseq<-xmatrix[,position]
+    xname<-names(x[[1]]$x$data[position])
   }
 
-  for (k in 1:nrow(X)) {
 
-    # Specify values for code-clarity
-    vals <- Y[, k]
-
-    # Specify explanatory value
-    history[k, "Value"] <- X[k, unique.column]
-
-    # Specify median value
-    history[k, "Median"] <- median(vals)
-
-    # 80% CI
-    history[k, "Upper 80%"] <- ci.upper(vals, .8)
-    history[k, "Lower 80%"] <- ci.lower(vals, .8)
-
-    # 95% CI
-    history[k, "Upper 95%"] <- ci.upper(vals, .95)
-    history[k, "Lower 95%"] <- ci.lower(vals, .95)
-
-    # 99.9% CI
-    history[k, "Upper 99.9%"] <- ci.upper(vals, .999)
-    history[k, "Lower 99.9%"] <- ci.lower(vals, .999)
+  if(qi=="pv"){
+    ev<-simulation.matrix(x, "Predicted Values: Y|X")
+  }else{
+    ev<-simulation.matrix(x, "Expected Values: E(Y|X)")
   }
 
-  # Get limits for plot
-  plot.domain <- c(min(history[, 1]), max(history[, 1]))
-  plot.range <- c(min(history[, -1]), max(history[, -1]))
-  plot.label <- paste("Range of \"", unique.column, "\"", sep="")
 
-  #
-  plot(
-    # Plot points on an x-y axis. Check out this semantic programming
-    history[, "Value"], history[, "Median"],
-    # Specify domain and range of plot
-    xlim = plot.domain, ylim = plot.range,
-    # Label the axes
-    xlab = plot.label, ylab = qi,
-    # Title the plot
-    main = "Confidence Intervals with Respect to Explanatory Variables"
-    )
+  ## Set up defaults
 
-
-  # Values
-  k <- ncol(Y)
-  x.coords <- c(history[, 1], history[k:1, 1])
-
-  # Draw region around 80% confidence interval (NOTE: 3 = Upper 80%, 4 = Lower 80%)
-  polygon(x.coords, c(history[, 3], history[k:1, 4]), col=col[1], border="gray60")
-
-  # Draw region around 95% confidence interval (NOTE: 5 = Upper 80%, 6 = Lower 80%)
-  polygon(x.coords, c(history[, 5], history[k:1, 6]), col=col[2], border="gray90")
-
-  # Draw region around 99.9% confidence interval (NOTE: 7 = Upper 80%, 8 = Lower 80%)
-  polygon(x.coords, c(history[, 7], history[k:1, 8]), col=col[3], border="white")
-
-
-
-    ## This is the legend
-
-  if(is.null(leg.pos)) {
-    leg.pos <- if (leg.type == 1)
-      c(.91, .04, .2, .05)
-    else if (leg.type == 2)
-      c(.09, .04, .2, .05)
-    else if (leg.type == 3)
-      c(.09, .04, .8, .05)
-    else
-      c(.91, .04, .8, .05)
+  ci.upper<-function(x,alpha){
+    pos<-round((1-alpha)*length(x))
+    return(sort(x)[pos])
+  }
+  ci.lower<-function(x,alpha){
+    pos<-max(1,round(alpha*length(x)))
+    return(sort(x)[pos])
   }
 
-  # Construct positions for legend
-  lx <- plot.domain[1] + leg.pos[1] * (plot.domain[2] - plot.domain[1])
-  hx <- plot.domain[1] + (leg.pos[1] + leg.pos[2]) * (plot.domain[2] - plot.domain[1])
-  deltax <- (hx - lx)/10
-  my <- plot.range[1] + leg.pos[3] * (plot.range[2] - plot.range[1])
-  dy <- leg.pos[4] * (plot.range[2] - plot.range[1])
 
-  # Draw the lines for the legend
-  lines(c(hx+deltax,hx+2*deltax,hx+2*deltax,hx+deltax),c(my+3*dy,my+3*dy,my-3*dy,my-3*dy),col=leg.col)
-  lines(c(hx+3*deltax,hx+4*deltax,hx+4*deltax,hx+3*deltax),c(my+1*dy,my+1*dy,my-1*dy,my-1*dy),col=leg.col)
-  lines(c(lx-deltax,lx-2*deltax,lx-2*deltax,lx-deltax),c(my+2*dy,my+2*dy,my-2*dy,my-2*dy),col=leg.col)
+  k<-ncol(ev)
+  n<-nrow(ev)
+  if(is.null(col)){
+    myblue1<-rgb( 100, 149, 237, alpha=50, maxColorValue=255)
+    myblue2<-rgb( 152, 245, 255, alpha=50, maxColorValue=255)
+    myblue3<-rgb( 191, 239, 255, alpha=70, maxColorValue=255)
+    col<-c(myblue1,myblue2,myblue3)
+  }
+  history<-matrix(NA, nrow=k,ncol=8)
+  for(i in 1:k){
+    history[i,]<-c(xseq[i],median(ev[,i]),ci.upper(ev[,i],0.8),ci.lower(ev[,i],0.8),ci.upper(ev[,i],0.95),ci.lower(ev[,i],0.95),ci.upper(ev[,i],0.999),ci.lower(ev[,i],0.999))
+  }
+  all.xlim<-c(min(history[,1]),max(history[,1]))
+  all.ylim<-c(min(history[,-1]),max(history[,-1]))
+
+  ## This is the plot
+
+  par(bty="n")
+
+  plot(x=history[,1],y=history[,2],type="l",xlim=all.xlim,ylim=all.ylim,xlab=paste("Range of",xname),ylab="Expected Values: E(Y|X)")
+
+  polygon(c(history[,1],history[k:1,1]),c(history[,5],history[k:1,6]),col=col[2],border="gray90")
+  polygon(c(history[,1],history[k:1,1]),c(history[,3],history[k:1,4]),col=col[1],border="gray60")
+  polygon(c(history[,1],history[k:1,1]),c(history[,7],history[k:1,8]),col=col[3],border="white")
+
+  ## This is the legend
+
+  if(is.null(legpos)){
+    if(leg==1){
+      legpos<-c(.91,.04,.2,.05)
+    }else if(leg==2){
+      legpos<-c(.09,.04,.2,.05)
+    }else if(leg==3){
+      legpos<-c(.09,.04,.8,.05)
+    }else{
+      legpos<-c(.91,.04,.8,.05)
+    }
+  }
+
+  lx<-min(all.xlim)+ legpos[1]*(max(all.xlim)- min(all.xlim))
+  hx<-min(all.xlim)+ (legpos[1]+legpos[2])*(max(all.xlim)- min(all.xlim))
+
+  deltax<-(hx-lx)*.1
+
+  my<-min(all.ylim) +legpos[3]*min(max(all.ylim) - min(all.ylim))
+  dy<-legpos[4]*(max(all.ylim) - min(all.ylim))
+
+
+  lines(c(hx+deltax,hx+2*deltax,hx+2*deltax,hx+deltax),c(my+3*dy,my+3*dy,my-3*dy,my-3*dy),col=legcol)
+  lines(c(hx+3*deltax,hx+4*deltax,hx+4*deltax,hx+3*deltax),c(my+1*dy,my+1*dy,my-1*dy,my-1*dy),col=legcol)
+  lines(c(lx-deltax,lx-2*deltax,lx-2*deltax,lx-deltax),c(my+2*dy,my+2*dy,my-2*dy,my-2*dy),col=legcol)
   lines(c(lx-5*deltax,lx),c(my,my),col="white",lwd=3)
-  lines(c(lx-5*deltax,lx),c(my,my),col=leg.col)
+  lines(c(lx-5*deltax,lx),c(my,my),col=legcol)
   lines(c(lx,hx),c(my,my))
 
-  # Color in the lines drawn for the legend
   polygon(c(lx,lx,hx,hx),c(my-2*dy,my+2*dy,my+2*dy,my-2*dy),col=col[2],border="gray90")
   polygon(c(lx,lx,hx,hx),c(my-1*dy,my+1*dy,my+1*dy,my-1*dy),col=col[1],border="gray60")
   polygon(c(lx,lx,hx,hx),c(my-3*dy,my+3*dy,my+3*dy,my-3*dy),col=col[3],border="white")
 
-  # Label the legend
-  text(lx,my,labels="median",pos=2,cex=0.5,col=leg.col)
-  text(lx,my+2*dy,labels="ci95",pos=2,cex=0.5,col=leg.col)
-  text(hx,my+1*dy,labels="ci80",pos=4,cex=0.5,col=leg.col)
-  text(hx,my+3*dy,labels="ci99.9",pos=4,cex=0.5,col=leg.col)
-
-  # Fin.
+  text(lx,my,labels="median",pos=2,cex=0.5,col=legcol)
+  text(lx,my+2*dy,labels="ci95",pos=2,cex=0.5,col=legcol)
+  text(hx,my+1*dy,labels="ci80",pos=4,cex=0.5,col=legcol)
+  text(hx,my+3*dy,labels="ci99.9",pos=4,cex=0.5,col=legcol)
 }
+
+#' Method for plotting pooled simulations by confidence intervals
+#'
+#' Plot pooled simulated quantities of interest.
+#' @usage \method{plot}{pooled.sim}(x, qi="ev", var=NULL,  ...,  legcol="gray20", col=NULL, leg=1, legpos=NULL)
+#' @S3method plot pooled.sim
+#' @param x A `sim' object
+#' @param qi a character-string specifying the quantity of interest to plot
+#' @param var The variable to be used on the x-axis. Default is the variable
+#' across all the chosen values with smallest nonzero variance
+#' @param ... Parameters to be passed to the `truehist' function which is 
+#' implicitly called for numeric simulations
+#' @param legcol ``legend color'', an valid color used for plotting the line
+#' colors in the legend
+#' @param col a valid vector of colors of at least length 3 to use to color the
+#' confidence intervals
+#' @param leg ``legend position'', an integer from 1 to 4, specifying the
+#' position of the legend. 1 to 4 correspond to ``SE'', ``SW'', ``NW'', and
+#' ``NE'' respectively
+#' @param legpos ``legend type'', exact coordinates and sizes for legend.
+#' Overrides argment ``leg.type''
+#' @return the current graphical parameters. This is subject to change in future
+#' implementations of Zelig
+#' @author James Honaker, adapted by Matt Owen \email{mowen@@iq.harvard.edu}
+plot.pooled.sim <- plot.ci

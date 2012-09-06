@@ -1,9 +1,9 @@
-\name{plot.pooled.sim}
-\alias{plot.pooled.sim}
+\name{plot.ci}
+\alias{plot.ci}
 \title{Method for plotting pooled simulations by confidence intervals}
 \usage{
-  \method{plot}{pooled.sim}(x, qi="ev", var=NULL, ...,
-    legcol="gray20", col=NULL, leg=1, legpos=NULL)
+  plot.ci(x, qi = "ev", var = NULL, ..., legcol = "gray20",
+    col = NULL, leg = 1, legpos = NULL)
 }
 \arguments{
   \item{x}{A `sim' object}
@@ -37,7 +37,7 @@
   change in future implementations of Zelig
 }
 \description{
-  Plot pooled simulated quantities of interest.
+  Plot confidence intervals of pooled simulated values.
 }
 \author{
   James Honaker, adapted by Matt Owen
