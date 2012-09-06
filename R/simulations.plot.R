@@ -26,8 +26,7 @@ simulations.plot <-function(
                       main="",
                       col=NULL,
                       line.col=NULL,
-                      axisnames=TRUE,
-                      levels.y = NULL, levels.y1 = NULL
+                      axisnames=TRUE
                       ) {
   ## Univariate Plots ##
   if(is.null(y1)){
