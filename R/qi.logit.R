@@ -37,6 +37,9 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
     fd <- ev2 - ev1
   }
 
+  # Ensure that the correct levels are passed along.
+  levels(pr1) <- levels(pr2) <- c('0', '1')
+
   # return
   list(
        "Expected Values: E(Y|X)" = ev1,

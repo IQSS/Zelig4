@@ -26,38 +26,84 @@ simulations.plot <-function(
                       main="",
                       col=NULL,
                       line.col=NULL,
-                      axisnames=TRUE
+                      axisnames=TRUE,
+                      levels.y = NULL, levels.y1 = NULL
                       ) {
-
-## Univariate Plots ##
+  ## Univariate Plots ##
   if(is.null(y1)){
 
-    if(is.null(col)){
-      col<-rgb(100,149,237,maxColorValue=255)
-    }
-    if(is.null(line.col)){
-      line.col<-"black"
+    if (is.null(col))
+      col <- rgb(100,149,237,maxColorValue=255)
+
+    if (is.null(line.col))
+      line.col <- "black"
+
+    # Character
+    if (is.character(y)) {
+
+      # Try to cast y as integers, note that this is not always possible for the
+      # general case of characters
+      newy <- tryCatch(
+        as.numeric(y),
+        warning = function (w) NULL,
+        error = function (e) NULL
+        )
+
+      # If:
+      #   newy is not NULL (can be cast as a numeric) AND
+      #   newy is actually a collection of integers (not just numeric)
+      # Then:
+      #   we can tabulate (so sick)
+      if (FALSE && !is.null(newy) && all(as.integer(y) == y)) {
+
+        # Create a sequence of names
+        nameseq <- paste("Y=", min(newy):max(newy), sep="")
+
+        # Set the heights of the barplots.
+        # Note that tablar requires that all out values are greater than zero.
+        # So, we subtract the min value (ensuring everything is at least zero)
+        # then add 1
+        bar.heights <- tabulate(newy - min(newy) + 1) / length(y)
+
+        # Barplot with (potentially) some zero columns
+        output <- barplot(
+          bar.heights,
+          xlab=xlab, ylab=ylab, main=main, col=col[1],
+          axisnames=axisnames, names.arg=nameseq
+          )
+      }
+
+      # Otherwise, we stick with old-style tables
+      else {
+        y <- if (is.null(levels(y)))
+          factor(y)
+        else
+          factor(y, levels = levels(y))
+
+        bar.heights <- table(y)/length(y)
+        bar.names <- paste("Y=", names(bar.heights), sep="")
+
+        output <- barplot(
+          bar.heights,
+          xlab=xlab, ylab=ylab, main=main, col=col[1],
+          axisnames=axisnames, names.arg=bar.names
+          )
+      }
     }
 
-## Character
-     if(is.character(y)){
-       newy<-as.numeric(y)
-       nameseq<- paste("Y=",min(trunc(newy)):max(trunc(newy)),sep="")
-       newy<-tabulate(newy-min(newy) + 1)/sum(newy)        # tabulate uses trunc - might need to change?
-       output<-barplot(newy,xlab=xlab,ylab=ylab,main=main,col=col[1],axisnames=axisnames,names.arg=nameseq)        
-
-## Numeric
-     } else if(is.numeric(y)){ 
-       den.y<-density(y)
-       output<-plot(den.y,xlab=xlab,ylab=ylab,main=main,col=line.col[1])
+     ## Numeric
+     else if(is.numeric(y)){ 
+       den.y <- density(y)
+       output <- plot(den.y, xlab=xlab, ylab=ylab, main=main, col=line.col[1])
        if(!identical(col[1],"n")){
-         polygon(den.y$x,den.y$y,col=col[1])
+         polygon(den.y$x, den.y$y, col=col[1])
        } 
      }
 
 ## Comparison Plots ##
 
-  }else{
+  }
+  else{
 
 ## Character - Plot and shade a matrix  
     if(is.character(y) & is.character(y1) & length(y)==length(y1) ){

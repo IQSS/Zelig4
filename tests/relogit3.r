@@ -9,7 +9,7 @@ summary(z.out1)
 
 x.out1 <- setx(z.out1)
 
-s.out1 <- sim(z.out1, x = x.out1)
+s.out1 <- sim(z.out1, x = x.out1, num = 10)
 
 summary(s.out1)
 
