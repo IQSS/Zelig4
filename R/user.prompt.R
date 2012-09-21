@@ -5,7 +5,7 @@
 #' @export
 #' @note This function is primarily used by Zelig demo scripts
 user.prompt <- function (msg = NULL) {
-  if (is.null(message))
+  if (is.null(msg))
     msg <- "Press <return> to continue: "
 
   msg <- paste("\n", msg, sep="")
