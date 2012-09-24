@@ -1,4 +1,4 @@
-library(ZeligLeastSquares)
+library(Zelig)
 
 data(klein)
 

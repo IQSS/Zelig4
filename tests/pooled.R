@@ -1,11 +1,5 @@
-# Tests for multiple/pooled data
-
 library(Zelig)
-
 data(turnout)
-
 z <- zelig(vote ~ race + educate + age, model = "logit", data = turnout)
 x <- setx(z, educate = 4:5, age=15:17)
 s <- sim(z, x)
-
-summary(s)
