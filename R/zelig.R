@@ -193,12 +193,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     class(object) <- c(model, paste(model, 'mi', sep='-'), "MI")
   }
 
-  #
-  #
-  methods.env <- if(old.style.oop)
-    .RegisterMethodsS3(c("terms", register(obj)))
-  else
-    .RegisterMethodsS4(c("terms", register(obj)))
+  # This used to be important, but we have API work-arounds now
+  # methods.env <- if(old.style.oop)
+  #   .RegisterMethodsS3(c("terms", register(obj)))
+  # else
+  #   .RegisterMethodsS4(c("terms", register(obj)))
 
   # Update the shared environment
   assign('old-formula', formula, state)
@@ -206,7 +205,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   assign('parent', parent.frame(), state)
   assign('call', match.call(), state)
   assign('by', by, state)
-  assign('methods', methods.env, state)
+  # assign('methods', methods.env, state)
+  assign('methods', NULL, state)
   assign('model', model, state)
 
 

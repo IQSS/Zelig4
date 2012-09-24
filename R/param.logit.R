@@ -9,7 +9,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.logit <- function(obj, num, ...) {
   list(
-       simulations = mvrnorm(n=num, mu=coef(obj), Sigma=vcov(obj)),
+       simulations = mvrnorm(n=num, mu=coef(.object), Sigma=vcov(.object)),
        alpha       = NULL,
        fam = binomial(link="logit")
        )

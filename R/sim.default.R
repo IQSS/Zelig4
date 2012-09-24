@@ -33,6 +33,23 @@ sim.default <- function(
                         cond.data = NULL,
                         ...
                         ) {
+  # Create environment of local variables
+  model.env <- new.env()
+
+  # Add local variables
+  assign(".object", obj$result, model.env)
+  assign(".model", "model-name", model.env)
+
+  # Get S3 methods
+  paramfunction <- getS3method("param", obj$name, FALSE)
+  qifunction <- getS3method("qi", obj$name, FALSE)
+  bootfunction <- getS3method("bootstrap", obj$name, TRUE)
+
+  environment(paramfunction) <- model.env
+  environment(qifunction) <- model.env
+
+  # Begin function
+
   if (length(attr(x, "pooled")) > 0 && attr(x, "pooled")) {
 
     xes <- list()
@@ -53,13 +70,13 @@ sim.default <- function(
     return(xes)
   }
 
-
   # Stop on unimplemented features
   if (!is.null(cond.data))
     warning("conditions are not yet supported")
 
   # Simulate Parameters
-  param <- param(obj, num=num)
+  # param <- param(obj, num=num)
+  param <- paramfunction(obj, num=num)
 
   # Cast list into a "parameters" object
   param <- as.parameters(param, num)
@@ -152,8 +169,9 @@ sim.default <- function(
     param$alpha <- bl$alpha
   }
 
+
   # Compute quantities of interest
-  res.qi <- qi(obj, x=x, x1=x1, y=y, param=param, num=num)
+  res.qi <- qifunction(obj, x=x, x1=x1, y=y, param=param, num=num)
   
   # Cast as a "qi" object if it is not one
   res.qi <- as.qi(res.qi)
