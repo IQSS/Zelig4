@@ -1,4 +1,5 @@
 ^.git.*$
 ^man/\..*$
 ^man/\[.*$
-^no-cran-.*.R$
+^no-cran-.*\.R$
+^Rplots\.{pdf,jpg,jpeg,png,gif}$

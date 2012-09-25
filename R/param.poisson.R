@@ -9,7 +9,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.poisson <- function (obj, num=1000, ...) {
   list(
-       simulations = mvrnorm(num, mu=coef(obj), Sigma=vcov(obj)),
+       simulations = mvrnorm(num, mu=coef(.fitted), Sigma=vcov(.fitted)),
        fam = poisson()
        )
 }

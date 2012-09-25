@@ -9,7 +9,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.probit <- function(obj, num=1000, ...) {
   list(
-       simulations = mvrnorm(n=num, mu=coef(obj), Sigma=vcov(obj)),
+       simulations = mvrnorm(n=num, mu=coef(.fitted), Sigma=vcov(.fitted)),
        alpha = NULL,
        fam = binomial(link="probit")
        )

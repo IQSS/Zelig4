@@ -8,5 +8,5 @@
 #' @return a list to be cast as a 'parameters' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.ls <- function(obj, num, ...) {
-  mvrnorm(n=num, mu=coef(obj), Sigma=vcov(obj))
+  mvrnorm(n=num, mu=coef(.object), Sigma=vcov(.object))
 }

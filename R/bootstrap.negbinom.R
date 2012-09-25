@@ -10,10 +10,8 @@
 #' @return a list containing information concerning link, link-inverses, etc.
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 bootstrap.negbinom <- function (obj, ...) {
-  print(obj$theta)
-  q()
   list(
-       alpha = obj$theta,
-       beta = coef(obj)
+       alpha = .fitted$theta,
+       beta = coef(.fitted)
        )
 }

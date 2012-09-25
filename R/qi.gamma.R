@@ -13,7 +13,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 qi.gamma <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # Get parameters
-  shape <- gamma.shape(obj)
+  shape <- gamma.shape(.fitted)
   alpha <- rnorm(num, mean = shape$alpha, sd = shape$SE)
   coef <- coef(param)
 
@@ -21,45 +21,39 @@ qi.gamma <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   # Compute eta
   eta <- coef %*% t(x)
 
-  # or do this: get the inverse function
-  #inverse <- obj[["family", "linkinv"]]
-  # theta <- matrix(inverse(eta), nrow = nrow(coef))
-
-  # compute theta (apply inverse)
+  # Compute theta (apply inverse)
   theta <- matrix(1/eta, nrow = nrow(coef))
 
   ev <- theta
   pr <- matrix(NA, nrow = nrow(theta), ncol = ncol(theta))
 
-  # default to not available
+  # Default to not available
   ev1 <- pr1 <- fd <- NA
 
-  # compute predicted values
+  # Compute predicted values
   for (i in 1:nrow(ev))
     pr[i,] <- rgamma(
                      ncol(ev),
                      shape = alpha[i],
                      scale = theta[i,]/alpha[i]
                      )
-  
+
   # if x1 is not NULL, run more simultations
   # ...
 
   if (!is.null(x1)) {
 
-    # quantities of interest
-    results <- qi(obj, x1, num=num, param=param)
+    eta1 <- coef %*% t(x1)
+    ev1 <- theta1 <- matrix(1/eta1, nrow = nrow(coef))
+    pr1 <- matrix(NA, nrow = nrow(theta1), ncol = ncol(theta1))
 
-    # pass values over
-    ev1 <- results[["Expected Values: E(Y|X)"]]
-    pr1 <- results[["Predicted Values: Y|X"]]
+    for (i in 1:nrow(ev1))
+      pr1[i, ] <- rgamma(ncol(ev1), shape = alpha[i], scale = theta1[i,]/alpha[i])
 
-    # compute first differences
     fd <- ev1 - ev
   }
 
-
-  # return
+  # Return
   list("Expected Values: E(Y|X)" = ev,
        "Expected Values (for X1): E(Y|X1)" = ev1,
        "Predicted Values: Y|X" = pr,

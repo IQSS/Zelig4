@@ -5,10 +5,9 @@
   rocplot(y1, y2, fitted1, fitted2, cutoff = seq(from=0,
     to=1, length=100), lty1="solid", lty2="dashed",
     lwd1=par("lwd"), lwd2=par("lwd"), col1=par("col"),
-    col2=par("col"), main="ROC Curve",
-    xlab = "Proportion of 1's Correctly Predicted",
-    ylab="Proportion of 0's Correctly Predicted",
-    plot = TRUE, ... )
+    col2=par("col"), main="ROC Curve", xlab = "Proportion
+    of 1's Correctly Predicted", ylab="Proportion of 0's
+    Correctly Predicted", plot = TRUE, ... )
 }
 \arguments{
   \item{y1}{response variable for the first model}

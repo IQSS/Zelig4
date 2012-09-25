@@ -60,10 +60,10 @@ as.parameters.list <- function(params, num=NULL, ...) {
     params$linkinv
 
   # family object, has both a link and link-inverse
-  fam <- if (!is.null(params$fam))
-    params$fam
-  else if (!is.null(params$family))
+  fam <- if (!is.null(params$family))
     params$family
+  else if (!is.null(params$fam))
+    params$fam
   else
     NULL
 

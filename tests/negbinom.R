@@ -3,14 +3,10 @@ library(Zelig)
 
 data(sanction)
 
-z.out <- zelig(num ~ target + coop, model = "negbinom", data = sanction)
+z <- zelig(num ~ target + coop, model = "negbinom", data = sanction)
 
-x.out <- setx(z.out)
+x <- setx(z)
 
-s.out <- sim(z.out, x = x.out)
+s <- sim(z, x = x)
 
-summary(z.out)
-vcov(z.out)
-coef(z.out)
-x.out
-plot(s.out)
+summary(z)

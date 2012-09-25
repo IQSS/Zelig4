@@ -8,8 +8,8 @@
 #' @return a list to be cast as a 'parameters' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.tobit <- function(obj, num=1000, ...) {
-  cov <- vcov(obj)
-  mu <- c(coef(obj), log(obj$result$scale))
+  cov <- vcov(.fitted)
+  mu <- c(coef(.fitted), log(.fitted$scale))
 
   # Return
   list(

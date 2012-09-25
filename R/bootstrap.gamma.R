@@ -11,7 +11,7 @@
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 bootstrap.gamma <- function (obj, ...) {
   list(
-       alpha = gamma.shape(obj)$alpha,
-       beta = coef(obj)
+       alpha = gamma.shape(.fitted)$alpha,
+       beta = coef(.fitted)
        )
 }

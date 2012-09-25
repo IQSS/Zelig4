@@ -15,9 +15,9 @@ summary.Relogit <- function(object, ...) {
     k <- ncol(dta)
     res$cov.unscaled <- res$cov.unscaled * (n/(n+k))^2
     res$cov.scaled <- res$cov.unscaled * res$dispersion
-    res$coef[,2] <- sqrt(diag(res$cov.scaled))
-    res$coef[,3] <- res$coef[,1] / res$coef[,2]
-    res$coef[,4 ] <- 2*pt(-abs(res$coef[,3]), res$df.residual)
+    res$coefficients[,2] <- sqrt(diag(res$cov.scaled))
+    res$coefficients[,3] <- res$coefficients[,1] / res$coefficients[,2]
+    res$coefficients[,4 ] <- 2*pt(-abs(res$coefficients[,3]), res$df.residual)
   }
   res$call <- object$call
   res$tau <- object$tau

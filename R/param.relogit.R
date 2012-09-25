@@ -9,8 +9,7 @@
 #' @param num an integer specifying the number of simulations to compute
 #' @param ... unspecified parameters
 #' @return a list specifying important parameters for the ``relogit'' model
-param.relogit <- function (obj, num, ...)
-  param.logit(obj, num, ...)
+param.relogit <- param.logit
 
 
 #' Estimate Parameters for the ``relogit'' Zelig Mdoel

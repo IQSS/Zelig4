@@ -11,14 +11,14 @@
 param.gamma <- function(obj, num = 1000, ...) {
   # Extract shape parameters, which will be used to simulate the ancillary
   # parameters
-  shape <- gamma.shape(obj)
+  shape <- gamma.shape(.object)
 
   # Simulate ancillary parameters
   alpha <- rnorm(n=num, mean=shape$alpha, sd=shape$SE)
 
   #
   list(
-       simulations  = mvrnorm(n=num, mu=coef(obj), Sigma=vcov(obj)),
+       simulations  = mvrnorm(n=num, mu=coef(.object), Sigma=vcov(.object)),
        alpha = alpha,
        family = Gamma()
        )

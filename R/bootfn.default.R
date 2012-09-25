@@ -53,7 +53,7 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
     bootstrapfn <- Zelig:::bootstrap.default
 
   # Attach the ".num" private variable
-  bootstrapfn <- attach.env(bootstrapfn, NULL, .num = num)
+  bootstrapfn <- attach.env(bootstrapfn, NULL, .num = num, .fitted = object)
 
   # Get a result
   res <- bootstrapfn(fit)
@@ -86,8 +86,8 @@ as.bootvector <- function (obj) {
   if (!(is.vector(a) || is.null(a)))
     stop('The "alpha" slot of "obj" must be a vector or NULL.')
 
-  if (!is.vector(b))
-    stop('The "beta" slot of "obj" must be a vector.')
+  if (!(is.vector(b)))
+    stop('The "beta" slot of "obj" must be a vector')
 
   # Return
   list(
@@ -125,6 +125,10 @@ as.bootlist <- function (bootstraps, lengths, names) {
 
   if (!is.vector(lengths))
     stop('The parameter "lengths" must be a vector.')
+
+  print(bootstraps)
+  print(lengths)
+  message("\n\n")
 
   if (sum(lengths) != ncol(bootstraps))
     stop('The parameters "bootstraps" and "lengths" must be ',

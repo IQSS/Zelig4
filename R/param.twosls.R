@@ -11,7 +11,7 @@
 param.twosls <- function(obj, num=1000, ...) {
 
   # Produce a vector of all terms
-  big.coef <- coef(obj)
+  big.coef <- coef(.fitted)
 
   # Produce a pretty sparse matrix containing 3 vcov matrices.
   #
@@ -19,12 +19,12 @@ param.twosls <- function(obj, num=1000, ...) {
   # combination.
   # In particular, any terms that do not belong to the same equation will have
   # a zero value.
-  big.vcov <- vcov(obj)
+  big.vcov <- vcov(.fitted)
 
   # This is a complete list of the terms. This is largely ignored, aside from
   # the fact that we need a list of the formulae. In general, terms.multiple
   # produced a pretty unwieldy list of items.
-  all.terms <- terms(obj)
+  all.terms <- terms(.fitted)
 
   # This list stores the results
   simulations.list <- list()

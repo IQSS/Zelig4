@@ -8,11 +8,11 @@
 #' @return a list to be cast as a 'parameters' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.normal <- function(obj, num=1000, ...) {
-  degrees.freedom <- obj[["df.residual"]]
-  sig2 <- summary(obj$result)$dispersion
+  degrees.freedom <- .fitted$df.residual
+  sig2 <- summary(.fitted)$dispersion
 
   list(
-       simulations = mvrnorm(n=num, mu=coef(obj), Sigma=vcov(obj)),
+       simulations = mvrnorm(n=num, mu=coef(.fitted), Sigma=vcov(.fitted)),
        alpha = sqrt(degrees.freedom * sig2 / rchisq(num, degrees.freedom)),
        link = function (x) x,
        linkinv = function (x) x

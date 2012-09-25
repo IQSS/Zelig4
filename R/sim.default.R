@@ -11,10 +11,10 @@
 #' @param obj a 'zelig' object
 #' @param x a 'setx' object
 #' @param x1 a secondary 'setx' object used to perform particular computations
-#'   of quantities of interest
+#' of quantities of interest
 #' @param y a parameter reserved for the computation of particular quantities of
-#'   interest (average treatment effects). Few models currently support this
-#'   parameter
+#' interest (average treatment effects). Few models currently support this
+#' parameter
 #' @param num an integer specifying the number of simulations to compute
 #' @param bootstrap ignored
 #' @param bootfn ignored
@@ -33,11 +33,13 @@ sim.default <- function(
                         cond.data = NULL,
                         ...
                         ) {
+
   # Create environment of local variables
   model.env <- new.env()
 
   # Add local variables
   assign(".object", obj$result, model.env)
+  assign(".fitted", obj$result, model.env)
   assign(".model", "model-name", model.env)
 
   # Get S3 methods
@@ -134,6 +136,7 @@ sim.default <- function(
 
     # Bootstrapfn
     bootstrapfn <- getS3method("bootstrap", obj$name, TRUE)
+    environment(bootstrapfn) <- model.env
 
     # If is.null then we just get the default bootstrap fn, which is merely to
     # simulate the systematic paramaters
@@ -141,12 +144,13 @@ sim.default <- function(
       bootstrapfn <- Zelig:::bootstrap.default
 
     # Attach the appropriate environment to the function
-    bootstrapfn <- attach.env(bootstrapfn, NULL)
+    bootstrapfn <- attach.env(bootstrapfn, model.env)
 
     # Get a sample, so we know how to re-size the result.
     # Note: This "example" object will be used at the end of this if-clause to
     # build an object similar in structure to that of "bootstrapfn(obj)"
     example <- bootstrapfn(obj)
+    print(example)
     example <- as.bootvector(example)
 
     # Bootstrap using a function with parameters: data, i, object

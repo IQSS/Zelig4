@@ -8,8 +8,8 @@
 #' @return a list to be cast as a 'parameters' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.exp <- function(obj, num=1000, ...) {
-  cov <- vcov(obj)
-  mu <- coef(obj)
+  cov <- vcov(.object)
+  mu <- coef(.object)
 
   # Return
   list(
