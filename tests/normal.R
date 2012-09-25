@@ -1,7 +1,10 @@
 library(Zelig)
+
 data(macro)
-z.out1 <- zelig(unem ~ gdp + capmob + trade, model = "normal", data = macro)
-x.high <- setx(z.out1, trade = quantile(macro$trade, 0.8))
-x.low <- setx(z.out1, trade = quantile(macro$trade, 0.2))
-s.out1 <- sim(z.out1, x = x.high, x1 = x.low)
-plot(s.out1)
+
+z <- zelig(unem ~ gdp + capmob + trade, model = "normal", data = macro)
+
+x.high <- setx(z, trade = quantile(trade, 0.8))
+x.low <- setx(z, trade = quantile(trade, 0.2))
+
+s <- sim(z, x = x.high, x1 = x.low)

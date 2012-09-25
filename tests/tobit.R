@@ -1,5 +1,9 @@
 library(Zelig)
+
 data(tobin)
-z.out <- zelig(durable ~ age + quant, data = tobin, model = "tobit")
-x.out <- setx(z.out)
-s.out1 <- sim(z.out, x = x.out)
+
+z <- zelig(durable ~ age + quant, data = tobin, model = "tobit")
+
+x <- setx(z)
+
+s <- sim(z, x = x, num = 10)

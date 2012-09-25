@@ -9,18 +9,8 @@ formula <- list(
                 inst= ~ P1 + K1 + X1 + Tm + Wg + G
                 )
 
-z.out<-zelig(formula=formula, model="twosls",data=klein, cite=F)
+z <- zelig(formula=formula, model="twosls",data=klein, cite=F)
 
-x.out <-setx(z.out)
+x  <- setx(z)
 
-s.out <-sim(z.out,x=x.out)
-
-summary(s.out)
-
-
-# Plot
-
-user.prompt()
-plot(s.out)
-
-
+s  <- sim(z, x=x)

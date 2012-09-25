@@ -1,14 +1,9 @@
-#
 library(Zelig)
 
 data(sanction)
 
-z.out <- zelig(num ~ target + coop, model = "poisson", data = sanction)
+z <- zelig(num ~ target + coop, model = "poisson", data = sanction)
 
-x.out <- setx(z.out)
+x <- setx(z)
 
-s.out <- sim(z.out, x = x.out)
-
-summary(z.out)
-x.out
-plot(s.out)
+s <- sim(z, x = x, num = 10)
