@@ -87,8 +87,6 @@ as.qi.list <- function(s) {
 
   q <- stats
 
-  #print(q)
-
   # cast as `qi' object, and return
   class(q) <- "qi"
 

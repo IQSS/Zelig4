@@ -150,7 +150,6 @@ sim.default <- function(
     # Note: This "example" object will be used at the end of this if-clause to
     # build an object similar in structure to that of "bootstrapfn(obj)"
     example <- bootstrapfn(obj)
-    print(example)
     example <- as.bootvector(example)
 
     # Bootstrap using a function with parameters: data, i, object

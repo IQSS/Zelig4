@@ -46,13 +46,6 @@ qi.relogit2 <- function (obj, x = NULL, x1 = NULL, y = NULL, num=1000, param = N
   message("VARIABLES [[[[")
 
   #print(object)
-  print(simpar)
-  print(simpar$par0)
-  print(simpar$par1)
-
-  message("]]]]")
-  message("{{")
-
   low <- qi.relogit(tmp0, simpar$par0, x, x1)
   message("--")
   up <- qi.relogit(tmp1, simpar$par1, x, x1)

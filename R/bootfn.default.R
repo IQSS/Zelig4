@@ -126,10 +126,6 @@ as.bootlist <- function (bootstraps, lengths, names) {
   if (!is.vector(lengths))
     stop('The parameter "lengths" must be a vector.')
 
-  print(bootstraps)
-  print(lengths)
-  message("\n\n")
-
   if (sum(lengths) != ncol(bootstraps))
     stop('The parameters "bootstraps" and "lengths" must be ',
          'the same length.'

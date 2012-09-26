@@ -52,17 +52,17 @@ as.parameters.list <- function(params, num=NULL, ...) {
     tail(params, -num)
 
   # link function
-  link <- if (!is.null(params$link))
-    params$link
+  if ("link" %in% names(params))
+    link <- params$link
 
   # link-inverse function
-  linkinv <- if (!is.null(params$linkinv))
-    params$linkinv
+  if ("linkinv" %in% names(params))
+    linkinv <- params$linkinv
 
   # family object, has both a link and link-inverse
-  fam <- if (!is.null(params$family))
+  fam <- if ("family" %in% names(params))
     params$family
-  else if (!is.null(params$fam))
+  else if ("fam" %in% names(params))
     params$fam
   else
     NULL

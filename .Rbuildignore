@@ -1,5 +1,3 @@
-^.git.*$
-^man/\..*$
-^man/\[.*$
-^NO-CRAN-.*\.R$
-^Rplots\.{pdf,jpg,jpeg,png,gif}$
+^man\/\.
+^.*\/NO-CRAN-
+^.*Rplots\.(pdf|jpe?g|ng|gif)$

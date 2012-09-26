@@ -23,12 +23,11 @@ URL: http://gking.harvard.edu/zelig
 Date: 2012-08-31
 Depends:
     R (>= 2.14),
+    boot,
     MASS,
-    survival,
     methods,
     sandwich,
-    boot,
-    systemfit
+    survival
 Suggests:
     mvtnorm,
     Formula
@@ -186,12 +185,3 @@ Collate:
     'zelig2exp.R'
     'zelig2tobit.R'
     'cluster.formula.R'
-    'callsystemfit.R'
-    'describe.threesls.R'
-    'describe.twosls.R'
-    'param.threesls.R'
-    'param.twosls.R'
-    'qi.threesls.R'
-    'qi.twosls.R'
-    'zelig2threesls.R'
-    'zelig2twosls.R'
