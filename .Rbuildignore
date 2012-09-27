@@ -1,3 +1,5 @@
+.*\.markdown
 ^man\/\.
 ^.*\/NO-CRAN-
 ^.*Rplots\.(pdf|jpe?g|ng|gif)$
+\.Rnw$
