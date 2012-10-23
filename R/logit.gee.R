@@ -1,5 +1,4 @@
-#' Interface between the Zelig Model logit.gee and 
-#' the Pre-existing Model-fitting Method
+#' General Estimating Equation for Logit Regression
 #' @param formula a formula
 #' @param id a character-string specifying the column of the data-set to use
 #' for clustering
@@ -12,7 +11,9 @@
 #' @param corstr a character-string specifying the correlation structure
 #' @param data a data.frame 
 #' @return a list specifying the call to the external model
-#' @export
+#' @export zelig2logit.gee
+#' @name logit.gee
+#' @aliases zelig2logit.gee
 zelig2logit.gee <- function (formula, id, robust, ..., R, corstr = "independence", data) {
 
   Zelig:::loadDependencies(gee)
@@ -44,14 +45,12 @@ zelig2logit.gee <- function (formula, id, robust, ..., R, corstr = "independence
 
 #' @S3method param logit.gee
 param.logit.gee <- function(obj, num=1000, ...) {
-
   # Extract means to compute maximum likelihood
   mu <- coef(obj)
 
   # Extract covariance matrix to compute maximum likelihood
   Sigma <- vcov(obj)
 
-  #
   list(
        coef = mvrnorm(num, mu, Sigma),
        fam = binomial(link="logit")

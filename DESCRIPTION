@@ -184,7 +184,6 @@ Collate:
     'zelig2exp.R'
     'zelig2tobit.R'
     'cluster.formula.R'
-    'plot.zelig.R'
     'logit.gee.R'
     'plots.R'
     'robust.hook.R'
@@ -194,4 +193,3 @@ Collate:
     'poisson.gee.R'
     'probit.gee.R'
     'vcov.R'
-    'xxx.R'

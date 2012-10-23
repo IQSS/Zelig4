@@ -3,3 +3,4 @@
 ^.*\/NO-CRAN-
 ^.*Rplots\.(pdf|jpe?g|ng|gif)$
 \.Rnw$
+^man\/zelig2
