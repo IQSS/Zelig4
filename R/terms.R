@@ -212,3 +212,24 @@ terms.multiple<-function(x, data=NULL,...){
         return (alltgs)
         
 }
+#' Model Terms for 'vglm' Models
+#' @usage \method{terms}{vglm}(x, ...)
+#' @S3method terms vglm
+#' @param x a fitted model object from the VGAM library
+#' @param ... ignored parameters
+#' @return the models terms of this fitted model object
+#' @author Ferdinand Alimadhi, Kosuke Imai and Olivia Lau
+terms.vglm <- function(x, ...)
+  x@terms$terms
+#' Model Terms for a Zelig Object
+#' 
+#' This method simply extracts the model terms for the fitted model passed to 
+#' the \code{zelig} function.
+#' @S3method terms zelig
+#' @usage \method{terms}{zelig}(x, ...)
+#' @param x a \code{zelig} object
+#' @param ... forwarded parameters
+#' @return terms of the original fitted model
+terms.zelig <- function (x, ...) {
+  terms(x$result, ...)
+}

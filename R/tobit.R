@@ -80,3 +80,53 @@ make.surv <- function (formula, below, above) {
   # Return
   formula
 }
+#' Param Method for the \code{tobit} Zelig Model
+#' @note This method is used by the \code{tobit} Zelig model
+#' @usage \method{param}{tobit}(obj, num, ...)
+#' @S3method param tobit
+#' @param obj a 'zelig' object
+#' @param num an integer specifying the number of simulations to sample
+#' @param ... ignored parameters
+#' @return a list to be cast as a 'parameters' object
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+param.tobit <- function(obj, num=1000, ...) {
+  cov <- vcov(.fitted)
+  mu <- c(coef(.fitted), log(.fitted$scale))
+
+  # Return
+  list(
+       coef = mvrnorm(num, mu=mu, Sigma=cov),
+       linkinv = NULL
+       )
+}
+#' Compute quantities of interest for 'tobit' Zelig models
+#' @usage \method{qi}{tobit}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
+#' @S3method qi tobit
+#' @param obj a 'zelig' object
+#' @param x a 'setx' object or NULL
+#' @param x1 an optional 'setx' object
+#' @param y this parameter is reserved for simulating average treatment effects,
+#' though this feature is currentlysupported by only a handful of models
+#' @param num an integer specifying the number of simulations to compute
+#' @param param a parameters object
+#' @return a list of key-value pairs specifying pairing titles of quantities of
+#' interest with their simulations
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+qi.tobit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
+
+  list(
+       "Expected Value: E(Y|X)" = NA
+       )
+}
+#' Describe a ``tobit'' model to Zelig
+#' @usage \method{describe}{tobit}(...)
+#' @S3method describe tobit
+#' @param ... ignored parameters
+#' @return a list to be processed by `as.description'
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+describe.tobit <- function(...) {
+  list(
+       authors = "",
+       text = ""
+       )
+}
