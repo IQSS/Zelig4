@@ -1,3 +1,38 @@
+#' @export
+loadDependencies <- function (..., character.only = FALSE) {
+  # Get arguments that aren't "character.only"
+  packs <- match.call(expand.dots = TRUE)[-1]
+  packs$character.only <- NULL
+  packs <- as.character(packs)
+
+  #
+  results <- list()
+
+  #
+  for (pkg in packs)
+    results[pkg] <- require(pkg, character.only = TRUE)
+
+  if (all(unlist(results)))
+    invisible(TRUE)
+  else {
+    failed.packs <- Filter(function (x) { return(x == FALSE) }, results)
+    list.of.packages <- paste('"', names(failed.packs), '"', sep = '', collapse = ', ')
+
+    message('The following packages did not load: ')
+    cat('  ')
+    message(list.of.packages)
+    message()
+
+    install.string <- paste('  install.packages(', names(failed.packs), ')', sep = '', collapse = '\n')
+
+    message('To run this model, install these packages with the following command:')
+    message(install.string)
+    message()
+
+    stop('')
+  }
+}
+
 #' Produce All Combinations of a Set of Lists
 #' @note This function is used internall by the 'mi' constructors in order to
 #' produce the complete set of combinations of data-frames and factors by to

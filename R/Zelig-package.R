@@ -15,7 +15,7 @@
 #' \tabular{ll}{
 #' Package: \tab Zelig\cr
 #' Version: \tab 4.0-11\cr
-#' Date: \tab 2011-08-31\cr
+#' Date: \tab 2012-10-28\cr
 #' Depends: \tab R (>= 2.14), boot, MASS, methods, sandwich, survival\cr
 #' Suggests: \tab mvtnorm, Formula \cr
 #' License: \tab GPL version 2 or newer\cr
@@ -27,7 +27,6 @@
 #' @docType package
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, Olivia Lau,
 #'   and Gary King 
-#'         Maintainer: Matt Owen \email{monwe@@iq.harvard.edu}
 #' @keywords package
 #' @seealso zelig setx sim
 NULL

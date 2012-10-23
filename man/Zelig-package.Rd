@@ -21,16 +21,15 @@
 }
 \details{
   \tabular{ll}{ Package: \tab Zelig\cr Version: \tab
-  4.0-11\cr Date: \tab 2011-08-31\cr Depends: \tab R (>=
-  2.14), MASS, survival, methods, sandwich, boot,
-  systemfit\cr Suggests: \tab mvtnorm, Formula \cr License:
-  \tab GPL version 2 or newer\cr URL: \tab
+  4.0-11\cr Date: \tab 2012-10-28\cr Depends: \tab R (>=
+  2.14), boot, MASS, methods, sandwich, survival\cr
+  Suggests: \tab mvtnorm, Formula \cr License: \tab GPL
+  version 2 or newer\cr URL: \tab
   http://gking.harvard.edu/zelig\cr }
 }
 \author{
   Matt Owen \email{mowen@iq.harvard.edu}, Kosuke Imai,
-  Olivia Lau, and Gary King Maintainer: Matt Owen
-  \email{monwe@iq.harvard.edu}
+  Olivia Lau, and Gary King
 }
 \seealso{
   zelig setx sim

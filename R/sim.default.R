@@ -33,7 +33,6 @@ sim.default <- function(
                         cond.data = NULL,
                         ...
                         ) {
-
   # Create environment of local variables
   model.env <- new.env()
 
@@ -46,6 +45,8 @@ sim.default <- function(
   paramfunction <- getS3method("param", obj$name, FALSE)
   qifunction <- getS3method("qi", obj$name, FALSE)
   bootfunction <- getS3method("bootstrap", obj$name, TRUE)
+
+  parent.env(model.env) <- environment(paramfunction)
 
   environment(paramfunction) <- model.env
   environment(qifunction) <- model.env
@@ -171,7 +172,6 @@ sim.default <- function(
     param$coefficients <- bl$beta
     param$alpha <- bl$alpha
   }
-
 
   # Compute quantities of interest
   res.qi <- qifunction(obj, x=x, x1=x1, y=y, param=param, num=num)

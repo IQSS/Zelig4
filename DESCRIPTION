@@ -20,7 +20,7 @@ Description: Zelig is an easy-to-use program that can estimate, and
 Version: 4.0-11
 Packaged: Fri Aug 31 13:55:20 2012; mowen
 URL: http://gking.harvard.edu/zelig
-Date: 2012-08-31
+Date: 2012-10-28
 Depends:
     R (>= 2.14),
     boot,
@@ -30,7 +30,8 @@ Depends:
     survival
 Suggests:
     mvtnorm,
-    Formula
+    Formula,
+    gee
 Collate:
     'as.dataframe.setx.R'
     'as.matrix.setx.R'
@@ -154,13 +155,11 @@ Collate:
     'names.relogit.R'
     'plot.zelig.relogit.R'
     'summary.relogit2.R'
-    'vcov.relogit.R'
     'summary.relogit.R'
     'print.summary.relogit.R'
     'print.summary.relogit2.R'
     'print.summary.glm.robust.R'
     'summary.glm.robust.R'
-    'vcov.glm.robust.R'
     'robust.glm.hook.R'
     'param.relogit.R'
     'sim.relogit.R'
@@ -185,3 +184,14 @@ Collate:
     'zelig2exp.R'
     'zelig2tobit.R'
     'cluster.formula.R'
+    'plot.zelig.R'
+    'logit.gee.R'
+    'plots.R'
+    'robust.hook.R'
+    'common-methods.R'
+    'gamma.gee.R'
+    'normal.gee.R'
+    'poisson.gee.R'
+    'probit.gee.R'
+    'vcov.R'
+    'xxx.R'

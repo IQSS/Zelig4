@@ -20,9 +20,11 @@
 #' @return the current graphical parameters. This is subject to change in future
 #' implementations of Zelig
 #' @author James Honaker, adapted by Matt Owen \email{mowen@@iq.harvard.edu}
-plot.ci<-function(x,qi="ev",var=NULL, ..., legcol="gray20",col=NULL,leg=1,legpos=NULL){
+#' @export
+plot.ci<-function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL) {
 
   xmatrix<-matrix(NA,nrow=length(x),ncol=length(x[[1]]$x$data))
+
   for(i in 1:length(x)){
     xmatrix[i,]<-as.matrix(x[[i]]$x$data)
   }
@@ -58,11 +60,11 @@ plot.ci<-function(x,qi="ev",var=NULL, ..., legcol="gray20",col=NULL,leg=1,legpos
   ## Set up defaults
 
   ci.upper<-function(x,alpha){
-    pos<-round((1-alpha)*length(x))
+    pos <- max(round((1-alpha)*length(x)), 1)
     return(sort(x)[pos])
   }
   ci.lower<-function(x,alpha){
-    pos<-max(1,round(alpha*length(x)))
+    pos<-max(round(alpha*length(x)), 1)
     return(sort(x)[pos])
   }
 
@@ -76,8 +78,22 @@ plot.ci<-function(x,qi="ev",var=NULL, ..., legcol="gray20",col=NULL,leg=1,legpos
     col<-c(myblue1,myblue2,myblue3)
   }
   history<-matrix(NA, nrow=k,ncol=8)
-  for(i in 1:k){
-    history[i,]<-c(xseq[i],median(ev[,i]),ci.upper(ev[,i],0.8),ci.lower(ev[,i],0.8),ci.upper(ev[,i],0.95),ci.lower(ev[,i],0.95),ci.upper(ev[,i],0.999),ci.lower(ev[,i],0.999))
+  for (i in 1:k) {
+    v <- c(
+           xseq[i],
+           median(ev[,i]),
+
+           ci.upper(ev[,i],0.8),
+           ci.lower(ev[,i],0.8),
+
+           ci.upper(ev[,i],0.95),
+           ci.lower(ev[,i],0.95),
+
+           ci.upper(ev[,i],0.999),
+           ci.lower(ev[,i],0.999)
+           )
+
+    history[i,] <- v
   }
   all.xlim<-c(min(history[,1]),max(history[,1]))
   all.ylim<-c(min(history[,-1]),max(history[,-1]))

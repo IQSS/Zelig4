@@ -8,3 +8,5 @@ x.low <- setx(z, numst2 = 0)
 x.high <- setx(z, numst2 = 1)
 
 s <- sim(z, x = x.low, x1 = x.high, num = 10)
+
+plot(s)

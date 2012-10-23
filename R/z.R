@@ -7,6 +7,7 @@
 #' @param .function a function
 #' @param ... a set of parameters to be evaluated symbolically
 #' @return a ``z'' object which specifies how to evaluate the fitted model
+#' @export
 z <- function (.function, ...) {
   # Construct the function call
   .call <- as.call(as.list(match.call())[-1])

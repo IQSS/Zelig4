@@ -68,6 +68,66 @@ plot.sim <- function (x, ...) {
   return(par(old.par))
 }
 
+#' @S3method plot sim.cloglog.net
+plot.sim.cloglog.net <- function (x, ...) {
+
+  env <- tryCatch(
+    asNamespace(x$package.name),
+    error = function (e) { 
+      warning("")
+      globalenv()
+    }
+  )
+
+  # If plotPackageName
+  if (exists("plot.simulations", envir = env, mode="function")) {
+    # Get the simulation, because we know it exists
+    .plotter <- get("plot.simulations", envir = env, mode="function")
+
+    # Pass to a temporary variable to improve the visibility of the traceback
+    # if there is an error
+    res <- .plotter(x, ...)
+
+    # Return object (whatever it is)
+    return(invisible(res))
+  }
+
+  # Otherwise we just use this fall-back
+  old.par <- par(no.readonly = T)
+
+  # Some numbers we use to make things
+  total.qis <- length(names(x$qi))
+  palette <- rainbow(total.qis)
+  total.cols <- 2
+  total.rows <- ceiling(total.qis/total.cols)
+
+  vals <- ifelse(total.qis %% 2, c(1:total.qis, total.qis), 1:total.qis)
+
+  # Colors!
+  color.blue <- rgb(100, 149, 237, maxColorValue=255)
+
+  #
+  vals <- if (total.qis %% 2) {
+    c(1:total.qis, total.qis)
+  }
+  else {
+    1:total.qis
+  }
+
+  # Construct layout
+  layout(matrix(vals, total.rows, total.cols, byrow=TRUE))
+
+  k <- 1
+  for (title in names(x$qi)) {
+    simulations.plot(x$qi[[title]], main = title, col = palette[k], line.col = "black")
+    k <- k + 1
+  }
+
+
+  #
+  return(par(old.par))
+}
+
 
 #' Plot Any Simulation from the Zelig Core Package
 #'
@@ -154,8 +214,6 @@ plot.simulations <- function (x, ...) {
 
   simulations.plot(qi[[titles$pv]], main = titles$pv, col = color.x, line.col = "black")
   simulations.plot(qi[[titles$ev]], main = titles$ev, col = color.x, line.col = "black")
-  simulations.plot(qi[[titles$pv1]], main = titles$pv1, col = color.x1, line.col = "black")
-  simulations.plot(qi[[titles$ev1]], main = titles$ev1, col = color.x1, line.col = "black")
   simulations.plot(qi[[titles$fd]], main = titles$fd, col = color.mixed, line.col = "black")
 
   if (both.pv.exist) {
