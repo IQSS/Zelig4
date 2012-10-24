@@ -1,4 +1,5 @@
-library(ZeligLeastSquares)
+library(Zelig)
+library(systemfit)
 
 data(klein)
 

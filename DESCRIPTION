@@ -26,13 +26,14 @@ Depends:
     boot,
     MASS,
     methods,
-    sandwich,
-    survival
+    sandwich
 Suggests:
     mvtnorm,
     Formula,
     gee,
-    survey
+    survey,
+    survival,
+    systemfit
 Collate:
     'as.dataframe.setx.R'
     'as.matrix.setx.R'
