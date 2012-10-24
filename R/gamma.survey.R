@@ -69,6 +69,9 @@ zelig2gamma.survey <- function(
                                data,
                                ...
                                ) {
+
+  loadDependencies(survey)
+
   if (is.null(ids))
     ids <- ~1
 
@@ -124,14 +127,12 @@ zelig2gamma.survey <- function(
 #' @return a list to be cast as a \code{parameters} object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.gamma.survey <- function(obj, num=1000, ...) {
-  shape <- gamma.shape(obj)
+  shape <- gamma.shape(.fitted)
 
   list(
-       simulations = mvrnorm(num, coef(obj), vcov(obj)),
+       # .fitted is the fitted model object
+       simulations = mvrnorm(num, coef(.fitted), vcov(.fitted)),
        alpha = rnorm(num, shape$alpha, shape$SE),
-
-       # note: assignment of link and link-inverse are
-       #       implicit when the family is assigned
        fam   = Gamma()
        )
 }

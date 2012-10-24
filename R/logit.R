@@ -21,6 +21,7 @@ zelig2logit <- function(formula, weights=NULL, robust = F, ..., data) {
     data    = data
     )
 }
+
 #' Param Method for the \code{logit} Zelig Model
 #' @note This method is used by the \code{logit} Zelig model
 #' @usage \method{param}{logit}(obj, num, ...)
@@ -37,6 +38,7 @@ param.logit <- function(obj, num, ...) {
        fam = binomial(link="logit")
        )
 }
+
 #' Compute quantities of interest for 'logit' Zelig models
 #' @usage \method{qi}{logit}(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 #' @S3method qi logit
@@ -89,15 +91,6 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
        )
 }
 
-
-
-
-
-
-
-
-
-
 #' compute expected values
 .compute.ev <- function(obj, x=NULL, num=1000, param=NULL) {
 
@@ -115,6 +108,7 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   ev
 }
+
 #' Describe a `logit' model to Zelig
 #' @usage \method{describe}{logit}(...)
 #' @S3method describe logit

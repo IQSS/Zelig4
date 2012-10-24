@@ -17,7 +17,6 @@ relogit <- function(
                     case.control = "prior",
                     ...
                     ){
-
   mf <- match.call()
   mf$tau <- mf$bias.correct <- mf$case.control <- NULL
   if (!is.null(tau)) {
