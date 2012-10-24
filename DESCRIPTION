@@ -174,3 +174,5 @@ Collate:
     'probit.bayes.R'
     'summary.MCMCZelig.R'
     'callToString.R'
+    'lognorm.R'
+    'twosls.R'
