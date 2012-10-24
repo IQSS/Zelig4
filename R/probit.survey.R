@@ -65,6 +65,7 @@ zelig2probit.survey <- function(
                                 design=NULL,
                                 data
                                 ) {
+  loadDependencies(survey)
 
   if (is.null(ids))
     ids <- ~1
@@ -111,15 +112,8 @@ zelig2probit.survey <- function(
        family  = quasibinomial(link="probit")
        )
 }
-#' Param Method for the \code{probit.survey} Zelig Model
-#' @note This method is used internally by the \code{survey.zelig} package
+
 #' @S3method param probit.survey
-#' @usage \method{param}{probit.survey}(obj, num=1000, ...)
-#' @param obj a \code{zelig} object
-#' @param num an integer specifying the number of simulations to sample
-#' @param ... ignored parameters
-#' @return a list to be cast as a \code{parameters} object
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.probit.survey <- function(obj, num=1000, ...) {
   list(
        simulations = mvrnorm(num, coef(obj), vcov(obj)),
@@ -130,23 +124,11 @@ param.probit.survey <- function(obj, num=1000, ...) {
        fam   = binomial(link="probit")
        )
 }
-#' Simulate Quantities of Interest for \code{probit} Model
+
 #' @S3method qi probit.survey
-#' @usage \method{qi}{probit.survey}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
-#' @note This function is paraphrased from Zelig v3.4.0-1
-#' @param obj zelig object
-#' @param x setx object
-#' @param x1 setx object
-#' @param y ATT variable
-#' @param num implicitly called by sim - number of simulations to run
-#' @param param param object contains: link, link-inverse, simulations, ancillary parameters
-#' @return a list containing simulated quantities of interest
 qi.probit.survey <- qi.logit.survey
-#' Describe a \code{probit.survey} Citation to Zelig
-#' @param ... ignored parameters
-#' @return a list to be processed by \code{as.description}
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @export
+
+#' @S3method describe probit.survey
 describe.probit.survey <- function(...) {
   list(
        authors = "Nicholas Carnes",

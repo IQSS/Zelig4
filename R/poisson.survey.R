@@ -65,6 +65,7 @@ zelig2poisson.survey <- function(
                                design=NULL,
                                data
                                ) {
+  loadDependencies(survey)
 
   if (is.null(ids))
     ids <- ~1

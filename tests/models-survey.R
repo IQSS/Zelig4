@@ -161,8 +161,6 @@ s.out1 <- sim(z.out1, x=x.high, x1=x.low)
 
 plot(s.out1)
 
-q()
-
 z.out2 <- zelig(
                 api00 ~ meals + yr.rnd,
                 model = "normal.survey",  

@@ -117,15 +117,8 @@ zelig2gamma.survey <- function(
        family  = Gamma()
        )
 }
-#' Param Method for the \code{gamma.survey} Zelig Model
-#' @note This method is used internally by the \code{survey.zelig} package
+
 #' @S3method param gamma.survey
-#' @usage \method{param}{gamma.survey}(obj, num=1000, ...)
-#' @param obj a \code{zelig} object
-#' @param num an integer specifying the number of simulations to sample
-#' @param ... ignored parameters
-#' @return a list to be cast as a \code{parameters} object
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.gamma.survey <- function(obj, num=1000, ...) {
   shape <- gamma.shape(.fitted)
 
@@ -136,17 +129,8 @@ param.gamma.survey <- function(obj, num=1000, ...) {
        fam   = Gamma()
        )
 }
-#' Simulate Quantities of Interest for \code{gamma.survey} Model
+
 #' @S3method qi gamma.survey
-#' @usage \method{qi}{gamma.survey}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
-#' @note This function is paraphrased from Zelig v3.4.0-1
-#' @param obj zelig object
-#' @param x setx object
-#' @param x1 setx object
-#' @param y ATT variable
-#' @param num implicitly called by sim - number of simulations to run
-#' @param param param object contains: link, link-inverse, simulations, ancillary parameters
-#' @return a list containing simulated quantities of interest
 qi.gamma.survey <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   model <- GetObject(obj)
 
@@ -217,11 +201,8 @@ qi.gamma.survey <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
        "Average Treatment Effect: Y-PR" = att.pr
        )
 }
-#' Describe a \code{gamma.survey} Citation to Zelig
-#' @param ... ignored parameters
-#' @return a list to be processed by \code{as.description}
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @export
+
+#' @S3method describe gamma.survey
 describe.gamma.survey <- function(...) {
   list(
        authors = "Nicholas Carnes",
