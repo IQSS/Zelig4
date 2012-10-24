@@ -1,8 +1,8 @@
-\name{toString.call}
-\alias{toString.call}
+\name{callToString}
+\alias{callToString}
 \title{Convert \code{call} Object to a String}
 \usage{
-  \method{toString}{call}(x, ...)
+  callToString(x, ...)
 }
 \arguments{
   \item{x}{a \code{call} object}

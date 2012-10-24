@@ -29,14 +29,14 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
     # If the lhs is a name, this implies it's a single variable with no function
     # applied to it. Thus, it's a term.
     return(tryCatch(
-                    toString(lhs),
+                    callToString(lhs),
                     error = function (e) as.character(lhs)
            ))
   }
 
   # Otherwise, it is either a function being applied or the keywords "cbind" or
   # "list"
-  op <- toString(lhs[[1]])
+  op <- callToString(lhs[[1]])
 
   if (op %in% c("cbind", "list")) {
 
@@ -50,7 +50,7 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
 
     # If it is one of the keywords, we extract these terms individually
     lis <- as.list(lhs[-1])
-    lis <- unlist(Map(toString, lis))
+    lis <- unlist(Map(callToString, lis))
 
     if (!duplicates)
       # If duplicates flag is FALSE, remove all duplicate entries
@@ -65,7 +65,7 @@ getResponseTerms.formula <- function (x, ..., single.only=FALSE, duplicates=TRUE
     #   x + y ~ 1
     # will have a single response term:
     #   x + y
-    toString(lhs)
+    callToString(lhs)
   }
 }
 

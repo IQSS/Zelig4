@@ -57,11 +57,10 @@ param.mlogit.bayes <- function(obj, num=1000, ...) {
 #' @return a list of key-value pairs specifying pairing titles of quantities of
 #' interest with their simulations
 #' @export
-qi.mlogit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
-{
+qi.mlogit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
-  res1 <- compute.mlogit.bayes(obj, x, y, num, param)
-  res2 <- compute.mlogit.bayes(obj, x1, y, num, param)
+  res1 <- compute.mlogit.bayes(.fitted, x, y, num, param)
+  res2 <- compute.mlogit.bayes(.fitted, x1, y, num, param)
 
   list(
        "Expected Value: E(Y|X)" = res1$ev,
@@ -86,7 +85,7 @@ compute.mlogit.bayes <- function (obj, x, y, num, param) {
   resp <- model.response(model.frame(obj))
 
   level <- length(table(resp))
-  p <- dim(model.matrix(eval(obj$result),data=eval(obj$data)))[2]
+  p <- dim(model.matrix(eval(obj),data=eval(obj$data)))[2]
   coef <- coef(obj)
   eta <- array(NA, c(nrow(coef),level, nrow(x)))
 

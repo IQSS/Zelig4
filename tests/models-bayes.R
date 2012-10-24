@@ -3,34 +3,14 @@ library(Zelig)
 library(MCMCpack)
 library(coda)
 
-# Data
 data(turnout, package = "Zelig")
+data(mexico)
+data(macro)
+data(sanction)
 
-MCMClogit(vote ~ race + educate, data = turnout)
-q()
-
-#
-names(swiss) <- c("Fert","Agr","Exam","Educ","Cath","InfMort")
-
-z.out <- zelig(
-               vote ~ race + educate,
-               model = "logit.bayes",
-               verbose = FALSE,
-               data  = turnout
-               )
-q()
-
-summary(z.out)
-
-x.out <- setx(z.out, age=65)
-x1.out <- setx(z.out, age=10, educate=5)
-
-s.out <- sim(z.out, x.out, x1.out)
-
-summary(s.out)
-
-# YOU NEVER WAIT SO LONG!
-
+# mlogit.bayes
+# mlogit.bayes
+# mlogit.bayes
 
 z.out <- zelig(
                vote88 ~ pristr + othcok + othsocok,
@@ -44,6 +24,31 @@ s.out <- sim(z.out, x = x.out)
 
 summary(z.out)
 summary(s.out)
+
+# logit.bayes
+# logit.bayes
+# logit.bayes
+
+names(swiss) <- c("Fert","Agr","Exam","Educ","Cath","InfMort")
+
+z.out <- zelig(
+               vote ~ race + educate,
+               model = "logit.bayes",
+               verbose = FALSE,
+               data  = turnout
+               )
+summary(z.out)
+
+x.out <- setx(z.out, age=65)
+x1.out <- setx(z.out, age=10, educate=5)
+
+s.out <- sim(z.out, x.out, x1.out)
+
+summary(s.out)
+
+# normal.bayes
+# normal.bayes
+# normal.bayes
 
 z.out <- zelig(
                unem ~ gdp + capmob + trade,

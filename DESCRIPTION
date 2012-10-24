@@ -95,7 +95,6 @@ Collate:
     'summary.zelig.R'
     't.setx.R'
     'termsFromFormula.R'
-    'toString.call.R'
     'user.prompt.R'
     'Zelig-package.R'
     'zelig.R'
@@ -174,3 +173,4 @@ Collate:
     'print.summary.MCMCZelig.R'
     'probit.bayes.R'
     'summary.MCMCZelig.R'
+    'callToString.R'
