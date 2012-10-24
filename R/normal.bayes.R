@@ -26,29 +26,16 @@ zelig2normal.bayes <- function (
        ...
        )
 }
-#' Extract Samples from a Distribution in Order to Pass Them to the \code{qi} Function
-#' (this is primarily a helper function for the normal.bayes model)
-#' @param obj a zelig object
-#' @param num an integer specifying the number of simulations to compute
-#' @param ... additional parameters
-#' @return a list specifying link, link-inverse, random samples, and ancillary parameters
-#' @export
+
+#' @S3method param normal.bayes
 param.normal.bayes <- function(obj, num=1000, ...) {
   list(
        coef = coef(obj),
        linkinv = gaussian()
        )
 }
-#' Compute Quantities of Interest for the Zelig Model normal.bayes
+
 #' @S3method qi normal.bayes
-#' @param obj a zelig object
-#' @param x a setx object
-#' @param x1 an optional setx object
-#' @param y ...
-#' @param num an integer specifying the number of simulations to compute
-#' @param param a parameters object
-#' @return a list of key-value pairs specifying pairing titles of quantities of
-#' interest with their simulations
 qi.normal.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 {
 
@@ -64,7 +51,6 @@ qi.normal.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
        )
 }
 
-#
 normal.ev <- function (x, param) {
   # If either of the parameters are invalid,
   # Then return NA for both qi's
@@ -92,10 +78,8 @@ normal.ev <- function (x, param) {
   #
   list(ev = ev, pv = pv)
 }
-#' Describe the normal.bayes Zelig Model
-#' @param ... ignored parameters
-#' @return a list specifying author, title, etc. information
-#' @export
+
+#' @S3method describe normal.bayes
 describe.normal.bayes <- function(...) {
   list(
        authors = "",

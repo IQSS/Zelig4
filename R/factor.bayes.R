@@ -13,6 +13,9 @@ zelig2factor.bayes <- function (
                                 ..., 
                                 data
                                 ) {
+
+  loadDependencies(survey)
+
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)
 
@@ -35,38 +38,20 @@ zelig2factor.bayes <- function (
        ...
        )
 }
-#' Simulate Parameters for the Bayesian Logistic Regression
-#'
-#' This method simulates parameters for the Bayesian Logistic Regression
-#' (logit.bayes).
-#' @param obj a zelig object
-#' @param num an integer specifying the number of simulations to compute
-#' @param ... ignored parameters
-#' @return a list specifying link, link-inverse, random samples, and ancillary
-#' parameters
-#' @export
+
+#' @S3method param factor.bayes
 param.factor.bayes <- function (...) {
 }
-#' Compute Quantities of Interest for the Zelig Model factor.bayes
-#' @param obj a zelig object
-#' @param x a setx object
-#' @param x1 an optional setx object
-#' @param y ...
-#' @param num an integer specifying the number of simulations to compute
-#' @param param a parameters object
-#' @return a list of key-value pairs specifying pairing titles of quantities of interest
-#'         with their simulations
-#' @export
-qi.factor.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
+#' @S3method param factor.bayes
+qi.factor.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
+  stop('There is no qi function for the "factor.bayes" model')
   list(
        "Expected Value: E(Y|X)" = NA
        )
 }
-#' Describe the factor.bayes Zelig Model
-#' @param ... ignored parameters
-#' @return a list specifying author, title, etc. information
-#' @export
+
+#' @S3method describe factor.bayes
 describe.factor.bayes <- function(...) {
   list(
        authors = "",

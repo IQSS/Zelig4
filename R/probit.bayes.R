@@ -35,34 +35,19 @@ zelig2probit.bayes <- function (
        ...
        )
 }
-#' Extract Samples from a Distribution in Order to Pass Them to the \code{qi} Function
-#' (this is primarily a helper function for the probit.bayes model)
-#' @param obj a zelig object
-#' @param num an integer specifying the number of simulations to compute
-#' @param ... additional parameters
-#' @return a list specifying link, link-inverse, random samples, and ancillary parameters
-#' @export
+
+#' @S3method param probit.bayes
 param.probit.bayes <- function(obj, num=1000, ...) {
   list(
        coef = coef(obj),
        fam  = binomial(link="probit")
        )
 }
-#' Compute Quantities of Interest for the Zelig Model probit.bayes
-#' @param obj a zelig object
-#' @param x a setx object
-#' @param x1 an optional setx object
-#' @param y ...
-#' @param num an integer specifying the number of simulations to compute
-#' @param param a parameters object
-#' @return a list of key-value pairs specifying pairing titles of quantities of
-#' interest with their simulations
-#' @export
+
+#' @S3method qi probit.bayes
 qi.probit.bayes <- qi.logit.bayes
-#' Describe the probit.bayes Zelig Model
-#' @param ... ignored parameters
-#' @return a list specifying author, title, etc. information
-#' @export
+
+#' @S3method describe probit.bayes
 describe.probit.bayes <- function(...) {
   list(
        authors = "",

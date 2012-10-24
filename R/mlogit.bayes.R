@@ -18,6 +18,9 @@ zelig2mlogit.bayes <- function (
                                ..., 
                                data
                                ) {
+
+  loadDependencies(survey)
+
   list(
        .function = "MCMCmnl",
        .hook = "MCMChook",
@@ -32,31 +35,16 @@ zelig2mlogit.bayes <- function (
        ...
        )
 }
-#' Extract Samples from a Distribution in Order to Pass Them to the \code{qi} Function
-#' (this is primarily a helper function for the mlogit.bayes model)
-#' @param obj a zelig object
-#' @param num an integer specifying the number of simulations to compute
-#' @param ... additional parameters
-#' @return a list specifying link, link-inverse, random samples, and ancillary parameters
-#' @export
+
+#' @S3method param mlogit.bayes
 param.mlogit.bayes <- function(obj, num=1000, ...) {
   list(
        coef = coef(obj),
        linkinv = NULL
        )
 }
-#' Compute Quantities of Interest for the Zelig Model mlogit.bayes
-#'
-#' !!!
-#' @param obj a zelig object
-#' @param x a setx object
-#' @param x1 an optional setx object
-#' @param y ...
-#' @param num an integer specifying the number of simulations to compute
-#' @param param a parameters object
-#' @return a list of key-value pairs specifying pairing titles of quantities of
-#' interest with their simulations
-#' @export
+
+#' @S3method qi mlogit.bayes
 qi.mlogit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   res1 <- compute.mlogit.bayes(.fitted, x, y, num, param)
@@ -70,7 +58,6 @@ qi.mlogit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) 
        "First Differences"   = res2$ev - res1$ev
        )
 }
-
 
 compute.mlogit.bayes <- function (obj, x, y, num, param) {
   # If either of the parameters are invalid,
@@ -119,10 +106,8 @@ compute.mlogit.bayes <- function (obj, x, y, num, param) {
   }
   list(ev = ev, pv = pr)
 }
-#' Describe the mlogit.bayes Zelig Model
-#' @param ... ignored parameters
-#' @return a list specifying author, title, etc. information
-#' @export
+
+#' @S3method describe mlogit.bayes
 describe.mlogit.bayes <- function(...) {
   list(
        authors = "",

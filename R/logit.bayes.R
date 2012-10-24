@@ -18,6 +18,9 @@ zelig2logit.bayes <- function (
                                ..., 
                                data
                                ) {
+
+  loadDependencies(survey)
+
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)
 
@@ -35,33 +38,17 @@ zelig2logit.bayes <- function (
        ...
        )
 }
-#' Simulate Parameters for the Bayesian Logistic Regression
-#'
-#' This method simulates parameters for the Bayesian Logistic Regression
-#' (logit.bayes).
-#' @param obj a zelig object
-#' @param num an integer specifying the number of simulations to compute
-#' @param ... ignored parameters
-#' @return a list specifying link, link-inverse, random samples, and ancillary
-#' parameters
+
+
 #' @S3method param logit.bayes
-#' @export
 param.logit.bayes <- function(obj, num=1000, ...) {
   list(
        coef = coef(obj),
        fam  = binomial(link="logit")
        )
 }
-#' Compute Quantities of Interest for the Zelig Model logit.bayes
+
 #' @S3method qi logit.bayes
-#' @param obj a zelig object
-#' @param x a setx object
-#' @param x1 an optional setx object
-#' @param y ...
-#' @param num an integer specifying the number of simulations to compute
-#' @param param a parameters object
-#' @return a list of key-value pairs specifying pairing titles of quantities of
-#' interest with their simulations
 qi.logit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   # Use a Helper-Function that computes expected values and predicted values
@@ -103,10 +90,8 @@ logit.ev <- function (x, param) {
   # Return
   list(ev=ev, pv=pv)
 }
-#' Describe the logit.bayes Zelig Model
-#' @param ... ignored parameters
-#' @return a list specifying author, title, etc. information
-#' @export
+
+#' @S3method describe logit.bayes
 describe.logit.bayes <- function(...) {
   list(
        authors = "",
