@@ -7,6 +7,8 @@
 #' @export
 zelig2twosls <- function (formula, ..., data) {
 
+  loadDependencies(systemfit)
+
   # Helper function to perform set-difference
   "%w/o%" <- function(x, y)
     x[!x %in% y]
@@ -163,11 +165,31 @@ qi.twosls <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
 #' @S3method describe twosls
 describe.twosls <- function (...) {
-  list(
-       authors = c("Ferdinand Alimadhi", "Ying Lu", "Elena Villalon"),
-       description = "Two Stage Least Squares",
-       year = 2007
-       )
+  category <- "continuous"
+  description  <- "Two Stage Least Squares"
+  authors <- c("Ferdinand Alimadhi", "Ying Lu", "Elena Villalon")
+  year <- 2007
+
+  package <-list(
+                 name = "systemfit",
+		 version = "0.8"
+		 )
+
+  parameters <- list()
+  parameters$mu <-list(
+                       equations=c(2,Inf),
+                       tagsAllowed=TRUE,
+                       depVar=TRUE,
+                       expVar=TRUE
+                       )
+  parameters$inst<-list(
+                        equations=c(1,1),
+                        tagsAllowed=FALSE,
+                        depVar=FALSE,
+                        expVar=TRUE
+                        )
+ 
+  list(category = category, authors = authors, year = year, description = description, package = package, parameters = parameters)
 }
 
 #' @export

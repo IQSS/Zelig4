@@ -1,5 +1,4 @@
 library(Zelig)
-library(systemfit)
 
 data(klein)
 
