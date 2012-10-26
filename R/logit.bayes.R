@@ -19,7 +19,7 @@ zelig2logit.bayes <- function (
                                data
                                ) {
 
-  loadDependencies(survey)
+  loadDependencies(MCMCpack)
 
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)

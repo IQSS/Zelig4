@@ -1,0 +1,1623 @@
+\documentclass{article}
+
+\title{Zelig v4.0-10 Core Model Reference Manual}
+\author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
+
+\SweaveOpts{prefix.string=manual-bayes}
+
+\usepackage{bibentry}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{Zelig}
+\usepackage{Sweave}
+
+%\VignetteIndexEntry{Zelig Core Model Reference Manual}
+%\VignetteDepends{Zelig}
+%\VignetteKeyWords{model,regression}
+%\VignettePackage{Zelig, stats}
+
+\begin{document}
+
+<<loadLibrary, echo=F,results=hide>>=
+library(Zelig)
+library(MCMCpack)
+@ 
+
+% logit.bayes
+% logit.bayes
+% logit.bayes
+
+\section{\texttt{logit.bayes}: Bayesian Logistic Regression}
+
+\label{logit.bayes}
+
+Logistic regression specifies a dichotomous dependent variable as a
+function of a set of explanatory variables using a random walk
+Metropolis algorithm.  For a maximum likelihood implementation, see
+\Sref{logit}.  
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "logit.bayes", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+\subsubsection{Additional Inputs}
+
+Use the following arguments to monitor the Markov chain: 
+\begin{itemize}
+\item \texttt{burnin}: number of the initial MCMC iterations to be 
+ discarded (defaults to 1,000). 
+
+\item \texttt{mcmc}: number of the MCMC iterations after burnin
+(defaults to 10,000).
+
+\item \texttt{thin}: thinning interval for the Markov chain. Only every 
+ \texttt{thin}-th draw from the Markov chain is kept. The value of 
+\texttt{mcmc} must be divisible by this value. The default value is 1.
+
+\item \texttt{tune}: Metropolis tuning parameter, either 
+a positive scalar or a vector of length $k$, where $k$ is the number
+of coefficients. The tuning parameter should be set such that the
+acceptance rate of the Metropolis algorithm is satisfactory (typically
+between 0.20 and 0.5) before using the posterior density for
+inference. The default value is 1.1.
+
+\item \texttt{verbose}: defaults to {\tt FALSE}.  If \texttt{TRUE}, the progress 
+ of the sampler (every $10\%$) is printed to the screen.
+
+\item \texttt{seed}: seed for the random number generator.  The
+default is \texttt{NA} which corresponds to a random seed of 12345.
+
+\item \texttt{beta.start}: starting values for the Markov 
+chain, either a scalar or vector with length equal to the number of
+estimated coefficients. The default is \texttt{NA}, such that the maximum
+likelihood estimates are used as the starting values.
+
+\end{itemize}
+
+Use the following parameters to specify the model's priors:  
+\begin{itemize}
+\item \texttt{b0}: prior mean for the coefficients, either a numeric 
+vector or a scalar. If a scalar value, that value will
+be the prior mean for all the coefficients. The default is 0.
+
+\item \texttt{B0}: prior precision parameter for the coefficients,
+either a square matrix (with the dimensions equal to the number of
+coefficients) or a scalar. If a scalar value, that value times an
+identity matrix will be the prior precision parameter. The default is
+0, which leads to an improper prior.
+
+\end{itemize}
+
+Zelig users may wish to refer to \texttt{help(logit.bayes)} for more information.
+
+\input{coda_diag}
+
+\subsubsection{Examples}
+
+\begin{enumerate}
+\item {Basic Example} \\
+Attaching the sample  dataset:
+<<BasicExample.data>>=
+ data(turnout)
+@ 
+Estimating the logistic regression using \texttt{logit.bayes}:
+<<BasicExample.zelig>>=
+ z.out <- zelig(vote ~ race + educate, model = "logit.bayes",
+                  data = turnout, verbose = TRUE)
+@ 
+Convergence diagnostics before summarizing the estimates:
+<<BasicExample.geweke>>=
+ geweke.diag(z.out$result$coefficients)
+@
+<<BasicExample.heidel>>=
+ heidel.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.raftery>>= 
+ raftery.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.summary.zout>>= 
+summary(z.out)
+@ 
+Setting values for the explanatory variables to their sample averages:
+<<BasicExample.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulating quantities of interest from the posterior distribution given 
+\texttt{x.out}.
+<<BasicExample.sim>>=
+ s.out1 <- sim(z.out, x = x.out)
+@ 
+<<BasicExample.summary.sim>>= 
+summary(s.out1)
+@ 
+\item {Simulating First Differences} \\
+Estimating the first difference (and risk ratio) in individual's probability of
+voting  when education is set to be low (25th percentile) versus 
+high (75th percentile) while all the other variables held at their 
+default values.
+<<FirstDifferences.setx.high>>=
+ x.high <- setx(z.out, educate = quantile(turnout$educate, prob = 0.75))
+@ 
+<<FirstDifferences.setx.low>>= 
+x.low <- setx(z.out, educate = quantile(turnout$educate, prob = 0.25))
+@ 
+<<FirstDifferences.sim>>= 
+s.out2 <- sim(z.out, x = x.high, x1 = x.low)
+@ 
+<<FirstDifferences.summary>>= 
+summary(s.out2)
+@ 
+\end{enumerate}
+
+\subsubsection{Model}
+
+Let $Y_{i}$ be the binary dependent variable for observation $i$ which takes
+the value of either 0 or 1.
+
+\begin{itemize}
+\item The \emph{stochastic component} is given by
+\begin{eqnarray*}
+Y_{i}  &  \sim & \rm{Bernoulli}(\pi_{i})\\
+&  = & \pi_{i}^{Y_{i}}(1-\pi_{i})^{1-Y_{i}},
+\end{eqnarray*}
+where $\pi_{i}=\Pr(Y_{i}=1)$.
+
+\item The \emph{systematic component} is given by
+\begin{eqnarray*}
+\pi_{i}= \frac{1}{1+\exp(-x_{i} \beta)},
+\end{eqnarray*}
+where $x_{i}$ is the vector of $k$ explanatory variables for observation $i$
+and $\beta$ is the vector of coefficients.
+
+\item The \emph{prior} for $\beta$ is given by
+\begin{eqnarray*}
+\beta \sim \textrm{Normal}_k \left(  b_{0},B_{0}^{-1}\right)
+\end{eqnarray*}
+where $b_{0}$ is the vector of means for the $k$ explanatory variables
+and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
+variance-covariance matrix).
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+
+\begin{itemize}
+\item The expected values (\texttt{qi\$ev}) for the logit model are
+simulations of the predicted probability of a success:
+\begin{eqnarray*}
+E(Y) = \pi_{i}= \frac{1}{1 + \exp(-x_{i} \beta)},
+\end{eqnarray*}
+given the posterior draws of $\beta$ from the MCMC iterations.
+
+\item The predicted values (\texttt{qi\$pr}) are draws from the Bernoulli
+distribution with mean equal to the simulated expected value $\pi_{i}$.
+
+\item The first difference (\texttt{qi\$fd}) for the logit model is defined
+as
+\begin{eqnarray*}
+\text{FD}=\Pr(Y=1\mid X_{1})-\Pr(Y=1\mid X).
+\end{eqnarray*}
+
+\item The risk ratio (\texttt{qi\$rr})is defined as
+\begin{eqnarray*}
+\text{RR}=\Pr(Y=1\mid X_{1})\ /\ \Pr(Y=1\mid X).
+\end{eqnarray*}
+
+\item In conditional prediction models, the average expected treatment effect
+(\texttt{qi\$att.ev}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum t_{i}}\sum_{i:t_{i}=1}[Y_{i}(t_{i}=1)-E[Y_{i}(t_{i}=0)]],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups. 
+
+\item In conditional prediction models, the average predicted treatment effect
+(\texttt{qi\$att.pr}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum t_{i}}\sum_{i:t_{i}=1}[Y_{i}(t_{i}=1)-\widehat{Y_{i}(t_{i}=0)}],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups. 
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you may
+view. For example, if you run
+\begin{verbatim}
+z.out <- zelig(y ~ x, model = "logit.bayes", data)
+\end{verbatim}
+
+\noindent then you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior distribution of
+the \texttt{coefficients} by using \texttt{z.out\$coefficients}, and a default
+summary of information through \texttt{summary(z.out)}. Other elements
+available through the \texttt{\$} operator are listed below.
+
+\begin{itemize}
+\item From the \texttt{zelig()} output object \texttt{z.out}, you may extract:
+
+\begin{itemize}
+\item \texttt{coefficients}: draws from the posterior distributions
+of the estimated parameters.
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+\item \texttt{seed}: the random seed used in the model.
+
+\end{itemize}
+
+\item From the \texttt{sim()} output object \texttt{s.out}:
+
+\begin{itemize}
+\item \texttt{qi\$ev}: the simulated expected values(probabilities) for the specified
+values of \texttt{x}.
+
+\item \texttt{qi\$pr}: the simulated predicted values for the specified values
+of \texttt{x}.
+
+\item \texttt{qi\$fd}: the simulated first difference in the expected
+values for the values specified in \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$rr}: the simulated risk ratio for the expected values
+simulated from \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$att.ev}: the simulated average expected treatment effect
+for the treated from conditional prediction models.
+
+\item \texttt{qi\$att.pr}: the simulated average predicted treatment effect
+for the treated from conditional prediction models.
+\end{itemize}
+\end{itemize}
+
+% \subsection*{How to Cite the Logit Model}
+% \bibentry{ImaLauKin-robit11}
+
+\subsection*{How to Cite the Zelig Software Package}
+\CiteZelig
+
+\subsection*{See also}
+Bayesian logistic regression is part of the MCMCpack library by Andrew D. Martin and Kevin M. Quinn \citep{MarQui05}. The convergence diagnostics are part of the CODA library by Martyn Plummer, Nicky Best, Kate Cowles, and Karen Vines \citep{PluBesCowVin05}.
+
+
+% mlogit.bayes
+% mlogit.bayes
+% mlogit.bayes
+
+\section{\texttt{mlogit.bayes}: Bayesian Multinomial Logistic Regression}
+\label{mlogit.bayes}
+
+Use Bayesian multinomial logistic regression to model unordered
+categorical variables.  The dependent variable may be in the format of
+either character strings or integer values.  The model is estimated
+via a random walk Metropolis algorithm or a slice sampler.  See
+\Sref{mlogit} for the maximum-likelihood estimation of this model.
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "mlogit.bayes", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+\subsubsection{Additional Inputs}
+
+{\tt zelig()} accepts the following arguments for {\tt mlogit.bayes}:
+\begin{itemize}
+\item \texttt{baseline}: either a character string or numeric value
+(equal to one of the observed values in the dependent variable)
+specifying a baseline category.  The default value is \texttt{NA}
+which sets the baseline to the first alphabetical or numerical unique
+value of the dependent variable.
+\end{itemize}
+
+The model accepts the following additional arguments to monitor the
+Markov chains:  
+\begin{itemize}
+\item \texttt{burnin}: number of the initial MCMC iterations to be 
+ discarded (defaults to 1,000).
+
+\item \texttt{mcmc}: number of the MCMC iterations after burnin
+(defaults to 10,000).
+
+\item \texttt{thin}: thinning interval for the Markov chain. Only every 
+ \texttt{thin}-th draw from the Markov chain is kept. The value of 
+\texttt{mcmc} must be divisible by this value. The default value is 1.
+
+\item \texttt{mcmc.method}: either {\tt "MH"} or {\tt "slice"}, specifying whether
+to use Metropolis Algorithm or slice sampler. The default value is
+\texttt{"MH"}.
+
+\item \texttt{tune}: tuning parameter for the Metropolis-Hasting step,
+either a scalar or a numeric vector (for $k$ coefficients, enter a $k$
+vector).  The tuning parameter should be set such that the acceptance 
+rate is satisfactory (between 0.2 and 0.5). The default value is 1.1.
+
+\item \texttt{verbose}: defaults to \texttt{FALSE}.
+If \texttt{TRUE}, the progress of the sampler (every $10\%$) is
+printed to the screen.
+
+\item \texttt{seed}: seed for the random number generator. The default is 
+\texttt{NA} which corresponds to a random seed of 12345. 
+
+\item \texttt{beta.start}: starting values for the Markov 
+chain, either a scalar or a vector (for $k$ coefficients, enter a $k$
+vector). The default is \texttt{NA} where the maximum likelihood
+estimates are used as the starting values.
+
+\end{itemize}
+
+Use the following arguments to specify the priors for the model:  
+\begin{itemize}
+\item \texttt{b0}: prior mean for the coefficients, either a scalar or
+vector.  If a scalar, that value will be the prior mean for all the
+coefficients. The default is 0.
+
+\item \texttt{B0}: prior precision parameter for the coefficients,
+either a square matrix with the dimensions equal to the number of
+coefficients or a scalar. If a scalar, that value times an identity
+matrix will be the prior precision parameter. The default is 0 which
+leads to an improper prior.
+\end{itemize}
+
+Zelig users may wish to refer to \texttt{help(MCMCmnl)} for more 
+information.
+
+\input{coda_diag}
+
+\subsubsection{Examples}
+
+\begin{enumerate}
+\item {Basic Example} \\
+Attaching the sample dataset:
+<<BasicExample.data>>=
+ data(mexico)
+@ 
+Estimating multinomial logistics regression using \texttt{mlogit.bayes}:
+<<BasicExample.zelig>>=
+ z.out <- zelig(vote88 ~ pristr + othcok + othsocok, model = "mlogit.bayes", 
+               data = mexico)
+@ 
+Checking for convergence before summarizing the estimates:
+<<BasicExample.heidel>>=
+ heidel.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.raftery>>= 
+raftery.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.summary>>= 
+summary(z.out)
+@ \end{verbatim} 
+Setting values for the explanatory variables to their sample averages:
+<<BasicExample.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulating quantities of interest from the posterior distribution
+given \texttt{x.out}.
+<<BasicExample.sim>>=
+ s.out1 <- sim(z.out, x = x.out)
+@ 
+<<BasicExample.summary.sim>>= 
+summary(s.out1)
+@ 
+\item {Simulating First Differences} \\
+Estimating the first difference (and risk ratio) in the probabilities of
+voting different candidates when \texttt{pristr} (the strength of the
+PRI) is set to be weak (equal to 1) versus strong (equal to 3)
+while all the other variables held at their default values.
+<<FirstDifferences.setx>>=
+ x.weak <- setx(z.out, pristr = 1)
+ x.strong <- setx(z.out, pristr = 3)
+@ 
+<<FirstDifferences.sim>>= 
+s.out2 <- sim(z.out, x = x.strong, x1 = x.weak)
+@ 
+<<FirstDifferences.summary>>= 
+summary(s.out2)
+@ 
+\end{enumerate}
+
+\subsubsection{Model}
+
+Let $Y_{i}$ be the (unordered) categorical dependent variable for observation 
+$i$ which takes an integer values $j=1, \ldots, J$.
+
+\begin{itemize}
+\item The \emph{stochastic component} is given by:
+\begin{eqnarray*}
+Y_{i} &\sim& \textrm{Multinomial}(Y_i \mid \pi_{ij}).
+\end{eqnarray*}
+where $\pi_{ij}=\Pr(Y_i=j)$ for $j=1, \ldots, J$.
+
+\item The \emph{systematic component} is given by
+
+\begin{eqnarray*}
+\pi_{ij}=\frac{\exp(x_i\beta_j)}{\sum_{k=1}^J \exp(x_i\beta_k)},
+\textrm{ for } j=1,\ldots, J-1,
+\end{eqnarray*}
+where $x_{i}$ is the vector of $k$ explanatory variables for
+observation $i$ and $\beta_j$ is the vector of coefficient for
+category $j$. Category $J$ is assumed to be the baseline category.
+
+\item The \emph{prior} for $\beta$ is given by
+\begin{eqnarray*}
+\beta_j \sim \textrm{Normal}_k\left(  b_{0},B_{0}^{-1}\right) 
+\textrm{ for } j = 1, \ldots, J-1,
+\end{eqnarray*}
+where $b_{0}$ is the vector of means for the $k$ explanatory variables
+and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
+variance-covariance matrix).
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+
+\begin{itemize}
+\item The expected values (\texttt{qi\$ev}) for the multinomial logistics
+ regression model are the predicted probability of belonging to each
+ category:
+\begin{eqnarray*}
+\Pr(Y_i=j)=\pi_{ij}=\frac{\exp(x_i \beta_j)}{\sum_{k=1}^J \exp(x_J
+\beta_k)}, \quad \textrm{ for } j=1,\ldots, J-1,
+\end{eqnarray*}
+and 
+\begin{eqnarray*}
+\Pr(Y_i=J)=1-\sum_{j=1}^{J-1}\Pr(Y_i=j)
+\end{eqnarray*}
+given the posterior draws of $\beta_j$ for all categories from the 
+MCMC iterations.
+
+\item The predicted values (\texttt{qi\$pr}) are the draws of 
+$Y_i$  from a multinomial distribution whose parameters are the expected 
+values(\texttt{qi\$ev}) computed based on the posterior draws 
+of $\beta$ from the MCMC iterations.
+
+\item The first difference (\texttt{qi\$fd}) in category $j$ for the 
+multinomial logistic model is defined as
+\begin{eqnarray*}
+\text{FD}_j=\Pr(Y_i=j\mid X_{1})-\Pr(Y_i=j\mid X).
+\end{eqnarray*}
+
+\item The risk ratio (\texttt{qi\$rr}) in category $j$ is defined as
+\begin{eqnarray*}
+\text{RR}_j=\Pr(Y_i=j\mid X_{1})\ /\ \Pr(Y_i=j\mid X).
+\end{eqnarray*}
+
+
+\item In conditional prediction models, the average expected treatment effect
+(\texttt{qi\$att.ev}) for the treatment group in category $j$ is
+\begin{eqnarray*}
+\frac{1}{n_j}\sum_{i:t_{i}=1}^{n_j}[Y_{i}(t_{i}=1)-E[Y_{i}(t_{i}=0)]],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups, and $n_j$ is the 
+number of treated observations in category $j$.
+
+\item In conditional prediction models, the average predicted treatment effect
+(\texttt{qi\$att.pr}) for the treatment group in category $j$ is
+\begin{eqnarray*}
+\frac{1}{n_j}\sum_{i:t_{i}=1}^{n_j}[Y_{i}(t_{i}=1)-\widehat{Y_{i}(t_{i}=0)}],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups, and $n_j$ is the 
+number of treated observations in category $j$.
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you may
+view. For example, if you run:
+\begin{verbatim}
+z.out <- zelig(y ~ x, model = "mlogit.bayes", data)
+\end{verbatim}
+
+\noindent then you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior distribution of
+the \texttt{coefficients} by using \texttt{z.out\$coefficients}, and view a default
+summary of information through \texttt{summary(z.out)}. Other elements
+available through the \texttt{\$} operator are listed below.
+
+\begin{itemize}
+\item From the \texttt{zelig()} output object \texttt{z.out}, you may extract:
+
+\begin{itemize}
+\item \texttt{coefficients}: draws from the posterior distributions
+of the estimated coefficients $\beta$ for each category except the baseline
+category. 
+
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+\item \texttt{seed}: the random seed used in the model.
+
+\end{itemize}
+
+\item From the \texttt{sim()} output object \texttt{s.out}:
+
+\begin{itemize}
+\item \texttt{qi\$ev}: the simulated expected values(probabilities) of 
+each of the $J$ categories given the specified values of \texttt{x}.
+
+\item \texttt{qi\$pr}: the simulated predicted values drawn from the 
+multinomial distribution defined by the expected values(\texttt{qi\$ev})
+given the specified values of \texttt{x}.
+
+\item \texttt{qi\$fd}: the simulated first difference in the expected
+values of each of the $J$ categories for the values specified in 
+\texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$rr}: the simulated risk ratio for the 
+expected values of each of the $J$ categories simulated 
+from \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$att.ev}: the simulated average expected treatment effect
+for the treated from conditional prediction models.
+
+\item \texttt{qi\$att.pr}: the simulated average predicted treatment effect
+for the treated from conditional prediction models.
+\end{itemize}
+\end{itemize}
+
+% \subsection*{How to Cite the Logit Model}
+% \bibentry{ImaLauKin-robit11}
+\subsection*{How to Cite the Bayesian Multinomial Logit Model}
+\begin{verse}
+Ben Goodrich and Ying Lu. 2007. ``mlogit.bayes: Bayesian Multinomial Logistic Regression for Dependent Variables with Unordered Categorical Values ,'' in Kosuke Imai, Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
+\end{verse}
+
+\subsection*{How to Cite the Zelig Software Package}
+\CiteZelig
+
+\subsection*{See also}
+Bayesian logistic regression is part of the MCMCpack library by Andrew D. Martin and Kevin M. Quinn \citep{MarQui05}. The convergence diagnostics are part of the CODA library by Martyn Plummer, Nicky Best, Kate Cowles, and Karen Vines \citep{PluBesCowVin05}.
+
+% normal.bayes
+% normal.bayes
+% normal.bayes
+
+\section{\texttt{normal.bayes}: Bayesian Normal Linear Regression}
+\label{normal.bayes}
+
+Use Bayesian regression to specify a continuous dependent variable as
+a linear function of specified explanatory variables.  The model is
+implemented using a Gibbs sampler.  See \Sref{normal} for the
+maximum-likelihood implementation or \Sref{ls} for the ordinary least
+squares variation.
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "normal.bayes", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+\subsubsection{Additional Inputs}
+
+Use the following arguments to monitor the convergence of the Markov
+chain:  
+\begin{itemize}
+\item \texttt{burnin}: number of the initial MCMC iterations to be 
+ discarded (defaults to 1,000).
+
+\item \texttt{mcmc}: number of the MCMC iterations after burnin
+(defaults to 10,000).
+
+\item \texttt{thin}: thinning interval for the Markov chain. Only every 
+ \texttt{thin}-th draw from the Markov chain is kept. The value of 
+\texttt{mcmc} must be divisible by this value. The default value is 1.
+
+\item \texttt{verbose}: defaults to {\tt FALSE}. If \texttt{TRUE}, the
+progress of the sampler (every $10\%$) is printed to the screen.
+
+\item \texttt{seed}: seed for the random number generator. The default
+is \texttt{NA}, which corresponds to a random seed of 12345.
+
+\item \texttt{beta.start}: starting values for the Markov 
+chain, either a scalar or vector with length equal to the number 
+of estimated coefficients. The default is \texttt{NA}, which uses the
+least squares estimates as the starting values. 
+
+\end{itemize}
+
+Use the following arguments to specify the model's priors:  
+\begin{itemize}
+\item \texttt{b0}: prior mean for the coefficients, either a numeric
+vector or a scalar. If a scalar, that value will
+be the prior mean for all the coefficients. The default is 0.
+
+\item \texttt{B0}: prior precision parameter for the coefficients,
+either a square matrix (with the dimensions equal to the number of the
+coefficients) or a scalar. If a scalar, that value times an identity
+matrix will be the prior precision parameter. The default is 0, which
+leads to an improper prior. 
+
+\item \texttt{c0}: \texttt{c0/2} is the shape parameter for the Inverse Gamma
+prior on the variance of the disturbance terms. 
+
+\item \texttt{d0}: \texttt{d0/2} is the scale parameter for the Inverse Gamma
+prior on the variance of the disturbance terms. 
+
+\end{itemize}
+
+Zelig users may wish to refer to \texttt{help(MCMCregress)} for more 
+information.
+
+\input{coda_diag}
+
+\subsubsection{Examples}
+
+\begin{enumerate}
+\item {Basic Example} \\
+Attaching the sample dataset:
+<<BasicExample.data>>=
+ data(macro)
+@ 
+
+Estimating linear regression using \texttt{normal.bayes}:
+<<BasicExample.zelig>>=
+z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.bayes",
+                  data = macro, verbose = TRUE)
+@ 
+Checking for convergence before summarizing the estimates:
+<<BasicExample.geweke>>=
+ geweke.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.heidel>>= 
+heidel.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.raftery>>= 
+raftery.diag(z.out$result$coefficients)
+@
+<<BasicExample.summary>>=  
+summary(z.out) 
+@ 
+
+Setting values for the explanatory variables to their sample averages:
+<<BasicExample.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulating quantities of interest from the posterior distribution given 
+\texttt{x.out}:
+<<BasicExample.sim>>=
+ s.out1 <- sim(z.out, x = x.out)
+@
+<<BasicExample.summary.sim>>= 
+summary(s.out1)
+@ 
+\item {Simulating First Differences} \\
+Set explanatory variables to their default(mean/mode) values, with high
+(80th percentile) and low (20th percentile) trade on GDP:
+<<FirstDifferences.setx>>=
+ x.high <- setx(z.out, trade = quantile(macro$trade, prob = 0.8))
+ x.low <- setx(z.out, trade = quantile(macro$trade, prob = 0.2))
+@ 
+Estimating the first difference for the effect of
+high versus low trade on unemployment rate:
+<<FirstDifferences.sim>>=
+ s.out2 <- sim(z.out, x = x.high, x1 = x.low)
+@ 
+<<FirstDifferences.summary.sim>>=
+ summary(s.out2)
+@ 
+\end{enumerate}
+
+\subsubsection{Model}
+
+\begin{itemize}
+\item The \emph{stochastic component} is given by
+\begin{eqnarray*}
+\epsilon_{i}  &  \sim & \textrm{Normal}(0, \sigma^2)
+\end{eqnarray*}
+where $\epsilon_{i}=Y_i-\mu_i$.
+
+\item The \emph{systematic component} is given by
+\begin{eqnarray*}
+\mu_{i}= x_{i} \beta,
+\end{eqnarray*}
+where $x_{i}$ is the vector of $k$ explanatory variables for observation $i$
+and $\beta$ is the vector of coefficients.
+
+\item The \emph{semi-conjugate priors} for $\beta$ and $\sigma^2$ are given by
+\begin{eqnarray*}
+\beta & \sim & \textrm{Normal}_k \left( b_{0},B_{0}^{-1}\right) \\
+\sigma^{2} & \sim & {\rm InverseGamma}\left( \frac{c_0}{2}, 
+\frac{d_0}{2} \right) 
+\end{eqnarray*}
+where $b_{0}$ is the vector of means for the $k$ explanatory
+variables, $B_{0}$ is the $k\times k$ precision matrix (the inverse of
+a variance-covariance matrix), and $c_0/2$ and $d_0/2$ are the shape and
+scale parameters for $\sigma^{2}$.  Note that $\beta$ and $\sigma^2$
+are assumed to be \emph{a priori} independent.
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+
+\begin{itemize}
+\item The expected values (\texttt{qi\$ev}) for the linear regression model are
+calculated as following:
+\begin{eqnarray*}
+E(Y) = x_{i} \beta,
+\end{eqnarray*}
+given posterior draws of $\beta$ based on the MCMC iterations.
+
+\item The first difference (\texttt{qi\$fd}) for the linear regression model 
+is defined as
+\begin{eqnarray*}
+\text{FD}=E(Y\mid X_{1})-E(Y\mid X).
+\end{eqnarray*}
+
+\item In conditional prediction models, the average expected treatment effect
+(\texttt{qi\$att.ev}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum_{i=1}^n t_{i}}\sum_{i:t_{i}=1} \{
+Y_{i}(t_{i}=1)-E[Y_{i}(t_{i}=0)] \},
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups. 
+
+\item In conditional prediction models, the average predicted treatment
+  effect ({\tt att.pr}) for the treatment group is 
+    \begin{equation*} \frac{1}{\sum_{i=1}^n t_i}\sum_{i:t_i=1}^n \left\{ Y_i(t_i=1) -
+      \widehat{Y_i(t_i=0)} \right\},
+    \end{equation*} 
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups. 
+
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you may
+view. For example, if you run:
+\begin{verbatim}
+z.out <- zelig(y ~ x, model = "normal.bayes", data)
+\end{verbatim}
+
+\noindent then you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior distribution of
+the \texttt{coefficients} by using \texttt{z.out\$coefficients}, and view a 
+default summary of information through \texttt{summary(z.out)}. Other elements
+available through the \texttt{\$} operator are listed below.
+
+\begin{itemize}
+\item From the \texttt{zelig()} output object \texttt{z.out}, you may extract:
+
+\begin{itemize}
+\item \texttt{coefficients}: draws from the posterior distributions
+of the estimated parameters. The first $k$ columns contain the posterior draws
+of the coefficients $\beta$, and the last column contains the posterior draws 
+of the variance $\sigma^2$.
+
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+\item \texttt{seed}: the random seed used in the model.
+
+\end{itemize}
+
+\item From the \texttt{sim()} output object \texttt{s.out}:
+
+\begin{itemize}
+\item \texttt{qi\$ev}: the simulated expected values for the specified
+values of \texttt{x}.
+
+\item \texttt{qi\$fd}: the simulated first difference in the expected
+values for the values specified in \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$att.ev}: the simulated average expected treatment effect
+for the treated from conditional prediction models.
+
+\end{itemize}
+\end{itemize}
+
+\subsection*{How to Cite the Bayesian Gaussian Model}
+\begin{verse}
+Ben Goodrich and Ying Lu. 2007. ``normal.bayes: Bayesian Normal Linear Regression ,'' in Kosuke Imai, Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
+\end{verse}
+
+\subsection*{How to Cite the Zelig Software Package}
+\CiteZelig
+
+\subsection*{See also}
+Bayesian normal regression is part of the MCMCpack library by Andrew D. Martin and Kevin M. Quinn \citep{MarQui05}. The convergence diagnostics are part of the CODA library by Martyn Plummer, Nicky Best, Kate Cowles, and Karen Vines \citep{PluBesCowVin05}.
+
+% oprobit.bayes
+% oprobit.bayes
+% oprobit.bayes
+
+\section{\texttt{oprobit.bayes}: Bayesian Ordered Probit Regression}
+\label{oprobit.bayes}
+
+Use the ordinal probit regression model if your dependent variables are ordered and 
+categorical.  They may take either integer values or character strings.  The model 
+is estimated using a Gibbs sampler with data augmentation.  For a 
+maximum-likelihood implementation of this models, see \Sref{oprobit}.
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "oprobit.bayes", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+
+\subsubsection{Additional Inputs}
+
+{\tt zelig()} accepts the following arguments to monitor the Markov
+chain:  
+\begin{itemize}
+\item \texttt{burnin}: number of the initial MCMC iterations to be 
+ discarded (defaults to 1,000).
+
+\item \texttt{mcmc}: number of the MCMC iterations after burnin
+(defaults 10,000).
+
+\item \texttt{thin}: thinning interval for the Markov chain. Only every 
+ \texttt{thin}-th draw from the Markov chain is kept. The value of
+\texttt{mcmc} must be divisible by this value. The default value is 1.
+
+\item{\texttt{tune}}: tuning parameter for the Metropolis-Hasting step.
+The default value is \texttt{NA} which corresponds to 0.05 divided by
+the number of categories in the response variable.
+
+\item \texttt{verbose}: defaults to {\tt FALSE}  If \texttt{TRUE},
+the progress of the sampler (every $10\%$) is printed to the screen.
+
+\item \texttt{seed}: seed for the random number generator. The default 
+is \texttt{NA} which corresponds to a random seed 12345.
+
+\item \texttt{beta.start}: starting values for the Markov 
+chain, either a scalar or vector with length equal to the number 
+of estimated coefficients. The default is \texttt{NA}, which uses the
+maximum likelihood estimates as the starting values.  
+
+\end{itemize}
+
+Use the following parameters to specify the model's priors:  
+\begin{itemize}
+\item \texttt{b0}: prior mean for the coefficients, either a numeric 
+vector or a scalar. If a scalar value, that value will be the prior
+mean for all the coefficients. The default is 0.
+
+\item \texttt{B0}: prior precision parameter for the coefficients,
+either a square matrix (with dimensions equal to the number of
+coefficients) or a scalar. If a scalar value, that value times an
+identity matrix will be the prior precision parameter. The default is
+0 which leads to an improper prior.
+\end{itemize}
+
+\noindent Zelig users may wish to refer to \texttt{help(MCMCoprobit)} 
+for more information.
+
+\input{coda_diag}
+
+\subsubsection{Examples}
+
+\begin{enumerate}
+\item {Basic Example} \\
+Attaching the sample  dataset:
+<<BasicExample.data>>=
+ data(sanction)
+@ 
+Estimating ordered probit regression using \texttt{oprobit.bayes}:
+<<BasicExample.zelig>>=
+ z.out <- zelig(ncost ~ mil + coop, model = "oprobit.bayes",
+                  data = sanction, verbose=TRUE)
+@ 
+
+Creating an ordered dependent variable:
+<<BasicExample.factor>>=
+sanction$ncost <- factor(sanction$ncost, ordered = TRUE,
+                         levels = c("net gain", "little effect", 
+                         "modest loss", "major loss"))
+@ 
+
+Checking for convergence before summarizing the estimates:
+<<BasicExample.heidel>>=
+heidel.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.raftery>>= 
+raftery.diag(z.out$result$coefficients)
+@  
+<<BasicExample.summary>>=
+summary(z.out) 
+@  
+Setting values for the explanatory variables to their sample averages:
+<<BasicExample.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulating quantities of interest from the posterior distribution given:
+\texttt{x.out}.
+<<BasicExample.sim>>=
+ s.out1 <- sim(z.out, x = x.out)
+ summary(s.out1)
+@
+\item {Simulating First Differences} \\
+Estimating the first difference (and risk ratio) in the probabilities of
+incurring different level of cost when there is no military action versus 
+military action while all the other variables held at their 
+default values.
+
+<<FirstDifferences.setx>>=
+ x.high <- setx(z.out, mil=0)
+ x.low <- setx(z.out, mil=1)
+@ 
+<<FirstDifferences.sim>>= 
+s.out2 <- sim(z.out, x = x.high, x1 = x.low)
+ summary(s.out2)
+@ 
+\end{enumerate}
+
+\subsubsection{Model}
+Let $Y_{i}$ be the ordered categorical dependent variable for
+observation $i$ which takes an integer value $j=1, \ldots, J$.
+
+\begin{itemize}
+\item The \emph{stochastic component} is described by an unobserved 
+continuous variable, $Y_i^*$, 
+\begin{eqnarray*}
+Y_{i}^*  \sim \textrm{Normal}(\mu_i, 1).
+\end{eqnarray*}
+Instead of $Y_i^*$, we observe categorical variable $Y_i$,
+\begin{eqnarray*}
+Y_i = j \quad \textrm{ if } \tau_{j-1} \le Y_i^* \le \tau_j \textrm{
+for } j=1,\ldots, J.
+\end{eqnarray*}
+where $\tau_j$ for $j=0,\ldots, J$ are the threshold parameters with
+the following constraints, $\tau_l < \tau_m$ for $l < m$, and
+$\tau_0=-\infty, \tau_J=\infty$.
+
+The probability of observing $Y_i$ equal to category $j$ is,
+\begin{eqnarray*}
+\Pr(Y_i=j) &=& \Phi(\tau_j \mid \mu_i)-\Phi(\tau_{j-1} \mid \mu_i) 
+\textrm{ for } j=1,\ldots, J
+\end{eqnarray*}
+where $\Phi(\cdot \mid \mu_i)$ is the cumulative distribution function
+of the Normal distribution with mean $\mu_i$ and variance 1.
+
+\item The \emph{systematic component} is given by
+
+\begin{eqnarray*}
+\mu_{i}= x_i \beta,
+\end{eqnarray*}
+where $x_{i}$ is the vector of $k$ explanatory variables for 
+observation $i$ and $\beta$ is the vector of coefficients.
+
+\item The \emph{prior} for $\beta$ is given by
+\begin{eqnarray*}
+\beta \sim \textrm{Normal}_k\left(  b_{0},B_{0}^{-1}\right)
+\end{eqnarray*}
+where $b_{0}$ is the vector of means for the $k$ explanatory variables
+and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
+variance-covariance matrix).
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+
+\begin{itemize}
+\item The expected values (\texttt{qi\$ev}) for the ordered probit model are
+the predicted probability of belonging to each category:
+\begin{eqnarray*}
+\Pr(Y_i=j)= \Phi(\tau_j \mid x_i \beta)-\Phi(\tau_{j-1} \mid x_i \beta),
+\end{eqnarray*}
+given the posterior draws of $\beta$ and threshold parameters $\tau$
+from the MCMC iterations.
+
+\item The predicted values (\texttt{qi\$pr}) are the observed values of 
+$Y_i$ given the observation scheme and the posterior draws of $\beta$
+and cut points $\tau$ from the MCMC iterations.
+
+\item The first difference (\texttt{qi\$fd}) in category $j$ for the 
+ordered probit model is defined as
+\begin{eqnarray*}
+\text{FD}_j=\Pr(Y_i=j\mid X_{1})-\Pr(Y_i=j\mid X).
+\end{eqnarray*}
+
+\item The risk ratio (\texttt{qi\$rr}) in category $j$ is defined as
+\begin{eqnarray*}
+\text{RR}_j=\Pr(Y_i=j\mid X_{1})\ /\ \Pr(Y_i=j\mid X).
+\end{eqnarray*}
+
+
+\item In conditional prediction models, the average expected treatment effect
+(\texttt{qi\$att.ev}) for the treatment group in category $j$ is
+\begin{eqnarray*}
+\frac{1}{n_j}\sum_{i:t_{i}=1}^{n_j} \{
+Y_{i}(t_{i}=1)-E[Y_{i}(t_{i}=0)] \},
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups, and $n_j$ is the 
+number of observations in the treatment group that belong to category $j$.
+
+\item In conditional prediction models, the average predicted treatment effect
+(\texttt{qi\$att.pr}) for the treatment group in category $j$ is
+\begin{eqnarray*}
+\frac{1}{n_j}\sum_{i:t_{i}=1}^{n_j}[Y_{i}(t_{i}=1)-\widehat{Y_{i}(t_{i}=0)}],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups, and $n_j$ is the 
+number of observations in the treatment group that belong to category $j$.
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you may
+view. For example, if you run:
+\begin{verbatim}
+z.out <- zelig(y ~ x, model = "oprobit.bayes", data)
+\end{verbatim}
+
+\noindent then you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior
+distribution of the \texttt{coefficients} by using
+\texttt{z.out\$coefficients}, and view a default summary of
+information through \texttt{summary(z.out)}. Other elements available
+through the \texttt{\$} operator are listed below.
+
+\begin{itemize}
+\item From the \texttt{zelig()} output object \texttt{z.out}, you may extract:
+
+\begin{itemize}
+\item \texttt{coefficients}: draws from the posterior distributions
+of the estimated coefficients $\beta$ and threshold parameters $\tau$.
+Note, element $\tau_1$ is normalized to 0 and is not returned in the 
+\texttt{coefficients} object.
+
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+\item \texttt{seed}: the random seed used in the model.
+
+\end{itemize}
+
+\item From the \texttt{sim()} output object \texttt{s.out}:
+
+\begin{itemize}
+\item \texttt{qi\$ev}: the simulated expected values (probabilities) of 
+each of the $J$ categories for the specified values of \texttt{x}.
+
+\item \texttt{qi\$pr}: the simulated predicted values (observed values)
+ for the specified values of \texttt{x}.
+
+\item \texttt{qi\$fd}: the simulated first difference in the expected
+values of each of the $J$ categories for the values specified in 
+\texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$rr}: the simulated risk ratio for the 
+expected values of each of the $J$ categories simulated 
+from \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$att.ev}: the simulated average expected treatment effect
+for the treated from conditional prediction models.
+
+\item \texttt{qi\$att.pr}: the simulated average predicted treatment effect
+for the treated from conditional prediction models.
+\end{itemize}
+\end{itemize}
+
+
+\subsection*{How to Cite the \emph{oprobit.bayes} Zelig Model}
+\begin{verse}
+Ben Goodrich and Ying Lu. 2007. ``oprobit.bayes: Bayesian Ordered Probit Regression,'' in Kosuke Imai,Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
+\end{verse}
+
+\subsection*{How to Cite the Zelig Software Package}
+\CiteZelig
+
+\subsection*{See also}
+Bayesian ordinal probit regression is part of the MCMCpack library by Andrew D. Martin and Kevin M. Quinn \citep{MarQui05}.
+The convergence diagnostics are part of the CODA library by Martyn Plummer, Nicky Best, Kate Cowles, and Karen Vines \citep{PluBesCowVin05}.
+
+% poisson.bayes
+% poisson.bayes
+% poisson.bayes
+
+\section{\texttt{poisson.bayes}: Bayesian Poisson Regression}
+\label{poisson.bayes}
+
+Use the Poisson regression model if the observations of your dependent
+variable represents the number of independent events that occur during
+a fixed period of time. The model is fit using a random walk
+Metropolis algorithm.  For a maximum-likelihood estimation of this
+model see \Sref{poisson}.
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "poisson.bayes", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+\subsubsection{Additional Inputs}
+
+Use the following argument to monitor the Markov chain:  
+\begin{itemize}
+\item \texttt{burnin}: number of the initial MCMC iterations to be 
+ discarded (defaults to 1,000). 
+
+\item \texttt{mcmc}: number of the MCMC iterations after burnin
+(defaults to 10,000).
+
+\item \texttt{thin}:  thinning interval for the Markov chain. Only every 
+ \texttt{thin}-th draw from the Markov chain is kept. The value of 
+\texttt{mcmc} must be divisible by this value. The default value is 1.
+
+\item \texttt{tune}: Metropolis tuning parameter, either 
+a positive scalar or a vector of length $k$, where $k$ is the number
+of coefficients. The tuning parameter should be set such that the
+acceptance rate of the Metropolis algorithm is satisfactory (typically
+between 0.20 and 0.5). The default value is 1.1.
+
+\item \texttt{verbose}: default to {\tt FALSE}. 
+If \texttt{TRUE}, the progress of the sampler (every $10\%$) is
+printed to the screen.
+
+\item \texttt{seed}: seed for the random number generator. The default 
+is \texttt{NA} which corresponds to a random seed of 12345. 
+
+\item \texttt{beta.start}: starting values for the Markov 
+chain, either a scalar or vector with length equal to the number of
+estimated coefficients. The default is \texttt{NA}, such that the
+maximum likelihood estimates are used as the starting values.
+
+\end{itemize}
+
+Use the following parameters to specify the model's priors:  
+\begin{itemize}
+\item \texttt{b0}: prior mean for the coefficients, either a numeric 
+vector or a scalar. If a scalar, that value will be the prior mean for
+all the coefficients. The default is 0.
+
+\item \texttt{B0}: prior precision parameter for the coefficients,
+either a square matrix (with the dimensions equal to the number of the
+coefficients) or a scalar. If a scalar, that value times an identity
+matrix will be the prior precision parameter. The default is 0, which
+leads to an improper prior.
+
+\end{itemize}
+
+Zelig users may wish to refer to \texttt{help(MCMCpoisson)} for more 
+information.
+
+\input{coda_diag}
+
+\subsubsection{Examples}
+
+\begin{enumerate}
+\item {Basic Example} \\
+Attaching the sample  dataset:
+<<BasicExample.data>>=
+ data(sanction)
+@ 
+Estimating the Poisson regression using \texttt{poisson.bayes}:
+<<BasicExample.zelig>>=
+ z.out <- zelig(num ~ target + coop, model = "poisson.bayes",
+                  data = sanction, verbose = TRUE)
+@ 
+Checking convergence diagnostics before summarizing the estimates:
+<<BasicExample.geweke>>=
+ geweke.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.heidel>>= 
+heidel.diag(z.out$result$coefficients)
+@  
+<<BasicExample.raftery>>=
+raftery.diag(z.out$result$coefficients)
+@  
+<<BasicExample.summary>>=
+summary(z.out)
+@ 
+Setting values for the explanatory variables to their sample averages:
+<<BasicExample.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulating quantities of interest from the posterior distribution given 
+\texttt{x.out}.
+<<BasicExample.sim>>=
+ s.out1 <- sim(z.out, x = x.out)
+@ 
+<<BasicExample.summary.sim>>= 
+summary(s.out1)
+@
+\item {Simulating First Differences} \\
+Estimating the first difference in the number of countries imposing sanctions
+when the number of targets is set to be its maximum versus its minimum :
+<<FirstDifferences.setx>>=
+ x.max <- setx(z.out, target = max(sanction$target))
+ x.min <- setx(z.out, target = min(sanction$target))
+@
+<<FirstDifferences.sim>>=
+ s.out2 <- sim(z.out, x = x.max, x1 = x.min)
+ summary(s.out2)
+@ 
+\end{enumerate}
+
+\subsubsection{Model}
+
+Let $Y_{i}$ be the number of independent events that occur during 
+a fixed time period. 
+\begin{itemize}
+\item The \emph{stochastic component} is given by
+\begin{eqnarray*}
+Y_{i}  &  \sim & \textrm{Poisson}(\lambda_i)
+\end{eqnarray*}
+where $\lambda_i$ is the mean and variance parameter.
+
+\item The \emph{systematic component} is given by
+\begin{eqnarray*}
+\lambda_{i}= \exp(x_{i} \beta)
+\end{eqnarray*}
+where $x_{i}$ is the vector of $k$ explanatory variables for observation $i$
+and $\beta$ is the vector of coefficients.
+
+\item The \emph{prior} for $\beta$ is given by
+\begin{eqnarray*}
+\beta \sim \textrm{Normal}_k \left(  b_{0},B_{0}^{-1}\right)
+\end{eqnarray*}
+where $b_{0}$ is the vector of means for the $k$ explanatory variables
+and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
+variance-covariance matrix).
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+
+\begin{itemize}
+\item The expected values (\texttt{qi\$ev}) for the Poisson model are
+calculated as following:
+\begin{eqnarray*}
+E(Y\mid X) = \lambda_i = \exp(x_i \beta),
+\end{eqnarray*}
+given the posterior draws of $\beta$ based on the MCMC iterations.
+
+\item The predicted values (\texttt{qi\$pr}) are draws from the Poisson
+distribution with parameter $\lambda_i$.
+
+\item The first difference (\texttt{qi\$fd}) for the Poisson model is defined
+as
+\begin{eqnarray*}
+\text{FD}=E(Y\mid X_{1})-E(Y\mid X).
+\end{eqnarray*}
+
+\item In conditional prediction models, the average expected treatment effect
+(\texttt{qi\$att.ev}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum_{i=1}^n t_{i}}\sum_{i:t_{i}=1}\{Y_{i}(t_{i}=1)-E[Y_{i}(t_{i}=0)]\},
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups.
+
+\item In conditional prediction models, the average predicted treatment effect
+(\texttt{qi\$att.pr}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum_{i=1}^n t_{i}}\sum_{i:t_{i}=1}[Y_{i}(t_{i}=1)-\widehat{Y_{i}(t_{i}=0)}],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups.
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you may
+view. For example, if you run:
+\begin{verbatim}
+z.out <- zelig(y ~ x, model = "poisson.bayes", data)
+\end{verbatim}
+
+\noindent you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior distribution of
+the \texttt{coefficients} by using \texttt{z.out\$coefficients}, and view a 
+default summary of information through \texttt{summary(z.out)}. Other elements
+available through the \texttt{\$} operator are listed below.
+
+\begin{itemize}
+\item From the \texttt{zelig()} output object \texttt{z.out}, you may extract:
+
+\begin{itemize}
+\item \texttt{coefficients}: draws from the posterior distributions
+of the estimated parameters.
+
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+\item \texttt{seed}: the random seed used in the model.
+
+\end{itemize}
+
+\item From the \texttt{sim()} output object \texttt{s.out}:
+
+\begin{itemize}
+\item \texttt{qi\$ev}: the simulated expected values for the specified
+values of \texttt{x}.
+
+\item \texttt{qi\$pr}: the simulated predicted values for the specified values
+of \texttt{x}.
+
+\item \texttt{qi\$fd}: the simulated first difference in the expected
+values for the values specified in \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$att.ev}: the simulated average expected treatment effect
+for the treated from conditional prediction models.
+
+\item \texttt{qi\$att.pr}: the simulated average predicted treatment effect
+for the treated from conditional prediction models.
+\end{itemize}
+\end{itemize}
+
+\subsection* {How to Cite the \emph{poisson.bayes} Zelig Model}
+\begin{verse}
+Ben Goodrich and Ying Lu. 2007. ``poisson.bayes: Bayesian Poisson Regression,'' in Kosuke Imai, Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
+\end{verse}
+
+\subsection*{How to Cite the Zelig Software Package}
+\CiteZelig
+
+\subsection*{See also}
+Bayesian poisson regression is part of the MCMCpack library by Andrew D. Martin and Kevin M. Quinn \citep{MarQui05}. The convergence diagnostics are part of the CODA library by Martyn Plummer, Nicky Best, Kate Cowles, and Karen Vines \citep{PluBesCowVin05}.
+
+% probit.bayes
+% probit.bayes
+% probit.bayes
+
+\section{\texttt{probit.bayes}: Bayesian Probit Regression}
+\label{probit.bayes}
+
+Use the probit regression model for model binary dependent variables
+specified as a function of a set of explanatory variables.  The model
+is estimated using a Gibbs sampler.  For other models suitable for
+binary response variables, see Bayesian logistic
+regression(\Sref{logit.bayes}), maximum likelihood logit regression
+(\Sref{logit}), and maximum likelihood probit regression
+(\Sref{probit}).  
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> z.out <- zelig(Y ~ X1 + X2, model = "probit.bayes", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+
+\subsubsection{Additional Inputs}
+
+Using the following arguments to monitor the Markov chains:  
+\begin{itemize}
+\item \texttt{burnin}: number of the initial MCMC iterations to be 
+ discarded (defaults to 1,000).
+
+\item \texttt{mcmc}: number of the MCMC iterations after burnin
+(defaults to 10,000).
+
+\item \texttt{thin}: thinning interval for the Markov chain. Only every 
+ \texttt{thin}-th draw from the Markov chain is kept. The value of 
+\texttt{mcmc} must be divisible by this value. The default value is 1.
+
+\item \texttt{verbose}: defaults to {\tt FALSE}.  If \texttt{TRUE},
+the progress of the sampler (every $10\%$) is printed to the screen.
+
+\item \texttt{seed}: seed for the random number generator. The default is 
+\texttt{NA} which corresponds to a random seed of 12345. 
+
+\item \texttt{beta.start}: starting values for the Markov 
+chain, either a scalar or vector with length equal to the number of
+estimated coefficients. The default is \texttt{NA}, such that the
+maximum likelihood estimates are used as the starting values.
+
+\end{itemize}
+
+Use the following parameters to specify the model's priors:  
+\begin{itemize}
+\item \texttt{b0}: prior mean for the coefficients, either a numeric
+vector or a scalar. If a scalar value, that value will be the prior
+mean for all the coefficients. The default is 0.
+
+\item \texttt{B0}: prior precision parameter for the coefficients,
+either a square matrix (with the dimensions equal to the number of the
+coefficients) or a scalar. If a scalar value, that value times an
+identity matrix will be the prior precision parameter. The default is
+0, which leads to an improper prior.
+\end{itemize}
+
+Use the following arguments to specify optional output for the model:
+\begin{itemize}
+\item \texttt{bayes.resid}: defaults to {\tt FALSE}.  If {\tt TRUE},
+the latent Bayesian residuals for all observations are returned.
+Alternatively, users can specify a vector of observations for which the
+latent residuals should be returned.
+
+\end{itemize}
+
+Zelig users may wish to refer to \texttt{help(MCMCprobit)} for more 
+information.
+
+\input{coda_diag}
+
+\subsubsection{Examples}
+
+\begin{enumerate}
+\item {Basic Example} \\
+Attaching the sample  dataset:
+<<BasicExample.data>>=
+ data(turnout)
+@ 
+Estimating the probit regression using \texttt{probit.bayes}:
+<<BasicExample.zelig>>=
+ z.out <- zelig(vote ~ race + educate, model = "probit.bayes",
+                  data = turnout, verbose = TRUE)
+@ 
+Checking for convergence before summarizing the estimates:
+<<BasicExample.geweke>>=
+ geweke.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.heidel>>=
+ heidel.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.raftery>>= 
+raftery.diag(z.out$result$coefficients)
+@ 
+<<BasicExample.summary>>= 
+summary(z.out)
+@ \end{verbatim} 
+Setting values for the explanatory variables to their sample averages:
+<<BasicExample.setx>>=
+ x.out <- setx(z.out)
+@ 
+Simulating quantities of interest from the posterior distribution given:
+\texttt{x.out}
+<<BasicExample.sim>>=
+ s.out1 <- sim(z.out, x = x.out)
+@ 
+<<BasicExample.summary.sim>>= 
+summary(s.out1)
+@ 
+\item {Simulating First Differences} \\
+Estimating the first difference (and risk ratio) in individual's probability of
+voting  when education is set to be low (25th percentile) versus 
+high (75th percentile) while all the other variables are held at their 
+default values:
+<<FirstDifferences.setx>>=
+ x.high <- setx(z.out, educate = quantile(turnout$educate, prob = 0.75))
+ x.low <- setx(z.out, educate = quantile(turnout$educate, prob = 0.25))
+@ 
+<<FirstDifferences.sim>>=
+ s.out2 <- sim(z.out, x = x.high, x1 = x.low)
+@ 
+<<FirstDifferences.summary>>= 
+summary(s.out2)
+@ 
+\end{enumerate}
+
+\subsubsection{Model}
+
+Let $Y_{i}$ be the binary dependent variable for observation $i$ which
+takes the value of either 0 or 1.
+
+\begin{itemize}
+\item The \emph{stochastic component} is given by
+\begin{eqnarray*}
+Y_{i}  &  \sim & \textrm{Bernoulli}(\pi_{i})\\
+&  = & \pi_{i}^{Y_{i}}(1-\pi_{i})^{1-Y_{i}},
+\end{eqnarray*}
+where $\pi_{i}=\Pr(Y_{i}=1)$.
+
+\item The \emph{systematic component} is given by
+\begin{eqnarray*}
+\pi_{i}= \Phi(x_i \beta),
+\end{eqnarray*}
+where $\Phi(\cdot)$ is the cumulative density function of the standard
+Normal distribution with mean 0 and variance 1, $x_{i}$ is the vector
+of $k$ explanatory variables for observation $i$, and $\beta$ is the
+vector of coefficients.
+
+\item The \emph{prior} for $\beta$ is given by
+\begin{eqnarray*}
+\beta \sim \textrm{Normal}_k \left(  b_{0}, B_{0}^{-1} \right)
+\end{eqnarray*}
+where $b_{0}$ is the vector of means for the $k$ explanatory variables
+and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
+variance-covariance matrix).
+\end{itemize}
+
+\subsubsection{Quantities of Interest}
+
+\begin{itemize}
+\item The expected values (\texttt{qi\$ev}) for the probit model are
+the predicted probability of a success:
+\begin{eqnarray*}
+E(Y \mid X) = \pi_{i}= \Phi(x_i \beta),
+\end{eqnarray*}
+given the posterior draws of $\beta$ from the MCMC iterations.
+
+\item The predicted values (\texttt{qi\$pr}) are draws from the Bernoulli
+distribution with mean equal to the simulated expected value $\pi_{i}$.
+
+\item The first difference (\texttt{qi\$fd}) for the probit model is defined
+as
+\begin{eqnarray*}
+\text{FD}=\Pr(Y=1\mid X_{1})-\Pr(Y=1\mid X).
+\end{eqnarray*}
+
+\item The risk ratio (\texttt{qi\$rr})is defined as
+\begin{eqnarray*}
+\text{RR}=\Pr(Y=1\mid X_{1})\ /\ \Pr(Y=1\mid X).
+\end{eqnarray*}
+
+\item In conditional prediction models, the average expected treatment effect
+(\texttt{qi\$att.ev}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum t_{i}}\sum_{i:t_{i}=1}[Y_{i}(t_{i}=1)-E[Y_{i}(t_{i}=0)]],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups. 
+
+\item In conditional prediction models, the average predicted treatment effect
+(\texttt{qi\$att.pr}) for the treatment group is
+\begin{eqnarray*}
+\frac{1}{\sum t_{i}}\sum_{i:t_{i}=1}[Y_{i}(t_{i}=1)-\widehat{Y_{i}(t_{i}=0)}],
+\end{eqnarray*}
+where $t_{i}$ is a binary explanatory variable defining the treatment
+($t_{i}=1$) and control ($t_{i}=0$) groups. 
+\end{itemize}
+
+\subsubsection{Output Values}
+
+The output of each Zelig command contains useful information which you may
+view. For example, if you run:
+\begin{verbatim}
+z.out <- zelig(y ~ x, model = "probit.bayes", data)
+\end{verbatim}
+
+\noindent then you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior distribution of
+the \texttt{coefficients} by using \texttt{z.out\$coefficients}, and view 
+a default summary of information through \texttt{summary(z.out)}. 
+Other elements available through the \texttt{\$} operator are listed below.
+
+\begin{itemize}
+\item From the \texttt{zelig()} output object \texttt{z.out}, you may extract:
+
+\begin{itemize}
+\item \texttt{coefficients}: draws from the posterior distributions
+of the estimated parameters. 
+
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+
+\item \texttt{bayes.residuals}: When \texttt{bayes.residual} is \texttt{TRUE}
+or a set of observation numbers is given, this object contains the 
+posterior draws of the latent Bayesian residuals of all the observations 
+or the observations specified by the user. 
+
+\item \texttt{seed}: the random seed used in the model.
+
+\end{itemize}
+
+\item From the \texttt{sim()} output object \texttt{s.out}:
+
+\begin{itemize}
+\item \texttt{qi\$ev}: the simulated expected values (probabilities) for the specified
+values of \texttt{x}.
+
+\item \texttt{qi\$pr}: the simulated predicted values for the specified values
+of \texttt{x}.
+
+\item \texttt{qi\$fd}: the simulated first difference in the expected
+values for the values specified in \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$rr}: the simulated risk ratio for the expected values
+simulated from \texttt{x} and \texttt{x1}.
+
+\item \texttt{qi\$att.ev}: the simulated average expected treatment effect
+for the treated from conditional prediction models.
+
+\item \texttt{qi\$att.pr}: the simulated average predicted treatment effect
+for the treated from conditional prediction models.
+\end{itemize}
+\end{itemize}
+
+\subsection* {How to Cite the \emph{probit.bayes} Zelig model}
+\begin{verse}
+Ben Goodrich and Ying Lu. 2007. ``probit.bayes: Bayesian Probit Regression for Dichotomous Dependent Variable,'' in Kosuke Imai, Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
+\end{verse}
+
+\subsection*{How to Cite the Zelig Software Package}
+\CiteZelig
+
+\subsection*{See also}
+Bayesian probit regression is part of the MCMCpack library by Andrew D. Martin and Kevin M. Quinn \citep{MarQui05}. The convergence diagnostics are part of the CODA library by Martyn Plummer, Nicky Best, Kate Cowles, and Karen Vines \citep{PluBesCowVin05}.
+
+\bibliographystyle{plain}
+\bibliography{gk,gkpubs}
+
+\end{document}

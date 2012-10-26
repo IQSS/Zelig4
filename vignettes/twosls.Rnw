@@ -1,0 +1,237 @@
+\SweaveOpts{results=hide, prefix.string=vigpics/twosls}
+\include{zinput}
+%\VignetteIndexEntry{ Two Stage Least Squares}
+%\VignetteDepends{Zelig}
+%\VignetteKeyWords{model,continuous, least squares,instrumental}
+%\VignettePackage{Zelig}
+\begin{document}
+\nobibliography*
+<<beforepkgs, echo=FALSE>>=
+ before=search()
+@
+<<loadLibrary, echo=F,results=hide>>=
+library(Zelig)
+@ 
+
+\section{{\tt twosls}: Two Stage Least Squares}
+\label{twosls}
+
+\texttt{twosls} provides consistent estimates for linear regression models with 
+some explanatory variable (the instrumental variable) correlated with the error term. 
+In this situation, ordinary least squares fails to provide consistent 
+estimates. The name two-stage least squares stems from the two regressions 
+in the estimation procedure. In stage one, an ordinary least squares 
+prediction of the instrumental variable is obtained from regressing it on
+the instrument variables. In stage two, the coefficients of interest are 
+estimated using ordinary least square after substituting the instrumental 
+variable by its predictions from stage one. 
+
+\subsubsection{Syntax}
+\begin{verbatim}
+> fml <- list ("mu"  = Y ~ X + Z,
+               "inst" = Z ~ W + X)
+> z.out <- zelig(formula = fml, model = "twosls", data = mydata)
+> x.out <- setx(z.out)
+> s.out <- sim(z.out, x = x.out)
+\end{verbatim}
+\subsubsection{Inputs}
+\texttt{twosls} regression take the following inputs:
+\begin{itemize}
+\item \texttt{formula}:a list of the main equation and instrumental variable 
+equation. The first object in the list \texttt{mu} corresponds to the 
+regression model needs to be estimated. The second list object \texttt{inst} 
+specifies the regression model for the instrumental variable \texttt{Z}.
+For example:
+<<Inputs.list>>=
+ fml <- list ("mu"  = Y ~ X + Z,
+               "inst" = Z ~ W + X)
+@ 
+\begin{itemize}
+\item \texttt{Y}: the dependent variable of interest.
+\item \texttt{Z}: the instrumental variable.
+\item \texttt{W}: exogenous instrument variables.
+\end{itemize}
+\end{itemize}
+\subsubsection{Additional Inputs}
+\texttt{twosls} takes the following additional inputs for model
+specifications:
+\begin{itemize}
+\item \texttt{TX}: an optional matrix to transform the regressor
+matrix and, hence, also the coefficient vector (see \ref{details}). Default is \texttt{NULL}.
+\item \texttt{rcovformula}: formula to calculate the estimated residual covariance
+matrix (see \ref{details}). Default is equal to 1.
+\item \texttt{probdfsys}: use the degrees of freedom of the whole system
+(in place of the degrees of freedom of the single equation to calculate probability
+values for the t-test of individual parameters. 
+\item \texttt{single.eq.sigma}: use different $\sigma^2$ for each single
+equation to calculate the covariance matrix and the standard errors of the coefficients.
+\item \texttt{solvetol}: tolerance level for detecting linear dependencies when 
+inverting a matrix or calculating a determinant. Default is \texttt {solvetol}=.Machine\$double.eps.
+\item \texttt{saveMemory}: logical. Save memory by omitting some calculation that are
+not crucial for the basic estimate (e.g McElroy's $R^2$).
+\end{itemize}
+\subsubsection{Details}
+\label{details}
+\begin{itemize}
+\item \texttt{TX}: The matrix \texttt{TX} transforms the regressor matrix 
+($X$) by $X\ast=X \times TX$. Thus,
+the vector of coefficients is now $b=TX \times b\ast$ where $b$ is the 
+original(stacked) 
+vector of all coefficients and $b\ast$ is the new coefficient vector 
+that is estimated instead.
+Thus, the elements of vector $b$ and $b_i = \sum_j TX_{ij}\times b_j\ast$. The $TX$ matrix can be
+used to change the order of the coefficients and also to restrict coefficients (if $TX$ has 
+less columns than it has rows).
+\item \texttt{rcovformula}: The formula to calculate the estimated covariance matrix of the residuals($\hat{\Sigma}$)can be one
+of the following (see Judge et al., 1955, p.469):
+if \texttt{rcovformula}= 0:
+\begin{eqnarray*}
+\hat{\sigma_{ij}}= \frac{\hat{e_i}\prime\hat{e_j}}{T}
+\end{eqnarray*}
+if \texttt{rcovformula}= 1 or \texttt{rcovformula}='geomean':
+\begin{eqnarray*}
+\hat{\sigma_{ij}}= \frac{\hat{e_i}\prime\hat{e_j}}{\sqrt{(T-k_i)\times (T-k_j)}}
+\end{eqnarray*}
+if \texttt{rcovformula}= 2 or \texttt{rcovformula}='Theil':
+\begin{eqnarray*}
+\hat{\sigma_{ij}}= \frac{\hat{e_i}\prime\hat{e_j}}{T-k_i-k_j+tr[X_i(X_i\prime X_i)^{-1}X_i\prime X_j(X_j\prime X_j)^{-1}X_j\prime]}
+\end{eqnarray*}
+if \texttt{rcovformula}= 3 or \texttt{rcovformula}='max':
+\begin{eqnarray*}
+\hat{\sigma_{ij}}= \frac{\hat{e_i}\prime\hat{e_j}}{T-max(k_i,k_j)}
+\end{eqnarray*}
+If $i = j$, formula 1, 2, and 3 are equal. All these three formulas yield unbiased estimators
+for the diagonal elements of the residual covariance matrix. If $i neq j$, only formula 2
+yields an unbiased estimator for the residual covariance matrix, but it is not necessarily
+positive semidefinit. Thus, it is doubtful whether formula 2 is really superior to formula 1
+\end{itemize}
+\subsubsection{Examples}
+ Attaching the example dataset:
+<<Examples.data>>= 
+ data(klein)
+@ 
+ Formula:
+<<Examples.list>>= 
+ formula <- list(mu1=C~Wtot + P + P1,
+               mu2=I~P + P1 + K1,
+               mu3=Wp~ X + X1 + Tm,
+               inst= ~ P1 + K1 + X1 + Tm + Wg + G)
+@ 
+Estimating the model using \texttt{twosls}:
+<<Examples.zelig>>= 
+ z.out<-zelig(formula=formula, model="twosls",data=klein)
+ summary(z.out)
+@ 
+
+Set explanatory variables to their default (mean/mode) values
+<<Examples.setx>>= 
+ x.out <- setx(z.out)
+@ 
+
+Simulate draws from the posterior distribution:
+<<Examples.sim>>= 
+s.out <-sim(z.out,x=x.out)
+ summary(s.out)
+@
+Plot the quantities of interest
+\begin{center}
+<<label=Examplestwosls, fig=true, echo=false>>=
+plot(s.out)
+@ 
+\end{center}
+ 
+\clearpage
+\subsubsection{Model}
+Let's consider the following regression model,
+\begin{eqnarray*}
+Y_i=X_i\beta + Z_i\gamma + \epsilon_i, \quad  i=1,\ldots,N
+\end{eqnarray*}
+where $Y_i$ is the dependent variable, 
+$X_i = (X_{1i},\ldots, X_{Ni})$ is the vector of explanatory variables, 
+$\beta$ is the vector of coefficients of the explanatory variables $X_i$, 
+$Z_i$ 
+is the problematic explanatory variable, and $\gamma$ is the coefficient
+ of $Z_i$.  In the equation, there is a direct dependence of $Z_i$ 
+on the structural disturbances of $\epsilon$.
+\begin{itemize}
+\item The \emph{stochastic component} is given by
+\begin{eqnarray*}
+\epsilon_i  &  \sim & {\cal N}(0, \sigma^2), \quad {\rm and} \quad
+{\rm cov}(Z_i, \epsilon_i) \ne 0,
+\end{eqnarray*}
+\item The \emph{systematic component} is given by:
+\begin{eqnarray*}
+\mu_{i}= E(Y_i)= X_{i}\beta + Z_i\gamma,
+\end{eqnarray*}
+\end{itemize}
+\noindent To correct the problem caused by the correlation of $Z_i$ and $\epsilon$, 
+two stage least squares utilizes two steps:
+\begin{itemize}
+\item \emph{Stage 1}: A new instrumental variable $\hat{Z}$ is created 
+for $Z_i$ which is the ordinary least squares predictions from regressing 
+$Z_i$ on a set of exogenous instruments $W$ and $X$.
+\begin{eqnarray*}
+\widehat{Z_i} = \widetilde{W}_i[(\widetilde{W}^\top\widetilde{W})^{-1}\widetilde{W}^\top Z]
+\end{eqnarray*}
+where $\widetilde{W} = (W,X)$
+\item \emph{Stage 2}: Substitute for $\hat{Z}_i$ for $Z_i$ in the original 
+equation, estimate $\beta$ and $\gamma$ by ordinary least squares regression
+of $Y$ on $X$ and $\hat{Z}$ as in the following equation. 
+\begin{eqnarray*}
+Y_i=X_i\beta + \widehat{Z_i}\gamma + \epsilon_i,  \quad {\rm for} 
+\quad   i=1,\ldots,N
+\end{eqnarray*}
+\end{itemize}
+\subsubsection{See Also}
+For information about three stage least square regression, see 
+\Sref{3sls} and \texttt{help(3sls)}.
+For information about seemingly unrelated regression, see
+\Sref{sur} and \texttt{help(sur)}.
+\subsubsection{Quantities of Interest}
+\subsubsection{Output Values}
+The output of each Zelig command contains useful information which you may
+view. For example, if you run:
+\begin{verbatim}
+z.out <- zelig(formula=fml, model = "twosls", data)
+\end{verbatim}
+\noindent then you may examine the available information in \texttt{z.out} by
+using \texttt{names(z.out)}, see the draws from the posterior distribution of
+the \texttt{coefficients} by using \texttt{z.out\$coefficients}, and view a default
+summary of information through \texttt{summary(z.out)}. Other elements
+available through the \texttt{\$} operator are listed below:
+\begin{itemize}
+\item \texttt{h}: matrix of all (diagonally stacked) instrumental variables.
+\item \texttt{single.eq.sigma}: different $\sigma^2$s for each single equation?.
+   \item {\tt zelig.data}: the input data frame if {\tt save.data = TRUE}.  
+\end{itemize}
+
+\input{systemfit_output}
+
+\begin{itemize}
+\item \texttt{inst*}: instruments of the ith equation.
+\item \texttt{h*}: matrix of instrumental variables of the ith equation. 
+\end{itemize}
+
+\subsection* {How to Cite} 
+
+To cite the \emph{twosls} Zelig model:
+\begin{verse}
+Ferdinand Alimadhi, Ying Lu, and Elena Villalon. 2007. ``twosls: Two Stage Least Squares,'' in Kosuke Imai, Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
+
+\end{verse}
+\input{citeZelig}
+
+\subsection* {See also}
+The twosls function is adapted from the \texttt{systemfit} library by Jeff Hamann
+and Arne Henningsen \citep{HamaHenn05}.
+
+\bibliographystyle{asa}
+\bibliography{gk,gkpubs}
+<<afterpkgs, echo=FALSE>>=
+ after <- search()
+ torm <- setdiff(after,before)
+ for (pkg in torm)
+ detach(pos=match(pkg,search()))
+@
+\end{document}
+
