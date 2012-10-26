@@ -39,14 +39,14 @@ function of a set of explanatory variables using a random walk
 Metropolis algorithm.  For a maximum likelihood implementation, see
 \Sref{logit}.  
 
-\subsubsection{Syntax}
+\subsection{Syntax}
 \begin{verbatim}
 > z.out <- zelig(Y ~ X1 + X2, model = "logit.bayes", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
 
-\subsubsection{Additional Inputs}
+\subsection{Additional Inputs}
 
 Use the following arguments to monitor the Markov chain: 
 \begin{itemize}
@@ -94,11 +94,8 @@ identity matrix will be the prior precision parameter. The default is
 
 \end{itemize}
 
-Zelig users may wish to refer to \texttt{help(logit.bayes)} for more information.
 
-\input{coda_diag}
-
-\subsubsection{Examples}
+\subsection{Examples}
 
 \begin{enumerate}
 \item {Basic Example} \\
@@ -109,7 +106,7 @@ Attaching the sample  dataset:
 Estimating the logistic regression using \texttt{logit.bayes}:
 <<BasicExample.zelig>>=
  z.out <- zelig(vote ~ race + educate, model = "logit.bayes",
-                  data = turnout, verbose = TRUE)
+                  data = turnout, verbose = FALSE)
 @ 
 Convergence diagnostics before summarizing the estimates:
 <<BasicExample.geweke>>=
@@ -155,7 +152,7 @@ summary(s.out2)
 @ 
 \end{enumerate}
 
-\subsubsection{Model}
+\subsection{Model}
 
 Let $Y_{i}$ be the binary dependent variable for observation $i$ which takes
 the value of either 0 or 1.
@@ -184,7 +181,7 @@ and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
 variance-covariance matrix).
 \end{itemize}
 
-\subsubsection{Quantities of Interest}
+\subsection{Quantities of Interest}
 
 \begin{itemize}
 \item The expected values (\texttt{qi\$ev}) for the logit model are
@@ -225,7 +222,7 @@ where $t_{i}$ is a binary explanatory variable defining the treatment
 ($t_{i}=1$) and control ($t_{i}=0$) groups. 
 \end{itemize}
 
-\subsubsection{Output Values}
+\subsection{Output Values}
 
 The output of each Zelig command contains useful information which you may
 view. For example, if you run
@@ -296,14 +293,14 @@ either character strings or integer values.  The model is estimated
 via a random walk Metropolis algorithm or a slice sampler.  See
 \Sref{mlogit} for the maximum-likelihood estimation of this model.
 
-\subsubsection{Syntax}
+\subsection{Syntax}
 \begin{verbatim}
 > z.out <- zelig(Y ~ X1 + X2, model = "mlogit.bayes", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
 
-\subsubsection{Additional Inputs}
+\subsection{Additional Inputs}
 
 {\tt zelig()} accepts the following arguments for {\tt mlogit.bayes}:
 \begin{itemize}
@@ -366,9 +363,7 @@ leads to an improper prior.
 Zelig users may wish to refer to \texttt{help(MCMCmnl)} for more 
 information.
 
-\input{coda_diag}
-
-\subsubsection{Examples}
+\subsection{Examples}
 
 \begin{enumerate}
 \item {Basic Example} \\
@@ -420,7 +415,7 @@ summary(s.out2)
 @ 
 \end{enumerate}
 
-\subsubsection{Model}
+\subsection{Model}
 
 Let $Y_{i}$ be the (unordered) categorical dependent variable for observation 
 $i$ which takes an integer values $j=1, \ldots, J$.
@@ -452,7 +447,7 @@ and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
 variance-covariance matrix).
 \end{itemize}
 
-\subsubsection{Quantities of Interest}
+\subsection{Quantities of Interest}
 
 \begin{itemize}
 \item The expected values (\texttt{qi\$ev}) for the multinomial logistics
@@ -505,7 +500,7 @@ where $t_{i}$ is a binary explanatory variable defining the treatment
 number of treated observations in category $j$.
 \end{itemize}
 
-\subsubsection{Output Values}
+\subsection{Output Values}
 
 The output of each Zelig command contains useful information which you may
 view. For example, if you run:
@@ -584,14 +579,14 @@ implemented using a Gibbs sampler.  See \Sref{normal} for the
 maximum-likelihood implementation or \Sref{ls} for the ordinary least
 squares variation.
 
-\subsubsection{Syntax}
+\subsection{Syntax}
 \begin{verbatim}
 > z.out <- zelig(Y ~ X1 + X2, model = "normal.bayes", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
 
-\subsubsection{Additional Inputs}
+\subsection{Additional Inputs}
 
 Use the following arguments to monitor the convergence of the Markov
 chain:  
@@ -642,9 +637,7 @@ prior on the variance of the disturbance terms.
 Zelig users may wish to refer to \texttt{help(MCMCregress)} for more 
 information.
 
-\input{coda_diag}
-
-\subsubsection{Examples}
+\subsection{Examples}
 
 \begin{enumerate}
 \item {Basic Example} \\
@@ -656,7 +649,7 @@ Attaching the sample dataset:
 Estimating linear regression using \texttt{normal.bayes}:
 <<BasicExample.zelig>>=
 z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.bayes",
-                  data = macro, verbose = TRUE)
+                  data = macro, verbose = FALSE)
 @ 
 Checking for convergence before summarizing the estimates:
 <<BasicExample.geweke>>=
@@ -701,7 +694,7 @@ high versus low trade on unemployment rate:
 @ 
 \end{enumerate}
 
-\subsubsection{Model}
+\subsection{Model}
 
 \begin{itemize}
 \item The \emph{stochastic component} is given by
@@ -730,7 +723,7 @@ scale parameters for $\sigma^{2}$.  Note that $\beta$ and $\sigma^2$
 are assumed to be \emph{a priori} independent.
 \end{itemize}
 
-\subsubsection{Quantities of Interest}
+\subsection{Quantities of Interest}
 
 \begin{itemize}
 \item The expected values (\texttt{qi\$ev}) for the linear regression model are
@@ -765,7 +758,7 @@ where $t_{i}$ is a binary explanatory variable defining the treatment
 
 \end{itemize}
 
-\subsubsection{Output Values}
+\subsection{Output Values}
 
 The output of each Zelig command contains useful information which you may
 view. For example, if you run:
@@ -831,7 +824,7 @@ categorical.  They may take either integer values or character strings.  The mod
 is estimated using a Gibbs sampler with data augmentation.  For a 
 maximum-likelihood implementation of this models, see \Sref{oprobit}.
 
-\subsubsection{Syntax}
+\subsection{Syntax}
 \begin{verbatim}
 > z.out <- zelig(Y ~ X1 + X2, model = "oprobit.bayes", data = mydata)
 > x.out <- setx(z.out)
@@ -839,7 +832,7 @@ maximum-likelihood implementation of this models, see \Sref{oprobit}.
 \end{verbatim}
 
 
-\subsubsection{Additional Inputs}
+\subsection{Additional Inputs}
 
 {\tt zelig()} accepts the following arguments to monitor the Markov
 chain:  
@@ -887,9 +880,7 @@ identity matrix will be the prior precision parameter. The default is
 \noindent Zelig users may wish to refer to \texttt{help(MCMCoprobit)} 
 for more information.
 
-\input{coda_diag}
-
-\subsubsection{Examples}
+\subsection{Examples}
 
 \begin{enumerate}
 \item {Basic Example} \\
@@ -900,7 +891,7 @@ Attaching the sample  dataset:
 Estimating ordered probit regression using \texttt{oprobit.bayes}:
 <<BasicExample.zelig>>=
  z.out <- zelig(ncost ~ mil + coop, model = "oprobit.bayes",
-                  data = sanction, verbose=TRUE)
+                  data = sanction, verbose = FALSE)
 @ 
 
 Creating an ordered dependent variable:
@@ -946,7 +937,7 @@ s.out2 <- sim(z.out, x = x.high, x1 = x.low)
 @ 
 \end{enumerate}
 
-\subsubsection{Model}
+\subsection{Model}
 Let $Y_{i}$ be the ordered categorical dependent variable for
 observation $i$ which takes an integer value $j=1, \ldots, J$.
 
@@ -990,7 +981,7 @@ and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
 variance-covariance matrix).
 \end{itemize}
 
-\subsubsection{Quantities of Interest}
+\subsection{Quantities of Interest}
 
 \begin{itemize}
 \item The expected values (\texttt{qi\$ev}) for the ordered probit model are
@@ -1037,7 +1028,7 @@ where $t_{i}$ is a binary explanatory variable defining the treatment
 number of observations in the treatment group that belong to category $j$.
 \end{itemize}
 
-\subsubsection{Output Values}
+\subsection{Output Values}
 
 The output of each Zelig command contains useful information which you may
 view. For example, if you run:
@@ -1117,14 +1108,14 @@ a fixed period of time. The model is fit using a random walk
 Metropolis algorithm.  For a maximum-likelihood estimation of this
 model see \Sref{poisson}.
 
-\subsubsection{Syntax}
+\subsection{Syntax}
 \begin{verbatim}
 > z.out <- zelig(Y ~ X1 + X2, model = "poisson.bayes", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
 
-\subsubsection{Additional Inputs}
+\subsection{Additional Inputs}
 
 Use the following argument to monitor the Markov chain:  
 \begin{itemize}
@@ -1175,9 +1166,7 @@ leads to an improper prior.
 Zelig users may wish to refer to \texttt{help(MCMCpoisson)} for more 
 information.
 
-\input{coda_diag}
-
-\subsubsection{Examples}
+\subsection{Examples}
 
 \begin{enumerate}
 \item {Basic Example} \\
@@ -1188,7 +1177,7 @@ Attaching the sample  dataset:
 Estimating the Poisson regression using \texttt{poisson.bayes}:
 <<BasicExample.zelig>>=
  z.out <- zelig(num ~ target + coop, model = "poisson.bayes",
-                  data = sanction, verbose = TRUE)
+                  data = sanction, verbose = FALSE)
 @ 
 Checking convergence diagnostics before summarizing the estimates:
 <<BasicExample.geweke>>=
@@ -1228,7 +1217,7 @@ when the number of targets is set to be its maximum versus its minimum :
 @ 
 \end{enumerate}
 
-\subsubsection{Model}
+\subsection{Model}
 
 Let $Y_{i}$ be the number of independent events that occur during 
 a fixed time period. 
@@ -1255,7 +1244,7 @@ and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
 variance-covariance matrix).
 \end{itemize}
 
-\subsubsection{Quantities of Interest}
+\subsection{Quantities of Interest}
 
 \begin{itemize}
 \item The expected values (\texttt{qi\$ev}) for the Poisson model are
@@ -1291,7 +1280,7 @@ where $t_{i}$ is a binary explanatory variable defining the treatment
 ($t_{i}=1$) and control ($t_{i}=0$) groups.
 \end{itemize}
 
-\subsubsection{Output Values}
+\subsection{Output Values}
 
 The output of each Zelig command contains useful information which you may
 view. For example, if you run:
@@ -1363,14 +1352,14 @@ regression(\Sref{logit.bayes}), maximum likelihood logit regression
 (\Sref{logit}), and maximum likelihood probit regression
 (\Sref{probit}).  
 
-\subsubsection{Syntax}
+\subsection{Syntax}
 \begin{verbatim}
 > z.out <- zelig(Y ~ X1 + X2, model = "probit.bayes", data = mydata)
 > x.out <- setx(z.out)
 > s.out <- sim(z.out, x = x.out)
 \end{verbatim}
 
-\subsubsection{Additional Inputs}
+\subsection{Additional Inputs}
 
 Using the following arguments to monitor the Markov chains:  
 \begin{itemize}
@@ -1422,9 +1411,7 @@ latent residuals should be returned.
 Zelig users may wish to refer to \texttt{help(MCMCprobit)} for more 
 information.
 
-\input{coda_diag}
-
-\subsubsection{Examples}
+\subsection{Examples}
 
 \begin{enumerate}
 \item {Basic Example} \\
@@ -1435,7 +1422,7 @@ Attaching the sample  dataset:
 Estimating the probit regression using \texttt{probit.bayes}:
 <<BasicExample.zelig>>=
  z.out <- zelig(vote ~ race + educate, model = "probit.bayes",
-                  data = turnout, verbose = TRUE)
+                  data = turnout, verbose = FALSE)
 @ 
 Checking for convergence before summarizing the estimates:
 <<BasicExample.geweke>>=
@@ -1479,7 +1466,7 @@ summary(s.out2)
 @ 
 \end{enumerate}
 
-\subsubsection{Model}
+\subsection{Model}
 
 Let $Y_{i}$ be the binary dependent variable for observation $i$ which
 takes the value of either 0 or 1.
@@ -1510,7 +1497,7 @@ and $B_{0}$ is the $k \times k$ precision matrix (the inverse of a
 variance-covariance matrix).
 \end{itemize}
 
-\subsubsection{Quantities of Interest}
+\subsection{Quantities of Interest}
 
 \begin{itemize}
 \item The expected values (\texttt{qi\$ev}) for the probit model are
@@ -1551,7 +1538,7 @@ where $t_{i}$ is a binary explanatory variable defining the treatment
 ($t_{i}=1$) and control ($t_{i}=0$) groups. 
 \end{itemize}
 
-\subsubsection{Output Values}
+\subsection{Output Values}
 
 The output of each Zelig command contains useful information which you may
 view. For example, if you run:
