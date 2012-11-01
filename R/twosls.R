@@ -111,55 +111,57 @@ param.twosls <- function(obj, num=1000, ...) {
 qi.twosls <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   # Compute the expected value of multistage LS methods
-  compute.ev <- function (x, param, terms) {
-
+  compute.ev <- function (obj, x, param) {
     #
     if (is.null(x) || is.na(x)) {
       return(NA)
     }
 
-    # Cast as data.frame
-    x <- as.data.frame(x)
-
     # If 'x' has too many rows, there will currently be errors. This is an issue
     # in Zelig-core
-    if (nrow(x) > 1) {
+    if (nrow(x$matrix) > 1) {
       warning("This package does not currently support pooled results.")
       x <- x[1, ]
     }
 
+    # Begin regular function
+    terms <- terms(obj)
+
+    # :q
+    coef.list <- coef(param)
+
+    # Hold Results
+    eta <- list()
+
+    #
+    for (key in names(coef.list)) {
+      #
+      coef <- coef.list[[key]]
+      # print(colnames(coef))
+      small.x <- as.matrix(x$matrix[, colnames(coef)])
+      #
+      eta[[key]] <- coef %*% (small.x)
+    }
+
+
+    # Convert list into a matrix
+    eta <- Reduce(function (x, y) cbind(x, y), eta)
+    colnames(eta) <- names(terms)
+
+    eta
   }
 
-
-  # Begin regular function
-  terms <- terms(obj)
-
-  # :q
-  coef.list <- coef(param)
-
-  # Hold Results
-  eta <- list()
-
-  #
-  for (key in names(coef.list)) {
-    #
-    coef <- coef.list[[key]]
-    # print(colnames(coef))
-    small.x <- as.matrix(x$matrix[, colnames(coef)])
-    #
-    eta[[key]] <- coef %*% (small.x)
-  }
-
-
-  # Convert list into a matrix
-  eta <- Reduce(function (x, y) cbind(x, y), eta)
+  ev1 <- compute.ev(obj, x, param)
+  ev2 <- compute.ev(obj, x1, param)
+  fd <- ev2 - ev1
 
   # Name each column after the associated equation
-  colnames(eta) <- names(terms)
 
   # Return the results
   list(
-       "Expected Value: E(Y|X)" = eta
+       "Expected Value: E(Y|X)" = ev1,
+       "Expected Value (for X1): E(Y|X1)" = ev2,
+       "First Differences: E(Y|X1)-E(Y|X)" = ev2 - ev1
        )
 }
 
@@ -190,6 +192,53 @@ describe.twosls <- function (...) {
                         )
  
   list(category = category, authors = authors, year = year, description = description, package = package, parameters = parameters)
+}
+
+# Plot Simulated Quantities of Interest for ``twosls'' Model
+# 
+# @param
+#' @S3method plot sim.twosls
+plot.sim.twosls <- function (x, ...) {
+  valid.indices <- Map(function (y) !all(is.na(y)), x$qi)
+
+  qis <- x$qi[valid.indices]
+  print(qis)
+  q()
+
+
+  print(valid.indices)
+  q()
+
+  titles <- names(x$qi)
+
+  # Plot Quantities of Interest as a Set
+  plotSet <- function (title) {
+    for (k in 1:ncol(.qi)) {
+      plot(.qi, main = title)
+    }
+  }
+
+  max.cols <- max(unlist(Map(ncol, qis)))
+  layout.matrix <- matrix(0, length(qis), max.cols)
+
+  count <- 1
+
+  for (j in 1:length(qis)) {
+    for (k in 1:ncol(qis[[j]])) {
+      layout.matrix[j, k] <- count
+      count <- count + 1
+    }
+  }
+
+  for (key in titles) {
+    plotSet(key)
+  }
+  
+  q()
+
+  plotSet("Expected Value: E(Y|X)")
+  plotSet("Expected Value (for X1): E(Y|X1)")
+  plotSet("First Differences: E(Y|X1)-E(Y|X)")
 }
 
 #' @export

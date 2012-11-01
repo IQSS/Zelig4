@@ -1,14 +1,28 @@
-\SweaveOpts{results=hide, prefix.string=vigpics/twosls}
-\include{zinput}
-%\VignetteIndexEntry{ Two Stage Least Squares}
-%\VignetteDepends{Zelig}
-%\VignetteKeyWords{model,continuous, least squares,instrumental}
+\documentclass{article}
+
+\title{Zelig v4.0-10 Core Model Reference Manual}
+\author{Matt Owen, Olivia Lau, Kosuke Imai, and Gary King}
+
+\SweaveOpts{prefix.string=manual-twosls}
+
+\usepackage{bibentry}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{Zelig}
+\usepackage{Sweave}
+
+%\VignetteIndexEntry{Two Stage Least Squares}
 %\VignettePackage{Zelig}
+%\VignetteDepends{Zelig}
+%\VignetteKeyWords{model,continuous,least squares,instrumental,regression}
+
 \begin{document}
+
 \nobibliography*
-<<beforepkgs, echo=FALSE>>=
- before=search()
-@
+
 <<loadLibrary, echo=F,results=hide>>=
 library(Zelig)
 @ 
@@ -212,14 +226,12 @@ available through the \texttt{\$} operator are listed below:
 \item \texttt{h*}: matrix of instrumental variables of the ith equation. 
 \end{itemize}
 
-\subsection* {How to Cite} 
-
-To cite the \emph{twosls} Zelig model:
+\subsection* {How to Cite the \emph{twosls} Zelig model}
 \begin{verse}
 Ferdinand Alimadhi, Ying Lu, and Elena Villalon. 2007. ``twosls: Two Stage Least Squares,'' in Kosuke Imai, Gary King, and Olivia Lau, ``Zelig: Everyone's Statistical Software,'' \url{http://gking.harvard.edu/zelig}.
-
 \end{verse}
-\input{citeZelig}
+
+\CiteZelig
 
 \subsection* {See also}
 The twosls function is adapted from the \texttt{systemfit} library by Jeff Hamann
@@ -227,11 +239,6 @@ and Arne Henningsen \citep{HamaHenn05}.
 
 \bibliographystyle{asa}
 \bibliography{gk,gkpubs}
-<<afterpkgs, echo=FALSE>>=
- after <- search()
- torm <- setdiff(after,before)
- for (pkg in torm)
- detach(pos=match(pkg,search()))
-@
+
 \end{document}
 

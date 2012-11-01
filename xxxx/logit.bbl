@@ -1,0 +1,49 @@
+\begin{thebibliography}{1}
+
+\bibitem{Andrews91}
+Donald~W.K. Andrews.
+\newblock Heteroskedasticity and autocorrelation consistent covariance matrix
+  estimation.
+\newblock {\em Econometrica}, 59(3):817--858, May 1991.
+
+\bibitem{ImaLauKin-logit11}
+Kosuke Imai, Olivia Lau, and Gary King.
+\newblock {\em logit: Logistic Regression for Dichotomous Dependent}, 2011.
+
+\bibitem{KinTomWit00}
+Gary King, Michael Tomz, and Jason Wittenberg.
+\newblock Making the most of statistical analyses: Improving interpretation and
+  presentation.
+\newblock {\em American Journal of Political Science}, 44(2):341--355, April
+  2000.
+\newblock {http://gking.harvard.edu/files/abs/making-abs.shtml}.
+
+\bibitem{KinZen02}
+Gary King and Langche Zeng.
+\newblock Improving forecasts of state failure.
+\newblock {\em World Politics}, 53(4):623--658, July 2002.
+\newblock {http://gking.harvard.edu/files/abs/civil-abs.shtml}.
+
+\bibitem{LumHea99}
+Thomas Lumley and Patrick Heagerty.
+\newblock Weighted empirical adaptive variance estimators for correlated data
+  regression.
+\newblock {\em jrssb}, 61(2):459--477, 1999.
+
+\bibitem{McCNel89}
+Peter McCullagh and James~A. Nelder.
+\newblock {\em Generalized Linear Models}.
+\newblock Number~37 in Monograph on Statistics and Applied Probability. Chapman
+  \& Hall, 2nd edition, 1989.
+
+\bibitem{VenRip02}
+William~N. Venables and Brian~D. Ripley.
+\newblock {\em Modern Applied Statistics with S}.
+\newblock Springer-Verlag, 4th edition, 2002.
+
+\bibitem{Zeileis04}
+Achim Zeileis.
+\newblock Econometric computing with hc and hac covariance matrix estimators.
+\newblock {\em Journal of Statistical Software}, 11(10):1--17, 2004.
+
+\end{thebibliography}
