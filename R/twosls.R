@@ -199,15 +199,10 @@ describe.twosls <- function (...) {
 # @param
 #' @S3method plot sim.twosls
 plot.sim.twosls <- function (x, ...) {
-  valid.indices <- Map(function (y) !all(is.na(y)), x$qi)
-
-  qis <- x$qi[valid.indices]
-  print(qis)
-  q()
-
-
-  print(valid.indices)
-  q()
+  for (k in length(x$qi):1) {
+    if (!all(is.na(y)))
+      x[[k]] <- NULL
+  }
 
   titles <- names(x$qi)
 
