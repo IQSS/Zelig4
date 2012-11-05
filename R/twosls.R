@@ -194,24 +194,26 @@ describe.twosls <- function (...) {
   list(category = category, authors = authors, year = year, description = description, package = package, parameters = parameters)
 }
 
-# Plot Simulated Quantities of Interest for ``twosls'' Model
-# 
-# @param
 #' @S3method plot sim.twosls
 plot.sim.twosls <- function (x, ...) {
-  for (k in length(x$qi):1) {
-    if (!all(is.na(y)))
-      x[[k]] <- NULL
-  }
+  qis <- x$qi
 
-  titles <- names(x$qi)
+
+  for (k in length(qis):1) {
+    if (all(is.na(qis[[k]]))) {
+        qis[[k]] <- NULL
+    }
+  }
 
   # Plot Quantities of Interest as a Set
   plotSet <- function (title) {
-    for (k in 1:ncol(.qi)) {
-      plot(.qi, main = title)
+    for (col in colnames(qis[[title]])) {
+      q <- qis[[title]][, col]
+      plot(density(q), main = paste(col, title, sep=": "))
     }
   }
+
+  print(names(qis))
 
   max.cols <- max(unlist(Map(ncol, qis)))
   layout.matrix <- matrix(0, length(qis), max.cols)
@@ -225,15 +227,11 @@ plot.sim.twosls <- function (x, ...) {
     }
   }
 
-  for (key in titles) {
+  layout(layout.matrix)
+
+  for (key in names(qis)) {
     plotSet(key)
   }
-  
-  q()
-
-  plotSet("Expected Value: E(Y|X)")
-  plotSet("Expected Value (for X1): E(Y|X1)")
-  plotSet("First Differences: E(Y|X1)-E(Y|X)")
 }
 
 #' @export

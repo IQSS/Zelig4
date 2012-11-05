@@ -14,9 +14,9 @@ z <- zelig(formula, model="twosls", data=klein, cite=F)
 x <-setx(z)
 x1 <-setx(z, Wtot = 60)
 
-s <-sim(z, x=x, x1=x1)
+s <-sim(z, x=x)
 
 summary(s)
 
 # Plot
-Zelig:::plot.sim.twosls(s)
+plot(s)
