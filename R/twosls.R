@@ -196,16 +196,8 @@ describe.twosls <- function (...) {
 
 #' @S3method plot sim.twosls
 plot.sim.twosls <- function (x, ...) {
-  qis <- x$qi
 
-
-  for (k in length(qis):1) {
-    if (all(is.na(qis[[k]]))) {
-        qis[[k]] <- NULL
-    }
-  }
-
-  # Plot Quantities of Interest as a Set
+  # Define locak function to plot a set of quantities of interest
   plotSet <- function (title) {
     for (col in colnames(qis[[title]])) {
       q <- qis[[title]][, col]
@@ -213,16 +205,22 @@ plot.sim.twosls <- function (x, ...) {
     }
   }
 
-  print(names(qis))
+  # Code begins here
+
+  qis <- as.list.qi(x$qi)
+  qis <- Filter(function (y) any(!is.na(y)), qis)
+  qis <- Filter(is.matrix, qis)
+
 
   max.cols <- max(unlist(Map(ncol, qis)))
   layout.matrix <- matrix(0, length(qis), max.cols)
+  rownames(layout.matrix) <- names(qis)
 
   count <- 1
 
-  for (j in 1:length(qis)) {
-    for (k in 1:ncol(qis[[j]])) {
-      layout.matrix[j, k] <- count
+  for (title in names(qis)) {
+    for (k in 1:ncol(qis[[title]])) {
+      layout.matrix[title, k] <- count
       count <- count + 1
     }
   }
@@ -257,3 +255,24 @@ callsystemfit<-function(formula,data,method,inst=NULL,...){
   # Fin. Return the modified object
   return(out)
 }
+
+as.list.qi <- function (x, names = "") {
+  class(x) <- "list"
+  indices <- attr(x, ".index")
+  attr(x, ".index") <- NULL
+  rename.keys(x, indices, names(indices))
+}
+
+rename.keys <- function (x, keys, to, warn = TRUE) {
+  all.names <- names(x)
+  indices <- match(keys, all.names)
+
+  if (any(is.na(indices)))
+    stop("Keys contains values that are not in `x`")
+
+  all.names[indices] <- to
+  names(x) <- all.names
+
+  x
+}
+
