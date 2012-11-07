@@ -14,7 +14,7 @@ zelig2factor.bayes <- function (
                                 data
                                 ) {
 
-  loadDependencies(survey)
+  loadDependencies(MCMCpack, coda)
 
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)

@@ -7,7 +7,7 @@
 #' @return a list to be coerced into a zelig.call object
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-zelig2poisson <- function(formula, weights=NULL, ..., data)
+zelig2poisson <- function(formula, weights=NULL, ..., data) {
   z(
     glm,
     # .hook = "robust.glm.hook",
@@ -17,6 +17,7 @@ zelig2poisson <- function(formula, weights=NULL, ..., data)
     model   = F,
     data    = data
     )
+}
 #' Param Method for the 'poisson' Zelig Model
 #' @note This method is used by the 'poisson' Zelig model
 #' @usage \method{param}{poisson}(obj, num=1000, ...)

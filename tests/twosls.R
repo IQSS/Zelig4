@@ -14,7 +14,7 @@ z <- zelig(formula, model="twosls", data=klein, cite=F)
 x <-setx(z)
 x1 <-setx(z, Wtot = 60)
 
-s <-sim(z, x=x)
+s <-sim(z, x, x1)
 
 summary(s)
 

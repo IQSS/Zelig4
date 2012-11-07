@@ -18,6 +18,9 @@ zelig2probit.bayes <- function (
                                ..., 
                                data
                                ) {
+
+  loadDependencies(MCMCpack, coda)
+
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)
 

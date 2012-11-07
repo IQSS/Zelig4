@@ -207,6 +207,8 @@ plot.sim.twosls <- function (x, ...) {
 
   # Code begins here
 
+  cols <- c( rep(), rep(), rep() )
+
   qis <- as.list.qi(x$qi)
   qis <- Filter(function (y) any(!is.na(y)), qis)
   qis <- Filter(is.matrix, qis)

@@ -1,4 +1,4 @@
-library(ZeligCommon)
+library(Zelig)
 # Load the sample data:  
 data(coalition)
 

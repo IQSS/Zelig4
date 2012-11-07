@@ -1,9 +1,8 @@
 library(Zelig)
 
 library(MCMCpack)
-library(coda)
 
-data(turnout, package = "Zelig")
+data(turnout)
 data(mexico)
 data(macro)
 data(sanction)
