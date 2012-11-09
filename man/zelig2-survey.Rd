@@ -1,5 +1,8 @@
-\name{zelig2logit.survey}
+\name{zelig2-survey}
 \alias{zelig2logit.survey}
+\alias{zelig2normal.survey}
+\alias{zelig2poisson.survey}
+\alias{zelig2probit.survey}
 \title{Interface between \code{zelig} and \code{svyglm} for the \code{logit.survey}}
 \usage{
   zelig2logit.survey(formula, weights = NULL, ids = NULL,

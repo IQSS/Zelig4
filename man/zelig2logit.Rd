@@ -2,6 +2,8 @@
 \alias{zelig2logit}
 \title{Interface between logit model and Zelig}
 \usage{
+  zelig2logit(formula, weights = NULL, robust = F, ...,
+    data)
 }
 \arguments{
   \item{formula}{a formula}
