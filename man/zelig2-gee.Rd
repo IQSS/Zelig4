@@ -1,11 +1,21 @@
-\name{logit.gee}
-\alias{logit.gee}
+\name{zelig2-gee}
+
+\alias{zelig2gamma.gee}
 \alias{zelig2logit.gee}
-\title{General Estimating Equation for Logit Regression}
+\alias{zelig2normal.gee}
+\alias{zelig2poisson.gee}
+\alias{zelig2probit.gee}
+
+\title{Bridge between Zelig and the GEE Model Fitting Functions}
+
 \usage{
-  zelig2logit.gee(formula, id, robust, ..., R,
-    corstr = "independence", data)
+  zelig2gamma.gee(formula, id, robust, ..., R, corstr = "independence", data)
+  zelig2logit.gee(formula, id, robust, ..., R, corstr = "independence", data)
+  zelig2normal.gee(formula, id, robust, ..., R, corstr = "independence", data)
+  zelig2poisson.gee(formula, id, robust, ..., R, corstr = "independence", data)
+  zelig2probit.gee(formula, id, robust, ..., R, corstr = "independence", data)
 }
+
 \arguments{
   \item{formula}{a formula}
 
@@ -27,10 +37,12 @@
 
   \item{data}{a data.frame}
 }
+
 \value{
   a list specifying the call to the external model
 }
+
 \description{
-  General Estimating Equation for Logit Regression
+  Bridge between Zelig and the GEE Model Fitting Functions
 }
 

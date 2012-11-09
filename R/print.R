@@ -1,3 +1,68 @@
+#' Print a Bundle of Data-sets
+#'
+#' @S3method print setx.mi
+#' @usage \method{print}{setx.mi}(x, ...)
+#' @param x a \code{setx} object to print
+#' @param ... ignored parameters
+#' @return the \code{setx} object (invisibly)
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.setx.mi <- function(x, ...) {
+  # Store size for readability
+  size <- length(x)
+
+  for (k in 1:size) {
+    # Print object
+    print(x[[k]])
+
+    # If this is not the last element, print a new-line
+    if (k < size)
+      cat("\n")
+  }
+
+  invisible(x)
+}
+#' Print values of `setx' objects
+#'
+#' Print a ``setx'' object in human-readable form.
+#' @usage \method{print}{setx}(x, ...)
+#' @S3method print setx
+#' @param x a `setx' object
+#' @param ... ignored parameters
+#' @return the value of x (invisibly)
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.setx <- function(x, ...) {
+  model <- x$name
+  formula <- x$formula
+  label <- x$label
+
+  cat("Call:\n")
+  print(x$call)
+
+  cat("Label      =", label, "\n")
+  cat("Model name =", model, "\n")
+  cat("Formula    = ")
+  print(formula)
+
+  cat("\nComplete data.frame:\n")
+  print(x$updated)
+
+  invisible()
+}
+#' Print values of `sim' objects
+#' 
+#' This function is currently unimplemented, and included for future development
+#' @usage \method{print}{sim}(x, ...)
+#' @S3method print sim
+#' @param x a `sim' object (ignored)
+#' @param ... ignored parameters
+#' @return NULL (invisibly)
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.sim <- function(x, ...) {
+  o <- x
+  class(o) <- 'list'
+  print(o)
+}
 #' Print a Summary MCMCZelig Object
 #'
 #' This method prints a summary object for \code{MCMCZelig} objects
@@ -6,8 +71,8 @@
 #' @param ... ignored parameters
 #' @return a \code{summary.MCMCZelig} object
 #' @S3method print summary.MCMCZelig
-#' @usage print summary.MCMCZelig
-print.summary.MCMCZelig <- function(x, digits=max(3, getOption("digits") - 3), ...) {
+print.summary.MCMCZelig <- function(x, digits=max(3, getOption("digits") - 
+3), ...) {
   cat("\nCall: ") 
   print(x$call) 
   cat("\n", "Iterations = ", x$start, ":", x$end, "\n", sep = "")
@@ -218,4 +283,95 @@ print.summary.sim <- function(x, ...) {
 
   # Return invisibly
   invisible(x)
+}
+#' Print Multiply Imputed Simulations Summary
+#'
+#' Prints summary information about Multiply Imputed Fits
+#' @usage \method{print}{summarySim.MI}(x, digits=3, ...)
+#' @S3method print summarySim.MI
+#' @param x a 'summarySim.MI' object
+#' @param digits an integer specifying the number of digits of precision to
+#'   print
+#' @param ... ignored parameters
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.summarySim.MI <- function(x, digits=3, ...) {
+  for (qi.name in names(x)) {
+    if (!is.valid.qi.list(x[[qi.name]]))
+      next
+
+    summed.qi <- qi.summarize(qi.name, x[[qi.name]])
+    print(summed.qi)
+    cat("\n")
+  }
+
+  invisible(x)
+}
+
+#' Row-bind Matrices and Lists
+#' @param x a list or a matrix
+#' @param y a list or a matrix
+#' @return a matrix
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+.bind <- function (x, y) {
+
+  # Get names for future columns
+
+  if (!is.matrix(x))
+    x <- matrix(x, nrow=1, ncol=length(x), dimnames=list(NULL, names(x)))
+
+  if (missing(y))
+    return(x)
+
+  if (!is.matrix(y))
+    y <- matrix(y, nrow=1, ncol=length(y), dimnames-list(NULL, names(y)))
+
+  names <- unique(c(colnames(x), colnames(y)))
+
+  ncol <- length(names)
+
+  X <- matrix(NA, nrow=nrow(x), ncol=ncol, dimnames=list(NULL, names))
+  Y <- matrix(NA, nrow=nrow(y), ncol=ncol, dimnames=list(NULL, names))
+
+  X[, colnames(x)] <- x
+  Y[, colnames(y)] <- y
+
+  rbind(X, Y)
+}
+
+#' Check If Object Is a List of Valid Quantities of Interest
+#' @param x an object to be tested
+#' @return TRUE or FALSE
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+is.valid.qi.list <- function (x) {
+
+  # if it is not a list or that list has no entries
+  if (!(is.list(x) && length(x)))
+    return(FALSE)
+
+  # if any are not a matrix
+
+  for (val in x) {
+
+    if (is.matrix(val) && !(ncol(val) && ncol(val)))
+      return(FALSE)
+
+    else if (is.list(val) && !length(val))
+      return(FALSE)
+  }
+
+  TRUE
+}
+#' Print values of ``zelig'' objects
+#'
+#' Print the zelig object as a list
+#' @usage \method{print}{zelig}(x, ...)
+#' @S3method print zelig
+#' @param x a `zelig' object
+#' @param ... ignored parameters
+#' @return the `zelig' object (invisibly)
+#' @export 
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+print.zelig <- function(x, ...) {
+  class(x) <- "list"
+  print(x)
 }

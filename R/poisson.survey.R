@@ -77,15 +77,7 @@ zelig2poisson.survey <- function(
        family  = poisson()
        )
 }
-#' Param Method for the \code{poisson.survey} Zelig Model
-#' @note This method is used internally by the \code{survey.zelig} package
 #' @S3method param poisson.survey
-#' @usage \method{param}{poisson.survey}(obj, num=1000, ...)
-#' @param obj a \code{zelig} object
-#' @param num an integer specifying the number of simulations to sample
-#' @param ... ignored parameters
-#' @return a list to be cast as a \code{parameters} object
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
 param.poisson.survey <- function(obj, num=1000, ...) {
   list(
        simulations = mvrnorm(num, coef(obj), vcov(obj)),
@@ -96,17 +88,7 @@ param.poisson.survey <- function(obj, num=1000, ...) {
        fam   = poisson()
        )
 }
-#' Simulate Quantities of Interest for \code{poisson.survey} Model
 #' @S3method qi poisson.survey
-#' @usage \method{qi}{poisson.survey}(obj, x, x1=NULL, y=NULL, num=1000, param=NULL)
-#' @note This function is paraphrased from Zelig v3.4.0-1
-#' @param obj zelig object
-#' @param x setx object
-#' @param x1 setx object
-#' @param y ATT variable
-#' @param num implicitly called by sim - number of simulations to run
-#' @param param param object contains: link, link-inverse, simulations, ancillary parameters
-#' @return a list containing simulated quantities of interest
 qi.poisson.survey <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
   model <- GetObject(obj)
 
@@ -166,7 +148,6 @@ qi.poisson.survey <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
        )
 }
 #' @S3method describe poisson.survey
-#' @usage \method{describe}{poisson.survey}(...)
 describe.poisson.survey <- function(...) {
   list(
        authors = "Nicholas Carnes",

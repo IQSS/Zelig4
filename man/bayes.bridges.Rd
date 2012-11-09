@@ -1,6 +1,5 @@
 \name{zelig2-bayes}
 
-\alias{zelig2-bayes}
 \alias{zelig2factor.bayes}
 \alias{zelig2logit.bayes}
 \alias{zelig2mlogit.bayes}

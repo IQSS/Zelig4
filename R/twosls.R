@@ -234,7 +234,6 @@ plot.sim.twosls <- function (x, ...) {
   }
 }
 
-#' @export
 callsystemfit<-function(formula,data,method,inst=NULL,...){
   # Call systemfit..
   out <- systemfit(

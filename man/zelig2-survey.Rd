@@ -20,6 +20,7 @@
     method = "glm.fit", x = FALSE, y = TRUE,
     contrasts = NULL, design = NULL, link = "inverse",
     data, ...)
+
   zelig2logit.survey(formula, weights = NULL, ids = NULL,
     probs = NULL, strata = NULL, fpc = NULL, nest = FALSE,
     check.strata = !nest, repweights = NULL, type,
@@ -30,6 +31,7 @@
     mustart = NULL, offset = NULL, model1 = TRUE,
     method = "glm.fit", x = FALSE, y = TRUE,
     contrasts = NULL, design = NULL, data)
+
   zelig2normal.survey(formula, weights = NULL, ids = NULL,
     probs = NULL, strata = NULL, fpc = NULL, nest = FALSE,
     check.strata = !nest, repweights = NULL, type,
@@ -40,6 +42,7 @@
     mustart = NULL, offset = NULL, model1 = TRUE,
     method = "glm.fit", x = FALSE, y = TRUE,
     contrasts = NULL, design = NULL, data)
+
   zelig2poisson.survey(formula, weights = NULL, ids = NULL,
     probs = NULL, strata = NULL, fpc = NULL, nest = FALSE,
     check.strata = !nest, repweights = NULL, type,
@@ -50,6 +53,7 @@
     mustart = NULL, offset = NULL, model1 = TRUE,
     method = "glm.fit", x = FALSE, y = TRUE,
     contrasts = NULL, design = NULL, data)
+
   zelig2probit.survey(formula, weights = NULL, ids = NULL,
     probs = NULL, strata = NULL, fpc = NULL, nest = FALSE,
     check.strata = !nest, repweights = NULL, type,
@@ -61,6 +65,7 @@
     method = "glm.fit", x = FALSE, y = TRUE,
     contrasts = NULL, design = NULL, data)
 }
+
 \arguments{
   \item{formula}{a \code{formula}}
 
