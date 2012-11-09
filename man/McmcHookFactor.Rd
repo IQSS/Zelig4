@@ -13,6 +13,8 @@
 
   \item{zelig.call}{the actual call to zelig itself}
 
+  \item{seed}{a seed for the MCMC algorithm}
+
   \item{...}{ignored parameters}
 }
 \value{

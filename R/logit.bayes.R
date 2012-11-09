@@ -19,7 +19,7 @@ zelig2logit.bayes <- function (
                                data
                                ) {
 
-  loadDependencies(MCMCpack, coda)
+  loadDependencies("MCMCpack", "coda")
 
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)

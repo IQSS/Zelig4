@@ -13,7 +13,7 @@ zelig2normal.bayes <- function (
                                data
                                ) {
 
-  loadDependencies(MCMCpack, coda)
+  loadDependencies("MCMCpack", "coda")
 
   list(
        .function = "MCMCregress",

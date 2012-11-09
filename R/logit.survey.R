@@ -66,7 +66,7 @@ zelig2logit.survey <- function(
                                data
                                ) {
 
-  loadDependencies(survey)
+  loadDependencies("survey")
 
   if (is.null(ids))
     ids <- ~1

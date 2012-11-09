@@ -70,7 +70,7 @@ zelig2gamma.survey <- function(
                                ...
                                ) {
 
-  loadDependencies(survey)
+  loadDependencies("survey")
 
   if (is.null(ids))
     ids <- ~1

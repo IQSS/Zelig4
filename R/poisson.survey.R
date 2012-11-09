@@ -65,7 +65,7 @@ zelig2poisson.survey <- function(
                                design=NULL,
                                data
                                ) {
-  loadDependencies(survey)
+  loadDependencies("survey")
 
   if (is.null(ids))
     ids <- ~1
@@ -200,11 +200,7 @@ qi.poisson.survey <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
        "Average Treatment Effect: Y-PR" = att.pr
        )
 }
-#' Describe a \code{poisson.survey} Citation to Zelig
-#' @param ... ignored parameters
-#' @return a list to be processed by \code{as.description}
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-#' @export
+#' @S3method describe poisson.survey
 describe.poisson.survey <- function(...) {
   list(
        authors = "Nicholas Carnes",

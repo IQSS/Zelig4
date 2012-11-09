@@ -1,19 +1,19 @@
 ## Attaching the example dataset:
-data(macro)
+data(turnout)
 
-## Estimating the model using normal.bayes:
-z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.bayes", 
-                  data = macro, verbose=TRUE)
+## Estimating the model using probit.bayes:
+z.out <- zelig(vote ~ race + educate, model = "probit.bayes",
+                  data = turnout, verbose=TRUE)
 user.prompt()
 
 ## Checking for convergence before summarizing the estimates:
-geweke.diag(z.out$coefficients)  
+geweke.diag(z.out$coefficients)
 user.prompt()
 
-heidel.diag(z.out$coefficients)  
+heidel.diag(z.out$coefficients)
 user.prompt()
 
-raftery.diag(z.out$coefficients)  
+raftery.diag(z.out$coefficients)
 user.prompt()
 
 ## summarizing the output
@@ -34,11 +34,12 @@ user.prompt()
 summary(s.out1)
 user.prompt()
 
-## Simulating First Differences
-## Set explanatory variables to their default(mean/mode) values, 
-## with high (80th percentile) and low (20th percentile) trade on GDP:
-x.high <- setx(z.out, trade = quantile(macro$trade, prob = 0.8))
-x.low <- setx(z.out, trade = quantile(macro$trade, prob = 0.2))
+## Simulating First Differences:
+## Setting education is set to be between low(25th percentile) 
+## versus high(75th percentile) while all the other variables 
+## held at their default values.
+x.high <- setx(z.out, educate = quantile(turnout$educate, prob = 0.75))
+x.low <- setx(z.out, educate = quantile(turnout$educate, prob = 0.25))
 user.prompt()
 
 ## Estimating the first difference for the effect of

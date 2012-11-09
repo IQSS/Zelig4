@@ -1,19 +1,19 @@
 ## Attaching the example dataset:
-data(macro)
+data(sanction)
 
-## Estimating the model using normal.bayes:
-z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.bayes", 
-                  data = macro, verbose=TRUE)
+## Estimating the model using poisson.bayes:
+z.out <- zelig(num ~ target + coop, model = "poisson.bayes",
+                  data = sanction, verbose=TRUE)
 user.prompt()
 
 ## Checking for convergence before summarizing the estimates:
-geweke.diag(z.out$coefficients)  
+geweke.diag(z.out$coefficients)
 user.prompt()
 
-heidel.diag(z.out$coefficients)  
+heidel.diag(z.out$coefficients)
 user.prompt()
 
-raftery.diag(z.out$coefficients)  
+raftery.diag(z.out$coefficients)
 user.prompt()
 
 ## summarizing the output
@@ -34,16 +34,17 @@ user.prompt()
 summary(s.out1)
 user.prompt()
 
-## Simulating First Differences
-## Set explanatory variables to their default(mean/mode) values, 
-## with high (80th percentile) and low (20th percentile) trade on GDP:
-x.high <- setx(z.out, trade = quantile(macro$trade, prob = 0.8))
-x.low <- setx(z.out, trade = quantile(macro$trade, prob = 0.2))
+## Simulating First Differences:
+## Setting explanatory variables to their default(mean/mode)
+## values, with the number of targets to be its maximum 
+## versus its minimum:
+x.max <- setx(z.out, target = max(sanction$target))
+x.min <- setx(z.out, target = min(sanction$target))
 user.prompt()
 
 ## Estimating the first difference for the effect of
-## high versus low trade on unemployment rate:
-s.out2 <- sim(z.out, x = x.high, x1 = x.low)
+## maximum versus minimum number of targets:
+s.out2 <- sim(z.out, x = x.max, x1 = x.min)
 user.prompt()
 
 ## Summarizing the simulation results:

@@ -7,7 +7,7 @@
 #' @export
 zelig2lognorm <- function (formula, ..., robust = FALSE, cluster = NULL, data) {
 
-  loadDependencies(survival)
+  loadDependencies("survival")
 
   if (!(is.null(cluster) || robust))
     stop("If cluster is specified, then `robust` must be TRUE")

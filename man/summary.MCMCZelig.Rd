@@ -10,6 +10,8 @@
 
   \item{quantiles}{a numeric vector specifying the
   quantiles to use in the summary object.}
+
+  \item{...}{ignored parameters}
 }
 \value{
   a \code{summary.MCMCZelig} object

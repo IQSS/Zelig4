@@ -65,10 +65,10 @@ zelig2probit.survey <- function(
                                 design=NULL,
                                 data
                                 ) {
-  loadDependencies(survey)
+  loadDependencies("survey")
 
   if (is.null(ids))
-    ids <- ~1
+    ids <- ~ 1
 
   # the following lines designate the design
   # NOTE: nothing truly special goes on here;

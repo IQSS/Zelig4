@@ -19,7 +19,7 @@ zelig2mlogit.bayes <- function (
                                data
                                ) {
 
-  loadDependencies(MCMCpack, coda)
+  loadDependencies("MCMCpack", "coda")
 
   list(
        .function = "MCMCmnl",

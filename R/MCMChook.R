@@ -6,12 +6,12 @@
 #' @param obj the fitted model object (in this case a \code{mcmc} object.
 #' @param model.call the call made to the external model
 #' @param zelig.call the actual call to zelig itself
+#' @param seed a seed for the MCMC algorithm
 #' @param ... ignored parameters
 #' @return an object useable by Zelig
 #' @author Olivia Lau, Kosuke Imai, Gary King and Matt Owen
 #' @export
-MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...)
-{
+MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...) {
 
   # Create a new object
   res <- list()
@@ -45,6 +45,7 @@ MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...)
 #' @param obj the fitted model object (in this case a \code{mcmc} object.
 #' @param model.call the call made to the external model
 #' @param zelig.call the actual call to zelig itself
+#' @param seed a seed for the MCMC algorithm
 #' @param ... ignored parameters
 #' @return an object useable by Zelig
 #' @author Olivia Lau, Kosuke Imai, Gary King and Matt Owen

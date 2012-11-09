@@ -1,19 +1,19 @@
 ## Attaching the example dataset:
-data(macro)
+data(tobin)
 
-## Estimating the model using normal.bayes:
-z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.bayes", 
-                  data = macro, verbose=TRUE)
+## Estimating the model using tobit.bayes:
+z.out <- zelig(durable ~ age + quant, model = "tobit.bayes",
+                  data = tobin, verbose=TRUE)
 user.prompt()
 
 ## Checking for convergence before summarizing the estimates:
-geweke.diag(z.out$coefficients)  
+geweke.diag(z.out$coefficients)
 user.prompt()
 
-heidel.diag(z.out$coefficients)  
+heidel.diag(z.out$coefficients)
 user.prompt()
 
-raftery.diag(z.out$coefficients)  
+raftery.diag(z.out$coefficients)
 user.prompt()
 
 ## summarizing the output
@@ -34,15 +34,16 @@ user.prompt()
 summary(s.out1)
 user.prompt()
 
-## Simulating First Differences
-## Set explanatory variables to their default(mean/mode) values, 
-## with high (80th percentile) and low (20th percentile) trade on GDP:
-x.high <- setx(z.out, trade = quantile(macro$trade, prob = 0.8))
-x.low <- setx(z.out, trade = quantile(macro$trade, prob = 0.2))
+## Simulating First Differences:
+## Setting explanatory variables to their default(mean/mode)
+## values, with high (80th percentile) and low (20th percentile) 
+## liquidity ratio(\texttt{quant}):
+x.high <- setx(z.out, quant = quantile(tobin$quant, prob = 0.8))
+x.low <- setx(z.out, quant = quantile(tobin$quant, prob = 0.2)) 
 user.prompt()
 
 ## Estimating the first difference for the effect of
-## high versus low trade on unemployment rate:
+## high versus low liquidity ratio:
 s.out2 <- sim(z.out, x = x.high, x1 = x.low)
 user.prompt()
 

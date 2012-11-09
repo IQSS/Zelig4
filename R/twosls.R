@@ -7,7 +7,7 @@
 #' @export
 zelig2twosls <- function (formula, ..., data) {
 
-  loadDependencies(systemfit)
+  loadDependencies("systemfit")
 
   # Helper function to perform set-difference
   "%w/o%" <- function(x, y)

@@ -6,7 +6,7 @@
     digits = max(3, getOption("digits") - 3), ...)
 }
 \arguments{
-  \item{object}{an "MCMCZelig" object}
+  \item{x}{an "MCMCZelig" object}
 
   \item{digits}{a numeric specifying the precision of the
   summary object}

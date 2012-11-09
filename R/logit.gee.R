@@ -16,7 +16,7 @@
 #' @aliases zelig2logit.gee
 zelig2logit.gee <- function (formula, id, robust, ..., R, corstr = "independence", data) {
 
-  Zelig:::loadDependencies(gee)
+  loadDependencies("gee")
 
   if (corstr == "fixed" && is.null(R))
     stop("R must be defined")

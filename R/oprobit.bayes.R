@@ -19,7 +19,7 @@ zelig2oprobit.bayes <- function (
                                data
                                ) {
 
-  loadDependencies(MCMCpack, coda)
+  loadDependencies("MCMCpack", "coda")
 
   if (missing(verbose))
     verbose <- round((mcmc + burnin)/10)
@@ -38,19 +38,7 @@ zelig2oprobit.bayes <- function (
        ...
        )
 }
-#' Simulate Parameters for the Bayesian Logistic Regression
-#'
-#' @note Both the \code{param} and \code{sim} method for Bayesian regressions
-#' seem to ignore the \code{num} parameter.
-#' This method simulates parameters for the Bayesian Ordianal Probit Regression
-#' (oprobit.bayes).
-#' @param obj a zelig object
-#' @param num an integer specifying the number of simulations to compute
-#' @param ... ignored parameters
-#' @return a list specifying link, link-inverse, random samples, and ancillary
-#' parameters
 #' @S3method param oprobit.bayes
-#' @export
 param.oprobit.bayes <- function(obj, num=1000, ...) {
 
   # Produce the model matrix in order to get all terms (explicit and implicit)
@@ -92,16 +80,7 @@ param.oprobit.bayes <- function(obj, num=1000, ...) {
        linkinv = NULL
        )
 }
-#' Compute Quantities of Interest for the Zelig Model oprobit.bayes
-#' @param obj a zelig object
-#' @param x a setx object
-#' @param x1 an optional setx object
-#' @param y ...
-#' @param num an integer specifying the number of simulations to compute
-#' @param param a parameters object
-#' @return a list of key-value pairs specifying pairing titles of quantities of
-#' interest with their simulations
-#' @export
+#' @S3method qi oprobit.bayes
 qi.oprobit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
 {
   labels <- levels(model.response(model.frame(obj$result)))
@@ -118,8 +97,6 @@ qi.oprobit.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
        "First Differences: E(Y|X1) - E(Y|X)" = res2$ev - res1$ev
        )
 }
-
-
 # Helper function used to generate expected values
 compute.oprobit.bayes <- function (x, param, labels) {
   # If either of the parameters are invalid,
@@ -165,13 +142,10 @@ compute.oprobit.bayes <- function (x, param, labels) {
   # Return
   list(ev = ev, pv = pv)
 }
-#' Describe the oprobit.bayes Zelig Model
-#' @param ... ignored parameters
-#' @return a list specifying author, title, etc. information
-#' @export
+#' @S3method describe oprobit.bayes
 describe.oprobit.bayes <- function(...) {
   list(
-       authors = "",
-       text = ""
+       authors = "Skyler Cranmer",
+       text = "Ordinal Probit Regression for Bayesian Models"
        )
 }

@@ -1,9 +1,14 @@
 #' @export
 loadDependencies <- function (..., character.only = FALSE) {
   # Get arguments that aren't "character.only"
-  packs <- match.call(expand.dots = TRUE)[-1]
-  packs$character.only <- NULL
-  packs <- as.character(packs)
+
+  if (character.only) {
+    packs <- match.call(expand.dots = TRUE)[-1]
+    packs$character.only <- NULL
+    packs <- as.character(packs)
+  }
+  else
+    packs <- as.character(list(...))
 
   #
   results <- list()

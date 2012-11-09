@@ -1,7 +1,7 @@
 #' Print a Summary MCMCZelig Object
 #'
 #' This method prints a summary object for \code{MCMCZelig} objects
-#' @param object an "MCMCZelig" object
+#' @param x an "MCMCZelig" object
 #' @param digits a numeric specifying the precision of the summary object
 #' @param ... ignored parameters
 #' @return a \code{summary.MCMCZelig} object
