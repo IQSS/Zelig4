@@ -2,8 +2,8 @@
 \alias{plot.ci}
 \title{Method for plotting pooled simulations by confidence intervals}
 \usage{
-  plot.ci(x, qi = "ev", var = NULL, ..., legcol = "gray20",
-    col = NULL, leg = 1, legpos = NULL)
+  \method{plot}{ci}(x, qi="ev", var=NULL, ...,
+    legcol="gray20", col=NULL, leg=1, legpos=NULL)
 }
 \arguments{
   \item{x}{A `sim' object}

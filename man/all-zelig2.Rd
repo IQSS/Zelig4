@@ -1,9 +1,11 @@
 \name{all-zelig2}
+
 \alias{zelig2exp}
 \alias{zelig2lognorm}
 \alias{zelig2factor.bayes}
 \alias{zelig2gamma}
 \alias{zelig2gamma.gee}
+
 \title{Interface between the Zelig Model exp and
 the Pre-existing Model-fitting Method}
 \usage{

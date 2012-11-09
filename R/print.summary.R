@@ -6,8 +6,8 @@
 #' @param ... ignored parameters
 #' @return a \code{summary.MCMCZelig} object
 #' @S3method print summary.MCMCZelig
-print.summary.MCMCZelig <- function(x, digits=max(3, getOption("digits") - 
-3), ...) {
+#' @usage print summary.MCMCZelig
+print.summary.MCMCZelig <- function(x, digits=max(3, getOption("digits") - 3), ...) {
   cat("\nCall: ") 
   print(x$call) 
   cat("\n", "Iterations = ", x$start, ":", x$end, "\n", sep = "")

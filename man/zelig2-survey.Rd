@@ -1,10 +1,25 @@
 \name{zelig2-survey}
+
+\alias{zelig2gamma.survey}
 \alias{zelig2logit.survey}
 \alias{zelig2normal.survey}
 \alias{zelig2poisson.survey}
 \alias{zelig2probit.survey}
-\title{Interface between \code{zelig} and \code{svyglm} for the \code{logit.survey}}
+
+\title{Interface between \code{Zelig} and \code{svyglm}}
+
 \usage{
+  zelig2gamma.survey(formula, weights = NULL, ids = NULL,
+    probs = NULL, strata = NULL, fpc = NULL, nest = FALSE,
+    check.strata = !nest, repweights = NULL, type,
+    combined.weights = FALSE, rho = NULL,
+    bootstrap.average = NULL, scale = NULL, rscales = NULL,
+    fpctype = "fraction", return.replicates = FALSE,
+    na.action = "na.omit", start = NULL, etastart = NULL,
+    mustart = NULL, offset = NULL, model1 = TRUE,
+    method = "glm.fit", x = FALSE, y = TRUE,
+    contrasts = NULL, design = NULL, link = "inverse",
+    data, ...)
   zelig2logit.survey(formula, weights = NULL, ids = NULL,
     probs = NULL, strata = NULL, fpc = NULL, nest = FALSE,
     check.strata = !nest, repweights = NULL, type,

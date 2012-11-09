@@ -151,6 +151,7 @@ plot.MI.sim <- function(...) {
 #' implementations of Zelig
 #' @author James Honaker, adapted by Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export plot.ci
+#' @usage \method{plot}{ci}(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL)
 plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL) {
 
   xmatrix<-matrix(NA,nrow=length(x),ncol=length(x[[1]]$x$data))
