@@ -123,7 +123,13 @@
 
   \item{design}{...}
 
+  \item{link}{an object specifying a link function between the predictor and response variables}
+
   \item{data}{a \code{data.frame}}
+
+  \item{\dots}{
+    Additional parameters passed to teh ``gamma.survey'' model fitting function
+  }
 }
 \value{
   a \code{list} used to construct parameters for the

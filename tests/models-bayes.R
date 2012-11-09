@@ -1,7 +1,5 @@
 library(Zelig)
 
-library(MCMCpack)
-
 data(turnout)
 data(mexico)
 data(macro)

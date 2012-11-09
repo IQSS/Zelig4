@@ -1,5 +1,20 @@
 \name{qi}
+
 \alias{qi}
+\alias{qi.exp.Rd}
+\alias{qi.logit.Rd}
+\alias{qi.negbinom.Rd}
+\alias{qi.normal.survey.Rd}
+\alias{qi.poisson.survey.Rd}
+\alias{qi.relogit.Rd}
+\alias{qi.gamma.Rd}
+\alias{qi.ls.Rd}
+\alias{qi.normal.Rd}
+\alias{qi.poisson.Rd}
+\alias{qi.probit.Rd}
+\alias{qi.relogit2.Rd}
+\alias{qi.tobit.Rd}
+
 \title{Generic Method for Computing Quantities of Interest}
 \usage{
   qi(obj, x = NULL, x1 = NULL, y = NULL, num, param = NULL)
