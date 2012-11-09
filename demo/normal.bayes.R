@@ -7,13 +7,13 @@ z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.bayes",
 user.prompt()
 
 ## Checking for convergence before summarizing the estimates:
-geweke.diag(z.out$coefficients)  
+geweke.diag(z.out$result$coefficients)  
 user.prompt()
 
-heidel.diag(z.out$coefficients)  
+heidel.diag(z.out$result$coefficients)  
 user.prompt()
 
-raftery.diag(z.out$coefficients)  
+raftery.diag(z.out$result$coefficients)  
 user.prompt()
 
 ## summarizing the output

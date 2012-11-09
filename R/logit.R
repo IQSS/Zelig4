@@ -54,12 +54,30 @@ param.logit <- function(obj, num, ...) {
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
+  # Compute expected values
+  compute.ev <- function(obj, x=NULL, num=1000, param=NULL) {
+    if (is.null(x))
+      return(NA)
+
+    coef <- coef(param)
+    link.inverse <- linkinv(param)
+
+    eta <- coef %*% t(x)
+    eta <- Filter(function (y) !is.na(y), eta)
+
+    theta <- matrix(link.inverse(eta), nrow = nrow(coef))
+
+    ev <- matrix(link.inverse(eta), ncol=ncol(theta))
+
+    ev
+  }
+
   # Simulate quantities of interest for "x"
-  ev1 <- .compute.ev(obj, x, num, param)
+  ev1 <- compute.ev(obj, x, num, param)
   pr1 <- matrix(nrow=nrow(ev1), ncol=ncol(ev1))
 
   # Simulate the quantities of interest for "x1"
-  ev2 <- .compute.ev(obj, x1, num, param)
+  ev2 <- compute.ev(obj, x1, num, param)
   pr2 <- fd <- NA
 
   
@@ -91,7 +109,6 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
        )
 }
 
-#' compute expected values
 .compute.ev <- function(obj, x=NULL, num=1000, param=NULL) {
 
   if (is.null(x))

@@ -7,10 +7,10 @@ z.out <- zelig(vote88 ~ pristr + othcok + othsocok, model = "mlogit.bayes",
 user.prompt()
 
 ## Checking for convergence before summarizing the estimates:
-heidel.diag(z.out$coefficients)
+heidel.diag(z.out$result$coefficients)
 user.prompt()
 
-raftery.diag(z.out$coefficients)
+raftery.diag(z.out$result$coefficients)
 user.prompt()
 
 ## Summarizing the output
