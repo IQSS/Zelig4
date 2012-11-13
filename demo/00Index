@@ -13,7 +13,6 @@ factor.bayes       MCMC factor analysis
 logit.bayes        MCMC logistic regression model and simulation
 normal.bayes       MCMC regression model and simulation
 probit.bayes       MCMC probit regression model and simulation
-tobit.bayes        MCMC tobit regression model and simulation
 poisson.bayes      MCMC poisson regression model and simulation
 mlogit.bayes       MCMC multinomial regression model and simulation
 oprobit.bayes      MCMC ordered probit regression model and simulation

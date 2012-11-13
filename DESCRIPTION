@@ -32,4 +32,6 @@ Suggests:
     gee,
     survey,
     survival,
-    systemfit
+    systemfit,
+    MCMCpack,
+    coda
