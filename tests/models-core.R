@@ -84,8 +84,6 @@ x <- setx(z)
 
 s <- sim(z, x = x, num = 10)
 
-q()
-
 # probit
 # probit
 # probit
