@@ -167,23 +167,22 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1,
     xmatrix[i,]<-as.matrix(x[[i]]$x$data)
   }
 
+  if (length(x) == 1 && is.null(var)) {
+    warning("Must specify the `var` parameter when plotting the confidence interval of an unvarying model. Plotting nothing.")
+    return(invisible(FALSE))
+  }
+
   if (is.null(var)) {
     each.var <- apply(xmatrix,2,sd) 
-    print(each.var)
-    print(each.var)
     flag <- each.var>0
     min.var<-min(each.var[flag])
-    print(min.var)
     var.seq<-1:ncol(xmatrix)
     position<-var.seq[each.var==min.var]  
     position<-min(position)
     xseq<-xmatrix[,position]
-    print(position)
-    message(">>")
     return()
     xname<-names(x[[1]]$x$data[position])
-  }
-  else {
+  } else {
 
     if(is.numeric(var)){
       position<-var
@@ -196,9 +195,7 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1,
 
 
   if(qi=="pv"){
-    message("<<<<<")
     ev<-simulation.matrix(x, "Predicted Values: Y|X")
-    message(">>>>>")
   }else{
     ev<-simulation.matrix(x, "Expected Values: E(Y|X)")
   }
@@ -240,8 +237,52 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1,
            ci.lower(ev[,i],0.999)
            )
 
-    history[i,] <- v
+    history[i, ] <- v
   }
+  if (k == 1) {
+    left <- c(
+           xseq[1]-.5,
+           median(ev[,1]),
+
+           ci.upper(ev[,1],0.8),
+           ci.lower(ev[,1],0.8),
+
+           ci.upper(ev[,1],0.95),
+           ci.lower(ev[,1],0.95),
+
+           ci.upper(ev[,1],0.999),
+           ci.lower(ev[,1],0.999)
+           )
+    right <- c(
+           xseq[1]+.5,
+           median(ev[,1]),
+
+           ci.upper(ev[,1],0.8),
+           ci.lower(ev[,1],0.8),
+
+           ci.upper(ev[,1],0.95),
+           ci.lower(ev[,1],0.95),
+
+           ci.upper(ev[,1],0.999),
+           ci.lower(ev[,1],0.999)
+           )
+    v <- c(
+           xseq[1],
+           median(ev[,1]),
+
+           ci.upper(ev[,1],0.8),
+           ci.lower(ev[,1],0.8),
+
+           ci.upper(ev[,1],0.95),
+           ci.lower(ev[,1],0.95),
+
+           ci.upper(ev[,1],0.999),
+           ci.lower(ev[,1],0.999)
+           )
+    k <- 3
+    history <- rbind(left, v, right)
+  }
+
   all.xlim<-c(min(history[,1]),max(history[,1]))
   all.ylim<-c(min(history[,-1]),max(history[,-1]))
 
