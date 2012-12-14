@@ -154,22 +154,36 @@ plot.MI.sim <- function(...) {
 #' @usage \method{plot}{ci}(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL)
 plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL) {
 
+  if (! "pooled.sim" %in% class(x)) {
+    something <- list(x=x)
+    class(something) <- "pooled.sim"
+    attr(something, "titles") <- x$titles
+    x <- something
+  }
+
   xmatrix<-matrix(NA,nrow=length(x),ncol=length(x[[1]]$x$data))
 
   for(i in 1:length(x)){
     xmatrix[i,]<-as.matrix(x[[i]]$x$data)
   }
 
-  if(is.null(var)){
-    each.var<-apply(xmatrix,2,sd) 
-    flag<-each.var>0
+  if (is.null(var)) {
+    each.var <- apply(xmatrix,2,sd) 
+    print(each.var)
+    print(each.var)
+    flag <- each.var>0
     min.var<-min(each.var[flag])
+    print(min.var)
     var.seq<-1:ncol(xmatrix)
     position<-var.seq[each.var==min.var]  
     position<-min(position)
     xseq<-xmatrix[,position]
+    print(position)
+    message(">>")
+    return()
     xname<-names(x[[1]]$x$data[position])
-  }else{
+  }
+  else {
 
     if(is.numeric(var)){
       position<-var
@@ -182,7 +196,9 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1,
 
 
   if(qi=="pv"){
+    message("<<<<<")
     ev<-simulation.matrix(x, "Predicted Values: Y|X")
+    message(">>>>>")
   }else{
     ev<-simulation.matrix(x, "Expected Values: E(Y|X)")
   }

@@ -221,3 +221,32 @@ sim.default <- function(
   # return
   s
 }
+
+create.pooled.sim <- function(
+                        obj,
+                        x = NULL,
+                        x1 = NULL,
+                        y = NULL,
+                        num = 1000,
+                        bootstrap = FALSE,
+                        bootfn = NULL,
+                        cond.data = NULL,
+                        ...
+                        ) {
+  xes <- list()
+  titles <- null
+
+  for (key in names(x)) {
+    xes[[key]] <- sim(obj, x[[key]], x1[[key]], y, num, bootstrap, bootfn, cond.data, ...)
+    attr(xes[[key]], "pooled") <- false
+    titles <- append(titles, xes[[key]]$titles)
+  }
+
+  attr(xes, "pooled") <- true
+  attr(xes, "pooled.setx") <- x
+  attr(xes, "titles") <- unique(titles)
+
+  class(xes) <- c("pooled.sim")
+
+  return(xes)
+}
