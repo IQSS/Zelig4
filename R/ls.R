@@ -50,6 +50,7 @@ qi.ls <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   # compute expected value
   ev <- coefs %*% t(x)
+
   ev1 <- NA
   fd <- NA
   
