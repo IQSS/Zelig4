@@ -278,13 +278,8 @@ qi.relogit2 <- function (obj, x = NULL, x1 = NULL, y = NULL, num=1000, param = N
   tmp0 <- object$result$lower.estimate
   tmp1 <- object$result$upper.estimate
   
-  message("VARIABLES [[[[")
-
-  #print(object)
   low <- qi.relogit(tmp0, simpar$par0, x, x1)
-  message("--")
   up <- qi.relogit(tmp1, simpar$par1, x, x1)
-  message("}}")
 
   PP <- PR <- array(NA, dim = c(num, 2, nrow(x)),
                     dimnames = list(NULL, c("Lower Bound", "Upper Bound"),

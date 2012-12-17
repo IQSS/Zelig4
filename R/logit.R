@@ -100,11 +100,10 @@ qi.logit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   levels(pr1) <- levels(pr2) <- c('0', '1')
 
   # return
-  list(
-       "Expected Values: E(Y|X)" = ev1,
-       "Expected Values (for X1): E(Y|X1)" = ev2,
-       "Predicted Values: Y|X" = pr1,
-       "Predicted Values (for X1): Y|X1" = pr2,
+  list("Expected Values: E(Y|X)"  = ev1,
+       "Expected Values: E(Y|X1)" = ev2,
+       "Predicted Values: Y|X"    = pr1,
+       "Predicted Values: Y|X1"   = pr2,
        "First Differences: E(Y|X1) - E(Y|X)" = fd
        )
 }

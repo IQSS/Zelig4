@@ -18,6 +18,8 @@ x.high <- setx(z.out, numst2 = 1)
 
 s.out <- sim(z.out, x = x.low, x1 = x.high, num = 10)
 
+plot(s.out)
+
 # gamma
 # gamma
 # gamma
@@ -42,6 +44,8 @@ x.low <- setx(z, educate = quantile(turnout$educate, probs = 0.25))
 
 s <- sim(z, x = x.low, x1 = x.high, num = 10)
 
+plot(s)
+
 # ls
 # ls
 # ls
@@ -53,6 +57,8 @@ x.low <- setx(z, trade = quantile(trade, 0.2))
 
 s <- sim(z, x = x.high, x1 = x.low, num = 10)
 
+plot(s)
+
 # negbinom
 # negbinom
 # negbinom
@@ -62,6 +68,8 @@ z <- zelig(num ~ target + coop, model = "negbinom", data = sanction)
 x <- setx(z)
 
 s <- sim(z, x = x, num = 10)
+
+plot(s)
 
 # normal
 # normal
@@ -74,6 +82,8 @@ x.low <- setx(z, trade = quantile(trade, 0.2))
 
 s <- sim(z, x = x.high, x1 = x.low)
 
+plot(s)
+
 # poisson
 # poisson
 # poisson
@@ -83,6 +93,8 @@ z <- zelig(num ~ target + coop, model = "poisson", data = sanction)
 x <- setx(z)
 
 s <- sim(z, x = x, num = 10)
+
+plot(s)
 
 # probit
 # probit
@@ -94,6 +106,8 @@ x.low <- setx(z, educate = quantile(turnout$educate, probs = 0.75))
 x.high <- setx(z, educate = quantile(turnout$educate, probs = 0.25))
 
 s <- sim(z, x = x.low, x1 = x.high, num = 10)
+
+plot(s)
 
 # relogit
 # relogit
@@ -117,6 +131,9 @@ x.out2 <- setx(z.out2)
 
 s.out1 <- sim(z.out1, x = x.out1, num=10)
 s.out2 <- sim(z.out2, x = x.out2, num=10)
+
+plot(s.out1)
+plot(s.out2)
 
 # tobit
 # tobit

@@ -288,10 +288,10 @@ summary.setx <- function (object, ...) {
 
   structure(
     list(
-      call = x$call,
-      label = x$label,
-      model.name = x$name,
-      formula = x$formula,
+      call = object$call,
+      label = object$label,
+      model.name = object$name,
+      formula = object$formula,
       model.matrix = mm
     ),
     class = "summary.setx"

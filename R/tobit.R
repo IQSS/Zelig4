@@ -114,8 +114,15 @@ param.tobit <- function(obj, num=1000, ...) {
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 qi.tobit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
-  list(
-       "Expected Value: E(Y|X)" = NA
+  # This needs to be fixed.
+  ev1 <- ev2 <- pr1 <- pr2 <- fd <- NA
+
+  # return
+  list("Expected Values: E(Y|X)"  = ev1,
+       "Expected Values: E(Y|X1)" = ev2,
+       "Predicted Values: Y|X"    = pr1,
+       "Predicted Values: Y|X1"   = pr2,
+       "First Differences: E(Y|X1) - E(Y|X)" = fd
        )
 }
 #' Describe a ``tobit'' model to Zelig
@@ -125,8 +132,9 @@ qi.tobit <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 #' @return a list to be processed by `as.description'
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 describe.tobit <- function(...) {
-  list(
-       authors = "",
-       text = ""
+  list(authors  = c("Kosuke Imai", "Gary King", "Olivia Lau"),
+       year     = 2011,
+       category = "continuous",
+       text = "Linear regression for Left-Censored Dependent Variable"
        )
 }

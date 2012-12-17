@@ -510,8 +510,8 @@ plot.simulations <- function (x, ...) {
   qi <- x$qi
 
   # Define Relevant quantity of interest titles that have special properties
-  ev.titles <- c('Expected Values: E(Y|X)', 'Expected Values (for X1): E(Y|X1)')
-  pv.titles <- c('Predicted Values: Y|X', 'Predicted Values (for X1): Y|X1')
+  ev.titles <- c('Expected Values: E(Y|X)', 'Expected Values: E(Y|X1)')
+  pv.titles <- c('Predicted Values: Y|X', 'Predicted Values: Y|X1')
 
   # Determine whether two "Expected Values" qi's exist
   both.ev.exist <- all(ev.titles %in% names(qi))
@@ -567,32 +567,37 @@ plot.simulations <- function (x, ...) {
   layout(panels)
 
   titles <- list(
-    pv = "Predicted Values: Y|X",
-    pv1 = "Predicted Values (for X1): Y|X1",
-    ev = "Expected Values: E(Y|X)",
-    ev1 = "Expected Values (for X1): E(Y|X1)",
-    fd = "First Differences: E(Y|X1) - E(Y|X)"
+    ev  = "Expected Values: E(Y|X)",
+    ev1 = "Expected Values: E(Y|X1)",
+    pv  = "Predicted Values: Y|X",
+    pv1 = "Predicted Values: Y|X1",
+    fd  = "First Differences: E(Y|X1) - E(Y|X)"
     )
-
+  
+  # Plot each simulation
   simulations.plot(qi[[titles$pv]], main = titles$pv, col = color.x, line.col = "black")
+  simulations.plot(qi[[titles$pv1]], main = titles$pv, col = color.x1, line.col = "black")
   simulations.plot(qi[[titles$ev]], main = titles$ev, col = color.x, line.col = "black")
+  simulations.plot(qi[[titles$pv1]], main = titles$ev, col = color.x1, line.col = "black")
   simulations.plot(qi[[titles$fd]], main = titles$fd, col = color.mixed, line.col = "black")
 
   if (both.pv.exist) {
     simulations.plot(
       qi[["Predicted Values: Y|X"]],
-      qi[["Predicted Values (for X1): Y|X1"]],
+      qi[["Predicted Values: Y|X1"]],
       main = "Comparison of Y|X and Y|X1",
-      col = c(color.x, color.x1),
+      # Note that we are adding transparency to this
+      col = paste(c(color.x, color.x1), "80", sep=""),
       line.col = "black")
   }
 
   if (both.ev.exist) {
     simulations.plot(
       qi[["Expected Values: E(Y|X)"]],
-      qi[["Expected Values (for X1): E(Y|X1)"]],
+      qi[["Expected Values: E(Y|X1)"]],
       main = "Comparison of E(Y|X) and E(Y|X1)",
-      col = c(color.x, color.x1),
+      # Note that we are adding transparency to this
+      col = paste(c(color.x, color.x1), "80", sep=""),
       line.col = "black")
   }
 

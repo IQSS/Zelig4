@@ -105,7 +105,7 @@ qi.exp <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   # Compute Predicted Values
   compute.pv <- function (ev, param) {
-    NA
+    rexp(length(ev), rate = 1/ev)
   }
 
 
@@ -114,11 +114,14 @@ qi.exp <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   ev2 <- compute.ev(coef(param), x1)
 
   # Compute Predicted values for X and X1
+  pr1 <- compute.pv(ev1, x)
+  pr2 <- compute.pv(ev2, x1)
 
-
-  list(
-       "Expected Value: E(Y|X)" = ev1,
-       "Expected Value: E(Y|X1)" = ev2,
+  # Return quantities of Interest
+  list("Expected Values: E(Y|X)"  = ev1,
+       "Expected Values: E(Y|X1)" = ev2,
+       "Predicted Values: Y|X"    = pr1,
+       "Predicted Values: Y|X1"   = pr2,
        "First Differences: E(Y|X1) - E(Y|X)" = ev2 - ev1
        )
 }
@@ -130,7 +133,9 @@ qi.exp <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 describe.exp <- function(...) {
   list(
-       authors = "",
-       text = ""
+       authors = c("Olivia Lau", "Kosuke Imai", "Gary King"),
+       year = 2011,
+       category = "bounded",
+       text = "Exponential Regression for Duration Dependent Variables"
        )
 }

@@ -81,11 +81,11 @@ qi.poisson <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
     fd <- ev1 - ev
   }
 
-  #
-  list("Expected Values: E(Y|X)" = ev,
-       "Expected Values (for X1): E(Y|X1)" = ev1,
-       "Predicted Values: Y|X" = pr,
-       "Predicted Values: Y|X1" = pr1,
+  # Return quantities of interest
+  list("Expected Values: E(Y|X)"  = ev,
+       "Expected Values: E(Y|X1)" = ev1,
+       "Predicted Values: Y|X"    = pr,
+       "Predicted Values: Y|X1"   = pr1,
        "First Differences: E(Y|X1) - E(Y|X)" = fd
        )
 }
