@@ -6,7 +6,10 @@
 ## jH 29/11/12
 ##
 
+rm(list=ls())
+
 library(Zelig)
+
 
 #############################################
 ## General Parameters to set
@@ -18,22 +21,31 @@ maxx<- 1              # Max x value
 b1<-c(0.2,2,1)        # Set of speed parameters (coef on x) to cycle over
 b0<-c(-1,0,2)         # Set of shift parameters (constants) to cycle over
 trials<-c(3,6,6)      # Number of trials to cycle over, for distbns where relevant
+alpha<-c(1,2,3)       # Auxiliary parameter to cycle over, where relevant
 sd<-c(1,1,1)          # Standard Deviations to cycle over, where relevant
 
-allnames<-cbind("logit","poisson","tobit")  # Zelig models to cycle over
+allnames<-cbind("ls","logit","probit","poisson","negbinom")  # Zelig models to cycle over
+
+if("tobit" %in% allnames){
+	library("survival")
+}
 
 
 #############################################
 ## Simulate Data
 
-par(mfcol=c(length(allnames),length(b1)))
+#par(mfcol=c(length(allnames),length(b1)))
+par(mfrow=c(length(b1),length(allnames)))
+
 
 for(i in 1:length(b1)){
 
-  x.sim<- runif(nsim,minx,maxx)                   # These are simulated random x values
-  x.seq<- seq(from=minx, to=maxx, length=nsim)    # This is a regular sequence across the range of x
-  x.shortseq <- seq(from=minx,to=maxx, length=20) # This is for Zelig simulations
-  data<-data.frame(cbind(x.sim,x.seq))            # Copy to dataset, but also leave as vectors
+  x.sim<- runif(nsim,minx,maxx)                       # These are simulated random x values
+  x.seq<- seq(from=minx, to=maxx, length.out=nsim)    # This is a regular sequence across the range of x
+  x.shortseq <- seq(from=minx,to=maxx, length.out=20) # This is for Zelig simulations
+  
+  data<-data.frame(cbind(x.sim,x.seq))                # Copy to dataset, but also leave as vectors
+  data$x.junk<-rnorm(nsim)
 
   # Simulation of Linear Regression
   
@@ -65,6 +77,14 @@ for(i in 1:length(b1)){
   data$y.sim.poisson<- rpois(nsim,lambda.sim)
   data$y.hat.poisson<- exp(b1[i] * x.seq +b0[i])
 
+  # Simulation of Negative Binomial
+
+  lambda.sim<- exp(b1[i] * x.sim +b0[i])
+#  data$y.sim.negbinom<- rnbinom(n=nsim,mu=lambda.sim,size=alpha[i])
+  data$y.sim.negbinom<- rnegbin(n=nsim,mu=lambda.sim,theta=alpha[i])
+  data$y.hat.negbinom<- exp(b1[i] * x.seq +b0[i])
+  
+
   # Simulation of Tobit
 
   mu.sim<- b1[i]*x.sim + b0[i]
@@ -73,6 +93,7 @@ for(i in 1:length(b1)){
   mu.seq<- b1[i]*x.seq + b0[i] 
   y.uncensored.hat.tobit<- mu.seq + dnorm(mu.seq,mean=0,sd=sd[i])/pnorm(mu.seq,mean=0,sd=sd[i])
   data$y.hat.tobit<- y.uncensored.hat.tobit * (1- pnorm(0,mean=mu.seq,sd=sd[i]) ) 
+  
 
 #############################################
 ## Visualize Results
@@ -92,15 +113,39 @@ for(i in 1:length(b1)){
 
     ## Estimate and Plot Zelig Model
    
-    zeligVarnames<- c("x.sim",y.sim.name)
+    zeligVarnames<- c("x.sim","x.junk",y.sim.name)
+    
     subsetdata<- data[,zeligVarnames]
-    formula<-paste("y.sim.",allnames[j]," ~ x.sim",sep="")
 
-#    z.out<-zelig(formula,model=allnames[j],data=subsetdata)
-#    z.set<-setx(z.out,x.sim=x.shortseq)
-#    plot something from Zelig output
-#    par(new=TRUE)
-#    plot(data$x.seq,z.sim$SOMETHINGHERE,main="",ylim=all.ylim,xlab="",ylab="",type="l",col="olivegreen",lwd=2)
+    formula<-as.formula(paste(y.sim.name," ~ x.sim + x.junk",sep=""))
+#    formula<-as.formula(paste(y.sim.name," ~ x.sim",sep=""))
+
+    z.out<-zelig(formula,model=allnames[j],data=subsetdata)
+
+    ## Simulate using the "ci" approach. 
+	z.set<-setx(z.out,x.sim=x.shortseq)
+    z.sim<-sim(z.out,x=z.set)
+    
+    y.qiseq<-rep(-999,length(x.shortseq))
+    for(s in 1:length(x.shortseq)){
+        y.qiseq[s]<-mean(z.sim[[s]]$qi$ev1)    # Although, curious why ..$qi[1] is printable but mean = NA
+    	
+    }
+    points(x=x.shortseq,y=y.qiseq,col="blue",cex=1.6)
+
+
+    ## Iterate by the conventional "sim" across values.
+    y.qiseq<-rep(-999,length(x.shortseq))
+    y.qiseq2<-rep(-999,length(x.shortseq))
+
+    for(s in 1:length(x.shortseq)){
+		z.set<-setx(z.out,x.sim=x.shortseq[s])
+    	z.sim<-sim(z.out,x=z.set)
+        y.qiseq[s]<-mean(z.sim$qi$ev1)   
+        
+    }
+    points(x=x.shortseq,y=y.qiseq,col="green",cex=1)
+    dev.copy2pdf(file="./figs/mcz41.pdf")
 
   } 
 }
