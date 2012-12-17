@@ -152,7 +152,12 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       dots[[key]]
   }
 
-  # 
+  # Convert "res" into a list of lists. This makes atomic entries into lists.
+  for (k in 1:length(res)) {
+    res[[k]] <- as.list(res[[k]])
+  }
+
+  # Combine all the sublists
   res <- do.call("mix", res)
 
   # A list containing paired design matrices and their corresponding data.frame's
@@ -182,7 +187,6 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
       as.data.frame = dat
       )
   }
-
 
   # Phonetically... setx's
   setexes <- list()

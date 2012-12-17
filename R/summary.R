@@ -270,3 +270,30 @@ summary.zelig <- function (object, ...) {
     # S3 objects have no problem figuring out which method to use
     summary(obj)
 }
+#' Sumary of ``setx'' Object
+#'
+#' Compute summary data for ``setx'' objects
+#' @S3method summary zelig
+#' @usage \method{summary}{zelig}(object, ...)
+#' @param object a zelig object
+#' @param ... parameters forwarded to the generic summary object
+#' @return the summary of the fitted model
+#' @export
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+summary.setx <- function (object, ...) {
+  mm <- object$matrix
+  attr(mm, "assign") <- NULL
+  attr(mm, "contrasts") <- NULL
+
+
+  structure(
+    list(
+      call = x$call,
+      label = x$label,
+      model.name = x$name,
+      formula = x$formula,
+      model.matrix = mm
+    ),
+    class = "summary.setx"
+    )
+}
