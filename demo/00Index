@@ -8,6 +8,7 @@ negbinom           Negative Binomial regression and simulation
 normal             Normal (Gaussian) regression and simulation
 poisson            Poisson regression and simulation
 probit             Probit regression and simulation
+relogit            Rare events logit regression and simulation
 twosls             Two Stage Least Squares
 factor.bayes       MCMC factor analysis
 logit.bayes        MCMC logistic regression model and simulation
