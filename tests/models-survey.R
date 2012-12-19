@@ -8,7 +8,8 @@ data(scd, package = 'survey')
 # gamma.survey (1 of 3)
 
 # TEST 1
-z.out1 <- zelig(api00 ~ meals + yr.rnd,
+z.out1 <- zelig(
+                api00 ~ meals + yr.rnd,
                 model   = 'gamma.survey',  
                 weights = ~ pw,
                 data    = apistrat

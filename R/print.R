@@ -1,3 +1,25 @@
+#' Print a Zelig Object
+#' @S3method print zelig
+print.zelig <- function (x, ...) {
+  name <- x$name
+  package.name <- x$package.name
+  call <- x$call
+
+  cat("Model Name: ", name, "\n")
+  cat("Package Name: ", package.name, "\n")
+  cat("Call:\n")
+  print(call)
+
+  # 
+  message("\nFor information about the fitted model, use the summary() function.")
+
+  # Return invisibly
+  invisible(x)
+}
+#' Print MI Zelig Object
+#' @S3method print mi
+print.mi <- function (x, ...) {
+}
 #' Print a Bundle of Data-sets
 #'
 #' @S3method print setx.mi

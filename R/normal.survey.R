@@ -53,7 +53,7 @@ zelig2normal.survey <- function(
               )
 
   else {
-    assign(".survey.prob.weights", weights, envir=.GlobalEnv)
+    .survey.prob.weights <- weights
     
     svrepdesign(
                 data=data,
@@ -71,11 +71,10 @@ zelig2normal.survey <- function(
   }
 
   
-  list(
-       .function = "svyglm",
-       formula = formula,
-       design  = design
-       )
+  z(.function = svyglm,
+    formula = formula,
+    design  = design
+    )
 }
 
   

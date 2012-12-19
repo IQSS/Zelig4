@@ -19,6 +19,9 @@ zelig2tobit <- function (
                          data
                          ) {
 
+  # Load survival
+  loadDependencies("survival")
+
   if (!(is.null(cluster) || robust))
     stop("If cluster is specified, then `robust` must be TRUE")
 

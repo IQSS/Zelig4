@@ -52,8 +52,7 @@ zelig2poisson.survey <- function(
               )
 
   else {
-    assign(".survey.prob.weights", weights, envir=.GlobalEnv)
-    
+    .survey.prob.weights <- weights
     svrepdesign(
                 data=data,
                 repweights=repweights, 	
@@ -70,12 +69,11 @@ zelig2poisson.survey <- function(
   }
 
   
-  list(
-       .function = "svyglm",
-       formula = formula,
-       design  = design,
-       family  = poisson()
-       )
+  z(.function = svyglm,
+    formula = formula,
+    design  = design,
+    family  = poisson()
+    )
 }
 #' @S3method param poisson.survey
 param.poisson.survey <- function(obj, num=1000, ...) {

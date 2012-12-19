@@ -52,8 +52,7 @@ zelig2probit.survey <- function(
               )
 
   else {
-    assign(".survey.prob.weights", weights, envir=.GlobalEnv)
-    
+    .survey.prob.weights <- weights
     svrepdesign(
                 data=data,
                 repweights=repweights, 	
@@ -70,12 +69,11 @@ zelig2probit.survey <- function(
   }
 
   
-  list(
-       .function = "svyglm",
-       formula = formula,
-       design  = design,
-       family  = quasibinomial(link="probit")
-       )
+  z(.function = svyglm,
+    formula = formula,
+    design  = design,
+    family  = quasibinomial(link="probit")
+    )
 }
 
 #' @S3method param probit.survey

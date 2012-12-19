@@ -53,7 +53,7 @@ zelig2logit.survey <- function(
               )
 
   else {
-    assign(".survey.prob.weights", weights, envir=.GlobalEnv)
+    .survey.prob.weights <- weights
     
     svrepdesign(
                 data=data,
@@ -70,8 +70,6 @@ zelig2logit.survey <- function(
                 )
   }
 
-  # formals(glm)$family <- "SPAGHETTI!!"
-
   # we cannot plug in family=Gamma yet because of weird issues
   # with glm. Uncomment the below lines for an explanation:
 
@@ -85,12 +83,11 @@ zelig2logit.survey <- function(
   # this is because of how glm is written (it evaluates the
   # family variable as a function in the parent.frame)
 
-  list(
-      .function = "svyglm",
-       formula = formula,
-       design  = design,
-       family  = quasibinomial(link="logit")
-       )
+  z(.function = svyglm,
+    formula = formula,
+    design  = design,
+    family  = quasibinomial(link="logit")
+    )
 }
 
 #' @S3method param logit.survey

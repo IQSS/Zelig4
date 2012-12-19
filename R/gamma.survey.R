@@ -56,8 +56,10 @@ zelig2gamma.survey <- function(
   }
 
   else {
-    assign(".survey.prob.weights", weights, envir=.GlobalEnv)
+    # Using the "z" function stores this implicitly in a namespace
+    .survey.prob.weights <- weights
     
+    # 
     svrepdesign(
                 data=data,
                 repweights=repweights, 	
@@ -73,12 +75,11 @@ zelig2gamma.survey <- function(
                 )
   }
 
-  list(.function = "svyglm",
-       
-       formula = formula,
-       design  = design,
-       family  = Gamma()
-       )
+  z(.function = svyglm,
+    formula = formula,
+    design  = design,
+    family  = Gamma()
+    )
 }
 
 #' @S3method param gamma.survey
