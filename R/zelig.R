@@ -152,10 +152,18 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     attach(env)
     attach(d.f)
 
-    new.res <- eval(new.call, env)
+    tryCatch(
+      {
+        new.res <- eval(new.call, env)
+      },
+      error = function (e) {
+        message("There was an error fitting this statistical model.")
+        new.res <- NULL
+      }
+      )
 
-    detach(env)
     detach(d.f)
+    detach(env)
 
     # Apply first hook if it exists
     if (!is.null(zclist$.hook)) {

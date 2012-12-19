@@ -41,8 +41,8 @@
 ")
 
   # Set class globally when the package is attached
-  setClass("zelig", representation(), where=.GlobalEnv)
-  setClass("MI", representation(), where=.GlobalEnv)
+  # setClass("zelig", representation(), where = asNamespace("Zelig"))
+  # setClass("MI", representation(), where = asNamespace("Zelig"))
 }
 
 # @lis: list of characters
@@ -65,14 +65,14 @@
 # @name: character-string
 .RegisterMethodS4 <- function(name) {
   res <- try(setMethod(name, signature="zelig",
-                       where = .GlobalEnv,
+                       # where = .GlobalEnv,
                        definition=.NewZeligGenericS4(name)
                        ),
              silent=TRUE
              )
 
   res <- try(setMethod(name, signature="MI",
-                       where = .GlobalEnv,
+                       # where = .GlobalEnv,
                        definition=.NewZeligMIGenericS4(name)
                        ),
              silent=TRUE
@@ -646,11 +646,11 @@ eval.in <- .call <- function (...) {
     fname <- paste(meth, "zelig", sep=".")
     # assign the relevant function in the
     # correct environment or namespace
-    assign(fname, .NewZeligGenericS3(meth), envir = .GlobalEnv)
+    assign(fname, .NewZeligGenericS3(meth), envir = asNamespace("Zelig"))
 
     # assign MI version
     fname <- paste(meth, "MI", sep=".")
-    assign(fname, .NewZeligMIGenericS3(meth), .GlobalEnv)    
+    assign(fname, .NewZeligMIGenericS3(meth), asNamespace("Zelig"))
   }
 
   # return
