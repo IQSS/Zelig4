@@ -91,7 +91,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   #   mi(turnout[1:1000, ], )
   # will contain a data.frame labeled:
   #   turnout[1:1000, ]
-  m <- eval(call("make.mi", substitute(data), by=by))
+  m <- eval(call("multi.dataset", substitute(data), by=by))
 
   # Ensure certain values remain consistent between any object on this list
   # by giving them all a pointer to the same environment object which contains
@@ -152,12 +152,14 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     attach(env)
     attach(d.f)
 
+    print(new.call)
+
     tryCatch(
       {
         new.res <- eval(new.call, env)
       },
       error = function (e) {
-        message("There was an error fitting this statistical model.")
+        warning("There was an error fitting this statistical model.")
         new.res <- NULL
       }
       )

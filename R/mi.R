@@ -52,7 +52,27 @@ mi <- function (...) {
 #' @examples
 #' data(immi1, immi2, immi3, immi4, immi5)
 #' mi(immi1, immi2, immi3, immi4, immi5)
-make.mi <- function(obj, by=NULL) {
+multi.dataset <- function (obj, by=NULL) {
+  UseMethod("multi.dataset")
+}
+
+multi.dataset.amelia <- function (obj, by=NULL) {
+  #
+  imputations <- obj$imputations
+
+  # 
+  class(imputations) <- NULL
+
+  # Create generic labels
+  names(imputations) <- paste('imputation', 1:length(imputations), sep = "")
+
+
+}
+
+#
+#
+#
+multi.dataset.default <- function(obj, by=NULL) {
 
   if (is.data.frame(obj))
     obj <- eval(call("mi", substitute(obj)))
@@ -79,7 +99,7 @@ make.mi <- function(obj, by=NULL) {
                state  = state,
                list   = datasets
                )
-  class(self) <- "mi"
+  class(self) <- "multi.dataset"
   self
 }
 
@@ -208,7 +228,6 @@ retrieve.factors <- function (frames, by=NULL) {
   factor.list
 }
 
-
 #' Length Method for 'mi' Objects
 #' Compute the length of the number data-frames to be expected.
 #' @note This function is primarily used internally by Zelig.
@@ -220,6 +239,74 @@ retrieve.factors <- function (frames, by=NULL) {
 #' @return an integer specifying the number of subsetted data-frame's that are
 #'   contained within within the 'mi' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
-length.mi <- function(x) {
+length.multi.dataset <- function(x) {
   nrow(x$list)
+}
+
+#' Get Labels from \code{mi} Object
+#' 
+#' Find a suitable set of labels for titling each individual \code{mi} object.
+#' @note This function is primarily used internally by Zelig to keep track of
+#'   the \code{data.frame}'s produced by \code{mi} objects.
+#' @S3method labels mi
+#' @usage \method{labels}{mi}(object, ...)
+#' @param object an \code{mi} object
+#' @param ... ignored parameters
+#' @return a character-string specifying all the labels
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+labels.multi.dataset <- function (object, ...) {
+  env <- object$state
+  iter <- get('iter', envir=env)
+
+  Reset(object)
+
+  LABELS <- NULL
+
+  while ({key <- NextLabel(object); !is.null(key)}) {
+    Name <- key[[1]]
+    Constraints <- key[-1]
+
+    if (length(Constraints) == 0) {
+      LABELS <- c(LABELS, Name)
+      next
+    }
+
+    label <- paste(names(Constraints), Constraints, sep='=', collapse=", ")
+    label <- sprintf("%s (%s)", Name, label)
+    LABELS <- c(LABELS, label)
+  }
+
+  # Restore iterator to previous position
+  assign('iter', iter, env)
+
+  LABELS
+}
+
+# Multiset
+multiple.frames <- function (obj, by = NULL) {
+  UseMethod("multiple.frames")
+}
+
+# A set of things to make into a collection
+multiple.frames.data.frame <- function (obj, labels = NULL, by = NULL) {
+  labels <- as.character(substitute(obj))
+  res <- list()
+  res[[labels]] <- 
+}
+
+# An individual list
+multiple.frames.list <- function (obj, by = NULL) {
+}
+
+# Takes a list of data frames *ONLY*
+make.multi.dataset <- function (obj) {
+  if (!inherits(obj, "list"))
+    return(NULL)
+
+  for (k in length(obj):1) {
+    if (!is.data.frame(obj[[k]])) {
+      warning('"mi" obj contains an element that is not a data.frame. Ommitting.')
+      obj[[k]] <- NULL
+    }
+  }
 }

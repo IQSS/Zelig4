@@ -16,10 +16,6 @@ print.zelig <- function (x, ...) {
   # Return invisibly
   invisible(x)
 }
-#' Print MI Zelig Object
-#' @S3method print mi
-print.mi <- function (x, ...) {
-}
 #' Print a Bundle of Data-sets
 #'
 #' @S3method print setx.mi
