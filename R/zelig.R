@@ -52,20 +52,34 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # Yea this forever
   model.warnings(model)
 
-
-  Call <- match.call()
-
+  # Split data.frame
   if (!missing(by)) {
-    if (any(by %in% all.vars(formula))) {
-      warning("by cannot list contain a variable from the model's formula")
-      by <- NULL
-    }
 
     if (length(by) > 1) {
       warning("by cannot have length greater than 1")
       by <- NULL
     }
+
+    if (!is.data.frame(data))
+      warning("")
+
+
+    else if (any(by %in% all.vars(formula))) {
+      warning("by cannot list contain a variable from the model's formula")
+      by <- NULL
+    }
+
+    else
+      data <- divide(data, by)
   }
+
+  data <- multi.dataset(data)
+  print(data)
+  q()
+
+  #
+  Call <- match.call()
+
 
   # expand dot arguments
   dots <- list()
@@ -109,8 +123,11 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # models within a particular software package
   package.name <- getPackageName(environment(zelig2), FALSE)
 
+  print(data)
+  q()
+
   # repeat
-  repeat {
+  for (key in names(data)) {
     # get the next data.frame
     x <- NextFrame(m, as.pair = TRUE)
     d.f <- x$data
