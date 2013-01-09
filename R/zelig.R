@@ -73,13 +73,14 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       data <- divide(data, by)
   }
 
-  data <- multi.dataset(data)
-  print(data)
-  q()
+  # Almost equivalient to:
+  #   data <- multi.dataset(data)
+  # 
+  # but we want to keep the name of the original data object as our title (sometimes).
+  data <- eval(call("multi.dataset", substitute(data)))
 
-  #
+  # 
   Call <- match.call()
-
 
   # expand dot arguments
   dots <- list()
@@ -105,7 +106,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   #   mi(turnout[1:1000, ], )
   # will contain a data.frame labeled:
   #   turnout[1:1000, ]
-  m <- eval(call("multi.dataset", substitute(data), by=by))
+  # m <- eval(call("multi.dataset", substitute(data), by=by))
 
   # Ensure certain values remain consistent between any object on this list
   # by giving them all a pointer to the same environment object which contains
@@ -123,21 +124,15 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   # models within a particular software package
   package.name <- getPackageName(environment(zelig2), FALSE)
 
-  print(data)
-  q()
-
   # repeat
   for (key in names(data)) {
-    # get the next data.frame
-    x <- NextFrame(m, as.pair = TRUE)
-    d.f <- x$data
-    label <- x$label
+    d.f <- data[[key]]
+    label <- key
+
 
     # catch end-of-list error
     if (is.null(d.f))
-      break
-
-    # call zelig2* function
+      next
 
     # print(formals(zelig2))
     zclist <- zelig2(formula, ..., data=d.f)
@@ -169,7 +164,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     attach(env)
     attach(d.f)
 
-    print(new.call)
+
 
     tryCatch(
       {
@@ -189,6 +184,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       zclist$.hook <- get(zclist$.hook, mode='function')
       new.res <- zclist$.hook(new.res, new.call, match.call(), ...)
     }
+    next
 
     # Determine whether this is an S4 object
     old.style.oop <- ! isS4(new.res)
@@ -211,6 +207,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # Add to list of results
     object[[label]] <- obj
   }
+
+  q()
 
   if (missing(by) && is.data.frame(data)) {
     object <- object[[1]]

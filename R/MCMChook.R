@@ -13,6 +13,10 @@
 #' @export
 MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...) {
 
+  print(zelig.call)
+  print(model.call)
+
+  q()
   # Create a new object
   res <- list()
 

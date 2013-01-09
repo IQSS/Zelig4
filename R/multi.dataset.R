@@ -24,8 +24,8 @@ multi.dataset <- function (obj, ...) {
 # @param obj a data.frame to conver
 # @return a ``multi.dataset'' object
 multi.dataset.data.frame <- function (obj, ...) {
-  # Place inside a list
-  make.multi.dataset(list(obj), "")
+  # Place inside a list and label according to the name from the function call
+  make.multi.dataset(list(obj), as.character(substitute(obj)))
 }
 
 # Create a Multiple Dataset Object from a data.frame
@@ -41,8 +41,25 @@ multi.dataset.list <- function (obj, ...) {
     }
   }
 
+  LABELS <- names(obj)
+
+  # If there are no labels, or they are uneven
+  if (is.null(LABELS) || length(LABELS) != length(obj))
+    LABELS <- paste("data-set-", 1:length(obj), sep = "")
+
+  # Otherwise, we have a nice matching of labels, but we might still have some
+  # that are empty
+  else {
+    for (k in 1:length(LABELS)) {
+      lab <- LABELS[k]
+
+      if (is.na(lab) || is.null(lab) || (is.character(lab) && nchar(lab) == 0))
+        LABELS[k] <- paste("data-set-", k, sep = "")
+    }
+  }
+
   # Return object
-  make.multi.dataset(obj, "")
+  make.multi.dataset(obj, LABELS)
 }
 
 # Create a Multiple Dataset Object from a data.frame
