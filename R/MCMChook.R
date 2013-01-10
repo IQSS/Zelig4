@@ -13,10 +13,6 @@
 #' @export
 MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...) {
 
-  print(zelig.call)
-  print(model.call)
-
-  q()
   # Create a new object
   res <- list()
 
@@ -26,7 +22,7 @@ MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...) {
   res$coefficients <- obj
   res$formula <- zelig.call$formula
   res$data <- zelig.call$data
-  res$model <- model.frame(eval(res$formula), data = eval(res$data))
+  # res$model <- model.frame(eval(res$formula), data = eval(res$data))
   res$terms <- attr(res$model, "terms")
   res$call <- model.call
 

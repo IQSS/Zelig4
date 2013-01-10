@@ -83,7 +83,8 @@ poisson.ev <- function (x, param) {
 #' @S3method describe poisson.bayes
 describe.poisson.bayes <- function(...) {
   list(
-       authors = "",
-       text = ""
+       description  = "Bayesian Poisson Regression",
+       authors = c("Ben Goodrich", "Ying Lu"),
+       year = 2013
        )
 }

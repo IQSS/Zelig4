@@ -82,7 +82,8 @@ logit.ev <- function (x, param) {
 #' @S3method describe logit.bayes
 describe.logit.bayes <- function(...) {
   list(
-       authors = "",
-       text = ""
+       authors = c("Ben Goodrich", "Ying Lu"),
+       text = "Bayesian Logistic Regression for Dichotomous Dependent Variables",
+       year = 2013
        )
 }

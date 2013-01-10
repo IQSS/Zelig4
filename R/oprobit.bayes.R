@@ -133,7 +133,8 @@ compute.oprobit.bayes <- function (x, param, labels) {
 #' @S3method describe oprobit.bayes
 describe.oprobit.bayes <- function(...) {
   list(
-       authors = "Skyler Cranmer",
-       text = "Ordinal Probit Regression for Bayesian Models"
+       text = "Bayesian Probit Regression for Dichotomous Dependent Variables",
+       authors = c("Ben Goodrich", "Ying Lu"),
+       year = 2013
        )
 }

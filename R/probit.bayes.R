@@ -41,7 +41,8 @@ qi.probit.bayes <- qi.logit.bayes
 #' @S3method describe probit.bayes
 describe.probit.bayes <- function(...) {
   list(
-       authors = "",
-       text = ""
+       description  = "Bayesian Probit Regression for Dichotomous Dependent Variables",
+       authors = c("Ben Goodrich", "Ying Lu"),
+       year = 2013
        )
 }

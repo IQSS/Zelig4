@@ -98,7 +98,8 @@ compute.mlogit.bayes <- function (obj, x, y, num, param) {
 #' @S3method describe mlogit.bayes
 describe.mlogit.bayes <- function(...) {
   list(
-       authors = "",
-       text = ""
+       authors = c("Ben Goodrich", "Ying Lu"),
+       text = "Bayesian Multinomial Logistic Regression for Dependent Variables with Unordered Categorical Values",
+       year = 2013
        )
 }

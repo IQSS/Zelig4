@@ -184,7 +184,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       zclist$.hook <- get(zclist$.hook, mode='function')
       new.res <- zclist$.hook(new.res, new.call, match.call(), ...)
     }
-    next
 
     # Determine whether this is an S4 object
     old.style.oop <- ! isS4(new.res)
@@ -207,8 +206,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # Add to list of results
     object[[label]] <- obj
   }
-
-  q()
 
   if (missing(by) && is.data.frame(data)) {
     object <- object[[1]]
