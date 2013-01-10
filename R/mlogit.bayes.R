@@ -53,19 +53,17 @@ compute.mlogit.bayes <- function (obj, x, y, num, param) {
   if (is.null(x) || is.na(x) || is.null(param))
     return(list(ev=NA, pv=NA))
 
-  x <- as.matrix(x)
-  # x1 <- as.matrix(x1)
-
-
+  # 
   resp <- model.response(model.frame(obj))
 
   level <- length(table(resp))
-  p <- dim(model.matrix(eval(obj),data=eval(obj$data)))[2]
+  p <- dim(model.matrix(eval(obj),data=obj$data))[2]
   coef <- coef(obj)
-  eta <- array(NA, c(nrow(coef),level, nrow(x)))
+  eta <- array(NA, c(nrow(coef),level, nrow(x$matrix)))
 
 
-  eta[,1,] <- matrix(0, nrow(coef), nrow(x))
+
+  eta[, 1, ] <- matrix(0, nrow(coef), nrow(x$matrix))
 
   for (j in 2:level) {
     ind <- (1:p)*(level-1)-(level-j)
@@ -73,11 +71,11 @@ compute.mlogit.bayes <- function (obj, x, y, num, param) {
   }
 
   eta<-exp(eta)
-  ev <- array(NA, c(nrow(coef), level, nrow(x)))
-  pr <- matrix(NA, nrow(coef), nrow(x))
+  ev <- array(NA, c(nrow(coef), level, nrow(x$matrix)))
+  pr <- matrix(NA, nrow(coef), nrow(x$matrix))
   colnames(ev) <- rep(NA, level)
 
-  for (k in 1:nrow(x)) {
+  for (k in 1:nrow(x$matrix)) {
     for (j in 1:level)
       ev[,j,k] <- eta[,j,k]/rowSums(eta[,,k])
   }
@@ -86,7 +84,7 @@ compute.mlogit.bayes <- function (obj, x, y, num, param) {
     colnames(ev)[j] <- paste("P(Y=", j, ")", sep="")
   }
 
-  for (k in 1:nrow(x)) {             
+  for (k in 1:nrow(x$matrix)) {             
     probs <- as.matrix(ev[,,k])
     temp <- apply(probs, 1, FUN=rmultinom, n=1, size=1)
     temp <- as.matrix(t(temp)%*%(1:nrow(temp)))

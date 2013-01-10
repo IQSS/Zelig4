@@ -11,7 +11,7 @@
 #' @return an object useable by Zelig
 #' @author Olivia Lau, Kosuke Imai, Gary King and Matt Owen
 #' @export
-MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...) {
+MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ..., data = NULL) {
 
   # Create a new object
   res <- list()
@@ -21,8 +21,8 @@ MCMChook <- function (obj, model.call, zelig.call, seed=NULL, ...) {
   # Add the bare necessities for a zelig object
   res$coefficients <- obj
   res$formula <- zelig.call$formula
-  res$data <- zelig.call$data
-  # res$model <- model.frame(eval(res$formula), data = eval(res$data))
+  res$data <- data
+  res$model <- model.frame(eval(res$formula), data = data)
   res$terms <- attr(res$model, "terms")
   res$call <- model.call
 

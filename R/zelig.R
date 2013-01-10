@@ -182,7 +182,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     # Apply first hook if it exists
     if (!is.null(zclist$.hook)) {
       zclist$.hook <- get(zclist$.hook, mode='function')
-      new.res <- zclist$.hook(new.res, new.call, match.call(), ...)
+      new.res <- zclist$.hook(new.res, new.call, match.call(), ..., data = d.f)
     }
 
     # Determine whether this is an S4 object

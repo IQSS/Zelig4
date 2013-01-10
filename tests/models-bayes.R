@@ -14,7 +14,6 @@ z.out <- zelig(
                model = "mlogit.bayes", 
                data = mexico
                )
-
 x.out <- setx(z.out)
 
 s.out <- sim(z.out, x = x.out)
@@ -121,7 +120,7 @@ summary(s.out)
 
 
 
-
+q()
 
 
 
