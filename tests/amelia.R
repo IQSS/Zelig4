@@ -36,9 +36,11 @@ imputed.data
 # Fit statistical model
 
 z <- zelig(y ~ x1 + x2, model = "ls", data = imputed.data)
+x <- setx(z)
+s <- sim(z, x)
 
 #
 
-summary(z)
+summary(s)
 
 # Fin.

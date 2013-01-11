@@ -77,7 +77,7 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   #   data <- multi.dataset(data)
   # 
   # but we want to keep the name of the original data object as our title (sometimes).
-  data <- eval(call("multi.dataset", substitute(data)))
+  divided.data <- eval(call("multi.dataset", substitute(data)))
 
   # 
   Call <- match.call()
@@ -125,8 +125,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
   package.name <- getPackageName(environment(zelig2), FALSE)
 
   # repeat
-  for (key in names(data)) {
-    d.f <- data[[key]]
+  for (key in names(divided.data)) {
+    d.f <- divided.data[[key]]
     label <- key
 
 
@@ -163,8 +163,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
     attach(env)
     attach(d.f)
-
-
 
     tryCatch(
       {

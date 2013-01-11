@@ -14,8 +14,8 @@
 #' 
 #' \tabular{ll}{
 #' Package: \tab Zelig\cr
-#' Version: \tab 4.1-1\cr
-#' Date: \tab 2012-11-09\cr
+#' Version: \tab 4.1-2\cr
+#' Date: \tab 2013-01-11\cr
 #' Depends: \tab R (>= 2.14), boot, MASS, methods, sandwich, survival\cr
 #' Suggests: \tab mvtnorm, Formula \cr
 #' License: \tab GPL version 2 or newer\cr

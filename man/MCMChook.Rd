@@ -2,7 +2,7 @@
 \alias{MCMChook}
 \title{Hook to Clean-up MCMC Objects}
 \usage{
-  MCMChook(obj, model.call, zelig.call, seed = NULL, ...)
+  MCMChook(obj, model.call, zelig.call, seed = NULL, ..., data = NULL)
 }
 \arguments{
   \item{obj}{the fitted model object (in this case a
@@ -15,6 +15,8 @@
   \item{seed}{a seed for the MCMC algorithm}
 
   \item{...}{ignored parameters}
+
+  \item{data}{the data.frame being used to fit the statistical model}
 }
 \value{
   an object useable by Zelig

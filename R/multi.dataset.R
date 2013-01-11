@@ -25,7 +25,8 @@ multi.dataset <- function (obj, ...) {
 # @return a ``multi.dataset'' object
 multi.dataset.data.frame <- function (obj, ...) {
   # Place inside a list and label according to the name from the function call
-  make.multi.dataset(list(obj), as.character(substitute(obj)))
+  label <- as.character(as.expression(substitute(obj)))
+  make.multi.dataset(list(obj), label)
 }
 
 # Create a Multiple Dataset Object from a data.frame

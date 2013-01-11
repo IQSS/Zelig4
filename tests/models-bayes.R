@@ -109,21 +109,6 @@ s.out <- sim(z.out, x.out, x1.out)
 
 summary(s.out)
 
-# YOU NEVER WAIT SO LONG!
-
-
-
-
-
-
-
-
-
-
-q()
-
-
-
 
 z.out <- zelig(cbind(Agr,Exam,Educ,Cath,InfMort)~NULL, 
                model="factor.bayes",
