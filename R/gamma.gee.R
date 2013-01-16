@@ -13,7 +13,7 @@
 #' @param data a data.frame 
 #' @return a list specifying the call to the external model
 #' @export
-zelig2gamma.gee <- function (formula, id, robust, ..., R, corstr = "independence", data) {
+zelig2gamma.gee <- function (formula, id, robust = FALSE, ..., R = NULL, corstr = "independence", data) {
 
   loadDependencies("gee")
 
@@ -28,11 +28,10 @@ zelig2gamma.gee <- function (formula, id, robust, ..., R, corstr = "independence
     id <- sort(id)
   }
 
-  list(
-       .function = "gee",
-       .hook = "robust.hook",
-       .post = "clean.up.gamma.gee",
+  id <- 1
 
+  z(
+       gee,
        formula = formula,
        id = id,
        corstr = corstr,

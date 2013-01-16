@@ -15,8 +15,9 @@ z <- function (.function, ...) {
 
   # Construct the object
   s <- list(
-            call = .call,
-            env = .parent
+            "function" = .function,
+            "call" = .call,
+            "env" = .parent
             )
 
   # Set attributes

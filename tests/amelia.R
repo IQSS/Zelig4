@@ -1,7 +1,6 @@
 library(Zelig)
 library(Amelia)
 
-
 # Create data set
 
 beta <- c(.3, -10)

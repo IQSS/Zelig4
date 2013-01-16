@@ -17,6 +17,7 @@ z.out <- zelig(duration ~ fract + numst2,
                )
 
 summary(z.out)
+q()
 
 #  Setting the explanatory variables at their default values
 #  (mode for factor variables and mean for non-factor variables),

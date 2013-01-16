@@ -54,7 +54,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
   # Split data.frame
   if (!missing(by)) {
-
     if (length(by) > 1) {
       warning("by cannot have length greater than 1")
       by <- NULL
@@ -136,6 +135,19 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
     # print(formals(zelig2))
     zclist <- zelig2(formula, ..., data=d.f)
+    new.call <- zclist$call
+    env <- zclist$env
+
+    wrapped <- function (new.call, env) {
+      print(new.call)
+      print(ls(env))
+
+
+    }
+
+    wrapped(new.call, env)
+
+    q()
 
     if (!inherits(zclist, "z")) {
       # list of parameters to be ignored by external models IF not in
@@ -156,26 +168,24 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     else if (inherits(zclist, "z")) {
       new.call <- zclist$call
       env <- zclist$env
+
+      print(new.call)
+      q()
     }
     else {
       warning("zelig2 function is returning an invalid type of object")
     }
 
-    attach(env)
-    attach(d.f)
 
     tryCatch(
       {
-        new.res <- eval(new.call, env)
+        new.res <- eval.in.bubble(new.call, env)
       },
       error = function (e) {
         warning("There was an error fitting this statistical model.")
         new.res <- NULL
       }
       )
-
-    detach(d.f)
-    detach(env)
 
     # Apply first hook if it exists
     if (!is.null(zclist$.hook)) {
@@ -313,4 +323,7 @@ makeZeligObject <- function (object,
 
   # Return 
   self
+}
+
+eval.in.bubble <- function (c, e) {
 }
