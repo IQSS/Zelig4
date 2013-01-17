@@ -142,6 +142,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       print(new.call)
       print(ls(env))
 
+      attr(new.call, "function"))
+
 
     }
 
@@ -326,4 +328,5 @@ makeZeligObject <- function (object,
 }
 
 eval.in.bubble <- function (c, e) {
+  c$function
 }
