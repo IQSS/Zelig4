@@ -141,15 +141,8 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     wrapped <- function (new.call, env) {
       print(new.call)
       print(ls(env))
-
-      attr(new.call, "function"))
-
-
+      print(attr(new.call, "function"))
     }
-
-    wrapped(new.call, env)
-
-    q()
 
     if (!inherits(zclist, "z")) {
       # list of parameters to be ignored by external models IF not in
@@ -170,9 +163,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     else if (inherits(zclist, "z")) {
       new.call <- zclist$call
       env <- zclist$env
-
-      print(new.call)
-      q()
     }
     else {
       warning("zelig2 function is returning an invalid type of object")
@@ -181,10 +171,12 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
 
     tryCatch(
       {
-        new.res <- eval.in.bubble(new.call, env)
+        print(new.call)
+        new.res <- eval(new.call)
       },
       error = function (e) {
         warning("There was an error fitting this statistical model.")
+        print(e)
         new.res <- NULL
       }
       )
@@ -328,5 +320,4 @@ makeZeligObject <- function (object,
 }
 
 eval.in.bubble <- function (c, e) {
-  c$function
 }
