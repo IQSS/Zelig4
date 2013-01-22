@@ -28,27 +28,26 @@ zelig2gamma.gee <- function (formula, id, robust = FALSE, ..., R = NULL, corstr 
     id <- sort(id)
   }
 
-  id <- 1
-
   z(
-       gee,
-       formula = formula,
-       id = id,
-       corstr = corstr,
-       family  = Gamma,
-       data = data,
-       ...
-       )
+    gee,
+    formula = formula,
+    id = id,
+    corstr = corstr,
+    family  = Gamma,
+    data = data,
+    ...
+    )
 }
 
 #' @S3method param gamma.gee
 param.gamma.gee <- function(obj, num=1000, ...) {
 
   # Extract means to compute maximum likelihood
-  mu <- coef(obj)
+  mu <- coef(.fitted)
 
   # Extract covariance matrix to compute maximum likelihood
-  Sigma <- vcov(obj)
+  Sigma <- .fitted$naive.variance
+
 
   #
   list(

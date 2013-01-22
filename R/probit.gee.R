@@ -42,7 +42,7 @@ zelig2probit.gee <- function (formula, id, robust, ..., R, corstr = "independenc
 }
 
 #' @S3method param probit.gee
-param.probit.gee <- param.gamma.gee <- function(obj, num=1000, ...) {
+param.probit.gee <- function(obj, num=1000, ...) {
 
   # Extract means to compute maximum likelihood
   mu <- coef(obj)

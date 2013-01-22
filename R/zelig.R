@@ -138,12 +138,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     new.call <- zclist$call
     env <- zclist$env
 
-    wrapped <- function (new.call, env) {
-      print(new.call)
-      print(ls(env))
-      print(attr(new.call, "function"))
-    }
-
     if (!inherits(zclist, "z")) {
       # list of parameters to be ignored by external models IF not in
       # zelig2-return value
@@ -155,24 +149,27 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       assign("zclist", zclist, zelig.env)
       assign("remove", remove, zelig.env)
 
-
       res.call <- zelig.call(Call, zclist, remove)
       new.call <- res.call$call
       env <- res.call$envir
     }
     else if (inherits(zclist, "z")) {
-      new.call <- zclist$call
-      env <- zclist$env
+      new.call <- zclist$literal.call
+      mock.call <- zclist$call
+      env <- NULL
     }
     else {
       warning("zelig2 function is returning an invalid type of object")
     }
 
-
     tryCatch(
       {
-        print(new.call)
         new.res <- eval(new.call)
+
+        if (isS4(new.res))
+           new.res@call <-mock.call
+        else
+           new.res$call <-mock.call
       },
       error = function (e) {
         warning("There was an error fitting this statistical model.")

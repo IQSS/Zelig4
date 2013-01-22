@@ -11,13 +11,21 @@
 z <- function (.function, ...) {
   # Construct the function call
   .call <- as.call(as.list(match.call())[-1])
+  .function.name <- as.character(.call[[1]])
   .parent <- parent.frame()
+  .dots <- list(...)
+
+  s <- append(list(as.name(.function.name)), list(...))
+  literal.call <- as.call(s)
 
   # Construct the object
   s <- list(
             "function" = .function,
             "call" = .call,
-            "env" = .parent
+            "env" = .parent,
+            "function.name" = .function.name,
+            "dots" = .dots,
+            "literal.call" = literal.call
             )
 
   # Set attributes
