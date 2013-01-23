@@ -173,7 +173,9 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     new.res <- NULL
 
     tryCatch(
-      { new.res <- eval(new.call) },
+      {
+        new.res <- eval(new.call)
+      },
       error = function (e) {
         warning("There was an error fitting this statistical model.")
         print(e)
@@ -224,12 +226,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     attr(object, 'state') <- state
     class(object) <- c(model, paste(model, 'mi', sep='-'), "MI")
   }
-
-  # This used to be important, but we have API work-arounds now
-  # methods.env <- if(old.style.oop)
-  #   .RegisterMethodsS3(c("terms", register(obj)))
-  # else
-  #   .RegisterMethodsS4(c("terms", register(obj)))
 
   # Update the shared environment
   assign('old-formula', formula, state)
@@ -325,7 +321,4 @@ makeZeligObject <- function (object,
 
   # Return 
   self
-}
-
-eval.in.bubble <- function (c, e) {
 }

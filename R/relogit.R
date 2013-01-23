@@ -153,13 +153,14 @@ zelig2relogit <- function(
   environment(form) <- environment()
 
   # Return the obvious answer
-  list(
-       .function = "relogit",
-       formula = form,
-       bias.correct = bias.correct,
-       case.control = case.control,
-       tau = tau
-       )
+  z(
+    .function = relogit,
+    formula = form,
+    bias.correct = bias.correct,
+    case.control = case.control,
+    tau = tau,
+    data = data
+    )
 }
 #' Estimate Parameters for the ``relogit'' Zelig Mdoel
 #'

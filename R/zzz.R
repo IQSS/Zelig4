@@ -39,10 +39,6 @@
 +----------------------------------------------------------------+
 
 ")
-
-  # Set class globally when the package is attached
-  # setClass("zelig", representation(), where = asNamespace("Zelig"))
-  # setClass("MI", representation(), where = asNamespace("Zelig"))
 }
 
 # @lis: list of characters
@@ -521,20 +517,6 @@ list.zelig.models <- function(with.namespace=TRUE) {
 }
 
 
-#' Attach Environment and Evaluate Expression
-#'
-#' Run in an insulated environment
-#' @usage eval.in(...)
-#' @param ... Two parameters: The first is an expression to evaluate, and the 
-#' second the environment to evaluate the expression in
-#' @return evaluation of ``..1'' within the environment ``..2''
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-eval.in <- .call <- function (...) {
-  attach(..2)
-  res <- suppressMessages((..1))
-  detach(..2)
-  res
-}
 .GetGenerics <- function(...) UseMethod(".GetGenerics")
 
 # needs work
@@ -627,42 +609,6 @@ eval.in <- .call <- function (...) {
   }
 }
 
-
-# @object: a zelig object
-# @lis: a character-vector of names to register for zelig objects
-.RegisterMethods <- function(lis)
-  .RegisterMethodsS3(lis)
-
-
-
-# @lis: 
-# return: 
-.RegisterMethodsS3 <- function(lis) {
-  # error-catching & handling
-  saved.environment <- new.env()
-
-  # iterate through the list
-  for (meth in lis) {
-    fname <- paste(meth, "zelig", sep=".")
-    # assign the relevant function in the
-    # correct environment or namespace
-    assign(fname, .NewZeligGenericS3(meth), envir = asNamespace("Zelig"))
-
-    # assign MI version
-    fname <- paste(meth, "MI", sep=".")
-    assign(fname, .NewZeligMIGenericS3(meth), asNamespace("Zelig"))
-  }
-
-  # return
-  invisible(saved.environment)
-}
-
-# @f: a character-string specifying the function name
-# @class: a character-string specifying the class name
-.existsS3method <- function(f, class, ...)
-  tryCatch(is.function(getS3method(f, class, ...)),
-           error=function (e) FALSE
-           )
 # numerical_functions.R
 # ---------------------
 # contents:
