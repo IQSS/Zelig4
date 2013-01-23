@@ -28,7 +28,7 @@ zelig2factor.bayes <- function (
        mcmc   = mcmc,
        verbose= verbose,
        data   = data,
-
+       factors = factors,
        ...
        )
 }

@@ -8,12 +8,20 @@
 #' @param ... a set of parameters to be evaluated symbolically
 #' @return a ``z'' object which specifies how to evaluate the fitted model
 #' @export
-z <- function (.function, ...) {
+z <- function (.function, ..., .hook = NULL) {
   # Construct the function call
   .call <- as.call(as.list(match.call())[-1])
   .function.name <- as.character(.call[[1]])
   .parent <- parent.frame()
   .dots <- list(...)
+
+  # Ensure that hook works appropriately
+  if(!missing(.hook)) {
+    if (!is.function(.hook)) {
+      warning(".hook parameter must be a function. ignoring.")
+      .hook <- NULL
+    }
+  }
 
   s <- append(list(as.name(.function.name)), list(...))
   literal.call <- as.call(s)
@@ -21,10 +29,14 @@ z <- function (.function, ...) {
   # Construct the object
   s <- list(
             "function" = .function,
+            "hook" = .hook,
+
             "call" = .call,
             "env" = .parent,
+
             "function.name" = .function.name,
             "dots" = .dots,
+
             "literal.call" = literal.call
             )
 

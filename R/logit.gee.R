@@ -14,7 +14,7 @@
 #' @export zelig2logit.gee
 #' @name logit.gee
 #' @aliases zelig2logit.gee
-zelig2logit.gee <- function (formula, id, robust, ..., R, corstr = "independence", data) {
+zelig2logit.gee <- function (formula, id, robust, ..., R = NULL, corstr = "independence", data) {
 
   loadDependencies("gee")
 
@@ -29,17 +29,18 @@ zelig2logit.gee <- function (formula, id, robust, ..., R, corstr = "independence
     id <- sort(id)
   }
 
-  list(
-       .function = "gee",
-       .hook = "robust.hook",
+  z(
+    .function = gee,
+    .hook = robust.gee.hook,
 
-       formula = formula,
-       id = id,
-       corstr = corstr,
-       family  = binomial(link="logit"),
-       data = data,
-       ...
-       )
+    formula = formula,
+    id = id,
+    corstr = corstr,
+    family  = binomial(link="logit"),
+    data = data,
+    R = R,
+    ...
+    )
 }
 
 

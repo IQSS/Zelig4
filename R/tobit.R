@@ -33,15 +33,15 @@ zelig2tobit <- function (
   formula <- make.surv(formula, below, above)
   formula <- cluster.formula(formula, cluster)
 
-  list(
-       .function = "survreg",
+  z(
+    .function = "survreg",
 
-       formula = formula,
-       dist = "gaussian",
-       data = data,
-       robust = robust,
-       ...
-       )
+    formula = formula,
+    dist = "gaussian",
+    data = data,
+    robust = robust,
+    ...
+    )
 }
 
 

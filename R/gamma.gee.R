@@ -29,7 +29,9 @@ zelig2gamma.gee <- function (formula, id, robust = FALSE, ..., R = NULL, corstr 
   }
 
   z(
-    gee,
+    .function = gee,
+    .hook = robust.gee.hook,
+
     formula = formula,
     id = id,
     corstr = corstr,

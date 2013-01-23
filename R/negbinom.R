@@ -8,14 +8,14 @@
 #' @export
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}
 zelig2negbinom <- function(formula, weights=NULL, ..., data)
-  list(
-       .function = "glm.nb",
-       .hook = "robust.glm.hook",
+  z(
+    .function = "glm.nb",
+    .hook = "robust.glm.hook",
 
-       weights = weights,
-       formula = formula,
-       data    = data
-       )
+    weights = weights,
+    formula = formula,
+    data    = data
+    )
 #' Param Method for the 'negbinom' Zelig Model
 #' @note This method is used by the 'negbinom' Zelig model
 #' @usage \method{param}{negbinom}(obj, num=1000, ...)

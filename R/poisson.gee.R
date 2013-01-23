@@ -13,7 +13,7 @@
 #' @param data a data.frame 
 #' @return a list specifying the call to the external model
 #' @export
-zelig2poisson.gee <- function (formula, id, robust, ..., R, corstr = "independence", data) {
+zelig2poisson.gee <- function (formula, id, robust, ..., R = NULL, corstr = "independence", data) {
 
   loadDependencies("gee")
 
@@ -28,17 +28,18 @@ zelig2poisson.gee <- function (formula, id, robust, ..., R, corstr = "independen
     id <- sort(id)
   }
 
-  list(
-       .function = "gee",
-       .hook = "robust.hook",
+  z(
+    .function = gee,
+    .hook = robust.gee.hook,
 
-       formula = formula,
-       id = id,
-       corstr = corstr,
-       family  = poisson(),
-       data = data,
-       ...
-       )
+    formula = formula,
+    id = id,
+    corstr = corstr,
+    family  = poisson(),
+    data = data,
+    R = R,
+    ...
+    )
 }
 
 #' @S3method param poisson.gee

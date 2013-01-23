@@ -133,25 +133,32 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
     if (is.null(d.f))
       next
 
-    # print(formals(zelig2))
     zclist <- zelig2(formula, ..., data=d.f)
+
     new.call <- zclist$call
     env <- zclist$env
 
     if (!inherits(zclist, "z")) {
-      # list of parameters to be ignored by external models IF not in
-      # zelig2-return value
-      remove <- c("model", "by", "cite", "...")
+      if (!is.list(zclist))
+        warning("invalid object returned from `zelig2` method")
 
-      # construct the call object
-      zelig.call <- call("zelig.call", as.name("zclist"), as.name("remove"))
-      zelig.env <- new.env()
-      assign("zclist", zclist, zelig.env)
-      assign("remove", remove, zelig.env)
+      else {
+        wl <- zclist
 
-      res.call <- zelig.call(Call, zclist, remove)
-      new.call <- res.call$call
-      env <- res.call$envir
+        # reserved words taken from the zelig2 method
+        .func <- as.name(wl$.function)
+        .hook <- wl$.hook
+
+        # remove the reserved words
+        wl$.function <- NULL
+        wl$.hook <- NULL
+        wl$.post <- NULL
+        wl$.model.matrix <- NULL
+
+        new.call <- as.call(append(list(.func), wl))
+        mock.call <- match.call()
+        env <- NULL
+      }
     }
     else if (inherits(zclist, "z")) {
       new.call <- zclist$literal.call
@@ -162,19 +169,14 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       warning("zelig2 function is returning an invalid type of object")
     }
 
-    tryCatch(
-      {
-        new.res <- eval(new.call)
+    # Default value for result object
+    new.res <- NULL
 
-        if (isS4(new.res))
-           new.res@call <-mock.call
-        else
-           new.res$call <-mock.call
-      },
+    tryCatch(
+      { new.res <- eval(new.call) },
       error = function (e) {
         warning("There was an error fitting this statistical model.")
         print(e)
-        new.res <- NULL
       }
       )
 
@@ -183,10 +185,19 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       zclist$.hook <- get(zclist$.hook, mode='function')
       new.res <- zclist$.hook(new.res, new.call, match.call(), ..., data = d.f)
     }
-
+    else if (!is.null(zclist$hook) && is.function(zclist$hook)) {
+      message("!!!!!!")
+      new.res <- zclist$hook(new.res, new.call, match.call(), ..., data = d.f)
+    }
     # Determine whether this is an S4 object
     old.style.oop <- ! isS4(new.res)
 
+    if (exists("mock.call")) {
+      if (isS4(new.res))
+        new.res@call <- mock.call
+      else
+        new.res$call <- mock.call
+    }
 
     # This is the only "obj" assignment that matters
     obj <- makeZeligObject(new.res,

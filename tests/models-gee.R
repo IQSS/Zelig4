@@ -34,12 +34,6 @@ plot(s.out)
 
 
 
-
-
-
-
-
-
 ##  Attaching the sample turnout dataset:
 
 turnout$cluster <- rep(c(1:200),10)
@@ -68,7 +62,6 @@ s.out2 <- sim(z.out1, x = x.high, x1 = x.low)
 summary(s.out2)
 plot(s.out2)
 
-q()
 #####  Example 3:  Example with Fixed Correlation Structure
 
 ##  User-defined correlation structure
@@ -78,56 +71,13 @@ diag(corr.mat) <- 1
 ##  Generating empirical estimates:
 z.out2 <- zelig(vote ~ race + educate, model = "logit.gee", id = "cluster", 
 	data = sorted.turnout, robust = T, corstr = "fixed", R=corr.mat)
+
 ##  Viewing the regression output:
 summary(z.out2)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# NORMAL.GEE
+# NORMAL.GEE
+# NORMAL.GEE
 
 z.out <- zelig(unem ~ gdp + capmob + trade, model = "normal.gee", id = "country", data = macro, robust=TRUE, corstr="AR-M", Mv=1)
 summary(z.out)

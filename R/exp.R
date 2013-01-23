@@ -19,15 +19,14 @@ zelig2exp <- function (formula, ..., robust = FALSE, cluster = NULL, data) {
     formula <- cluster.formula(formula, cluster)
 
   # Return
-  list(
-       .function = "survreg",
-
-       formula = formula,
-       dist = "exponential",
-       robust = robust,
-       data = data,
-       ...
-       )
+  z(
+    .function = "survreg",
+    formula = formula,
+    dist = "exponential",
+    robust = robust,
+    data = data,
+    ...
+    )
 }
 
 
