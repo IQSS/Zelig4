@@ -41,113 +41,8 @@
 ")
 }
 
-# @lis: list of characters
-.RegisterMethodsS4 <- function(lis) {
-  # create a new environment
-  saved.env <- new.env()
-
-  #
-  for (fname in lis) {
-    # Register Method S4
-    # not: Register Methods S4
-    # this is not recursive!
-    .RegisterMethodS4(fname)
-  }
-
-  saved.env
-}
-
-
-# @name: character-string
-.RegisterMethodS4 <- function(name) {
-  res <- try(setMethod(name, signature="zelig",
-                       # where = .GlobalEnv,
-                       definition=.NewZeligGenericS4(name)
-                       ),
-             silent=TRUE
-             )
-
-  res <- try(setMethod(name, signature="MI",
-                       # where = .GlobalEnv,
-                       definition=.NewZeligMIGenericS4(name)
-                       ),
-             silent=TRUE
-             )
-
-  if (inherits(res, "try-error")) {
-    FALSE
-  }
-
-  else {
-    res
-  }
-}
-
-
-# @name: name of the generic
-# return: anonymous function
-# **************************
-# note that the following function changes the
-# formal arguments to that of the original
-# generic function.  this is to suppress most
-# warnings that crop up while setting an S4 method
-.NewZeligGenericS4 <- function(name) {
-  # get generic
-  fdef <- getGeneric(name)
-
-  #
-  fformals <- formals(fdef)
-  stored.name <- name
-
-  # 
-  f <- function(object, ...) {
-    # get list of parameters,
-    # ommitting function name
-    params <- as.list(sys.call())[-1]
-
-    # get the result object from the zelig object
-    params[[1]] <- eval.parent(params[[1]])$result
-
-    # call the function on the fitted model
-    do.call(name, params)
-  }
-
-  # assign formals, so that they match perfectly
-  formals(f) <- fformals
-
-  # return
-  f
-}
-
-#
-#
-.NewZeligMIGenericS4 <- function(name) {
-  # get generic
-  fdef <- getGeneric(name)
-
-  #
-  fformals <- formals(fdef)
-  stored.name <- name
-
-  # define function
-  f <- function(object, ...) {
-    params <- as.list(sys.call())
-    params[[1]] <- stored.name
-    params[[2]] <- eval.parent(params[[2]])$result
-
-    #
-    do.call(Map, params)
-  }
-
-  formals(f) <- fformals
-
-  # return
-  f
-}
-
-
-
-# @object: a zelig object
+# @param object a zelig object
+# @param envir an environment
 .GetGenericsS4 <- function(object, envir=parent.frame()) {
   if (inherits(object$result, "list")) {
     .ListS4Generics(classes=class(object$result[[1]]), env=envir)
@@ -415,66 +310,6 @@ list.zelig.models <- function(with.namespace=TRUE) {
     # with just a list of models
     names(functions)
 }
-#' Store Named Values in an Newly Created Environment
-#' @note This function is exclusively used internally by Zelig
-#' @param params a list of parameters to create a Zelig Call
-#' @return a list containing:
-#           * parameters - a list of symbols
-#           * envir - an environment where variables
-#             contained in envir exist
-.store.values <- function(params) {
-  #
-  e <- new.env()
-
-  #
-  named.params <- list()
-  names <- names(params)
-
-  #
-  for (key in names) {
-
-    # the following if-statements are meant to prevent the storage of
-    # small call-function readable data-types. That is, these things
-    # are very easily printable and have no need to be tucked away
-    if (inherits(params[[key]], 'formula')) {
-      named.params[[key]] <- params[[key]]
-      next
-    }
-
-    if (is.character(params[[key]])) {
-      named.params[[key]] <- params[[key]]
-      next
-    }
-
-    if (is.numeric(params[[key]])) {
-      named.params[[key]] <- params[[key]]
-      next
-    }
-
-    if (inherits(params[[key]], "literal")) {
-      named.params[[key]] <- params[[key]]$value
-      next
-    }
-
-
-    # Everything below here gets processed
-    # in the default manner
-    # .............
-    
-    # prefix keyname if there is an overlap
-    keyname <- .prefix(key, envir=e, prefix="stored")
-
-    # store variable `keyname` in zelig environment
-    assign(keyname, params[[key]], envir=e)
-
-    # create a symbolic list
-    named.params[[key]] <- as.name(keyname)
-  }
-
-  # return list
-  list(params=named.params, envir=e)
-}
-
 
 #' Append a Prefix to a Character String
 #' @note This function is exclusively used internally by Zelig
@@ -554,68 +389,12 @@ list.zelig.models <- function(with.namespace=TRUE) {
   }
 
   # final list
-  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register",
-             'qi', 'summary')
+  flist <- c("zelig", "param", "as.parameters", "sim", "setx", "register", 'qi', 'summary')
   meth.list <- sort(unique(c(meth.list,
                              names(get(".knownS3Generics")))))
 
   meth.list[ ! meth.list %in% flist ]
 }
-
-
-# @name:  name of generic function
-# return: a function that calls the given generic 
-#         function on the result object
-.NewZeligGenericS3 <- function(name) {
-  # store name in this environment
-  stored.name <- name
-
-  # return function
-  function (...) {
-    # get list of parameters,
-    # omitting function name
-    params <- as.list(match.call())[-1]
-
-    # get the result object from the zelig object
-    params[[1]] <- ..1$result
-
-    #attach(..1$envir)
-    # call function on the fitted model
-    eval.in(do.call(stored.name, params), ..1$envir)
-    #detach(..1$envir)
-  }
-}
-
-
-.NewZeligMIGenericS3 <- function(name) {
-  # store name in this environment
-  stored.name <- name
-
-  # return function
-  function (...) {
-    # get list of parameters
-    params <- as.list(match.call())
-
-    # pass stored name as parameter
-    # so that Map applies this to ...
-    params[[1]] <- stored.name
-
-    # get the result object from the zelig object
-    params[[2]] <- ..1$result
-
-
-    # call function on the fitted model
-    do.call(Map, params)
-  }
-}
-
-# numerical_functions.R
-# ---------------------
-# contents:
-#  * .nderiv
-#  * .nr
-#  * .NumInverse
-
 
 # Numerical Derivative
 #

@@ -34,4 +34,4 @@ NULL
 # SUPER SECRET VARIABLES...
 # These squelch "R CMD CHECK" issues for dynamically (though constantly added)
 # local variables to the "bootstrap", "param" and "qi" functions.
-.fitted <- .object <- NULL
+.call <- .fitted <- .object <- NULL

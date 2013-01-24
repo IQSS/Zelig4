@@ -1,8 +1,8 @@
-\name{robust.hook}
-\alias{robust.hook}
+\name{robust.gee.hook}
+\alias{robust.gee.hook}
 \title{Classify Fitted Object as Naive or Robust}
 \usage{
-  robust.hook(obj, Zall, Call, robust, ...)
+  robust.gee.hook(obj, Zall, Call, robust, ...)
 }
 \arguments{
   \item{obj}{a \code{zelig} object}

@@ -2,13 +2,16 @@
 \alias{z}
 \title{Return value for a zelig2-function}
 \usage{
-  z(.function, ...)
+  z(.function, ..., .hook = NULL)
 }
 \arguments{
   \item{.function}{a function}
 
   \item{...}{a set of parameters to be evaluated
   symbolically}
+
+  \item{.hook}{a function to be applied after the external, model-fitting
+  function is called}
 }
 \value{
   a ``z'' object which specifies how to evaluate the fitted
