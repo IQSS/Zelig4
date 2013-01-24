@@ -188,7 +188,6 @@ zelig <- function (formula, model, data, ..., by=NULL, cite=T) {
       new.res <- zclist$.hook(new.res, new.call, match.call(), ..., data = d.f)
     }
     else if (!is.null(zclist$hook) && is.function(zclist$hook)) {
-      message("!!!!!!")
       new.res <- zclist$hook(new.res, new.call, match.call(), ..., data = d.f)
     }
     # Determine whether this is an S4 object
