@@ -39,9 +39,7 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
     NULL
 
   # Fit the model
-  attach(.env)
   fit <- eval(jeez)
-  detach(.env)
 
   # If "bootstrapfn" is unspecified, then we try to search its appropriate value
   # down
