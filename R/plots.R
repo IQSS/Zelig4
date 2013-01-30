@@ -138,6 +138,10 @@ plot.MI.sim <- function(...) {
 #' across all the chosen values with smallest nonzero variance
 #' @param ... Parameters to be passed to the `truehist' function which is 
 #' implicitly called for numeric simulations
+#' @param main a character-string specifying the main heading of the plot
+#' @param sub a character-string specifying the sub heading of the plot
+#' @param xlab a character-string specifying the label for the x-axis
+#' @param ylab a character-string specifying the label for the y-axis
 #' @param legcol ``legend color'', an valid color used for plotting the line
 #' colors in the legend
 #' @param col a valid vector of colors of at least length 3 to use to color the
@@ -152,7 +156,7 @@ plot.MI.sim <- function(...) {
 #' @author James Honaker, adapted by Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export plot.ci
 #' @usage \method{plot}{ci}(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL)
-plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL) {
+plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL) {
 
   if (! "pooled.sim" %in% class(x)) {
     something <- list(x=x)
@@ -201,20 +205,22 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1,
   }
 
 
-  ## Set up defaults
-
-  ci.upper<-function(x,alpha){
+  # Define functions to compute confidence intervals
+  ci.upper <- function (x, alpha) {
     pos <- max(round((1-alpha)*length(x)), 1)
     return(sort(x)[pos])
   }
-  ci.lower<-function(x,alpha){
+
+  ci.lower <- function (x, alpha) {
     pos<-max(round(alpha*length(x)), 1)
     return(sort(x)[pos])
   }
 
-
+  #
   k<-ncol(ev)
   n<-nrow(ev)
+
+  #
   if(is.null(col)){
     myblue1<-rgb( 100, 149, 237, alpha=50, maxColorValue=255)
     myblue2<-rgb( 152, 245, 255, alpha=50, maxColorValue=255)
@@ -283,14 +289,30 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1,
     history <- rbind(left, v, right)
   }
 
-  all.xlim<-c(min(history[,1]),max(history[,1]))
-  all.ylim<-c(min(history[,-1]),max(history[,-1]))
+  # Specify x-axis length
+  all.xlim <- if (is.null(xlim))
+    c(min(history[, 1]),max(history[, 1]))
+  else
+    xlim
+
+  # Specify y-axis length
+  all.ylim <-if (is.null(ylim))
+    c(min(history[, -1]), max(history[, -1]))
+  else
+    ylim
+
+  # Define xlabel
+  if (is.null(xlab))
+    xlab <- paste("Range of",xname)
+
+  if (is.null(ylab))
+    ylab <- "Expected Values: E(Y|X)"
 
   ## This is the plot
 
   par(bty="n")
 
-  plot(x=history[,1],y=history[,2],type="l",xlim=all.xlim,ylim=all.ylim,xlab=paste("Range of",xname),ylab="Expected Values: E(Y|X)")
+  plot(x=history[, 1], y=history[, 2], type="l", xlim=all.xlim, ylim=all.ylim, main = main, sub = sub, xlab=xlab, ylab=ylab)
 
   polygon(c(history[,1],history[k:1,1]),c(history[,5],history[k:1,6]),col=col[2],border="gray90")
   polygon(c(history[,1],history[k:1,1]),c(history[,3],history[k:1,4]),col=col[1],border="gray60")
