@@ -2,8 +2,7 @@
 \alias{plot.pooled.sim}
 \title{Method for plotting pooled simulations by confidence intervals}
 \usage{
-  \method{plot}{pooled.sim}(x, qi="ev", var=NULL, ...,
-    legcol="gray20", col=NULL, leg=1, legpos=NULL)
+  \method{plot}{pooled.sim}(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL)
 }
 \arguments{
   \item{x}{A `sim' object}
@@ -18,6 +17,18 @@
   \item{...}{Parameters to be passed to the `truehist'
   function which is implicitly called for numeric
   simulations}
+
+  \item{main}{A character-string, specifying the main title of the plot}
+
+  \item{sub}{A character-string, specifying the sub-title of the plot}
+
+  \item{xlab}{A character-string, specifying the label for the x-axis}
+
+  \item{ylab}{A character-string, specifying the label for the y-axis}
+
+  \item{xlim}{A vector of length 2, specifying the left-most and right-most values for the plot}
+
+  \item{ylim}{A vector of length 2, specifying the bottom-most and top-most values for the plot}
 
   \item{legcol}{``legend color'', an valid color used for
   plotting the line colors in the legend}

@@ -2,14 +2,28 @@ library(Zelig)
 
 data(turnout)
 
+par(mfrow=c(2, 2))
+
 z <- zelig(vote ~ income + educate, model="logit", data=turnout)
-x <- setx(z, educate=2:23)
+x <- setx(z, educate=-5:5)
 s <- sim(z, x)
 
 plot.ci(s, var="educate")
 
 z <- zelig(vote ~ income + educate, model="logit", data=turnout)
-x <- setx(z, educate=12)
+x <- setx(z, educate=0:5)
+s <- sim(z, x)
+
+plot.ci(s, var="educate")
+
+z <- zelig(vote ~ income + educate, model="logit", data=turnout)
+x <- setx(z, educate=-5:5)
+s <- sim(z, x)
+
+plot.ci(s, var="educate", ylim = c(-2, 1))
+
+z <- zelig(vote ~ income + educate, model="logit", data=turnout)
+x <- setx(z, educate=-5:5)
 s <- sim(z, x)
 
 plot.ci(s, var="educate")
