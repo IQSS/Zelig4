@@ -310,10 +310,6 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
 
   ## This is the plot
 
-  message("LIMITS <<<")
-  print(xlim)
-  print(ylim)
-  message(">>>")
   par(bty="n")
 
   plot(x=history[, 1], y=history[, 2], type="l", xlim=all.xlim, ylim=all.ylim, main = main, sub = sub, xlab=xlab, ylab=ylab)

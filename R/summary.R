@@ -297,3 +297,63 @@ summary.setx <- function (object, ...) {
     class = "summary.setx"
     )
 }
+
+#' Compute Summary of Multiply Imputed Models Using Rubin's Rule
+#' Returns a summary object of a Zelig object, having the values computed using
+#' Rubin's rule
+#' @param object
+#' @param subset An integer vector specifying which data sets to group and
+#' summarize
+#' @param ... ignored parameters
+summary.MI <- function (object, subset, ...) {
+
+  if (length(object) == 0)
+    stop('Invalid input for "subset"')
+
+  else if (length(object) == 1)
+    return(summary(object[[1]]))
+
+  #
+  getcoef <- function(x) {
+    # Get the result from the Zelig object
+    obj <- x$result
+
+    # S4
+    if (!isS4(obj))
+      coef(obj)
+
+    else if ("coef3" %in% slotNames(obj))
+      obj@coef3
+
+    else
+      obj@coef
+  }
+
+
+  #
+  res <- list()
+
+  # Get indices
+  subset <- if (is.null(subset))
+    1:length(object)
+  else
+    c(subset)
+
+  # Compute the summary of all objects
+  for (k in subset)
+    res[[k]] <- summary(object[[k]])
+
+  # Answer
+  ans <- list()
+  ans$zelig <- object[[1]]$name
+  ans$call <- object[[1]]$call
+  ans$all <- res
+
+  #
+  coef1 <- se1 <- NULL
+
+  for (k in subset) {
+  }
+
+
+}
