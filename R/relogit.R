@@ -368,3 +368,12 @@ describe.relogit <- function(...) {
        text = "Rare Events Logistic Regression for Dichotomous Dependent Variables"
        )
 }
+
+# Return Names of Relogit Model
+#
+names.relogit <- function(x){
+  res <- list(default=names(unclass(x)),
+            estimate = names(x$lower.estimate), tau = x$tau)
+  class(res) <- "names.relogit"
+  res
+}
