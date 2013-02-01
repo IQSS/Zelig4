@@ -7,6 +7,8 @@
 \arguments{
   \item{object}{a set of fitted statistical models}
 
+  \item{subset}{an integer vector, specifying the indices of the data.frames to be used in the subset}
+
   \item{...}{parameters to forward}
 }
 \value{
