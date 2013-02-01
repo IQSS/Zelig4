@@ -4,11 +4,11 @@ data(turnout)
 
 par(mfrow=c(2, 2))
 
-z <- zelig(vote ~ income + educate, model="logit", data=turnout)
-x <- setx(z, educate=-5:5)
+z <- zelig(vote ~ income + educate, model="relogit", data=turnout)
+x <- setx(z, educate=-5:8)
 s <- sim(z, x)
 
-plot.ci(s, var="educate")
+plot(s, var = "educate")
 
 z <- zelig(vote ~ income + educate, model="logit", data=turnout)
 x <- setx(z, educate=0:5)
