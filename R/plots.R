@@ -598,9 +598,9 @@ plot.simulations <- function (x, ...) {
   
   # Plot each simulation
   simulations.plot(qi[[titles$pv]], main = titles$pv, col = color.x, line.col = "black")
-  simulations.plot(qi[[titles$pv1]], main = titles$pv, col = color.x1, line.col = "black")
+  simulations.plot(qi[[titles$pv1]], main = titles$pv1, col = color.x1, line.col = "black")
   simulations.plot(qi[[titles$ev]], main = titles$ev, col = color.x, line.col = "black")
-  simulations.plot(qi[[titles$pv1]], main = titles$ev, col = color.x1, line.col = "black")
+  simulations.plot(qi[[titles$ev1]], main = titles$ev1, col = color.x1, line.col = "black")
   simulations.plot(qi[[titles$fd]], main = titles$fd, col = color.mixed, line.col = "black")
 
   if (both.pv.exist) {
