@@ -2,7 +2,7 @@
 \alias{summary.MI}
 \title{Summarry of Multiply Imputed Statistical Models}
 \usage{
-  \method{summary}{MI}(object, ...)
+  \method{summary}{MI}(object, subset = NULL, ...)
 }
 \arguments{
   \item{object}{a set of fitted statistical models}

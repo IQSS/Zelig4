@@ -24,22 +24,6 @@ summary.MCMCZelig <- function(object, quantiles = c(0.025, 0.5, 0.975), ...) {
   class(out) <- "summary.MCMCZelig"
   out
 }
-
-#' Summarry of Multiply Imputed Statistical Models
-#'
-#' ...
-#' @S3method summary MI
-#' @usage \method{summary}{MI}(object, ...)
-#' @param object a set of fitted statistical models
-#' @param ... parameters to forward
-#' @return a list of summaries
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-summary.MI <- function(object, ...) {
-  results <- list()
-  for (key in names(object))
-    results[[key]] <- summary(object[[key]]$result)
-  results
-}
 #' Method for summarizing simulations of multiply imputed quantities of interest
 #'
 #' @S3method summary MI.sim
@@ -297,15 +281,16 @@ summary.setx <- function (object, ...) {
     class = "summary.setx"
     )
 }
-
-#' Compute Summary of Multiply Imputed Models Using Rubin's Rule
-#' Returns a summary object of a Zelig object, having the values computed using
-#' Rubin's rule
-#' @param object
-#' @param subset An integer vector specifying which data sets to group and
-#' summarize
-#' @param ... ignored parameters
-summary.MI <- function (object, subset, ...) {
+#' Summary of Multiply Imputed Statistical Models Using Rubin's Rule
+#'
+#' ...
+#' @S3method summary MI
+#' @usage \method{summary}{MI}(object, ...)
+#' @param object a set of fitted statistical models
+#' @param ... parameters to forward
+#' @return a list of summaries
+#' @author Matt Owen \email{mowen@@iq.harvard.edu}
+summary.MI <- function (object, subset = NULL, ...) {
 
   if (length(object) == 0)
     stop('Invalid input for "subset"')
@@ -314,17 +299,12 @@ summary.MI <- function (object, subset, ...) {
     return(summary(object[[1]]))
 
   #
-  getcoef <- function(x) {
-    # Get the result from the Zelig object
-    obj <- x$result
-
+  getcoef <- function(obj) {
     # S4
     if (!isS4(obj))
       coef(obj)
-
     else if ("coef3" %in% slotNames(obj))
       obj@coef3
-
     else
       obj@coef
   }
@@ -340,20 +320,85 @@ summary.MI <- function (object, subset, ...) {
     c(subset)
 
   # Compute the summary of all objects
-  for (k in subset)
+  for (k in subset) {
     res[[k]] <- summary(object[[k]])
+  }
+
 
   # Answer
-  ans <- list()
-  ans$zelig <- object[[1]]$name
-  ans$call <- object[[1]]$call
-  ans$all <- res
+  ans <- list(
+              zelig = object[[1]]$name,
+              call = object[[1]]$result$call,
+              all = res
+              )
 
   #
   coef1 <- se1 <- NULL
 
+  #
   for (k in subset) {
+    tmp <-  getcoef(res[[k]])
+    coef1 <- cbind(coef1, tmp[, 1])
+    se1 <- cbind(se1, tmp[, 2])
   }
 
+  rows <- nrow(coef1)
+  Q <- apply(coef1, 1, mean)
+  U <- apply(se1^2, 1, mean)
+  B <- apply((coef1-Q)^2, 1, sum)/(length(subset)-1)
+  var <- U+(1+1/length(subset))*B
+  nu <- (length(subset)-1)*(1+U/((1+1/length(subset))*B))^2
 
+  coef.table <- matrix(NA, nrow = rows, ncol = 4)
+  dimnames(coef.table) <- list(rownames(coef1),
+                               c("Value", "Std. Error", "t-stat", "p-value"))
+  coef.table[,1] <- Q
+  coef.table[,2] <- sqrt(var)
+  coef.table[,3] <- Q/sqrt(var)
+  coef.table[,4] <- pt(abs(Q/sqrt(var)), df=nu, lower.tail=F)*2
+  ans$coefficients <- coef.table
+  ans$cov.scaled <- ans$cov.unscaled <- NULL
+
+  for (i in 1:length(ans)) {
+    if (is.numeric(ans[[i]]) && !names(ans)[i] %in% c("coefficients")) {
+      tmp <- NULL
+      for (j in subset) {
+        r <- res[[j]]
+        tmp <- cbind(tmp, r[[pmatch(names(ans)[i], names(res[[j]]))]])
+      }
+      ans[[i]] <- apply(tmp, 1, mean)
+    }
+  }
+
+  class(ans) <- "summaryMI"
+  ans
 }
+
+print.summaryMI <- function(x, subset = NULL, ...){
+  m <- length(x$all)
+  if (m == 0)
+    m <- 1
+  if (any(subset > max(m)))
+    stop("the subset selected lies outside the range of available \n        observations in the MI regression output.")
+  cat("\n  Model:", x$zelig)
+  cat("\n  Number of multiply imputed data sets:", m, "\n")
+  if (is.null(subset)) {
+    cat("\nCombined results:\n\n")
+    cat("Call:\n")
+    print(x$call)
+    cat("\nCoefficients:\n")
+    print(x$coefficients)
+    cat("\nFor combined results from datasets i to j, use summary(x, subset = i:j).\nFor separate results, use print(summary(x), subset = i:j).\n\n")
+  }
+  else {
+    if (is.function(subset))
+      M <- 1:m
+    if (is.numeric(subset))
+      M <- subset
+    for(i in M){
+      cat(paste("\nResult with dataset", i, "\n"))
+      print(x$all[[i]], ...)
+    }
+  }
+}
+

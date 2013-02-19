@@ -13,6 +13,10 @@ s.pooled <- sim(z, x.pooled, num = 5)
 as.matrix(x.single)
 as.matrix(x.pooled)
 
-simulation.matrix(s.single, "Expected Values")
-simulation.matrix(s.pooled, "Expected Values")
-simulation.matrix(s.pooled, "Predicted Values")
+# simulation.matrix(s.single, "Expected Values")
+summary(s.pooled)
+sm <- simulation.matrix(s.pooled, "Expected Values")
+attr(sm, "which")
+# simulation.matrix(s.pooled, "Predicted Values")
+
+
