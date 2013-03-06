@@ -156,7 +156,15 @@ plot.MI.sim <- function(...) {
 #' @author James Honaker, adapted by Matt Owen \email{mowen@@iq.harvard.edu}
 #' @export plot.ci
 #' @usage \method{plot}{ci}(x, qi="ev", var=NULL, ..., legcol="gray20", col=NULL, leg=1, legpos=NULL)
-plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL) {
+plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL, ci=c(80,95,99.9)) {
+
+  if(length(ci)<3){
+  	ci<-rep(ci,3)
+  }
+  if(length(ci)>3){
+  	ci<-ci[1:3]
+  }
+  ci<-sort(ci)
 
   if (! "pooled.sim" %in% class(x)) {
     something <- list(x=x)
@@ -197,22 +205,32 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
     xname<-names(x[[1]]$x$data[position])
   }
 
+  ev1<-NULL
 
   if(qi=="pv"){
     ev<-simulation.matrix(x, "Predicted Values: Y|X")
+    if(!is.null(s.out[[1]]$x1)){
+      ev1<-simulation.matrix(x, "Predicted Values: Y|X1")
+    }
+  }else if(qi=="fd"){
+    ev<-simulation.matrix(x, "First Differences: E(Y|X1) - E(Y|X)")
   }else{
     ev<-simulation.matrix(x, "Expected Values: E(Y|X)")
+    if(!is.null(s.out[[1]]$x1)){
+      ev1<-simulation.matrix(x, "Expected Values: E(Y|X1)")
+    }
   }
+
 
 
   # Define functions to compute confidence intervals
   ci.upper <- function (x, alpha) {
-    pos <- max(round((1-alpha)*length(x)), 1)
+    pos <- max(round((1-(alpha/100))*length(x)), 1)
     return(sort(x)[pos])
   }
 
   ci.lower <- function (x, alpha) {
-    pos<-max(round(alpha*length(x)), 1)
+    pos<-max(round((alpha/100)*length(x)), 1)
     return(sort(x)[pos])
   }
 
@@ -225,81 +243,106 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
     myblue1<-rgb( 100, 149, 237, alpha=50, maxColorValue=255)
     myblue2<-rgb( 152, 245, 255, alpha=50, maxColorValue=255)
     myblue3<-rgb( 191, 239, 255, alpha=70, maxColorValue=255)
-    col<-c(myblue1,myblue2,myblue3)
+    myred1 <-rgb( 237, 149, 100, alpha=50, maxColorValue=255)
+    myred2 <-rgb( 255, 245, 152, alpha=50, maxColorValue=255)
+    myred3 <-rgb( 255, 239, 191, alpha=70, maxColorValue=255)
+
+    col<-c(myblue1,myblue2,myblue3,myred1,myred2,myred3)
   }
-  history<-matrix(NA, nrow=k,ncol=8)
-  for (i in 1:k) {
-    v <- c(
-           xseq[i],
-           median(ev[,i]),
 
-           ci.upper(ev[,i],0.8),
-           ci.lower(ev[,i],0.8),
+  form.history <- function (k,xseq,results,ci=c(80,95,99.9)){
+  
+    history<-matrix(NA, nrow=k,ncol=8)
+    for (i in 1:k) {
+      v <- c(
+             xseq[i],
+             median(results[,i]),
+ 
+             ci.upper(results[,i],ci[1]),
+             ci.lower(results[,i],ci[1]),
 
-           ci.upper(ev[,i],0.95),
-           ci.lower(ev[,i],0.95),
+             ci.upper(results[,i],ci[2]),
+             ci.lower(results[,i],ci[2]),
 
-           ci.upper(ev[,i],0.999),
-           ci.lower(ev[,i],0.999)
-           )
+             ci.upper(results[,i],ci[3]),
+             ci.lower(results[,i],ci[3])
+             )
 
-    history[i, ] <- v
+      history[i, ] <- v
+    }
+    if (k == 1) {
+      left <- c(
+             xseq[1]-.5,
+             median(results[,1]),
+
+             ci.upper(results[,1],ci[1]),
+             ci.lower(results[,1],ci[1]),
+
+             ci.upper(results[,1],ci[2]),
+             ci.lower(results[,1],ci[2]),
+
+             ci.upper(results[,1],ci[3]),
+             ci.lower(results[,1],ci[3])
+             )
+      right <- c(
+             xseq[1]+.5,
+             median(results[,1]),
+
+             ci.upper(results[,1],ci[1]),
+             ci.lower(results[,1],ci[1]),
+
+             ci.upper(results[,1],ci[2]),
+             ci.lower(results[,1],ci[2]),
+
+             ci.upper(results[,1],ci[3]),
+             ci.lower(results[,1],ci[3])
+             )
+      v <- c(
+             xseq[1],
+             median(results[,1]),
+
+             ci.upper(results[,1],ci[1]),
+             ci.lower(results[,1],ci[1]),
+
+             ci.upper(results[,1],ci[2]),
+             ci.lower(results[,1],ci[2]),
+
+             ci.upper(results[,1],ci[3]),
+             ci.lower(results[,1],ci[3])
+             )
+      history <- rbind(left, v, right)
+    }
+
+    return(history)
   }
-  if (k == 1) {
-    left <- c(
-           xseq[1]-.5,
-           median(ev[,1]),
 
-           ci.upper(ev[,1],0.8),
-           ci.lower(ev[,1],0.8),
 
-           ci.upper(ev[,1],0.95),
-           ci.lower(ev[,1],0.95),
 
-           ci.upper(ev[,1],0.999),
-           ci.lower(ev[,1],0.999)
-           )
-    right <- c(
-           xseq[1]+.5,
-           median(ev[,1]),
+  history<-  form.history(k,xseq,ev,ci)
+  if(!is.null(ev1)){
+    history1<- form.history(k,xseq,ev1,ci)
+  }else{
+    history1<-NULL
+  }
 
-           ci.upper(ev[,1],0.8),
-           ci.lower(ev[,1],0.8),
-
-           ci.upper(ev[,1],0.95),
-           ci.lower(ev[,1],0.95),
-
-           ci.upper(ev[,1],0.999),
-           ci.lower(ev[,1],0.999)
-           )
-    v <- c(
-           xseq[1],
-           median(ev[,1]),
-
-           ci.upper(ev[,1],0.8),
-           ci.lower(ev[,1],0.8),
-
-           ci.upper(ev[,1],0.95),
-           ci.lower(ev[,1],0.95),
-
-           ci.upper(ev[,1],0.999),
-           ci.lower(ev[,1],0.999)
-           )
-    k <- 3
-    history <- rbind(left, v, right)
+  # This is for small sets that have been duplicated so as to have observable volume
+  if(k==1){
+    k<-3
   }
 
   # Specify x-axis length
   all.xlim <- if (is.null(xlim))
-    c(min(history[, 1]),max(history[, 1]))
+    c(min(c(history[, 1],history1[, 1])),max(c(history[, 1],history1[, 1])))
   else
     xlim
 
+
   # Specify y-axis length
   all.ylim <-if (is.null(ylim))
-    c(min(history[, -1]), max(history[, -1]))
+    c(min(c(history[, -1],history1[, -1])),max(c(history[, -1],history1[, -1])))
   else
     ylim
+
 
   # Define xlabel
   if (is.null(xlab))
@@ -317,6 +360,16 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
   polygon(c(history[,1],history[k:1,1]),c(history[,5],history[k:1,6]),col=col[2],border="gray90")
   polygon(c(history[,1],history[k:1,1]),c(history[,3],history[k:1,4]),col=col[1],border="gray60")
   polygon(c(history[,1],history[k:1,1]),c(history[,7],history[k:1,8]),col=col[3],border="white")
+
+  if(!is.null(ev1)){
+  lines(x=history1[, 1], y=history1[, 2], type="l")
+
+  polygon(c(history1[,1],history1[k:1,1]),c(history1[,5],history1[k:1,6]),col=col[5],border="gray90")
+  polygon(c(history1[,1],history1[k:1,1]),c(history1[,3],history1[k:1,4]),col=col[4],border="gray60")
+  polygon(c(history1[,1],history1[k:1,1]),c(history1[,7],history1[k:1,8]),col=col[6],border="white")
+
+  }
+
 
   ## This is the legend
 
@@ -353,9 +406,9 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
   polygon(c(lx,lx,hx,hx),c(my-3*dy,my+3*dy,my+3*dy,my-3*dy),col=col[3],border="white")
 
   text(lx,my,labels="median",pos=2,cex=0.5,col=legcol)
-  text(lx,my+2*dy,labels="ci95",pos=2,cex=0.5,col=legcol)
-  text(hx,my+1*dy,labels="ci80",pos=4,cex=0.5,col=legcol)
-  text(hx,my+3*dy,labels="ci99.9",pos=4,cex=0.5,col=legcol)
+  text(lx,my+2*dy,labels=paste("ci",ci[2],sep=""),pos=2,cex=0.5,col=legcol)
+  text(hx,my+1*dy,labels=paste("ci",ci[1],sep=""),pos=4,cex=0.5,col=legcol)
+  text(hx,my+3*dy,labels=paste("ci",ci[3],sep=""),pos=4,cex=0.5,col=legcol)
 }
 
 #' Method for plotting pooled simulations by confidence intervals
