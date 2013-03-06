@@ -209,19 +209,17 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
 
   if(qi=="pv"){
     ev<-simulation.matrix(x, "Predicted Values: Y|X")
-    if(!is.null(s.out[[1]]$x1)){
+    if(!is.null(x[[1]]$x1)){
       ev1<-simulation.matrix(x, "Predicted Values: Y|X1")
     }
-  }else if(qi=="fd"){
+  } else if(qi=="fd") {
     ev<-simulation.matrix(x, "First Differences: E(Y|X1) - E(Y|X)")
-  }else{
+  } else {
     ev<-simulation.matrix(x, "Expected Values: E(Y|X)")
-    if(!is.null(s.out[[1]]$x1)){
+    if(!is.null(x[[1]]$x1)){
       ev1<-simulation.matrix(x, "Expected Values: E(Y|X1)")
     }
   }
-
-
 
   # Define functions to compute confidence intervals
   ci.upper <- function (x, alpha) {
