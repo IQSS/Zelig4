@@ -58,8 +58,10 @@ sim.default <- function(
     xes <- list()
     titles <- NULL
 
-    for (key in names(x)) {
-      xes[[key]] <- sim(obj, x[[key]], x1[[key]], y, num, bootstrap, bootfn, cond.data, ...)
+    # for (key in names(x)) {
+    for (k in 1:length(x)) {
+      key <- names(x)[[k]]
+      xes[[key]] <- sim(obj, x[[k]], x1[[k]], y, num, bootstrap, bootfn, cond.data, ...)
       attr(xes[[key]], "pooled") <- FALSE
       titles <- append(titles, xes[[key]]$titles)
     }
