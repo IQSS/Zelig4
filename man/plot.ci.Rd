@@ -9,6 +9,8 @@
 
   \item{qi}{a character-string specifying the quantity of
   interest to plot: "ev" expected values, "pv" predicted values, "fd" first differences}
+  
+  \item{var}{The variable to be used on the x-axis}
 
   \item{...}{Parameters to be passed to the `truehist'
   function which is implicitly called for numeric
