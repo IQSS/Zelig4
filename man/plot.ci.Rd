@@ -2,17 +2,13 @@
 \alias{plot.ci}
 \title{Method for plotting pooled simulations by confidence intervals}
 \usage{
-  \method{plot}{ci}(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL)
+  \method{plot}{ci}(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL, ci=c(80,95,99.9))
 }
 \arguments{
   \item{x}{A `sim' object}
 
   \item{qi}{a character-string specifying the quantity of
-  interest to plot}
-
-  \item{var}{The variable to be used on the x-axis. Default
-  is the variable across all the chosen values with
-  smallest nonzero variance}
+  interest to plot: "ev" expected values, "pv" predicted values, "fd" first differences}
 
   \item{...}{Parameters to be passed to the `truehist'
   function which is implicitly called for numeric
@@ -42,13 +38,16 @@
 
   \item{legpos}{``legend type'', exact coordinates and
   sizes for legend. Overrides argment ``leg.type''}
+  
+  \item{ci}{A vector of length up to 3, specifying the three confidence interval levels to 
+  plot on the graph (where confidence is expressed on the scale 0-100).}
 }
 \value{
   the current graphical parameters. This is subject to
   change in future implementations of Zelig
 }
 \description{
-  Plot confidence intervals of pooled simulated values.
+  Plot confidence intervals of simulated quantities of interest, across a range of a variable.
 }
 \author{
   James Honaker, adapted by Matt Owen
