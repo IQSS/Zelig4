@@ -205,21 +205,26 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
     xname<-names(x[[1]]$x$data[position])
   }
 
+  # Use "qi" argument to select quantities of interest and set labels
   ev1<-NULL
-
   if(qi=="pv"){
-    ev<-simulation.matrix(x, "Predicted Values: Y|X")
+    request<-"Predicted Values: Y|X"
     if(!is.null(x[[1]]$x1)){
       ev1<-simulation.matrix(x, "Predicted Values: Y|X1")
     }
   } else if(qi=="fd") {
-    ev<-simulation.matrix(x, "First Differences: E(Y|X1) - E(Y|X)")
+    request<-"First Differences: E(Y|X1) - E(Y|X)"
   } else {
-    ev<-simulation.matrix(x, "Expected Values: E(Y|X)")
+    request<-"Expected Values: E(Y|X)"
     if(!is.null(x[[1]]$x1)){
       ev1<-simulation.matrix(x, "Expected Values: E(Y|X1)")
     }
   }
+  ev<-simulation.matrix(x, request)
+  if (is.null(ylab)){
+    ylab <- request
+  }
+  
 
   # Define functions to compute confidence intervals
   ci.upper <- function (x, alpha) {
@@ -246,7 +251,12 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
     myred3 <-rgb( 255, 239, 191, alpha=70, maxColorValue=255)
 
     col<-c(myblue1,myblue2,myblue3,myred1,myred2,myred3)
+  }else{
+  	if(length(col)<6){
+  	  col<-rep(col,6)[1:6]
+    }
   }
+
 
   form.history <- function (k,xseq,results,ci=c(80,95,99.9)){
   
@@ -355,16 +365,18 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
 
   plot(x=history[, 1], y=history[, 2], type="l", xlim=all.xlim, ylim=all.ylim, main = main, sub = sub, xlab=xlab, ylab=ylab)
 
+  polygon(c(history[,1],history[k:1,1]),c(history[,7],history[k:1,8]),col=col[3],border="white")
   polygon(c(history[,1],history[k:1,1]),c(history[,5],history[k:1,6]),col=col[2],border="gray90")
   polygon(c(history[,1],history[k:1,1]),c(history[,3],history[k:1,4]),col=col[1],border="gray60")
-  polygon(c(history[,1],history[k:1,1]),c(history[,7],history[k:1,8]),col=col[3],border="white")
+  polygon(c(history[,1],history[k:1,1]),c(history[,7],history[k:1,8]),col=NA,border="white")
 
   if(!is.null(ev1)){
   lines(x=history1[, 1], y=history1[, 2], type="l")
 
+  polygon(c(history1[,1],history1[k:1,1]),c(history1[,7],history1[k:1,8]),col=col[6],border="white")
   polygon(c(history1[,1],history1[k:1,1]),c(history1[,5],history1[k:1,6]),col=col[5],border="gray90")
   polygon(c(history1[,1],history1[k:1,1]),c(history1[,3],history1[k:1,4]),col=col[4],border="gray60")
-  polygon(c(history1[,1],history1[k:1,1]),c(history1[,7],history1[k:1,8]),col=col[6],border="white")
+  polygon(c(history1[,1],history1[k:1,1]),c(history1[,7],history1[k:1,8]),col=NA,border="white")
 
   }
 
@@ -399,9 +411,10 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
   lines(c(lx-5*deltax,lx),c(my,my),col=legcol)
   lines(c(lx,hx),c(my,my))
 
+  polygon(c(lx,lx,hx,hx),c(my-3*dy,my+3*dy,my+3*dy,my-3*dy),col=col[3],border="white")
   polygon(c(lx,lx,hx,hx),c(my-2*dy,my+2*dy,my+2*dy,my-2*dy),col=col[2],border="gray90")
   polygon(c(lx,lx,hx,hx),c(my-1*dy,my+1*dy,my+1*dy,my-1*dy),col=col[1],border="gray60")
-  polygon(c(lx,lx,hx,hx),c(my-3*dy,my+3*dy,my+3*dy,my-3*dy),col=col[3],border="white")
+  polygon(c(lx,lx,hx,hx),c(my-3*dy,my+3*dy,my+3*dy,my-3*dy),col=NA,border="white")
 
   text(lx,my,labels="median",pos=2,cex=0.5,col=legcol)
   text(lx,my+2*dy,labels=paste("ci",ci[2],sep=""),pos=2,cex=0.5,col=legcol)
