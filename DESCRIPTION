@@ -1,5 +1,5 @@
 Package: Zelig
-Maintainer: Matt Owen <mowen@iq.harvard.edu>
+Maintainer: James Honaker <jhonaker@iq.harvard.edu>
 License: GPL (>=2)
 Title: Everyone's Statistical Software
 Author: Matt Owen <mowen@iq.harvard.edu>, Kosuke Imai
@@ -17,7 +17,7 @@ Description: Zelig is an easy-to-use program that can estimate, and
     any model, and mimicking the program Clarify (for Stata) that takes
     the raw output of existing statistical procedures and translates
     them into quantities of direct interest.
-Version: 4.1-3
+Version: 4.2-0
 URL: http://gking.harvard.edu/zelig
 Date: 2013-01-30
 Depends:
