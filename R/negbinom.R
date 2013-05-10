@@ -67,13 +67,13 @@ qi.negbinom <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   #
   for (i in 1:ncol(ev))
-    pr[,i] <- rnegbin(nrow(ev), mu = ev[i,], theta = alpha[i])
+    pr[,i] <- as.character(rnegbin(nrow(ev), mu = ev[i,], theta = alpha[i]))
 
 
   if (!is.null(x1)) {
 
     # quantities of interest
-    results <- qi(obj, x1, num=num)
+    results <- qi(obj=obj, x=x1, num=num, param=param)
 
     # pass values over
     ev1 <- results[["Expected Values: E(Y|X)"]]
