@@ -117,17 +117,41 @@ plot.sim.probit.gee <- plot.sim.logit.gee
 }
 #' Plot graphs of simulated multiply-imputed data
 #'
-#' This function is currently unimplemented, and reserved for future use.
+#' This function combines results across multiply imputed results
+#'    and then calls the appropriate plot for that class.
 #'
 #' @usage \method{plot}{MI.sim}(...)
 #' @S3method plot MI.sim
 #' @param ... ignored parameters
-#' @return NULL (invisibly)
-#' @author Matt Owen \email{mowen@@iq.harvard.edu}
-plot.MI.sim <- function(...) {
-  warning("Zelig currently does not support plots of mutiply imputed data")
-  invisible(NULL)
+#'
+#' @return the return of the appropriate plot method
+#' @author James Honaker \email{jhonaker@@iq.harvard.edu}
+plot.MI.sim <- function(x, ...) {
+  #warning("Zelig currently does not support plots of mutiply imputed data")
+  
+  m<-length(x)                      # The number of imputed datasets
+
+  reformed<-x[[1]]
+
+  all.qi<-attributes(x[[1]]$qi)$names    # Byzantine
+
+  ## Currently, we're appending all the qi's together into one object.
+
+  if(m>1){
+    for(i in 2:m){
+#      for(j in 1:length(all.qi)){ # Could do this by position number rather than names
+
+      for(j in all.qi){
+                    ## The $qi's are themselves lists, so this is difficult.
+        reformed$qi[j][[1]]<-rbind(reformed$qi[j][[1]],x[[i]]$qi[j][[1]])
+      }
+    }
+  }
+
+  output<-plot(reformed)
 }
+
+
 #' Method for plotting pooled simulations by confidence intervals
 #'
 #' Plot confidence intervals of pooled simulated values.
@@ -693,6 +717,8 @@ plot.simulations <- function (x, ...) {
   # Return old parameter invisibly
   invisible(old.par)
 }
+
+
 plot.zelig.relogit <- function(x, xlab ="", user.par = FALSE, alt.col = "red",
                                ylab = NULL, samples = 100, ...){
   k <- length(x$qi)
