@@ -138,7 +138,7 @@ simulations.plot <-function(
 
        for(m in 1:n.y){
          for(n in 1:n.y){
-           text(x=locations.x[m],y=locations.y[n],labels=paste(round(100*comp[m,n])/100),col=lab.colors[(comp[m,n]> ((max(comp)-min(comp))/2) )+1])
+           text(x=locations.x[m],y=locations.y[n],labels=paste(round(100*comp[m,n])), col=lab.colors[(comp[m,n]> ((max(comp)-min(comp))/2) )+1])
          }
        }
 
