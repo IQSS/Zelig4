@@ -17,6 +17,8 @@
 sim.MI <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, ...) {
 
   sim.results <- list()
+  m<-length(obj)
+  mi.num<-ceiling(num/m)
 
   for (key in names(obj)) {
     object <- obj[[key]]
@@ -24,7 +26,7 @@ sim.MI <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, ...) {
     new.x1 <- x1[[key]]
     new.y <- y[[key]]
 
-    sim.results[[key]] <- sim(object, x=new.x, x1=new.x1, y=new.y, num=num)
+    sim.results[[key]] <- sim(object, x=new.x, x1=new.x1, y=new.y, num=mi.num)
   }
 
   model <- get('model', attr(obj, 'state'))

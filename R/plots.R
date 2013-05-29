@@ -127,28 +127,26 @@ plot.sim.probit.gee <- plot.sim.logit.gee
 #' @return the return of the appropriate plot method
 #' @author James Honaker \email{jhonaker@@iq.harvard.edu}
 plot.MI.sim <- function(x, ...) {
-  #warning("Zelig currently does not support plots of mutiply imputed data")
+
+  m<-length(x)                           # The number of imputed datasets
+  reformed<-x[[1]]                       # Simplified object of the original class
+  all.qi<-attributes(x[[1]]$qi)$names    # Convoluted given the current structure of objects
+
+  ## Currently, we're appending all the qi's together into one object
+  ## Note - everything that is not a qi, will just come from the first imputed dataset
   
-  m<-length(x)                      # The number of imputed datasets
-
-  reformed<-x[[1]]
-
-  all.qi<-attributes(x[[1]]$qi)$names    # Byzantine
-
-  ## Currently, we're appending all the qi's together into one object.
-
   if(m>1){
     for(i in 2:m){
-#      for(j in 1:length(all.qi)){ # Could do this by position number rather than names
-
-      for(j in all.qi){
-                    ## The $qi's are themselves lists, so this is difficult.
+      for(j in all.qi){    # Could do this by position number as "in 1:length(all.qi)"
+        ## The $qi's are themselves lists, so this is difficult:
         reformed$qi[j][[1]]<-rbind(reformed$qi[j][[1]],x[[i]]$qi[j][[1]])
       }
     }
   }
 
   output<-plot(reformed)
+  ## Return any plot returns invisibly
+  invisible(output)
 }
 
 
