@@ -206,26 +206,31 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
     return(invisible(FALSE))
   }
 
+  if(is.character(var)){
+    if( !(var %in% names(x[[1]]$x$data) ) ){
+      warning("Specified variable for confidence interval plot is not in estimated model.  Plotting nothing.")
+      return(invisible(FALSE))
+    }  
+  }
+
+
   if (is.null(var)) {
     each.var <- apply(xmatrix,2,sd) 
     flag <- each.var>0
     min.var<-min(each.var[flag])
     var.seq<-1:ncol(xmatrix)
-    position<-var.seq[each.var==min.var]  
-    position<-min(position)
-    xseq<-xmatrix[,position]
-    return()
-    xname<-names(x[[1]]$x$data[position])
+    position<-var.seq[each.var==min.var]
   } else {
-
-    if(is.numeric(var)){
+    if(is.numeric(var)){   
       position<-var
     }else if(is.character(var)){
       position<-grep(var,names(x[[1]]$x$data))
     }
-    xseq<-xmatrix[,position]
-    xname<-names(x[[1]]$x$data[position])
   }
+  position<-min(position)
+  xseq<-xmatrix[,position]
+  xname<-names(x[[1]]$x$data[position])
+
 
   # Use "qi" argument to select quantities of interest and set labels
   ev1<-NULL
@@ -246,7 +251,7 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
   if (is.null(ylab)){
     ylab <- request
   }
-  
+
 
   # Define functions to compute confidence intervals
   ci.upper <- function (x, alpha) {
@@ -345,8 +350,6 @@ plot.ci <- function(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = N
 
     return(history)
   }
-
-
 
   history<-  form.history(k,xseq,ev,ci)
   if(!is.null(ev1)){
