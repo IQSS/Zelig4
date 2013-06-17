@@ -509,10 +509,23 @@ plot.sim <- function (x, ...) {
   old.par <- par(no.readonly = T)
 
   # Some numbers we use to make things
-  total.qis <- length(names(x$qi))
+  count<- 0
+  for(i in 1:length(names(x$qi))){
+      if (!all( is.na(x$qi[[i]]) ) & !is.null(x$qi[[i]]) )
+      count<-count+1
+      
+  }
+  total.qis<-max(count,1)
+  #total.qis <- length(names(x$qi))
+
+    
   palette <- rainbow(total.qis)
   total.cols <- 2
   total.rows <- ceiling(total.qis/total.cols)
+  if(total.rows==1){
+    total.rows<-2
+    total.cols<-1
+  }
 
   vals <- ifelse(total.qis %% 2, c(1:total.qis, total.qis), 1:total.qis)
 
@@ -617,6 +630,8 @@ plot.simulations <- function (x, ...) {
   # Save old state
   old.par <- par(no.readonly=T)
 
+  print("GOING THIS ROUTE")
+    
   # Quantities of Interest
   qi <- x$qi
 
