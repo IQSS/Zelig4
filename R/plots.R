@@ -629,8 +629,6 @@ plot.sim.cloglog.net <- function (x, ...) {
 plot.simulations <- function (x, ...) {
   # Save old state
   old.par <- par(no.readonly=T)
-
-  print("GOING THIS ROUTE")
     
   # Quantities of Interest
   qi <- x$qi
