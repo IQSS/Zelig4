@@ -2,7 +2,7 @@
 \alias{plot.pooled.sim}
 \title{Method for plotting pooled simulations by confidence intervals}
 \usage{
-  \method{plot}{pooled.sim}(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL)
+  \method{plot}{pooled.sim}(x, qi="ev", var=NULL, ..., main = NULL, sub = NULL, xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, legcol="gray20", col=NULL, leg=1, legpos=NULL, ci=c(80,95,99.9))
 }
 \arguments{
   \item{x}{A `sim' object}
@@ -42,6 +42,9 @@
 
   \item{legpos}{``legend type'', exact coordinates and
   sizes for legend. Overrides argment ``leg.type''}
+
+  \item{ci}{A numeric triple, specifying the three levels 
+  to plot confidence intervals for, scaled 0 to 100}
 }
 \value{
   the current graphical parameters. This is subject to
