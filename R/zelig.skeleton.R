@@ -94,8 +94,7 @@ zelig.skeleton <- function (
                    name = pkg,
                    environment = e,
                    path = path,
-                   force = force,
-                   namespace = TRUE
+                   force = force
                    )
 
   # Copy files over - as of 3/11 these files are blank
