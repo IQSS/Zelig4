@@ -26,5 +26,6 @@ normal.survey	   Survey-Weighted Normal Regression for Continuous Dependent Vari
 logit.survey	   Survey-Weighted Logistic Regression for Dichotomous Dependent Variables
 probit.survey	   Survey-Weighted Probit Regression for Dichotomous Dependent Variables
 poisson.survey     Survey-Weighted Poisson Regression for Event-count Dependent Variables
-gamma.survey       Survey-Weighted Poisson Regression for Positive Continuous Dependent Variables
+gamma.survey       Survey-Weighted Poisson Regression for Positive Continuous Dependent Variables 
+vertci	           Confidence intervals across the range of a continuous covariate
 Zelig.HelloWorld   Step-by-step demo on creating Zelig packages

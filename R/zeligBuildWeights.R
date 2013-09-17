@@ -15,12 +15,9 @@
 #' @param rebuild An option to allow specified repweights to reconfigure the 
 #'   rows of the dataset to rebuild a corresponding dataset where every row is
 #'   of weight 1.  Useful if analysis model does not accept weights.  
-#' @param data Dataset, required if weights are defined by variable name, or if
-#'   dataset is to be reconfigured (by \code{rebuild} or \code{zeros} options)
-#' @param useweights Defines if weights are allowed in model.
-#' @param userepweights Defines if repweights are allowed in model.  Overridden if
+#' @param allowweights Defines if weights are allowed in model.
+#' @param allowrepweights Defines if repweights are allowed in model.  Overridden if
 #'   \code{useweights=TRUE}.
-#'   dataset is to be reconfigured (by \code{rebuild} or \code{zeros} options)
 #' @param data Dataset, required if weights are defined by variable name, or if
 #'   dataset is to be reconfigured (by \code{rebuild} or \code{zeros} options)
 #' @return weights A vector of weights of the structure defined by the

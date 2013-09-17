@@ -2,9 +2,10 @@
 \alias{plot.MI.sim}
 \title{Plot graphs of simulated multiply-imputed data}
 \usage{
-  \method{plot}{MI.sim}(...)
+  \method{plot}{MI.sim}(x, ...)
 }
 \arguments{
+  \item{x}{A zelig `sim' object, with multiply imputed data}	
   \item{...}{ignored parameters}
 }
 \value{
