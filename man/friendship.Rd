@@ -20,8 +20,8 @@ The sociomatrices were combined into the friendship dataset using the format.net
 
 \examples{
 	\dontrun{
-		friendship <- format.network.data(friends, advice, prestige, authority, perpower, per)	
-			}} 
+friendship <- format.network.data(friends, advice, prestige, authority, perpower, per)
+}} 
 
 \keyword{datasets}
 

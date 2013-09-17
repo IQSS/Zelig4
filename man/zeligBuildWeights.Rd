@@ -2,14 +2,13 @@
 \alias{zeligBuildWeights}
 \title{Developer Utility Function for Dealing with Observation Weighting}
 \usage{
-  zeligBuildWeights(weights=NULL, repweights=NULL, zeros="zeros", rebuild=FALSE, allowweights=TRUE, allowrepweights=TRUE, data=NULL) 
+  zeligBuildWeights(weights=NULL, repweights=NULL, zeros="zeros", rebuild=FALSE,
+   allowweights=TRUE, allowrepweights=TRUE, data=NULL) 
 }
 \arguments{
-\item{weights}{A set of non-negative value weights.  Overrides repweights 
-   if defined.}
-\item{repweights}{A set of whole number (non-negative integer) weights.  
-   useful if weights are just for making copies or deleting certain 
-   or frequency weights.}
+\item{weights}{A set of non-negative value weights.  Overrides repweights if defined.}
+\item{repweights}{A set of whole number (non-negative integer) weights.  Useful if 
+   weights are just for making copies or deleting certain or frequency weights.}
 \item{zeros}{An option on how to deal with zero valued user supplied weights.
    Default of "zero" allows zero weights, "epsilon" changes zeroes to 1e-08,
    "remove" removes those observations from the dataset.}
@@ -23,9 +22,8 @@
      dataset is to be reconfigured (by \code{rebuild} or \code{zeros} options)}
 }
 \value{
-\item{weights}{A vector of weights of the structure defined by the
-   developer and required by the analysis model.  Or NULL if certain checks 
-   are failed.}
+\item{weights}{A vector of weights of the structure defined by the developer and 
+      required by the analysis model.  Or NULL if certain checks are failed.}
 \item{data}{A reconfigured dataset, if modified.}
 }
 \description{

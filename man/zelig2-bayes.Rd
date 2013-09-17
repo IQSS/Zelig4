@@ -11,7 +11,8 @@
 \title{Zelig Bridge Functions to Bayesian Models}
 
 \usage{
-  zelig2factor.bayes(formula, factors = 2, burnin = 1000, mcmc = 20000, verbose = 0, ..., data)
+  zelig2factor.bayes(formula, factors = 2, burnin = 1000, mcmc = 20000, verbose = 0, ...,
+   data)
   zelig2logit.bayes(formula, burnin = 1000, mcmc = 10000, verbose = 0, ..., data)
   zelig2mlogit.bayes(formula, burnin = 1000, mcmc = 10000, verbose = 0, ..., data)
   zelig2normal.bayes(formula, burnin = 1000, mcmc = 10000, verbose = 0, ..., data)
