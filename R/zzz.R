@@ -1246,35 +1246,37 @@ splitUp <- function(args) {
 
 
 
+## Honaker: I had to remove this utility function because
+## CRAN has recently weighed against use of ":::"
 
-# @topic: character-string representing help-topic
-# @package: package containing help-topic
-# return: character-string of processed Rd file
-.get.help.file <- function(topic, package) {
-  # get package help-file if no topic is set
-  if (missing(topic))
-    topic <- package
-  
-  # error-checking:
-  #   ensure file and package are strings
-  if (!is.character(topic) && length(topic) > 1L)
-    stop()
-
-  if (!is.character(package) && length(package) > 1L)
-    stop()
-
-  # 
-  directory <- system.file(package=package)
-
-  # 
-  path <- utils:::index.search(
-                               topic=topic,
-                               paths=directory
-                               )
-
-  # search package-help-dataabase, get Rd file as string
-  utils:::.getHelpFile(file=path)
-}
+## @topic: character-string representing help-topic
+## @package: package containing help-topic
+## return: character-string of processed Rd file
+#.get.help.file <- function(topic, package) {
+#  # get package help-file if no topic is set
+#  if (missing(topic))
+#    topic <- package
+#
+  ## error-checking:
+  ##   ensure file and package are strings
+#  if (!is.character(topic) && length(topic) > 1L)
+#    stop()
+#
+#  if (!is.character(package) && length(package) > 1L)
+#    stop()
+#
+  ##
+#  directory <- system.file(package=package)
+#
+  ##
+#  path <- utils:::index.search(
+#                               topic=topic,
+#                               paths=directory
+#                               )
+#
+  ## search package-help-dataabase, get Rd file as string
+#  utils:::.getHelpFile(file=path)
+#}
 
 
 
@@ -1357,7 +1359,7 @@ replace.call <- function(zobj, call1, call2) {
 #' @param package a character-string naming a package
 #' @return whether this package depends on Zelig
 is.zelig.package <- function(package="") {
-  "Zelig" %in% tools:::pkgDepends(package)$Depends
+  "Zelig" %in% tools::pkgDepends(package)$Depends
 }
 
 #' Whether a R-Package Contains a 'Yes' in its DESCRIPTION File's 'Zelig' Field
