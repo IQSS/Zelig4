@@ -47,8 +47,22 @@ bootfn.default <- function(data, i, object, bootstrapfn=NULL, num, ...) {
     bootstrapfn <- getS3method("bootstrap", .model, TRUE)
 
   # If bootstrap search came up sour, get default
-  if (is.null(bootstrapfn))
-    bootstrapfn <- Zelig:::bootstrap.default
+  
+## CRAN is opposed to ::: within same package, 
+## but I'm opposed to S4 environment artifacts
+##  if (is.null(bootstrapfn))
+##    bootstrapfn <- Zelig:::bootstrap.default
+## So this obviously makes my code better:
+
+  if (is.null(bootstrapfn)){
+    localbootstrap.default <- function (obj, ...)
+    list(
+       alpha = NULL,
+       beta = coef(obj)
+       )
+    bootstrapfn <- localbootstrap.default
+  }
+
 
   # Attach the ".num" private variable
   bootstrapfn <- attach.env(bootstrapfn, NULL, .num = num, .fitted = object)
