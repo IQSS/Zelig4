@@ -8,7 +8,8 @@
 \arguments{
 \item{weights}{A set of non-negative value weights.  Overrides repweights if defined.}
 \item{repweights}{A set of whole number (non-negative integer) weights.  Useful if 
-   weights are just for making copies or deleting certain or frequency weights.}
+   weights are just for making copies of or deleting certain observations or for
+   frequency weights.}
 \item{zeros}{An option on how to deal with zero valued user supplied weights.
    Default of "zero" allows zero weights, "epsilon" changes zeroes to 1e-08,
    "remove" removes those observations from the dataset.}
