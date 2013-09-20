@@ -1,4 +1,6 @@
 .*\.markdown
 ^.*\/NO-CRAN-
+\messages
+README.markdown
 ^.*Rplots\.(pdf|jpe?g|ng|gif)$
 \.Rnw$
