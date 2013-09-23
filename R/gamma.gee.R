@@ -78,8 +78,8 @@ qi.gamma.gee <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   }
 
   list(
-       "Expected Values (for x): E(Y|X)"   = ev1,
-       "Expected Values (for x1): E(Y|X1)" = ev2,
+       "Expected Values: E(Y|X)"   = ev1,
+       "Expected Values: E(Y|X1)" = ev2,
        "First Differences: E(Y|X1) - E(Y|X)" = fd
        )
 }
