@@ -54,7 +54,7 @@ param.poisson.gee <- function(obj, num=1000, ...) {
   #
   list(
        coef = mvrnorm(num, mu, Sigma),
-       fam = Gamma()
+       fam = poisson()
        )
 }
 
