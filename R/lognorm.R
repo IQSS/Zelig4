@@ -91,8 +91,8 @@ qi.lognorm <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
 
 
   list(
-       "Expected Value: E(Y|X)" = ev1,
-       "Expected Value: E(Y|X1)" = ev2,
+       "Expected Values: E(Y|X)" = ev1,
+       "Expected Values: E(Y|X1)" = ev2,
        "First Differences: E(Y|X1) - E(Y|X)" = ev2 - ev1
        )
 }

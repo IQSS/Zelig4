@@ -154,8 +154,8 @@ names.qi <- function(x) {
 #' appropriately titled acronym forms. That is, the two Quantity of Interest
 #' titles:
 #' \begin{itemize}
-#'    \item "Expected Values (for X): E(Y|X)"
-#'    \item "Expected Values (for X1): E(Y|X1)"
+#'    \item "Expected Values: E(Y|X)"
+#'    \item "Expected Values: E(Y|X1)"
 #' \end{itemize}
 #' The result will be: "ev1" and "ev2". That is, the acronym will not contain
 #' information kept in paranetheses or after a colon. 

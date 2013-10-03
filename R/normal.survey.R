@@ -143,7 +143,7 @@ qi.normal.survey <- function(obj, x, x1=NULL, y=NULL, num=1000, param=NULL) {
 
   list(
        "Expected Values: E(Y|X)" = ev,
-       "Expected Values for (X1): E(Y|X1)" = ev1,
+       "Expected Values: E(Y|X1)" = ev1,
        "Predicted Values: Y|X" = pr,
        "Predicted Values (for X1): Y|X1" = pr1,
        "First Differences E(Y|X1)-E(Y|X)" = fd,

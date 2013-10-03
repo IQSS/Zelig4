@@ -92,8 +92,8 @@ plot.sim.logit.gee <- function (x, ...) {
   rr <- x$qi$rr
 
   # Plot ev1
-  .plot.density(ev1, "Expected Values (for X): E(Y|X)", palette[1])
-  .plot.density(ev2, "Expected Values (for X1): E(Y|X1)", palette[2])
+  .plot.density(ev1, "Expected Values: E(Y|X)", palette[1])
+  .plot.density(ev2, "Expected Values: E(Y|X1)", palette[2])
   .plot.density(fd, "First Differences: E(Y|X1) - E(Y|X)", palette[3])
   .plot.density(rr, "Risk Ratios: E(Y|X1)/E(Y|X)", palette[4])
     

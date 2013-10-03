@@ -48,10 +48,10 @@ qi.poisson.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL)
   res2 <- poisson.ev(x1, param)
 
   list(
-       "Expected Value: E(Y|X)" = res1$ev,
-       "Predicted Value: Y|X" = res1$pv,
-       "Expected Value (for X1): E(Y|X1)" = res2$ev,
-       "Predicted Value (for X1): Y|X1" = res2$pv,
+       "Expected Values: E(Y|X)" = res1$ev,
+       "Expected Values: E(Y|X1)" = res2$ev,
+       "Predicted Values: Y|X" = res1$pv,
+       "Predicted Values: Y|X1" = res2$pv,
        "First Differences: E(Y|X1) - E(Y|X)" = res2$ev - res1$ev
        )
 }

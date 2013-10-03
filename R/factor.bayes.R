@@ -41,7 +41,7 @@ param.factor.bayes <- function (...) {
 qi.factor.bayes <- function(obj, x=NULL, x1=NULL, y=NULL, num=1000, param=NULL) {
   stop('There is no qi function for the "factor.bayes" model')
   list(
-       "Expected Value: E(Y|X)" = NA
+       "Expected Values: E(Y|X)" = NA
        )
 }
 
