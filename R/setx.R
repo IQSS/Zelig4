@@ -75,18 +75,20 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, ...) {
   if (is.null(data))
     data <- obj$data
 
-  # Create a variable to hold the values of the dot parameters
-  dots <- list()
-
   # Get the dots as a set of expressions
   symbolic.dots <- match.call(expand.dots = FALSE)[["..."]]
 
+  # Create a variable to hold the values of the dot parameters
+    #dots <- list()
   # Assign values to the dot parameters
-  for (key in names(symbolic.dots)) {
-    result <- with(data, eval(symbolic.dots[[key]]))
-    dots[[key]] <- result
-  }
+    #for (key in names(symbolic.dots)) {
+    #result <- with(data, eval(symbolic.dots[[key]]))
+    #dots[[key]] <- result
+    #}
 
+  ## cchoirat: fix
+  dots <- list(...)
+    
   # Extract information about terms
   # Note: the functions 'getPredictorTerms' and 'getOutcomeTerms' are in need
   # of a rewrite. At the moment, they are pretty kludgey (written by Matt O.).

@@ -10,7 +10,7 @@
 #' @author Vito D'Orazio
 #' @export
 
-spectest <- function(model, null, var, onetail=FALSE) {
+spectest <- function(model, null=0, var, onetail=FALSE) {
     
     z.coef <- model$result$coefficients
     z.df <- model$result$df.residual
@@ -25,9 +25,6 @@ spectest <- function(model, null, var, onetail=FALSE) {
     pval <- (1 - pt(abs(z.coef[var.i]-null)/z.se[var.i],z.df) )*tail.multiplier
     
     xseq <- seq(from=min(model$data[var.i]), to=max(model$data[var.i]), length=25)
-    
-    ## correcting the environment issue for xseq
-    assign("xseq", xseq, envir=.GlobalEnv)
     
     ## passing x0 using var
     ## or passing setx a parameter stored in function spectest's input
