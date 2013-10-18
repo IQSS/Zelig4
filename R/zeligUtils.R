@@ -41,3 +41,28 @@ spectest <- function(model, null=0, var, onetail=FALSE) {
     return(pval)
     
 }
+
+
+
+# a function whose parameters are a Zelig model and a dataset of counterfactual examples.  It returns the counterfactual dataset where the DV is the mean expected value and inHull is a dummy for each observation
+
+
+zwhat <- function(model, cfs) {
+    
+    for(i in 1:nrow(cfs)) {
+        x.out <- setx(model, data=cfs[i,], fn=NULL)
+        s.out <- sim(model, x = x.out)
+        y.preds[i] <- mean(s.out$qi$ev1)
+    }
+    
+    dv.name <- as.name(all.vars(update(model$formula, . ~ 1)))
+    dv.index <- which(colnames(cfs)==dv.name)
+    cfs[,dv.index] <- y.preds
+    colnames(cfs)[dv.index] <- "yhat"
+    
+    my.what <- whatif(data=model$data, cfact=cfs)
+    inHull <- my.what$in.hull
+    out <- cbind(cfs, inHull)
+    return(out)
+    
+}

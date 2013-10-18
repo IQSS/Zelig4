@@ -3,7 +3,7 @@
 \title{Set explanatory variables}
 \usage{
   \method{setx}{default}(obj, fn=NULL, data=NULL,
-    cond=FALSE, ...)
+    cond=FALSE, withdata=FALSE, ...)
 }
 \arguments{
   \item{obj}{a 'zelig' object}
@@ -14,6 +14,10 @@
   \item{data}{a data.frame}
 
   \item{cond}{ignored}
+
+  \item{withdata}{If TRUE, then expressions for setting 
+  variables will be evaluated in a new environment created
+  with the dataset of the passed saved output from zelig}
 
   \item{...}{parameters specifying what to explicitly set
   each column as. This is used to produce counterfactuals}

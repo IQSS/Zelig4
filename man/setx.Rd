@@ -2,7 +2,7 @@
 \alias{setx}
 \title{Setting Explanatory Variable Values}
 \usage{
-  setx(obj, fn = NULL, data = NULL, cond = FALSE, ...)
+  setx(obj, fn = NULL, data = NULL, cond = FALSE, withdata = FALSE, ...)
 }
 \arguments{
   \item{obj}{the saved output from zelig}
@@ -20,6 +20,10 @@
   NULL} and ignore the additional arguments in
   \code{\dots}.  If \code{cond = TRUE} and \code{data =
   NULL}, \code{setx} will prompt you for a data frame.}
+
+  \item{withdata}{If TRUE, then expressions for setting 
+  variables will be evaluated in a new environment created
+  with the dataset of the passed saved output from zelig}
 
   \item{...}{user-defined values of specific variables for
   overwriting the default values set by the function
