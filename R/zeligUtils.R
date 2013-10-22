@@ -66,3 +66,68 @@ zwhat <- function(model, cfs) {
     return(out)
     
 }
+
+
+# Construct Cubic Smoothing Spline Basis for Defined Variable
+
+zeligBuildSpline<-function(formula, k, data){
+    
+    if(!is.data.frame(data)){
+        data<-as.data.frame(data)
+    }
+    
+    # if formula is of type formula, then deparse
+    if(is(formula,"formula")){
+        formula<-deparse(formula)
+    } # ...maybe add extra conditions.
+
+    pos<-regexpr("s\\(.+\\)",formula)
+    
+    if(pos[1]>0){
+    
+        var<-substr(formula,pos[1]+2,pos[1]+attr(pos,"match.length")-2)  # find first variable inside "s(.)" notation
+        var<-sub("^\\s+", "", var) #trim leading whitespace
+        var<-sub("\\s+$", "", var)   #trim trailing whitespace
+        formula<- sub("s\\(.+\\)", var, formula)  #replace "s(x)" with "x"
+    
+    
+        kseq<-seq(from=min(data[,var],na.rm=TRUE),to=max(data[,var],na.rm=TRUE),length=k+2)
+        kseq<-kseq[2:(k+1)]
+        copy<-data[,var]
+        
+        # add squared and cubic terms
+        tempname<-paste(var, "squared",sep="")
+        formulaAddition<-tempname
+        tempvar <- copy^2
+        data<-cbind(data,tempvar)
+        names(data)<-c(names(data[,1:(ncol(data)-1)]),tempname)
+        
+        tempname<-paste(var, "cubed",sep="")
+        formulaAddition<-c(formulaAddition, tempname)
+        tempvar <- copy^3
+        data<-cbind(data,tempvar)
+        names(data)<-c(names(data[,1:(ncol(data)-1)]),tempname)
+        
+        # add knot points
+        for(i in 1:k){
+            tempname<-paste(var,"knot",i,sep="")
+            formulaAddition<-c(formulaAddition, tempname)
+            tempvar <- 0 + as.numeric(copy>kseq[i]) * ((copy - kseq[i])^3)
+            data<-cbind(data,tempvar)
+            names(data)<-c(names(data[,1:(ncol(data)-1)]),tempname)
+        }
+
+        formulaAddition<-paste(formulaAddition, collapse=" + ")
+        formula<-as.formula( paste(formula, formulaAddition, sep=" + ") )
+        
+    }
+    
+    # Currently does nothing, including no error message, if s() not found.  Consider adding warning message.
+    return(list(formula=formula,data=data))
+    
+}
+
+
+
+
+

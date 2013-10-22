@@ -19,7 +19,7 @@ Description: Zelig is an easy-to-use program that can estimate, and
     them into quantities of direct interest.
 Version: 4.2-2
 URL: http://gking.harvard.edu/zelig
-Date: 2013-10-17
+Date: 2013-10-22
 Depends:
     R (>= 2.14),
     boot,
