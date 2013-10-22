@@ -7,7 +7,7 @@
 \arguments{
   \item{formula}{a formula}
 
-  \item{model}{a Zelid model}
+  \item{model}{a Zelig model}
 
   \item{data}{a data-frame}
 }
