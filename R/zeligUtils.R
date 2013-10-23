@@ -37,7 +37,6 @@ spectest <- function(model, null=0, var, onetail=FALSE) {
     s.out <- sim(model, x=x.out)
     plot.ci(s.out)
     
-    rm(xseq, envir=.GlobalEnv)
     return(pval)
     
 }
