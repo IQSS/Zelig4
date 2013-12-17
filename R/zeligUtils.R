@@ -186,12 +186,12 @@ max1norm<-function(result,history){
 
 # utility function to create differentially private set of parameter estimates from Zelig call output
 
-diffpriv<-function(z.out){
+diffpriv<-function(z.out,epsilon=1){
     
     jk<-jackknife(z.out)
     params<- z.out$result$coefficients
     dist<- max1norm(result=params, history=jk)
-    diffp<- params + rexp(n=length(params), rate=1/dist$m)
+    diffp<- params + rexp(n=length(params), rate=1/(dist$m*epsilon))
     
     return(diffp)
 }
