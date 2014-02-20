@@ -54,11 +54,12 @@ setx <- function(obj, fn=NULL, data=NULL, cond=FALSE, withdata=FALSE,...)
 #'           columns of the keys data-types
 #' @param data a data.frame
 #' @param cond ignored
+#' @param set to na.rm to TRUE to remove missing values when setting.
 #' @param ... parameters specifying what to explicitly set each column as. This
 #'            is used to produce counterfactuals
 #' @return a 'setx' object
 #' @author Matt Owen \email{mowen@@iq.harvard.edu}, Kosuke Imai, and Olivia Lau 
-setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, withdata=FALSE, ...) {
+setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, withdata=FALSE, na.rm = NULL, ...) {
 
   # Warnings and errors
   if (!missing(cond))
@@ -107,12 +108,17 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, withdata=FALSE, ..
   # explanatory variables
   explan.obj <- Filter(function (x) x %in% vars.obj, names(dots))
 
+  # custom function for mean to handle missing values according to user defined options
+  mean.na.rm = function(x) mean(x, na.rm = na.rm)
+  Median.na.rm = function(x) Median(x, na.rm = na.rm)
+  Mode.na.rm = function(x) Mode(x, na.rm = na.rm)
+
   # defaults for fn
   if (missing(fn) || !is.list(fn))
     # set fn to appropriate values, if NULL
-    fn <- list(numeric = mean,
-               ordered = Median,
-               other   = Mode
+    fn <- list(numeric = mean.na.rm,
+               ordered = Median.na.rm,
+               other   = Mode.na.rm
                )
 
   # res
@@ -126,6 +132,9 @@ setx.default <- function(obj, fn=NULL, data=NULL, cond=FALSE, withdata=FALSE, ..
     if (key %in% names(dots) || key %in% not.vars)
       next
 
+    if(any(is.na(data[ ,key]) & !na.rm)
+      warning('You have missing values in X, sim() will likely fail.')
+      
     m <- class(data[,key])[[1]]
 
     # Match the class-type with the correct function to call
